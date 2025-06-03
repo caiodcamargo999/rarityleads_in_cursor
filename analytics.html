@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rarity Leads - Analytics</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="dashboard.css">
+    <link rel="stylesheet" href="https://fonts.bunny.net/css?family=bentosans:400" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <nav class="nav">
+        <div class="nav-brand">
+            <img src="logo.png" alt="Rarity Leads" class="logo">
+            <h1>Rarity Leads</h1>
+        </div>
+        <div class="nav-links">
+            <a href="dashboard.html">Dashboard</a>
+            <a href="#">Leads</a>
+            <a href="#">Campaigns</a>
+            <a href="#">Sequences</a>
+            <a href="#" class="active">Analytics</a>
+            <a href="#">Settings</a>
+        </div>
+        <div class="nav-actions">
+            <select id="role-select" class="role-select">
+                <option value="agency_owner">Agency Owner</option>
+                <option value="performance_manager">Performance Manager</option>
+                <option value="sdr_setter">SDR/Setter</option>
+                <option value="client">Client</option>
+            </select>
+            <button id="sign-out-btn" class="btn-secondary">Sign Out</button>
+        </div>
+    </nav>
+
+    <main class="dashboard">
+        <header class="dashboard-header">
+            <div class="welcome-section">
+                <h2 class="welcome-message">Analytics</h2>
+                <p class="dashboard-subtitle">Visualize e analise os dados de performance das suas campanhas e leads.</p>
+            </div>
+        </header>
+
+        <div class="dashboard-grid">
+            <!-- Métricas principais -->
+            <section class="dashboard-section performance-overview">
+                <h3 class="section-title">Visão Geral</h3>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h4>Leads Gerados</h4>
+                        <p class="stat-value">0</p>
+                        <p class="stat-change positive">+0% este mês</p>
+                    </div>
+                    <div class="stat-card">
+                        <h4>Taxa de Conversão</h4>
+                        <p class="stat-value">0%</p>
+                        <p class="stat-change">Sem variação</p>
+                    </div>
+                    <div class="stat-card">
+                        <h4>Campanhas Ativas</h4>
+                        <p class="stat-value">0</p>
+                        <p class="stat-change">Sem variação</p>
+                    </div>
+                    <div class="stat-card">
+                        <h4>Receita</h4>
+                        <p class="stat-value">R$0</p>
+                        <p class="stat-change">Sem variação</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Gráficos de Analytics -->
+            <section class="dashboard-section analytics-section">
+                <div class="section-header">
+                    <h3 class="section-title">Gráficos de Performance</h3>
+                    <div class="section-actions">
+                        <select id="analytics-period" class="period-select">
+                            <option value="7">Últimos 7 dias</option>
+                            <option value="30" selected>Últimos 30 dias</option>
+                            <option value="90">Últimos 90 dias</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="analytics-grid">
+                    <div class="funnel-card">
+                        <h4>Funil de Aquisição</h4>
+                        <div class="funnel-chart">
+                            <canvas id="funnel-chart"></canvas>
+                            <div class="no-data-placeholder">Sem dados disponíveis</div>
+                        </div>
+                    </div>
+                    <div class="campaign-card">
+                        <h4>Performance de Campanhas</h4>
+                        <div class="campaign-chart">
+                            <canvas id="campaign-chart"></canvas>
+                            <div class="no-data-placeholder">Sem dados disponíveis</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+</body>
+</html> 

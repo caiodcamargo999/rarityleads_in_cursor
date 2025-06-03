@@ -1,0 +1,44 @@
+{
+    "meta": {
+        "title": "Rarity Leads - Plateforme de Génération de Leads avec IA",
+        "description": "Rarity Leads est votre plateforme native en IA pour attirer, qualifier et conclure des clients — sans le travail manuel."
+    },
+    "nav": {
+        "features": "Fonctionnalités",
+        "pricing": "Tarifs",
+        "results": "Résultats",
+        "startFree": "Commencer Gratuitement"
+    },
+    "hero": {
+        "title": "Automatisez vos Leads. Évoluez avec Précision.",
+        "subtitle": "Rarity Leads est votre plateforme native en IA pour attirer, qualifier et conclure des clients — sans le travail manuel.",
+        "cta": "Commencer Gratuitement"
+    },
+    "features": {
+        "one": {
+            "title": "SDR avec IA qui Qualifie les Leads pour Vous",
+            "description": "Notre chatbot intelligent travaille 24/7 pour qualifier les leads à travers des conversations naturelles, assurant que seuls les prospects à forte intention atteignent votre équipe."
+        },
+        "two": {
+            "title": "Suivis Intelligents sur WhatsApp, Sans Messages Manuels",
+            "description": "Automatisez vos séquences de suivi avec support multimédia, séquençage intelligent et logique de réponse basée sur l'IA."
+        },
+        "three": {
+            "title": "Intelligence des Campagnes pour Google et Meta",
+            "description": "Optimisez vos campagnes publicitaires avec des insights basés sur l'IA, des enchères automatisées et un suivi des performances en temps réel."
+        }
+    },
+    "cta": {
+        "title": "Arrêtez de Courir après les Leads. Commencez à Conclure.",
+        "button": "Commencer Maintenant",
+        "trust": {
+            "clutch": "4.9 Étoiles sur Clutch",
+            "clients": "1 200+ Clients",
+            "ai": "Powered par IA et Approuvé par les Humains"
+        }
+    },
+    "accessibility": {
+        "skipToContent": "Passer au contenu principal",
+        "menuToggle": "Basculer le menu"
+    }
+} 

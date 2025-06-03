@@ -1,0 +1,44 @@
+{
+    "meta": {
+        "title": "Rarity Leads - AI-Powered Lead Generation Platform",
+        "description": "Rarity Leads is your AI-native platform to attract, qualify, and close clients — without the manual grind."
+    },
+    "nav": {
+        "features": "Features",
+        "pricing": "Pricing",
+        "results": "Results",
+        "startFree": "Start for Free"
+    },
+    "hero": {
+        "title": "Automate Your Leads. Scale With Precision.",
+        "subtitle": "Rarity Leads is your AI-native platform to attract, qualify, and close clients — without the manual grind.",
+        "cta": "Start for Free"
+    },
+    "features": {
+        "one": {
+            "title": "AI-Powered SDR That Qualifies Leads for You",
+            "description": "Our intelligent chatbot works 24/7 to qualify leads through natural conversations, ensuring only high-intent prospects reach your team."
+        },
+        "two": {
+            "title": "Smart WhatsApp Follow-ups, No Manual Messaging",
+            "description": "Automate your follow-up sequences with rich media support, intelligent sequencing, and AI-powered response logic."
+        },
+        "three": {
+            "title": "Campaign Intelligence for Google and Meta",
+            "description": "Optimize your ad campaigns with AI-driven insights, automated bidding, and real-time performance tracking."
+        }
+    },
+    "cta": {
+        "title": "Stop Chasing Leads. Start Closing.",
+        "button": "Get Started",
+        "trust": {
+            "clutch": "4.9 Stars on Clutch",
+            "clients": "1,200+ Clients",
+            "ai": "AI-Powered and Human-Approved"
+        }
+    },
+    "accessibility": {
+        "skipToContent": "Skip to main content",
+        "menuToggle": "Toggle menu"
+    }
+} 

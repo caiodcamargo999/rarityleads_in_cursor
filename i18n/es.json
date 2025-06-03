@@ -1,0 +1,44 @@
+{
+    "meta": {
+        "title": "Rarity Leads - Plataforma de Generación de Leads con IA",
+        "description": "Rarity Leads es tu plataforma nativa en IA para atraer, calificar y cerrar clientes — sin el trabajo manual."
+    },
+    "nav": {
+        "features": "Características",
+        "pricing": "Precios",
+        "results": "Resultados",
+        "startFree": "Comenzar Gratis"
+    },
+    "hero": {
+        "title": "Automatiza tus Leads. Escala con Precisión.",
+        "subtitle": "Rarity Leads es tu plataforma nativa en IA para atraer, calificar y cerrar clientes — sin el trabajo manual.",
+        "cta": "Comenzar Gratis"
+    },
+    "features": {
+        "one": {
+            "title": "SDR con IA que Califica Leads para Ti",
+            "description": "Nuestro chatbot inteligente trabaja 24/7 para calificar leads a través de conversaciones naturales, asegurando que solo prospectos con alta intención lleguen a tu equipo."
+        },
+        "two": {
+            "title": "Seguimientos Inteligentes en WhatsApp, Sin Mensajes Manuales",
+            "description": "Automatiza tus secuencias de seguimiento con soporte para medios ricos, secuenciación inteligente y lógica de respuesta basada en IA."
+        },
+        "three": {
+            "title": "Inteligencia de Campañas para Google y Meta",
+            "description": "Optimiza tus campañas publicitarias con insights basados en IA, pujas automatizadas y seguimiento de rendimiento en tiempo real."
+        }
+    },
+    "cta": {
+        "title": "Deja de Perseguir Leads. Comienza a Cerrar.",
+        "button": "Comenzar Ahora",
+        "trust": {
+            "clutch": "4.9 Estrellas en Clutch",
+            "clients": "1.200+ Clientes",
+            "ai": "Powered por IA y Aprobado por Humanos"
+        }
+    },
+    "accessibility": {
+        "skipToContent": "Saltar al contenido principal",
+        "menuToggle": "Alternar menú"
+    }
+} 

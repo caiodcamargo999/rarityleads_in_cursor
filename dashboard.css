@@ -1,0 +1,466 @@
+/* Dashboard Layout */
+.dashboard {
+    padding: 2rem;
+    padding-top: 14rem;
+    max-width: 1600px;
+    margin: 0 auto;
+    background: #1a1740; /* tom escuro inspirado no seu site */
+}
+
+/* Role Selector */
+.role-selector {
+    margin-bottom: 2rem;
+}
+
+.role-select {
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    background: var(--card-bg);
+    color: var(--text-primary);
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.role-select:hover {
+    border-color: var(--primary-color);
+}
+
+/* Dashboard Header */
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.welcome-message {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.header-actions {
+    display: flex;
+    gap: 1.2rem;
+}
+
+/* Dashboard Grid */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 1.5rem;
+}
+
+/* Stats Grid */
+.stats-grid {
+    grid-column: span 12;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+}
+
+.stat-card {
+    background: #221d4a;
+    border: 1px solid #2e2860;
+    border-radius: 12px;
+    padding: 1.5rem;
+    transition: transform 0.2s ease;
+    color: #fff;
+}
+
+.stat-card:hover {
+    transform: translateY(-2px);
+}
+
+.stat-card h3 {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.5rem;
+}
+
+.stat-value {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+}
+
+.stat-change {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+}
+
+.stat-change.positive {
+    color: var(--success-color);
+}
+
+.stat-change.negative {
+    color: var(--error-color);
+}
+
+/* Cards */
+.funnel-card,
+.leads-card,
+.campaign-card,
+.campaigns-card,
+.sequences-card {
+    background: #221d4a;
+    border: 1px solid #2e2860;
+    border-radius: 12px;
+    padding: 1.5rem;
+    color: #fff;
+}
+
+.funnel-card {
+    grid-column: span 6;
+}
+
+.leads-card {
+    grid-column: span 6;
+}
+
+.campaign-card {
+    grid-column: span 12;
+}
+
+.campaigns-card,
+.sequences-card {
+    grid-column: span 6;
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.card-header h3 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.period-select {
+    padding: 0.5rem;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    background: var(--input-bg);
+    color: var(--text-primary);
+}
+
+/* Charts */
+.funnel-chart,
+.campaign-chart {
+    height: 300px;
+    position: relative;
+}
+
+/* Leads Table */
+.leads-table-container {
+    overflow-x: auto;
+}
+
+.leads-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.leads-table th,
+.leads-table td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.leads-table th {
+    font-weight: 500;
+    color: #bdb8e3;
+    background: #221d4a;
+}
+
+.leads-table td {
+    color: #fff;
+}
+
+.status {
+    padding: 0.25rem 0.75rem;
+    border-radius: 999px;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.status.new { background: var(--info-bg); color: var(--info-color); }
+.status.contacted { background: var(--warning-bg); color: var(--warning-color); }
+.status.qualified { background: var(--success-bg); color: var(--success-color); }
+.status.appointment { background: var(--primary-bg); color: var(--primary-color); }
+.status.closed { background: var(--secondary-bg); color: var(--secondary-color); }
+
+/* Campaigns and Sequences Lists */
+.campaigns-list,
+.sequences-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1rem;
+}
+
+.campaign-card,
+.sequence-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 1rem;
+}
+
+.campaign-card h3,
+.sequence-card h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+}
+
+.campaign-info,
+.sequence-info {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.platform {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+}
+
+.campaign-metrics,
+.sequence-details {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
+}
+
+.metric,
+.detail {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.label {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+}
+
+.value {
+    font-size: 0.875rem;
+    color: var(--text-primary);
+}
+
+/* Modals */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal.active {
+    display: flex;
+}
+
+.modal-content {
+    background: var(--card-bg);
+    border-radius: 12px;
+    padding: 2rem;
+    width: 100%;
+    max-width: 600px;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.modal-header h2 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.close-modal {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: var(--text-secondary);
+    cursor: pointer;
+    padding: 0.5rem;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.5rem;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    background: var(--input-bg);
+    color: var(--text-primary);
+}
+
+.form-group select[multiple] {
+    height: 120px;
+}
+
+.range-inputs {
+    display: flex;
+    gap: 1rem;
+}
+
+.range-inputs input {
+    width: 50%;
+}
+
+.form-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+    margin-top: 2rem;
+}
+
+/* Sequence Steps */
+.sequence-step {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    align-items: center;
+}
+
+.sequence-step input {
+    flex: 1;
+}
+
+.sequence-step select {
+    width: 150px;
+}
+
+.remove-step {
+    padding: 0.5rem;
+    color: var(--error-color);
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+/* Error Message */
+.error-message {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    background: var(--error-bg);
+    color: var(--error-color);
+    padding: 1rem 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+    .dashboard-grid {
+        grid-template-columns: repeat(6, 1fr);
+    }
+
+    .funnel-card,
+    .leads-card,
+    .campaign-card,
+    .campaigns-card,
+    .sequences-card {
+        grid-column: span 6;
+    }
+}
+
+@media (max-width: 768px) {
+    .dashboard {
+        padding: 1rem;
+    }
+
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .funnel-card,
+    .leads-card,
+    .campaign-card,
+    .campaigns-card,
+    .sequences-card {
+        grid-column: span 6;
+    }
+
+    .header-actions {
+        flex-direction: column;
+    }
+
+    .modal-content {
+        margin: 1rem;
+        padding: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .campaigns-list,
+    .sequences-list {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Fonte principal */
+html, body, button, input, select, textarea {
+    font-family: 'BentoSans', Arial, sans-serif !important;
+    font-weight: 400;
+    color: #fff;
+}
+
+/* Melhorar contraste dos títulos e textos */
+h1, h2, h3, h4, h5, h6 {
+    color: #fff;
+    letter-spacing: 0.01em;
+}
+
+/* Garantir espaçamento para evitar sobreposição */
+.dashboard-header, .dashboard-grid, .stats-grid, .card-header, .section-header {
+    margin-bottom: 1.5rem;
+}
+
+/* Placeholder de dados */
+.no-data-placeholder {
+    color: #bdb8e3;
+    text-align: center;
+    margin-top: 2rem;
+    font-size: 1.1rem;
+} 
