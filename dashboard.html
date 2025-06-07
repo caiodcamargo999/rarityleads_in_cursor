@@ -3,88 +3,229 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rarity Leads - Dashboard</title>
+    <title data-i18n="meta.title">Rarity Leads - Dashboard</title>
+    <meta name="description" data-i18n="meta.description" content="Here's what's happening with your lead generation today">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="dashboard.css">
-    <link rel="stylesheet" href="https://fonts.bunny.net/css?family=bentosans:400" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="i18n.js"></script>
     <script type="module" src="dashboard.js"></script>
 </head>
-<body>
-    <!-- Main Navigation -->
-    <nav class="nav">
-        <div class="nav-brand">
-            <img src="logo.png" alt="Rarity Leads" class="logo">
-            <h1>Rarity Leads</h1>
-        </div>
-        <div class="nav-links">
-            <a href="dashboard.html">Dashboard</a>
-            <a href="#">Leads</a>
-            <a href="#">Campaigns</a>
-            <a href="#">Sequences</a>
-            <a href="analytics.html" class="active">Analytics</a>
-            <a href="#">Settings</a>
-        </div>
-        <div class="nav-actions">
-            <select id="role-select" class="role-select">
-                <option value="agency_owner">Agency Owner</option>
-                <option value="performance_manager">Performance Manager</option>
-                <option value="sdr_setter">SDR/Setter</option>
-                <option value="client">Client</option>
-            </select>
-            <button id="sign-out-btn" class="btn-secondary">Sign Out</button>
-        </div>
-    </nav>
-
-    <main class="dashboard">
-        <!-- Welcome Section -->
-        <header class="dashboard-header">
-            <div class="welcome-section">
-                <h2 class="welcome-message">Welcome back!</h2>
-                <p class="dashboard-subtitle">Track and manage your lead generation performance</p>
+<body class="dashboard-body">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo-container">
+                <div class="logo-icon">✨</div>
+                <span class="logo-text">Rarity Leads</span>
             </div>
+        </div>
+
+        <nav class="sidebar-nav">
+            <ul class="nav-menu">
+                <li class="nav-item active">
+                    <a href="dashboard.html" class="nav-link">
+                        <i class="fas fa-chart-line"></i>
+                        <span data-i18n="nav.dashboard">Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="fas fa-users"></i>
+                        <span data-i18n="nav.leads">Leads</span>
+                        <span class="badge">24</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="fas fa-bullhorn"></i>
+                        <span data-i18n="nav.campaigns">Campaigns</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="fas fa-robot"></i>
+                        <span data-i18n="nav.sequences">Sequences</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="analytics.html" class="nav-link">
+                        <i class="fas fa-chart-bar"></i>
+                        <span data-i18n="nav.analytics">Analytics</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="fas fa-cog"></i>
+                        <span data-i18n="nav.settings">Settings</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="user-profile">
+                <div class="user-avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="user-info">
+                    <div class="user-name" data-i18n="nav.agencyOwner">Agency Owner</div>
+                    <div class="user-email">admin@rarity.com</div>
+                </div>
+                <button class="logout-btn" id="sign-out-btn">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Top Header -->
+    <header class="top-header">
+        <div class="header-left">
+            <button class="sidebar-toggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="breadcrumb">
+                <span class="breadcrumb-item">Dashboard</span>
+            </div>
+        </div>
+
+        <div class="header-right">
             <div class="header-actions">
-                <button id="connect-linkedin-btn" class="btn-secondary">Conectar LinkedIn</button>
-                <button id="connect-claude-btn" class="btn-secondary">Conectar Claude</button>
-                <button id="create-campaign-btn" class="btn-primary">Create Campaign</button>
-                <button id="create-sequence-btn" class="btn-secondary">Create Sequence</button>
-            </div>
-        </header>
-
-        <div class="dashboard-grid">
-            <!-- Performance Overview Section -->
-            <section class="dashboard-section performance-overview">
-                <h3 class="section-title">Performance Overview</h3>
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <h4>Total Leads</h4>
-                        <p class="stat-value">0</p>
-                        <p class="stat-change positive">+12% from last month</p>
-                    </div>
-                    <div class="stat-card">
-                        <h4>Conversion Rate</h4>
-                        <p class="stat-value">0%</p>
-                        <p class="stat-change positive">+5% from last month</p>
-                    </div>
-                    <div class="stat-card">
-                        <h4>Active Campaigns</h4>
-                        <p class="stat-value">0</p>
-                        <p class="stat-change">No change</p>
-                    </div>
-                    <div class="stat-card">
-                        <h4>Revenue</h4>
-                        <p class="stat-value">$0</p>
-                        <p class="stat-change positive">+8% from last month</p>
+                <div class="language-selector">
+                    <button class="current-lang">
+                        <span class="lang-flag">🇺🇸</span>
+                        <span class="lang-code">EN</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="lang-dropdown">
+                        <a href="#" data-lang="en" class="lang-option active">
+                            <span class="lang-flag">🇺🇸</span>
+                            <span class="lang-name">English</span>
+                        </a>
+                        <a href="#" data-lang="pt-BR" class="lang-option">
+                            <span class="lang-flag">🇧🇷</span>
+                            <span class="lang-name">Português</span>
+                        </a>
+                        <a href="#" data-lang="es" class="lang-option">
+                            <span class="lang-flag">🇪🇸</span>
+                            <span class="lang-name">Español</span>
+                        </a>
+                        <a href="#" data-lang="fr" class="lang-option">
+                            <span class="lang-flag">🇫🇷</span>
+                            <span class="lang-name">Français</span>
+                        </a>
                     </div>
                 </div>
-            </section>
+                <button class="header-btn" data-tooltip="Notifications">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-dot"></span>
+                </button>
+                <button class="header-btn" data-tooltip="Help">
+                    <i class="fas fa-question-circle"></i>
+                </button>
+            </div>
+        </div>
+    </header>
 
-            <!-- Lead Generation Analytics Section -->
-            <section class="dashboard-section analytics-section">
-                <div class="section-header">
-                    <h3 class="section-title">Lead Generation Analytics</h3>
-                    <div class="section-actions">
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Welcome Section -->
+        <div class="welcome-section">
+            <div class="welcome-content">
+                <h1 class="welcome-title">Welcome back! 👋</h1>
+                <p class="welcome-subtitle">Here's what's happening with your lead generation today</p>
+            </div>
+            <div class="quick-actions">
+                <button id="create-campaign-btn" class="action-btn primary">
+                    <i class="fas fa-plus"></i>
+                    <span>New Campaign</span>
+                </button>
+                <button id="create-sequence-btn" class="action-btn secondary">
+                    <i class="fas fa-robot"></i>
+                    <span>New Sequence</span>
+                </button>
+                <button id="connect-linkedin-btn" class="action-btn secondary">
+                    <i class="fab fa-linkedin"></i>
+                    <span>Connect LinkedIn</span>
+                </button>
+                <button id="connect-claude-btn" class="action-btn secondary">
+                    <i class="fas fa-brain"></i>
+                    <span>Connect Claude</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Stats Overview -->
+        <div class="stats-overview">
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-value">1,247</div>
+                    <div class="stat-label">Total Leads</div>
+                    <div class="stat-change positive">
+                        <i class="fas fa-arrow-up"></i>
+                        <span>+12% from last month</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-percentage"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-value">31.2%</div>
+                    <div class="stat-label">Conversion Rate</div>
+                    <div class="stat-change positive">
+                        <i class="fas fa-arrow-up"></i>
+                        <span>+5% from last month</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-bullhorn"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-value">8</div>
+                    <div class="stat-label">Active Campaigns</div>
+                    <div class="stat-change neutral">
+                        <i class="fas fa-minus"></i>
+                        <span>No change</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-dollar-sign"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-value">$24,680</div>
+                    <div class="stat-label">Revenue</div>
+                    <div class="stat-change positive">
+                        <i class="fas fa-arrow-up"></i>
+                        <span>+18% from last month</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Section -->
+        <div class="charts-section">
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h3>Lead Generation Analytics</h3>
+                    <div class="chart-controls">
                         <select id="analytics-period" class="period-select">
                             <option value="7">Last 7 days</option>
                             <option value="30" selected>Last 30 days</option>
@@ -92,75 +233,288 @@
                         </select>
                     </div>
                 </div>
-                <div class="analytics-grid">
-                    <!-- Acquisition Funnel -->
-                    <div class="funnel-card">
-                        <h4>Acquisition Funnel</h4>
-                        <div class="funnel-chart">
-                            <canvas id="funnel-chart"></canvas>
-                            <div class="no-data-placeholder">Sem dados disponíveis</div>
+                <div class="chart-content">
+                    <canvas id="leads-chart"></canvas>
+                </div>
+            </div>
+
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h3>Acquisition Funnel</h3>
+                    <div class="chart-info">
+                        <i class="fas fa-info-circle" data-tooltip="Shows the conversion rate at each stage"></i>
+                    </div>
+                </div>
+                <div class="chart-content">
+                    <div class="funnel-stages">
+                        <div class="funnel-stage">
+                            <div class="stage-bar" style="width: 100%"></div>
+                            <div class="stage-info">
+                                <span class="stage-label">Visitors</span>
+                                <span class="stage-value">2,847</span>
+                            </div>
+                        </div>
+                        <div class="funnel-stage">
+                            <div class="stage-bar" style="width: 65%"></div>
+                            <div class="stage-info">
+                                <span class="stage-label">Leads</span>
+                                <span class="stage-value">1,850</span>
+                            </div>
+                        </div>
+                        <div class="funnel-stage">
+                            <div class="stage-bar" style="width: 35%"></div>
+                            <div class="stage-info">
+                                <span class="stage-label">Qualified</span>
+                                <span class="stage-value">996</span>
+                            </div>
+                        </div>
+                        <div class="funnel-stage">
+                            <div class="stage-bar" style="width: 15%"></div>
+                            <div class="stage-info">
+                                <span class="stage-label">Customers</span>
+                                <span class="stage-value">427</span>
+                            </div>
                         </div>
                     </div>
-                    <!-- Campaign Performance -->
-                    <div class="campaign-card">
-                        <h4>Campaign Performance</h4>
-                        <div class="campaign-chart">
-                            <canvas id="campaign-chart"></canvas>
-                            <div class="no-data-placeholder">Sem dados disponíveis</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Activity & Leads -->
+        <div class="content-grid">
+            <div class="activity-card">
+                <div class="card-header">
+                    <h3>Recent Activity</h3>
+                    <button class="view-all-btn">View All</button>
+                </div>
+                <div class="activity-list">
+                    <div class="activity-item">
+                        <div class="activity-icon">
+                            <i class="fas fa-user-plus"></i>
+                        </div>
+                        <div class="activity-content">
+                            <div class="activity-title">New lead from LinkedIn campaign</div>
+                            <div class="activity-meta">Sarah Johnson • TechCorp • 2 minutes ago</div>
+                        </div>
+                        <div class="activity-status new">New</div>
+                    </div>
+
+                    <div class="activity-item">
+                        <div class="activity-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div class="activity-content">
+                            <div class="activity-title">Email sequence completed</div>
+                            <div class="activity-meta">Marketing Campaign #3 • 15 minutes ago</div>
+                        </div>
+                        <div class="activity-status completed">Completed</div>
+                    </div>
+
+                    <div class="activity-item">
+                        <div class="activity-icon">
+                            <i class="fas fa-calendar-check"></i>
+                        </div>
+                        <div class="activity-content">
+                            <div class="activity-title">Meeting scheduled</div>
+                            <div class="activity-meta">John Smith • StartupXYZ • 1 hour ago</div>
+                        </div>
+                        <div class="activity-status scheduled">Scheduled</div>
+                    </div>
+
+                    <div class="activity-item">
+                        <div class="activity-icon">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <div class="activity-content">
+                            <div class="activity-title">Lead qualified</div>
+                            <div class="activity-meta">Maria Garcia • Enterprise Inc • 2 hours ago</div>
+                        </div>
+                        <div class="activity-status qualified">Qualified</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="leads-card">
+                <div class="card-header">
+                    <h3>Recent Leads</h3>
+                    <div class="header-actions">
+                        <button id="filter-leads-btn" class="filter-btn">
+                            <i class="fas fa-filter"></i>
+                        </button>
+                        <button class="export-btn">
+                            <i class="fas fa-download"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="leads-list">
+                    <div class="lead-item">
+                        <div class="lead-avatar">
+                            <img src="https://ui-avatars.com/api/?name=Sarah+Johnson&background=8B5CF6&color=fff" alt="Sarah Johnson">
+                        </div>
+                        <div class="lead-info">
+                            <div class="lead-name">Sarah Johnson</div>
+                            <div class="lead-company">TechCorp • CEO</div>
+                            <div class="lead-email">sarah@techcorp.com</div>
+                        </div>
+                        <div class="lead-score">
+                            <div class="score-badge high">95</div>
+                        </div>
+                        <div class="lead-status">
+                            <span class="status-badge new">New</span>
+                        </div>
+                        <div class="lead-actions">
+                            <button class="action-btn-small">
+                                <i class="fas fa-envelope"></i>
+                            </button>
+                            <button class="action-btn-small">
+                                <i class="fas fa-phone"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="lead-item">
+                        <div class="lead-avatar">
+                            <img src="https://ui-avatars.com/api/?name=John+Smith&background=EC4899&color=fff" alt="John Smith">
+                        </div>
+                        <div class="lead-info">
+                            <div class="lead-name">John Smith</div>
+                            <div class="lead-company">StartupXYZ • CTO</div>
+                            <div class="lead-email">john@startupxyz.com</div>
+                        </div>
+                        <div class="lead-score">
+                            <div class="score-badge medium">78</div>
+                        </div>
+                        <div class="lead-status">
+                            <span class="status-badge contacted">Contacted</span>
+                        </div>
+                        <div class="lead-actions">
+                            <button class="action-btn-small">
+                                <i class="fas fa-envelope"></i>
+                            </button>
+                            <button class="action-btn-small">
+                                <i class="fas fa-phone"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="lead-item">
+                        <div class="lead-avatar">
+                            <img src="https://ui-avatars.com/api/?name=Maria+Garcia&background=10B981&color=fff" alt="Maria Garcia">
+                        </div>
+                        <div class="lead-info">
+                            <div class="lead-name">Maria Garcia</div>
+                            <div class="lead-company">Enterprise Inc • VP Marketing</div>
+                            <div class="lead-email">maria@enterprise.com</div>
+                        </div>
+                        <div class="lead-score">
+                            <div class="score-badge high">92</div>
+                        </div>
+                        <div class="lead-status">
+                            <span class="status-badge qualified">Qualified</span>
+                        </div>
+                        <div class="lead-actions">
+                            <button class="action-btn-small">
+                                <i class="fas fa-envelope"></i>
+                            </button>
+                            <button class="action-btn-small">
+                                <i class="fas fa-phone"></i>
+                            </button>
                         </div>
                     </div>
                 </div>
-            </section>
+            </div>
+        </div>
 
-            <!-- Lead Management Section -->
-            <section class="dashboard-section lead-management">
-                <div class="section-header">
-                    <h3 class="section-title">Lead Management</h3>
-                    <div class="section-actions">
-                        <button id="filter-leads-btn" class="btn-secondary">Filter</button>
-                        <button class="btn-secondary">Export</button>
-                    </div>
-                </div>
-                <div class="leads-table-container">
-                    <table class="leads-table">
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Email</th>
-                                <th>Company</th>
-                                <th>Status</th>
-                                <th>Score</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <!-- Leads will be populated by JavaScript -->
-                        </tbody>
-                    </table>
-                </div>
-            </section>
-
-            <!-- Campaign Management Section -->
-            <section class="dashboard-section campaign-management">
-                <div class="section-header">
-                    <h3 class="section-title">Campaign Management</h3>
-                    <button id="view-all-campaigns" class="btn-secondary">View All</button>
+        <!-- Campaigns & Performance -->
+        <div class="bottom-section">
+            <div class="campaigns-overview">
+                <div class="card-header">
+                    <h3>Active Campaigns</h3>
+                    <button id="view-all-campaigns" class="view-all-btn">View All</button>
                 </div>
                 <div class="campaigns-grid">
-                    <div class="active-campaigns">
-                        <h4>Active Campaigns</h4>
-                        <div class="campaigns-list">
-                            <!-- Campaigns will be populated by JavaScript -->
+                    <div class="campaign-card">
+                        <div class="campaign-header">
+                            <div class="campaign-info">
+                                <h4>LinkedIn Outreach Q1</h4>
+                                <span class="campaign-platform linkedin">
+                                    <i class="fab fa-linkedin"></i>
+                                    LinkedIn
+                                </span>
+                            </div>
+                            <div class="campaign-status active">Active</div>
+                        </div>
+                        <div class="campaign-metrics">
+                            <div class="metric">
+                                <span class="metric-value">247</span>
+                                <span class="metric-label">Leads</span>
+                            </div>
+                            <div class="metric">
+                                <span class="metric-value">31.2%</span>
+                                <span class="metric-label">Conv. Rate</span>
+                            </div>
+                            <div class="metric">
+                                <span class="metric-value">$12.50</span>
+                                <span class="metric-label">Cost/Lead</span>
+                            </div>
                         </div>
                     </div>
-                    <div class="automation-sequences">
-                        <h4>Automation Sequences</h4>
-                        <div class="sequences-list">
-                            <!-- Sequences will be populated by JavaScript -->
+
+                    <div class="campaign-card">
+                        <div class="campaign-header">
+                            <div class="campaign-info">
+                                <h4>Facebook Lead Gen</h4>
+                                <span class="campaign-platform facebook">
+                                    <i class="fab fa-facebook"></i>
+                                    Facebook
+                                </span>
+                            </div>
+                            <div class="campaign-status active">Active</div>
+                        </div>
+                        <div class="campaign-metrics">
+                            <div class="metric">
+                                <span class="metric-value">189</span>
+                                <span class="metric-label">Leads</span>
+                            </div>
+                            <div class="metric">
+                                <span class="metric-value">28.7%</span>
+                                <span class="metric-label">Conv. Rate</span>
+                            </div>
+                            <div class="metric">
+                                <span class="metric-value">$15.80</span>
+                                <span class="metric-label">Cost/Lead</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="campaign-card">
+                        <div class="campaign-header">
+                            <div class="campaign-info">
+                                <h4>Google Ads Campaign</h4>
+                                <span class="campaign-platform google">
+                                    <i class="fab fa-google"></i>
+                                    Google
+                                </span>
+                            </div>
+                            <div class="campaign-status paused">Paused</div>
+                        </div>
+                        <div class="campaign-metrics">
+                            <div class="metric">
+                                <span class="metric-value">156</span>
+                                <span class="metric-label">Leads</span>
+                            </div>
+                            <div class="metric">
+                                <span class="metric-value">24.1%</span>
+                                <span class="metric-label">Conv. Rate</span>
+                            </div>
+                            <div class="metric">
+                                <span class="metric-value">$18.90</span>
+                                <span class="metric-label">Cost/Lead</span>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </section>
+            </div>
         </div>
     </main>
 

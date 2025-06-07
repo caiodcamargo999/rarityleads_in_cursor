@@ -3,103 +3,885 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rarity Leads - Analytics</title>
-    <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="dashboard.css">
-    <link rel="stylesheet" href="https://fonts.bunny.net/css?family=bentosans:400" />
+    <title data-i18n="meta.title">Rarity Leads - Analytics</title>
+    <meta name="description" data-i18n="meta.description" content="Visualize and analyze your campaign and lead performance data">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #43e97b 75%, #38f9d7 100%);
+            min-height: 100vh;
+            color: #1a202c;
+        }
+
+        /* Navigation */
+        .nav {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+            padding: 0 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            max-width: 1400px;
+            margin: 0 auto;
+            height: 70px;
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 700;
+            font-size: 20px;
+            color: #1a202c;
+        }
+
+        .nav-brand .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: #64748b;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: #667eea;
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .language-selector {
+            position: relative;
+        }
+
+        .current-lang {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            color: #374151;
+            transition: all 0.2s ease;
+        }
+
+        .current-lang:hover {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .lang-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            min-width: 160px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.2s ease;
+            z-index: 1000;
+        }
+
+        .language-selector.open .lang-dropdown {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .lang-option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 16px;
+            color: #374151;
+            text-decoration: none;
+            transition: background 0.2s ease;
+        }
+
+        .lang-option:hover,
+        .lang-option.active {
+            background: #f8fafc;
+            color: #667eea;
+        }
+
+        .role-select {
+            padding: 8px 12px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            background: white;
+            color: #374151;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .btn-secondary {
+            padding: 8px 16px;
+            background: #f8fafc;
+            color: #374151;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-secondary:hover {
+            background: #e2e8f0;
+        }
+
+        /* Main Content */
+        .main-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .page-header {
+            margin-bottom: 2rem;
+        }
+
+        .page-title {
+            font-size: 32px;
+            font-weight: 700;
+            color: #1a202c;
+            margin-bottom: 8px;
+        }
+
+        .page-subtitle {
+            color: #64748b;
+            font-size: 16px;
+            line-height: 1.5;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            transition: all 0.2s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #43e97b 75%, #38f9d7 100%);
+        }
+
+        .stat-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+
+        .stat-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            color: white;
+        }
+
+        .stat-icon.leads { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .stat-icon.conversion { background: linear-gradient(135deg, #f093fb 0%, #764ba2 100%); }
+        .stat-icon.campaigns { background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); }
+        .stat-icon.revenue { background: linear-gradient(135deg, #38f9d7 0%, #43e97b 100%); }
+
+        .stat-value {
+            font-size: 36px;
+            font-weight: 700;
+            color: #1a202c;
+            margin-bottom: 8px;
+            line-height: 1;
+        }
+
+        .stat-change {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .stat-change.positive { color: #059669; }
+        .stat-change.negative { color: #dc2626; }
+        .stat-change.neutral { color: #64748b; }
+
+        .stat-change i {
+            font-size: 12px;
+        }
+
+        /* Analytics Section */
+        .analytics-section {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            margin-bottom: 2rem;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #1a202c;
+        }
+
+        .section-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .period-select {
+            padding: 8px 12px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            background: white;
+            color: #374151;
+            font-size: 14px;
+            cursor: pointer;
+            min-width: 150px;
+        }
+
+        .period-select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        /* Charts Grid */
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+        }
+
+        .chart-card {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid #e2e8f0;
+            position: relative;
+            min-height: 400px;
+        }
+
+        .chart-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .chart-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 300px;
+            width: 100%;
+        }
+
+        .no-data-placeholder {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: #9ca3af;
+            font-size: 14px;
+        }
+
+        .no-data-placeholder i {
+            font-size: 48px;
+            margin-bottom: 12px;
+            opacity: 0.5;
+        }
+
+        /* Loading States */
+        .loading {
+            opacity: 0.7;
+            pointer-events: none;
+        }
+
+        .loading::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 20px;
+            height: 20px;
+            margin: -10px 0 0 -10px;
+            border: 2px solid #e2e8f0;
+            border-top: 2px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-container {
+                padding: 0 1rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .main-content {
+                padding: 1rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .charts-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .chart-card {
+                min-height: 300px;
+            }
+
+            .chart-container {
+                height: 250px;
+            }
+        }
+    </style>
 </head>
 <body>
     <nav class="nav">
-        <div class="nav-brand">
-            <img src="logo.png" alt="Rarity Leads" class="logo">
-            <h1>Rarity Leads</h1>
-        </div>
-        <div class="nav-links">
-            <a href="dashboard.html">Dashboard</a>
-            <a href="#">Leads</a>
-            <a href="#">Campaigns</a>
-            <a href="#">Sequences</a>
-            <a href="#" class="active">Analytics</a>
-            <a href="#">Settings</a>
-        </div>
-        <div class="nav-actions">
-            <select id="role-select" class="role-select">
-                <option value="agency_owner">Agency Owner</option>
-                <option value="performance_manager">Performance Manager</option>
-                <option value="sdr_setter">SDR/Setter</option>
-                <option value="client">Client</option>
-            </select>
-            <button id="sign-out-btn" class="btn-secondary">Sign Out</button>
+        <div class="nav-container">
+            <div class="nav-brand">
+                <div class="logo-icon">
+                    <i class="fas fa-rocket"></i>
+                </div>
+                <span>Rarity Leads</span>
+            </div>
+            <div class="nav-links">
+                <a href="dashboard.html" data-i18n="nav.dashboard">Dashboard</a>
+                <a href="#" data-i18n="nav.leads">Leads</a>
+                <a href="#" data-i18n="nav.campaigns">Campaigns</a>
+                <a href="#" data-i18n="nav.sequences">Sequences</a>
+                <a href="#" class="active" data-i18n="nav.analytics">Analytics</a>
+                <a href="#" data-i18n="nav.settings">Settings</a>
+            </div>
+            <div class="nav-actions">
+                <div class="language-selector">
+                    <button class="current-lang">
+                        <span class="lang-flag">🇺🇸</span>
+                        <span class="lang-code">EN</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="lang-dropdown">
+                        <a href="#" data-lang="en" class="lang-option active">
+                            <span class="lang-flag">🇺🇸</span>
+                            <span class="lang-name">English</span>
+                        </a>
+                        <a href="#" data-lang="pt-BR" class="lang-option">
+                            <span class="lang-flag">🇧🇷</span>
+                            <span class="lang-name">Português</span>
+                        </a>
+                        <a href="#" data-lang="es" class="lang-option">
+                            <span class="lang-flag">🇪🇸</span>
+                            <span class="lang-name">Español</span>
+                        </a>
+                        <a href="#" data-lang="fr" class="lang-option">
+                            <span class="lang-flag">🇫🇷</span>
+                            <span class="lang-name">Français</span>
+                        </a>
+                    </div>
+                </div>
+                <select id="role-select" class="role-select">
+                    <option value="agency_owner" data-i18n="nav.agencyOwner">Agency Owner</option>
+                    <option value="performance_manager" data-i18n="nav.performanceManager">Performance Manager</option>
+                    <option value="sdr_setter" data-i18n="nav.sdrSetter">SDR/Setter</option>
+                    <option value="client" data-i18n="nav.client">Client</option>
+                </select>
+                <button id="sign-out-btn" class="btn-secondary" data-i18n="nav.signOut">Sign Out</button>
+            </div>
         </div>
     </nav>
 
-    <main class="dashboard">
-        <header class="dashboard-header">
-            <div class="welcome-section">
-                <h2 class="welcome-message">Analytics</h2>
-                <p class="dashboard-subtitle">Visualize e analise os dados de performance das suas campanhas e leads.</p>
-            </div>
+    <main class="main-content">
+        <header class="page-header">
+            <h1 class="page-title" data-i18n="analytics.title">Analytics</h1>
+            <p class="page-subtitle" data-i18n="analytics.subtitle">Visualize and analyze your campaign and lead performance data</p>
         </header>
 
-        <div class="dashboard-grid">
-            <!-- Métricas principais -->
-            <section class="dashboard-section performance-overview">
-                <h3 class="section-title">Visão Geral</h3>
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <h4>Leads Gerados</h4>
-                        <p class="stat-value">0</p>
-                        <p class="stat-change positive">+0% este mês</p>
-                    </div>
-                    <div class="stat-card">
-                        <h4>Taxa de Conversão</h4>
-                        <p class="stat-value">0%</p>
-                        <p class="stat-change">Sem variação</p>
-                    </div>
-                    <div class="stat-card">
-                        <h4>Campanhas Ativas</h4>
-                        <p class="stat-value">0</p>
-                        <p class="stat-change">Sem variação</p>
-                    </div>
-                    <div class="stat-card">
-                        <h4>Receita</h4>
-                        <p class="stat-value">R$0</p>
-                        <p class="stat-change">Sem variação</p>
+        <!-- Stats Overview -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-title" data-i18n="analytics.leadsGenerated">Leads Generated</div>
+                    <div class="stat-icon leads">
+                        <i class="fas fa-users"></i>
                     </div>
                 </div>
-            </section>
+                <div class="stat-value" id="leads-count">1,247</div>
+                <div class="stat-change positive">
+                    <i class="fas fa-arrow-up"></i>
+                    <span>+23% <span data-i18n="analytics.thisMonth">this month</span></span>
+                </div>
+            </div>
 
-            <!-- Gráficos de Analytics -->
-            <section class="dashboard-section analytics-section">
-                <div class="section-header">
-                    <h3 class="section-title">Gráficos de Performance</h3>
-                    <div class="section-actions">
-                        <select id="analytics-period" class="period-select">
-                            <option value="7">Últimos 7 dias</option>
-                            <option value="30" selected>Últimos 30 dias</option>
-                            <option value="90">Últimos 90 dias</option>
-                        </select>
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-title" data-i18n="analytics.conversionRate">Conversion Rate</div>
+                    <div class="stat-icon conversion">
+                        <i class="fas fa-chart-line"></i>
                     </div>
                 </div>
-                <div class="analytics-grid">
-                    <div class="funnel-card">
-                        <h4>Funil de Aquisição</h4>
-                        <div class="funnel-chart">
-                            <canvas id="funnel-chart"></canvas>
-                            <div class="no-data-placeholder">Sem dados disponíveis</div>
-                        </div>
-                    </div>
-                    <div class="campaign-card">
-                        <h4>Performance de Campanhas</h4>
-                        <div class="campaign-chart">
-                            <canvas id="campaign-chart"></canvas>
-                            <div class="no-data-placeholder">Sem dados disponíveis</div>
-                        </div>
+                <div class="stat-value" id="conversion-rate">31.2%</div>
+                <div class="stat-change positive">
+                    <i class="fas fa-arrow-up"></i>
+                    <span>+8.4% <span data-i18n="analytics.thisMonth">this month</span></span>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-title" data-i18n="analytics.activeCampaigns">Active Campaigns</div>
+                    <div class="stat-icon campaigns">
+                        <i class="fas fa-bullhorn"></i>
                     </div>
                 </div>
-            </section>
+                <div class="stat-value" id="active-campaigns">12</div>
+                <div class="stat-change neutral">
+                    <i class="fas fa-minus"></i>
+                    <span data-i18n="analytics.noVariation">No variation</span>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-title" data-i18n="analytics.revenue">Revenue</div>
+                    <div class="stat-icon revenue">
+                        <i class="fas fa-dollar-sign"></i>
+                    </div>
+                </div>
+                <div class="stat-value" id="revenue-amount">$47,892</div>
+                <div class="stat-change positive">
+                    <i class="fas fa-arrow-up"></i>
+                    <span>+15.3% <span data-i18n="analytics.thisMonth">this month</span></span>
+                </div>
+            </div>
         </div>
+
+        <!-- Analytics Charts -->
+        <section class="analytics-section">
+            <div class="section-header">
+                <h2 class="section-title" data-i18n="analytics.performanceCharts">Performance Charts</h2>
+                <div class="section-actions">
+                    <select id="analytics-period" class="period-select">
+                        <option value="7" data-i18n="analytics.period.last7days">Last 7 days</option>
+                        <option value="30" selected data-i18n="analytics.period.last30days">Last 30 days</option>
+                        <option value="90" data-i18n="analytics.period.last90days">Last 90 days</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="charts-grid">
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3 class="chart-title" data-i18n="analytics.acquisitionFunnel">Acquisition Funnel</h3>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="funnel-chart"></canvas>
+                        <div class="no-data-placeholder" style="display: none;">
+                            <i class="fas fa-chart-bar"></i>
+                            <div data-i18n="analytics.noData">No data available</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3 class="chart-title" data-i18n="analytics.campaignPerformance">Campaign Performance</h3>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="campaign-chart"></canvas>
+                        <div class="no-data-placeholder" style="display: none;">
+                            <i class="fas fa-chart-line"></i>
+                            <div data-i18n="analytics.noData">No data available</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3 class="chart-title" data-i18n="analytics.leadSources">Lead Sources</h3>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="sources-chart"></canvas>
+                    </div>
+                </div>
+
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3 class="chart-title" data-i18n="analytics.revenueTrends">Revenue Trends</h3>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="revenue-chart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
     </main>
+
+    <!-- Scripts -->
+    <script src="i18n.js"></script>
+    <script>
+        // Initialize charts with sample data
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeCharts();
+            setupEventListeners();
+        });
+
+        function initializeCharts() {
+            // Funnel Chart
+            const funnelCtx = document.getElementById('funnel-chart').getContext('2d');
+            window.funnelChart = new Chart(funnelCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: [
+                        window.i18n ? window.i18n.t('analytics.visitors') : 'Visitors',
+                        window.i18n ? window.i18n.t('analytics.leads') : 'Leads',
+                        window.i18n ? window.i18n.t('analytics.qualified') : 'Qualified',
+                        window.i18n ? window.i18n.t('analytics.customers') : 'Customers'
+                    ],
+                    datasets: [{
+                        data: [10000, 1247, 389, 127],
+                        backgroundColor: [
+                            'rgba(102, 126, 234, 0.8)',
+                            'rgba(240, 147, 251, 0.8)',
+                            'rgba(79, 172, 254, 0.8)',
+                            'rgba(67, 233, 123, 0.8)'
+                        ],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                padding: 20,
+                                usePointStyle: true
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Campaign Performance Chart
+            const campaignCtx = document.getElementById('campaign-chart').getContext('2d');
+            window.campaignChart = new Chart(campaignCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                    datasets: [{
+                        label: window.i18n ? window.i18n.t('analytics.leadsGenerated') : 'Leads Generated',
+                        data: [65, 89, 123, 156, 189, 247],
+                        borderColor: 'rgb(102, 126, 234)',
+                        backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }, {
+                        label: window.i18n ? window.i18n.t('analytics.conversions') : 'Conversions',
+                        data: [20, 28, 38, 49, 59, 77],
+                        borderColor: 'rgb(240, 147, 251)',
+                        backgroundColor: 'rgba(240, 147, 251, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+
+            // Lead Sources Chart
+            const sourcesCtx = document.getElementById('sources-chart').getContext('2d');
+            window.sourcesChart = new Chart(sourcesCtx, {
+                type: 'bar',
+                data: {
+                    labels: [
+                        window.i18n ? window.i18n.t('analytics.googleAds') : 'Google Ads',
+                        window.i18n ? window.i18n.t('analytics.facebook') : 'Facebook',
+                        window.i18n ? window.i18n.t('analytics.linkedin') : 'LinkedIn',
+                        window.i18n ? window.i18n.t('analytics.organic') : 'Organic',
+                        window.i18n ? window.i18n.t('analytics.referral') : 'Referral'
+                    ],
+                    datasets: [{
+                        label: window.i18n ? window.i18n.t('analytics.leads') : 'Leads',
+                        data: [423, 312, 189, 156, 167],
+                        backgroundColor: [
+                            'rgba(102, 126, 234, 0.8)',
+                            'rgba(240, 147, 251, 0.8)',
+                            'rgba(79, 172, 254, 0.8)',
+                            'rgba(67, 233, 123, 0.8)',
+                            'rgba(251, 191, 36, 0.8)'
+                        ],
+                        borderRadius: 8,
+                        borderSkipped: false
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+
+            // Revenue Trends Chart
+            const revenueCtx = document.getElementById('revenue-chart').getContext('2d');
+            new Chart(revenueCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+                    datasets: [{
+                        label: 'Revenue ($)',
+                        data: [8500, 12300, 15600, 18900],
+                        borderColor: 'rgb(67, 233, 123)',
+                        backgroundColor: 'rgba(67, 233, 123, 0.1)',
+                        tension: 0.4,
+                        fill: true,
+                        pointBackgroundColor: 'rgb(67, 233, 123)',
+                        pointBorderColor: '#fff',
+                        pointBorderWidth: 2,
+                        pointRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return '$' + value.toLocaleString();
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function setupEventListeners() {
+            // Period selector
+            document.getElementById('analytics-period').addEventListener('change', function(e) {
+                const period = e.target.value;
+                console.log('Period changed to:', period);
+                // Here you would typically reload the charts with new data
+            });
+
+            // Sign out button
+            document.getElementById('sign-out-btn').addEventListener('click', function() {
+                const confirmMessage = window.i18n ? window.i18n.t('nav.confirmSignOut') : 'Are you sure you want to sign out?';
+                if (confirm(confirmMessage)) {
+                    window.location.href = 'auth.html';
+                }
+            });
+
+            // Language change listener
+            document.addEventListener('languageChanged', function() {
+                updateChartsLabels();
+            });
+        }
+
+        function updateChartsLabels() {
+            // Update all chart labels when language changes
+            if (window.funnelChart) {
+                window.funnelChart.data.labels = [
+                    window.i18n ? window.i18n.t('analytics.visitors') : 'Visitors',
+                    window.i18n ? window.i18n.t('analytics.leads') : 'Leads',
+                    window.i18n ? window.i18n.t('analytics.qualified') : 'Qualified',
+                    window.i18n ? window.i18n.t('analytics.customers') : 'Customers'
+                ];
+                window.funnelChart.update();
+            }
+
+            if (window.campaignChart) {
+                window.campaignChart.data.datasets[0].label = window.i18n ? window.i18n.t('analytics.leadsGenerated') : 'Leads Generated';
+                window.campaignChart.data.datasets[1].label = window.i18n ? window.i18n.t('analytics.conversions') : 'Conversions';
+                window.campaignChart.update();
+            }
+
+            if (window.sourcesChart) {
+                window.sourcesChart.data.labels = [
+                    window.i18n ? window.i18n.t('analytics.googleAds') : 'Google Ads',
+                    window.i18n ? window.i18n.t('analytics.facebook') : 'Facebook',
+                    window.i18n ? window.i18n.t('analytics.linkedin') : 'LinkedIn',
+                    window.i18n ? window.i18n.t('analytics.organic') : 'Organic',
+                    window.i18n ? window.i18n.t('analytics.referral') : 'Referral'
+                ];
+                window.sourcesChart.data.datasets[0].label = window.i18n ? window.i18n.t('analytics.leads') : 'Leads';
+                window.sourcesChart.update();
+            }
+        }
+
+        // Animate counters on page load
+        function animateCounters() {
+            const counters = document.querySelectorAll('.stat-value');
+            counters.forEach(counter => {
+                const target = parseInt(counter.textContent.replace(/[^0-9]/g, ''));
+                const increment = target / 100;
+                let current = 0;
+
+                const timer = setInterval(() => {
+                    current += increment;
+                    if (current >= target) {
+                        current = target;
+                        clearInterval(timer);
+                    }
+
+                    if (counter.textContent.includes('$')) {
+                        counter.textContent = '$' + Math.floor(current).toLocaleString();
+                    } else if (counter.textContent.includes('%')) {
+                        counter.textContent = (current / 10).toFixed(1) + '%';
+                    } else {
+                        counter.textContent = Math.floor(current).toLocaleString();
+                    }
+                }, 20);
+            });
+        }
+
+        // Start counter animation after page load
+        setTimeout(animateCounters, 500);
+    </script>
 </body>
-</html> 
+</html>

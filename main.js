@@ -1,9 +1,18 @@
 // Language Management
 const languages = {
     'en': {
+        nav: {
+            features: "Features",
+            pricing: "Pricing",
+            results: "Results",
+            getStarted: "Get Started"
+        },
         hero: {
-            title: 'Automate Your Leads. Scale With Precision.',
-            subtitle: 'Rarity Leads is your AI-native platform to attract, qualify, and close clients — without the manual grind.'
+            title: 'Generate Premium Leads on Autopilot',
+            subtitle: 'Transform your business with AI-powered lead generation that delivers qualified prospects 24/7. Join 500+ businesses already scaling with Rarity Leads.',
+            getStarted: "Get Started",
+            strategyCall: "Free Strategy Call",
+            badge: "Rated #1 Lead Generation Platform"
         },
         features: {
             one: {
@@ -22,12 +31,27 @@ const languages = {
         cta: {
             title: 'Stop Chasing Leads. Start Closing.',
             button: 'Get Started'
+        },
+        metrics: {
+            leadQuality: "Lead Quality Score",
+            conversionRate: "Conversion Rate",
+            costPerLead: "Cost Per Lead",
+            responseTime: "Response Time"
         }
     },
     'pt-BR': {
+        nav: {
+            features: "Recursos",
+            pricing: "Preços",
+            results: "Resultados",
+            getStarted: "Começar"
+        },
         hero: {
-            title: 'Automatize Seus Leads. Escale com Precisão.',
-            subtitle: 'Rarity Leads é sua plataforma nativa em IA para atrair, qualificar e fechar clientes — sem o trabalho manual.'
+            title: 'Gere Leads Premium no Piloto Automático',
+            subtitle: 'Transforme seu negócio com geração de leads alimentada por IA que entrega prospects qualificados 24/7. Junte-se a mais de 500 empresas já escalando com Rarity Leads.',
+            getStarted: "Começar Agora",
+            strategyCall: "Chamada Estratégica Gratuita",
+            badge: "Plataforma #1 de Geração de Leads"
         },
         features: {
             one: {
@@ -46,12 +70,27 @@ const languages = {
         cta: {
             title: 'Pare de Perseguir Leads. Comece a Fechar.',
             button: 'Começar Agora'
+        },
+        metrics: {
+            leadQuality: "Pontuação de Qualidade de Leads",
+            conversionRate: "Taxa de Conversão",
+            costPerLead: "Custo por Lead",
+            responseTime: "Tempo de Resposta"
         }
     },
     'es': {
+        nav: {
+            features: "Características",
+            pricing: "Precios",
+            results: "Resultados",
+            getStarted: "Comenzar"
+        },
         hero: {
-            title: 'Automatiza tus Leads. Escala con Precisión.',
-            subtitle: 'Rarity Leads es tu plataforma nativa en IA para atraer, calificar y cerrar clientes — sin el trabajo manual.'
+            title: 'Genera Leads Premium en Piloto Automático',
+            subtitle: 'Transforma tu negocio con generación de leads impulsada por IA que entrega prospectos calificados 24/7. Únete a más de 500 empresas ya escalando con Rarity Leads.',
+            getStarted: "Comenzar Ahora",
+            strategyCall: "Llamada Estratégica Gratuita",
+            badge: "Plataforma #1 de Generación de Leads"
         },
         features: {
             one: {
@@ -70,12 +109,27 @@ const languages = {
         cta: {
             title: 'Deja de Perseguir Leads. Comienza a Cerrar.',
             button: 'Comenzar Ahora'
+        },
+        metrics: {
+            leadQuality: "Puntuación de Calidad de Leads",
+            conversionRate: "Tasa de Conversión",
+            costPerLead: "Costo por Lead",
+            responseTime: "Tiempo de Respuesta"
         }
     },
     'fr': {
+        nav: {
+            features: "Fonctionnalités",
+            pricing: "Tarifs",
+            results: "Résultats",
+            getStarted: "Commencer"
+        },
         hero: {
-            title: 'Automatisez vos Leads. Évoluez avec Précision.',
-            subtitle: 'Rarity Leads est votre plateforme native en IA pour attirer, qualifier et conclure des clients — sans le travail manuel.'
+            title: 'Générez des Prospects Premium en Pilote Automatique',
+            subtitle: 'Transformez votre entreprise avec la génération de prospects alimentée par IA qui livre des prospects qualifiés 24/7. Rejoignez plus de 500 entreprises déjà en croissance avec Rarity Leads.',
+            getStarted: "Commencer Maintenant",
+            strategyCall: "Appel Stratégique Gratuit",
+            badge: "Plateforme #1 de Génération de Prospects"
         },
         features: {
             one: {
@@ -94,11 +148,17 @@ const languages = {
         cta: {
             title: 'Arrêtez de Courir après les Leads. Commencez à Conclure.',
             button: 'Commencer Maintenant'
+        },
+        metrics: {
+            leadQuality: "Score de Qualité des Prospects",
+            conversionRate: "Taux de Conversion",
+            costPerLead: "Coût par Prospect",
+            responseTime: "Temps de Réponse"
         }
     }
 };
 
-// DOM Elements
+// DOM Elements - with null checks
 const languageSelector = document.querySelector('.language-selector');
 const currentLang = document.querySelector('.current-lang');
 const langDropdown = document.querySelector('.lang-dropdown');
@@ -111,28 +171,37 @@ const supportedLangs = ['en', 'pt-BR', 'es', 'fr'];
 
 // Set initial language
 let currentLanguage = supportedLangs.includes(browserLang) ? browserLang : 'en';
-updateLanguage(currentLanguage);
+// Wait for DOM to be ready before updating language
+document.addEventListener('DOMContentLoaded', () => {
+    updateLanguage(currentLanguage);
+});
 
 // Language selector toggle
-currentLang.addEventListener('click', () => {
-    langDropdown.style.display = langDropdown.style.display === 'block' ? 'none' : 'block';
-});
+if (currentLang && langDropdown) {
+    currentLang.addEventListener('click', () => {
+        langDropdown.style.display = langDropdown.style.display === 'block' ? 'none' : 'block';
+    });
+}
 
 // Language selection
-document.querySelectorAll('.lang-dropdown a').forEach(link => {
-    link.addEventListener('click', (e) => {
-        e.preventDefault();
-        const lang = e.target.dataset.lang;
-        updateLanguage(lang);
-        langDropdown.style.display = 'none';
+if (langDropdown) {
+    document.querySelectorAll('.lang-dropdown a').forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const lang = e.target.dataset.lang;
+            updateLanguage(lang);
+            langDropdown.style.display = 'none';
+        });
     });
-});
+}
 
 // Mobile menu toggle
-mobileMenuToggle.addEventListener('click', () => {
-    navLinks.classList.toggle('active');
-    mobileMenuToggle.classList.toggle('active');
-});
+if (mobileMenuToggle && navLinks) {
+    mobileMenuToggle.addEventListener('click', () => {
+        navLinks.classList.toggle('active');
+        mobileMenuToggle.classList.toggle('active');
+    });
+}
 
 // Smooth scroll for anchor links
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -158,25 +227,85 @@ function updateLanguage(lang) {
     const content = languages[lang];
     if (!content) return;
 
+    // Generic function to update elements with data-i18n attributes
+    function updateI18nElements() {
+        document.querySelectorAll('[data-i18n]').forEach(element => {
+            const key = element.getAttribute('data-i18n');
+            const value = getNestedValue(content, key);
+            if (value) {
+                element.textContent = value;
+            }
+        });
+    }
+
+    // Helper function to get nested object values
+    function getNestedValue(obj, path) {
+        return path.split('.').reduce((current, key) => current && current[key], obj);
+    }
+
+    // Update navigation menu
+    const navFeatures = document.querySelector('nav a[href="#features"]');
+    const navPricing = document.querySelector('nav a[href="#pricing"]');
+    const navResults = document.querySelector('nav a[href="#results"]');
+    const navGetStarted = document.querySelector('nav .btn-primary');
+
+    if (navFeatures) navFeatures.textContent = content.nav.features;
+    if (navPricing) navPricing.textContent = content.nav.pricing;
+    if (navResults) navResults.textContent = content.nav.results;
+    if (navGetStarted) navGetStarted.textContent = content.nav.getStarted;
+
     // Update hero section
-    document.querySelector('#hero-section h1').textContent = content.hero.title;
-    document.querySelector('#hero-section .hero-subtitle').textContent = content.hero.subtitle;
+    const heroTitle = document.querySelector('#hero-section h1');
+    const heroSubtitle = document.querySelector('#hero-section .hero-subtitle');
+    const heroBadge = document.querySelector('#hero-section .badge span:last-child');
+    if (heroTitle) heroTitle.innerHTML = content.hero.title.replace('Premium Leads', '<span class="gradient-text">Premium Leads</span>');
+    if (heroSubtitle) heroSubtitle.textContent = content.hero.subtitle;
+    if (heroBadge) heroBadge.textContent = content.hero.badge;
+
+    // Update hero buttons
+    const getStartedBtn = document.querySelector('#hero-section .btn-primary span:last-child');
+    const strategyCallBtn = document.querySelector('#hero-section .btn-secondary');
+    if (getStartedBtn) getStartedBtn.textContent = content.hero.getStarted;
+    if (strategyCallBtn) strategyCallBtn.textContent = content.hero.strategyCall;
 
     // Update features
-    document.querySelector('#feature-one h2').textContent = content.features.one.title;
-    document.querySelector('#feature-one p').textContent = content.features.one.description;
-    document.querySelector('#feature-two h2').textContent = content.features.two.title;
-    document.querySelector('#feature-two p').textContent = content.features.two.description;
-    document.querySelector('#feature-three h2').textContent = content.features.three.title;
-    document.querySelector('#feature-three p').textContent = content.features.three.description;
+    const featureOne = document.querySelector('#feature-one h2');
+    const featureOneDesc = document.querySelector('#feature-one p');
+    const featureTwo = document.querySelector('#feature-two h2');
+    const featureTwoDesc = document.querySelector('#feature-two p');
+    const featureThree = document.querySelector('#feature-three h2');
+    const featureThreeDesc = document.querySelector('#feature-three p');
+
+    if (featureOne) featureOne.textContent = content.features.one.title;
+    if (featureOneDesc) featureOneDesc.textContent = content.features.one.description;
+    if (featureTwo) featureTwo.textContent = content.features.two.title;
+    if (featureTwoDesc) featureTwoDesc.textContent = content.features.two.description;
+    if (featureThree) featureThree.textContent = content.features.three.title;
+    if (featureThreeDesc) featureThreeDesc.textContent = content.features.three.description;
 
     // Update CTA section
-    document.querySelector('#cta-footer h2').textContent = content.cta.title;
-    document.querySelector('#cta-footer .btn-primary').textContent = content.cta.button;
+    const ctaTitle = document.querySelector('#cta-footer h2');
+    const ctaButton = document.querySelector('#cta-footer .btn-primary span:first-child');
+    if (ctaTitle) ctaTitle.textContent = content.cta.title;
+    if (ctaButton) ctaButton.textContent = content.cta.button;
+
+    // Update metrics
+    const metricsLabels = document.querySelectorAll('.metrics-dashboard .metric-label');
+    if (metricsLabels.length >= 4 && content.metrics) {
+        metricsLabels[0].textContent = content.metrics.leadQuality;
+        metricsLabels[1].textContent = content.metrics.conversionRate;
+        metricsLabels[2].textContent = content.metrics.costPerLead;
+        metricsLabels[3].textContent = content.metrics.responseTime;
+    }
 
     // Update language selector
-    currentLang.textContent = `${getFlagEmoji(lang)} ${lang.toUpperCase()}`;
+    if (currentLang) {
+        currentLang.textContent = `${getFlagEmoji(lang)} ${lang.toUpperCase()}`;
+    }
     document.documentElement.lang = lang;
+
+    // Call the generic i18n updater for any remaining elements
+    updateI18nElements();
 }
 
 // Get flag emoji for language
@@ -192,17 +321,19 @@ function getFlagEmoji(lang) {
 
 // Close dropdowns when clicking outside
 document.addEventListener('click', (e) => {
-    if (!languageSelector.contains(e.target)) {
+    if (languageSelector && langDropdown && !languageSelector.contains(e.target)) {
         langDropdown.style.display = 'none';
     }
 });
 
 // Handle window resize
 window.addEventListener('resize', () => {
-    if (window.innerWidth >= 768) {
-        navLinks.style.display = 'flex';
-    } else {
-        navLinks.style.display = 'none';
+    if (navLinks) {
+        if (window.innerWidth >= 768) {
+            navLinks.style.display = 'flex';
+        } else {
+            navLinks.style.display = 'none';
+        }
     }
 });
 
@@ -333,4 +464,47 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
-}); 
+
+    // Handle pricing CTA buttons
+    document.querySelectorAll('.pricing-cta').forEach(button => {
+        button.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.location.href = 'auth.html';
+        });
+    });
+
+    // Handle "Get Started" buttons
+    document.querySelectorAll('.btn-primary').forEach(button => {
+        if (button.textContent.includes('Get Started') || button.textContent.includes('Começar') ||
+            button.textContent.includes('Comenzar') || button.textContent.includes('Commencer')) {
+            button.addEventListener('click', (e) => {
+                e.preventDefault();
+                window.location.href = 'auth.html';
+            });
+        }
+    });
+
+    // Handle "Free Strategy Call" button
+    const strategyButton = document.querySelector('.btn-secondary');
+    if (strategyButton) {
+        strategyButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            // You can replace this with actual booking link
+            window.open('https://calendly.com/rarity-leads', '_blank');
+        });
+    }
+
+    // Add smooth scrolling for better UX
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        });
+    });
+});

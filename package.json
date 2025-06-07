@@ -1,0 +1,23 @@
+{
+  "name": "rarity-leads",
+  "version": "1.0.0",
+  "description": "AI-Powered Lead Generation Platform",
+  "main": "index.html",
+  "scripts": {
+    "dev": "live-server --port=3000",
+    "build": "echo 'Build complete'",
+    "start": "live-server --port=8080"
+  },
+  "keywords": [
+    "lead-generation",
+    "ai",
+    "saas",
+    "marketing",
+    "automation"
+  ],
+  "author": "Rarity Agency",
+  "license": "MIT",
+  "devDependencies": {
+    "live-server": "^1.2.2"
+  }
+}

@@ -3,179 +3,678 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sign Up – Rarity Leads</title>
-  <link rel="stylesheet" href="https://fonts.bunny.net/css?family=bentosans:400" />
-  <link rel="stylesheet" href="styles.css" />
+  <title data-i18n="meta.title">Sign Up – Rarity Leads</title>
+  <meta name="description" data-i18n="meta.description" content="Join thousands of businesses automating their lead generation with AI-powered tools">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
     body {
-      background: linear-gradient(135deg, #D50057 0%, #9B00C8 100%);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-family: 'BentoSans', Arial, sans-serif;
+      padding: 20px;
+      position: relative;
+      overflow-x: hidden;
     }
+
+    /* Animated Background */
+    body::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background:
+        radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
+        radial-gradient(circle at 40% 40%, rgba(120, 219, 255, 0.2) 0%, transparent 50%);
+      animation: backgroundMove 20s ease-in-out infinite;
+    }
+
+    @keyframes backgroundMove {
+      0%, 100% { transform: translateX(0) translateY(0); }
+      33% { transform: translateX(-30px) translateY(-50px); }
+      66% { transform: translateX(20px) translateY(30px); }
+    }
+
     .auth-container {
-      background: #1a1740;
-      border-radius: 18px;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.18);
-      padding: 2.5rem 2rem 2rem 2rem;
-      max-width: 370px;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 24px;
+      box-shadow:
+        0 20px 40px rgba(0, 0, 0, 0.1),
+        0 0 0 1px rgba(255, 255, 255, 0.05);
+      padding: 48px 40px;
+      max-width: 440px;
       width: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      color: #fff;
+      position: relative;
+      z-index: 1;
+      animation: slideUp 0.6s ease-out;
     }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .auth-header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
     .auth-logo {
-      width: 48px;
-      margin-bottom: 1.2rem;
-    }
-    .auth-title {
-      font-size: 2rem;
-      font-weight: 700;
-      margin-bottom: 0.5rem;
-      color: #fff;
-      letter-spacing: 0.01em;
-    }
-    .auth-subtitle {
-      color: #bdb8e3;
-      font-size: 1.1rem;
-      margin-bottom: 2rem;
-      text-align: center;
-    }
-    .auth-btn-google {
-      background: #fff;
-      color: #1a1740;
-      border: none;
-      border-radius: 999px;
-      padding: 0.9rem 1.5rem;
-      font-size: 1.1rem;
-      font-family: 'BentoSans', Arial, sans-serif;
-      font-weight: 500;
+      width: 64px;
+      height: 64px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 16px;
       display: flex;
       align-items: center;
-      gap: 0.7rem;
-      cursor: pointer;
-      margin-bottom: 1.2rem;
-      width: 100%;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.07);
-      transition: background 0.2s;
+      justify-content: center;
+      margin: 0 auto 24px;
+      box-shadow: 0 8px 32px rgba(102, 126, 234, 0.3);
     }
-    .auth-btn-google:hover {
-      background: #f3e8ff;
+
+    .auth-logo i {
+      color: white;
+      font-size: 28px;
     }
-    .auth-divider {
-      width: 100%;
-      text-align: center;
-      border-bottom: 1px solid #2e2860;
-      line-height: 0.1em;
-      margin: 1.2rem 0 1.5rem 0;
-      color: #bdb8e3;
-      font-size: 0.95rem;
+
+    .auth-title {
+      font-size: 32px;
+      font-weight: 700;
+      color: #1a202c;
+      margin-bottom: 8px;
+      letter-spacing: -0.02em;
     }
-    .auth-divider span {
-      background: #1a1740;
-      padding: 0 1rem;
+
+    .auth-subtitle {
+      color: #64748b;
+      font-size: 16px;
+      line-height: 1.5;
+      font-weight: 400;
     }
+
     .auth-form {
-      width: 100%;
       display: flex;
       flex-direction: column;
-      gap: 1.1rem;
+      gap: 24px;
     }
-    .auth-form label {
-      font-size: 1rem;
-      color: #bdb8e3;
-      margin-bottom: 0.3rem;
+
+    .social-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 32px;
     }
-    .auth-form input {
-      padding: 0.8rem 1rem;
-      border-radius: 8px;
-      border: 1px solid #2e2860;
-      background: #221d4a;
-      color: #fff;
-      font-size: 1rem;
-      font-family: 'BentoSans', Arial, sans-serif;
-      outline: none;
-      transition: border 0.2s;
-    }
-    .auth-form input:focus {
-      border: 1.5px solid #D50057;
-    }
-    .auth-btn-primary {
-      background: linear-gradient(90deg, #D50057 0%, #9B00C8 100%);
-      color: #fff;
-      border: none;
-      border-radius: 999px;
-      padding: 0.9rem 1.5rem;
-      font-size: 1.1rem;
-      font-family: 'BentoSans', Arial, sans-serif;
+
+    .social-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      padding: 16px 24px;
+      border: 2px solid #e2e8f0;
+      border-radius: 12px;
+      background: white;
+      color: #374151;
+      font-size: 16px;
       font-weight: 500;
-      cursor: pointer;
-      margin-top: 0.5rem;
-      transition: background 0.2s;
-    }
-    .auth-btn-primary:hover {
-      background: linear-gradient(90deg, #B044FF 0%, #5DB5FF 100%);
-    }
-    .auth-error {
-      color: #ffb4b4;
-      background: #3a1a1a;
-      border-radius: 6px;
-      padding: 0.7rem 1rem;
-      margin-bottom: 0.7rem;
-      font-size: 0.98rem;
-      display: none;
-    }
-    .auth-footer {
-      margin-top: 1.5rem;
-      color: #bdb8e3;
-      font-size: 0.98rem;
-      text-align: center;
-    }
-    .auth-footer a {
-      color: #D50057;
       text-decoration: none;
-      margin-left: 0.3rem;
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+
+    .social-btn:hover {
+      border-color: #667eea;
+      background: #f8fafc;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+    }
+
+    .social-btn img {
+      width: 20px;
+      height: 20px;
+    }
+
+    .divider {
+      position: relative;
+      text-align: center;
+      margin: 32px 0;
+    }
+
+    .divider::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: #e2e8f0;
+    }
+
+    .divider span {
+      background: rgba(255, 255, 255, 0.95);
+      color: #64748b;
+      padding: 0 16px;
+      font-size: 14px;
       font-weight: 500;
     }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .form-label {
+      font-size: 14px;
+      font-weight: 600;
+      color: #374151;
+    }
+
+    .form-input {
+      padding: 16px 20px;
+      border: 2px solid #e2e8f0;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 400;
+      color: #1a202c;
+      background: white;
+      transition: all 0.2s ease;
+      outline: none;
+    }
+
+    .form-input:focus {
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    .form-input::placeholder {
+      color: #9ca3af;
+    }
+
+    .primary-btn {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      padding: 18px 24px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .primary-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+    }
+
+    .primary-btn:active {
+      transform: translateY(0);
+    }
+
+    .primary-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: left 0.5s;
+    }
+
+    .primary-btn:hover::before {
+      left: 100%;
+    }
+
+    .auth-footer {
+      text-align: center;
+      margin-top: 32px;
+      padding-top: 24px;
+      border-top: 1px solid #e2e8f0;
+    }
+
+    .auth-footer p {
+      color: #64748b;
+      font-size: 14px;
+    }
+
+    .auth-footer a {
+      color: #667eea;
+      text-decoration: none;
+      font-weight: 600;
+      margin-left: 4px;
+      transition: color 0.2s ease;
+    }
+
+    .auth-footer a:hover {
+      color: #764ba2;
+    }
+
+    .auth-error {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      color: #dc2626;
+      padding: 12px 16px;
+      border-radius: 8px;
+      font-size: 14px;
+      display: none;
+      animation: shake 0.5s ease-in-out;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      75% { transform: translateX(5px); }
+    }
+
+    .loading {
+      opacity: 0.7;
+      pointer-events: none;
+    }
+
+    .loading .primary-btn {
+      background: #9ca3af;
+    }
+
+    /* Mobile Responsive */
     @media (max-width: 480px) {
-      .auth-container { padding: 1.2rem 0.5rem; }
-      .auth-title { font-size: 1.3rem; }
+      .auth-container {
+        padding: 32px 24px;
+        margin: 16px;
+        border-radius: 20px;
+      }
+
+      .auth-title {
+        font-size: 28px;
+      }
+
+      .auth-subtitle {
+        font-size: 15px;
+      }
+
+      .form-input, .social-btn, .primary-btn {
+        padding: 14px 16px;
+      }
+    }
+
+    /* Dark mode support */
+    @media (prefers-color-scheme: dark) {
+      .auth-container {
+        background: rgba(30, 41, 59, 0.95);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .auth-title {
+        color: #f1f5f9;
+      }
+
+      .auth-subtitle {
+        color: #94a3b8;
+      }
+
+      .form-label {
+        color: #e2e8f0;
+      }
+
+      .form-input {
+        background: rgba(51, 65, 85, 0.8);
+        border-color: #475569;
+        color: #f1f5f9;
+      }
+
+      .social-btn {
+        background: rgba(51, 65, 85, 0.8);
+        border-color: #475569;
+        color: #f1f5f9;
+      }
+
+      .divider::before {
+        background: #475569;
+      }
+
+      .divider span {
+        background: rgba(30, 41, 59, 0.95);
+        color: #94a3b8;
+      }
+
+      .auth-footer {
+        border-color: #475569;
+      }
+
+      .auth-footer p {
+        color: #94a3b8;
+      }
     }
   </style>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="i18n.js"></script>
   <script defer src="auth.js"></script>
 </head>
 <body>
   <main>
     <div class="auth-container" role="main" aria-label="Sign up form">
-      <img src="logo.png" alt="Rarity Leads logo" class="auth-logo" />
-      <div class="auth-title">Create your account</div>
-      <div class="auth-subtitle">Sign up to automate your lead generation with AI.</div>
-      <button class="auth-btn-google" id="google-signup">
-        <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google logo" style="width:22px;"/>
-        Sign up with Google
-      </button>
-      <div class="auth-divider"><span>or sign up with email</span></div>
+      <!-- Language Selector -->
+      <div class="language-selector" style="position: absolute; top: 20px; right: 20px; z-index: 10;">
+        <button class="current-lang" style="background: rgba(255,255,255,0.9); border: 1px solid #e2e8f0; border-radius: 8px; padding: 8px 12px; font-size: 14px; cursor: pointer;">
+          <span class="lang-flag">🇺🇸</span>
+          <span class="lang-code">EN</span>
+          <i class="fas fa-chevron-down" style="margin-left: 8px; font-size: 12px;"></i>
+        </button>
+        <div class="lang-dropdown" style="display: none; position: absolute; top: 100%; right: 0; background: white; border: 1px solid #e2e8f0; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); min-width: 150px; z-index: 20;">
+          <a href="#" data-lang="en" class="lang-option" style="display: flex; align-items: center; padding: 8px 12px; text-decoration: none; color: #374151; font-size: 14px; border-bottom: 1px solid #f3f4f6;">
+            <span class="lang-flag" style="margin-right: 8px;">🇺🇸</span>
+            <span class="lang-name">English</span>
+          </a>
+          <a href="#" data-lang="pt-BR" class="lang-option" style="display: flex; align-items: center; padding: 8px 12px; text-decoration: none; color: #374151; font-size: 14px; border-bottom: 1px solid #f3f4f6;">
+            <span class="lang-flag" style="margin-right: 8px;">🇧🇷</span>
+            <span class="lang-name">Português</span>
+          </a>
+          <a href="#" data-lang="es" class="lang-option" style="display: flex; align-items: center; padding: 8px 12px; text-decoration: none; color: #374151; font-size: 14px; border-bottom: 1px solid #f3f4f6;">
+            <span class="lang-flag" style="margin-right: 8px;">🇪🇸</span>
+            <span class="lang-name">Español</span>
+          </a>
+          <a href="#" data-lang="fr" class="lang-option" style="display: flex; align-items: center; padding: 8px 12px; text-decoration: none; color: #374151; font-size: 14px;">
+            <span class="lang-flag" style="margin-right: 8px;">🇫🇷</span>
+            <span class="lang-name">Français</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Header -->
+      <div class="auth-header">
+        <div class="auth-logo">
+          <i class="fas fa-rocket"></i>
+        </div>
+        <h1 class="auth-title" data-i18n="auth.createAccount">Create your account</h1>
+        <p class="auth-subtitle" data-i18n="auth.signUpSubtitle">Join thousands of businesses automating their lead generation with AI-powered tools</p>
+      </div>
+
+      <!-- Social Login -->
+      <div class="social-buttons">
+        <button class="social-btn" id="google-signup">
+          <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google logo" />
+          <span data-i18n="auth.continueWithGoogle">Continue with Google</span>
+        </button>
+        <button class="social-btn" id="github-signup">
+          <i class="fab fa-github" style="font-size: 20px;"></i>
+          <span data-i18n="auth.continueWithGitHub">Continue with GitHub</span>
+        </button>
+      </div>
+
+      <!-- Divider -->
+      <div class="divider">
+        <span data-i18n="auth.continueWithEmail">or continue with email</span>
+      </div>
+
+      <!-- Form -->
       <form class="auth-form" id="signup-form" autocomplete="on">
-        <div>
-          <label for="email">Email</label>
-          <input type="email" id="email" name="email" required autocomplete="email" placeholder="you@email.com" />
-        </div>
-        <div>
-          <label for="password">Password</label>
-          <input type="password" id="password" name="password" required minlength="6" autocomplete="new-password" placeholder="Create a password" />
-        </div>
         <div class="auth-error" id="auth-error"></div>
-        <button type="submit" class="auth-btn-primary">Sign Up</button>
+
+        <div class="form-group">
+          <label for="email" class="form-label" data-i18n="auth.emailAddress">Email address</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            class="form-input"
+            required
+            autocomplete="email"
+            data-i18n-attr="placeholder:auth.enterEmail"
+            placeholder="Enter your email address"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="password" class="form-label" data-i18n="auth.password">Password</label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            class="form-input"
+            required
+            minlength="8"
+            autocomplete="new-password"
+            data-i18n-attr="placeholder:auth.createPassword"
+            placeholder="Create a strong password"
+          />
+        </div>
+
+        <button type="submit" class="primary-btn" id="signup-btn">
+          <span data-i18n="auth.createAccount">Create Account</span>
+        </button>
       </form>
+
+      <!-- Footer -->
       <div class="auth-footer">
-        Already have an account?
-        <a href="/auth.html">Log in</a>
+        <p><span data-i18n="auth.alreadyHaveAccount">Already have an account?</span> <a href="#" id="switch-to-login" data-i18n="auth.signInInstead">Sign in instead</a></p>
       </div>
     </div>
   </main>
+
+  <!-- Enhanced JavaScript -->
+  <script>
+    // Form state management
+    let isSignUp = true;
+
+    // DOM elements
+    const container = document.querySelector('.auth-container');
+    const title = document.querySelector('.auth-title');
+    const subtitle = document.querySelector('.auth-subtitle');
+    const form = document.getElementById('signup-form');
+    const switchLink = document.getElementById('switch-to-login');
+    const submitBtn = document.getElementById('signup-btn');
+    const errorDiv = document.getElementById('auth-error');
+
+    // Switch between sign up and sign in
+    switchLink.addEventListener('click', (e) => {
+      e.preventDefault();
+      toggleAuthMode();
+    });
+
+    function toggleAuthMode() {
+      isSignUp = !isSignUp;
+
+      if (isSignUp) {
+        title.textContent = window.i18n ? window.i18n.t('auth.createAccount') : 'Create your account';
+        subtitle.textContent = window.i18n ? window.i18n.t('auth.signUpSubtitle') : 'Join thousands of businesses automating their lead generation with AI-powered tools';
+        submitBtn.innerHTML = `<span>${window.i18n ? window.i18n.t('auth.createAccount') : 'Create Account'}</span>`;
+        switchLink.innerHTML = window.i18n ? window.i18n.t('auth.signInInstead') : 'Sign in instead';
+        switchLink.parentElement.innerHTML = `${window.i18n ? window.i18n.t('auth.alreadyHaveAccount') : 'Already have an account?'} <a href="#" id="switch-to-login">${window.i18n ? window.i18n.t('auth.signInInstead') : 'Sign in instead'}</a>`;
+      } else {
+        title.textContent = window.i18n ? window.i18n.t('auth.welcomeBack') : 'Welcome back';
+        subtitle.textContent = window.i18n ? window.i18n.t('auth.signInSubtitle') : 'Sign in to your account to continue managing your leads';
+        submitBtn.innerHTML = `<span>${window.i18n ? window.i18n.t('auth.signIn') : 'Sign In'}</span>`;
+        switchLink.innerHTML = window.i18n ? window.i18n.t('auth.createAccountLink') : 'Create an account';
+        switchLink.parentElement.innerHTML = `${window.i18n ? window.i18n.t('auth.dontHaveAccount') : 'Don\'t have an account?'} <a href="#" id="switch-to-login">${window.i18n ? window.i18n.t('auth.createAccountLink') : 'Create an account'}</a>`;
+      }
+
+      // Re-attach event listener
+      document.getElementById('switch-to-login').addEventListener('click', (e) => {
+        e.preventDefault();
+        toggleAuthMode();
+      });
+
+      // Clear form
+      form.reset();
+      hideError();
+    }
+
+    // Form submission
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+
+      if (!validateForm(email, password)) return;
+
+      setLoading(true);
+
+      try {
+        if (isSignUp) {
+          await handleSignUp(email, password);
+        } else {
+          await handleSignIn(email, password);
+        }
+      } catch (error) {
+        showError(error.message);
+      } finally {
+        setLoading(false);
+      }
+    });
+
+    // Social login handlers
+    document.getElementById('google-signup').addEventListener('click', async () => {
+      setLoading(true);
+      try {
+        await handleGoogleAuth();
+      } catch (error) {
+        showError('Google authentication failed');
+      } finally {
+        setLoading(false);
+      }
+    });
+
+    document.getElementById('github-signup').addEventListener('click', async () => {
+      setLoading(true);
+      try {
+        await handleGitHubAuth();
+      } catch (error) {
+        showError('GitHub authentication failed');
+      } finally {
+        setLoading(false);
+      }
+    });
+
+    // Validation
+    function validateForm(email, password) {
+      if (!email || !password) {
+        showError('Please fill in all fields');
+        return false;
+      }
+
+      if (!isValidEmail(email)) {
+        showError('Please enter a valid email address');
+        return false;
+      }
+
+      if (isSignUp && password.length < 8) {
+        showError('Password must be at least 8 characters long');
+        return false;
+      }
+
+      return true;
+    }
+
+    function isValidEmail(email) {
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    }
+
+    // UI helpers
+    function setLoading(loading) {
+      if (loading) {
+        container.classList.add('loading');
+        submitBtn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> ${window.i18n ? window.i18n.t('auth.processing') : 'Processing...'}`;
+      } else {
+        container.classList.remove('loading');
+        const buttonText = isSignUp ?
+          (window.i18n ? window.i18n.t('auth.createAccount') : 'Create Account') :
+          (window.i18n ? window.i18n.t('auth.signIn') : 'Sign In');
+        submitBtn.innerHTML = `<span>${buttonText}</span>`;
+      }
+    }
+
+    function showError(message) {
+      errorDiv.textContent = message;
+      errorDiv.style.display = 'block';
+      errorDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    function hideError() {
+      errorDiv.style.display = 'none';
+    }
+
+    // Auth handlers (integrate with your backend)
+    async function handleSignUp(email, password) {
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 1500));
+
+      // Replace with actual Supabase integration
+      console.log('Sign up:', { email, password });
+
+      // Redirect to dashboard on success
+      window.location.href = '/dashboard.html';
+    }
+
+    async function handleSignIn(email, password) {
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 1500));
+
+      // Replace with actual Supabase integration
+      console.log('Sign in:', { email, password });
+
+      // Redirect to dashboard on success
+      window.location.href = '/dashboard.html';
+    }
+
+    async function handleGoogleAuth() {
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 1000));
+
+      // Replace with actual Google OAuth
+      console.log('Google auth');
+
+      // Redirect to dashboard on success
+      window.location.href = '/dashboard.html';
+    }
+
+    async function handleGitHubAuth() {
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 1000));
+
+      // Replace with actual GitHub OAuth
+      console.log('GitHub auth');
+
+      // Redirect to dashboard on success
+      window.location.href = '/dashboard.html';
+    }
+
+    // Input focus effects
+    document.querySelectorAll('.form-input').forEach(input => {
+      input.addEventListener('focus', () => {
+        hideError();
+      });
+    });
+
+    // Add some nice entrance animations
+    setTimeout(() => {
+      container.style.transform = 'translateY(0)';
+      container.style.opacity = '1';
+    }, 100);
+  </script>
 </body>
-</html> 
+</html>

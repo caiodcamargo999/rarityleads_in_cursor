@@ -1,44 +1,267 @@
 {
-    "meta": {
-        "title": "Rarity Leads - Plataforma de Generación de Leads con IA",
-        "description": "Rarity Leads es tu plataforma nativa en IA para atraer, calificar y cerrar clientes — sin el trabajo manual."
-    },
-    "nav": {
-        "features": "Características",
-        "pricing": "Precios",
-        "results": "Resultados",
-        "startFree": "Comenzar Gratis"
-    },
-    "hero": {
-        "title": "Automatiza tus Leads. Escala con Precisión.",
-        "subtitle": "Rarity Leads es tu plataforma nativa en IA para atraer, calificar y cerrar clientes — sin el trabajo manual.",
-        "cta": "Comenzar Gratis"
-    },
-    "features": {
-        "one": {
-            "title": "SDR con IA que Califica Leads para Ti",
-            "description": "Nuestro chatbot inteligente trabaja 24/7 para calificar leads a través de conversaciones naturales, asegurando que solo prospectos con alta intención lleguen a tu equipo."
-        },
-        "two": {
-            "title": "Seguimientos Inteligentes en WhatsApp, Sin Mensajes Manuales",
-            "description": "Automatiza tus secuencias de seguimiento con soporte para medios ricos, secuenciación inteligente y lógica de respuesta basada en IA."
-        },
-        "three": {
-            "title": "Inteligencia de Campañas para Google y Meta",
-            "description": "Optimiza tus campañas publicitarias con insights basados en IA, pujas automatizadas y seguimiento de rendimiento en tiempo real."
-        }
-    },
-    "cta": {
-        "title": "Deja de Perseguir Leads. Comienza a Cerrar.",
-        "button": "Comenzar Ahora",
-        "trust": {
-            "clutch": "4.9 Estrellas en Clutch",
-            "clients": "1.200+ Clientes",
-            "ai": "Powered por IA y Aprobado por Humanos"
-        }
-    },
-    "accessibility": {
-        "skipToContent": "Saltar al contenido principal",
-        "menuToggle": "Alternar menú"
+  "meta": {
+    "title": "Rarity Leads - Plataforma de Generación de Leads con IA",
+    "description": "Rarity Leads es tu plataforma nativa de IA para atraer, calificar y cerrar clientes — sin el trabajo manual."
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "leads": "Leads",
+    "campaigns": "Campañas",
+    "sequences": "Secuencias",
+    "analytics": "Analytics",
+    "settings": "Configuración",
+    "features": "Características",
+    "pricing": "Precios",
+    "results": "Resultados",
+    "startFree": "Empezar Gratis",
+    "signOut": "Cerrar Sesión",
+    "getStarted": "Empezar",
+    "freeStrategyCall": "Consultoría Estratégica Gratuita",
+    "confirmSignOut": "¿Estás seguro de que quieres cerrar sesión?",
+    "agencyOwner": "Propietario de Agencia",
+    "performanceManager": "Gerente de Rendimiento",
+    "sdrSetter": "SDR/Programador",
+    "client": "Cliente"
+  },
+  "hero": {
+    "badge": "Plataforma #1 de Generación de Leads Evaluada",
+    "title": "Genera Leads Premium en Piloto Automático",
+    "subtitle": "Transforma tu negocio con generación de leads impulsada por IA que entrega prospectos calificados 24/7. Únete a más de 500 empresas ya escalando con Rarity Leads.",
+    "cta": "Empezar",
+    "ctaSecondary": "Consultoría Gratuita",
+    "stats": {
+      "clients": "Clientes Activos",
+      "successRate": "Tasa de Éxito",
+      "leadGen": "Generación de Leads"
     }
-} 
+  },
+  "dashboard": {
+    "welcome": "Bienvenido de vuelta",
+    "subtitle": "Aquí está lo que está pasando con tu generación de leads hoy",
+    "overview": "Resumen de Rendimiento",
+    "leadsGenerated": "Leads Generados",
+    "conversionRate": "Tasa de Conversión",
+    "activeCampaigns": "Campañas Activas",
+    "revenue": "Ingresos",
+    "recentActivity": "Actividad Reciente",
+    "topLeads": "Top Leads",
+    "campaignPerformance": "Rendimiento de Campañas",
+    "quickActions": "Acciones Rápidas",
+    "createCampaign": "Crear Campaña",
+    "importLeads": "Importar Leads",
+    "viewReports": "Ver Reportes",
+    "thisMonth": "este mes",
+    "noVariation": "Sin variación"
+  },
+  "analytics": {
+    "title": "Panel de Análisis",
+    "subtitle": "Monitorea el rendimiento de tu generación de leads y la efectividad de tus campañas con insights completos",
+    "overview": "Resumen",
+    "performanceCharts": "Gráficos de Rendimiento",
+    "acquisitionFunnel": "Embudo de Adquisición",
+    "campaignPerformance": "Rendimiento de las Campañas",
+    "leadSources": "Fuentes de Leads",
+    "revenueTrends": "Tendencias de Ingresos",
+    "leadsGenerated": "Leads Generados",
+    "conversionRate": "Tasa de Conversión",
+    "activeCampaigns": "Campañas Activas",
+    "revenue": "Ingresos",
+    "period": {
+      "last7days": "Últimos 7 días",
+      "last30days": "Últimos 30 días",
+      "last90days": "Últimos 90 días"
+    },
+    "noData": "Sin datos disponibles",
+    "thisMonth": "este mes",
+    "noVariation": "Sin variación",
+    "week": "Semana",
+    "visitors": "Visitantes",
+    "leads": "Leads",
+    "qualified": "Calificados",
+    "customers": "Clientes",
+    "conversions": "Conversiones",
+    "googleAds": "Google Ads",
+    "facebook": "Facebook",
+    "linkedin": "LinkedIn",
+    "organic": "Orgánico",
+    "referral": "Referencia"
+  },
+  "auth": {
+    "createAccount": "Crear Cuenta",
+    "welcomeBack": "Bienvenido de vuelta",
+    "signUpSubtitle": "Únete a miles de empresas automatizando su generación de leads con herramientas impulsadas por IA",
+    "signInSubtitle": "Inicia sesión en tu cuenta para continuar gestionando tus leads",
+    "continueWithGoogle": "Continuar con Google",
+    "continueWithGitHub": "Continuar con GitHub",
+    "continueWithEmail": "o continuar con email",
+    "emailAddress": "Dirección de email",
+    "password": "Contraseña",
+    "createPassword": "Crea una contraseña fuerte",
+    "signIn": "Iniciar Sesión",
+    "alreadyHaveAccount": "¿Ya tienes una cuenta?",
+    "signInInstead": "Inicia sesión aquí",
+    "dontHaveAccount": "¿No tienes una cuenta?",
+    "createAccountLink": "Crear una cuenta",
+    "enterEmail": "Ingresa tu dirección de email",
+    "processing": "Procesando...",
+    "errors": {
+      "fillAllFields": "Por favor, completa todos los campos",
+      "invalidEmail": "Por favor, ingresa una dirección de email válida",
+      "passwordTooShort": "La contraseña debe tener al menos 8 caracteres",
+      "googleAuthFailed": "Autenticación con Google falló",
+      "githubAuthFailed": "Autenticación con GitHub falló"
+    }
+  },
+  "features": {
+    "title": "Por qué las Empresas Eligen Rarity Leads",
+    "subtitle": "Nuestra plataforma impulsada por IA combina segmentación avanzada, automatización inteligente y optimización en tiempo real para entregar resultados que realmente importan.",
+    "one": {
+      "title": "SDR con IA que Califica Leads para Ti",
+      "highlight": "Ahorra 15+ horas semanales",
+      "description": "Nuestro chatbot inteligente trabaja 24/7 para calificar leads a través de conversaciones naturales, asegurando que solo prospectos de alta intención lleguen a tu equipo."
+    },
+    "two": {
+      "title": "Seguimientos Inteligentes en WhatsApp, Sin Mensajes Manuales",
+      "highlight": "94% Tasa de Respuesta",
+      "description": "Automatiza tus secuencias de seguimiento con soporte de medios ricos, secuenciación inteligente y lógica de respuesta con IA."
+    },
+    "three": {
+      "title": "Inteligencia de Campañas para Google y Meta",
+      "highlight": "-68% Costo por Lead",
+      "description": "Optimiza tus campañas publicitarias con insights impulsados por IA, pujas automatizadas y seguimiento de rendimiento en tiempo real."
+    },
+    "four": {
+      "title": "Puntuación de Leads en Tiempo Real",
+      "highlight": "31.2% Tasa de Conversión",
+      "description": "Algoritmos avanzados de IA puntúan leads en tiempo real, priorizando prospectos de alto valor para acción inmediata."
+    },
+    "five": {
+      "title": "Segmentación de Precisión",
+      "highlight": "500+ Puntos de Datos",
+      "description": "Segmenta a tus clientes ideales con precisión láser usando nuestra base de datos propietaria e insights de audiencia impulsados por IA."
+    },
+    "six": {
+      "title": "Secuencias de Nutrición Automatizadas",
+      "highlight": "Compromiso 24/7",
+      "description": "Mantén a los prospectos comprometidos con secuencias de nutrición personalizadas y multicanal que se adaptan basadas en el comportamiento."
+    }
+  },
+  "testimonials": {
+    "title": "Resultados Reales de Empresas Reales",
+    "subtitle": "Ve cómo empresas como la tuya están escalando con Rarity Leads",
+    "one": {
+      "quote": "Rarity Leads transformó nuestra generación de leads. Pasamos de 20 leads por mes a 200+ prospectos calificados. El ROI es increíble.",
+      "author": "Marcus Johnson",
+      "title": "CEO, TechFlow Solutions",
+      "metric": "+900%",
+      "metricLabel": "Aumento de Leads"
+    },
+    "two": {
+      "quote": "La calificación por IA es revolucionaria. Nuestro equipo de ventas ahora se enfoca solo en leads calientes, y nuestra tasa de conversión se duplicó.",
+      "author": "Sarah Chen",
+      "title": "VP Ventas, GrowthCorp",
+      "metric": "+187%",
+      "metricLabel": "Tasa de Conversión"
+    },
+    "three": {
+      "quote": "La configuración fue increíblemente fácil, y los resultados llegaron rápido. En 48 horas, tuvimos nuestros primeros leads calificados llegando.",
+      "author": "David Rodriguez",
+      "title": "Fundador, StartupLab",
+      "metric": "48h",
+      "metricLabel": "Primeros Resultados"
+    }
+  },
+  "pricing": {
+    "title": "Elige Tu Plan de Crecimiento",
+    "subtitle": "Precios transparentes que escalan con tu éxito",
+    "starter": {
+      "name": "Iniciante",
+      "badge": "Más Popular",
+      "price": "297",
+      "period": "/mes",
+      "description": "Perfecto para pequeñas empresas listas para escalar",
+      "features": [
+        "Hasta 500 leads/mes",
+        "Calificación de Leads con IA",
+        "Automatización WhatsApp",
+        "Analytics Básico",
+        "Soporte por Email"
+      ],
+      "cta": "Prueba Gratis"
+    },
+    "professional": {
+      "name": "Profesional",
+      "badge": "Mejor Valor",
+      "price": "597",
+      "period": "/mes",
+      "description": "Para empresas en crecimiento que necesitan más poder",
+      "features": [
+        "Hasta 2,000 leads/mes",
+        "Calificación Avanzada con IA",
+        "Automatización Multicanal",
+        "Analytics y Reportes Avanzados",
+        "Soporte Prioritario",
+        "Integraciones Personalizadas",
+        "Pruebas A/B"
+      ],
+      "cta": "Prueba Gratis"
+    },
+    "enterprise": {
+      "name": "Enterprise",
+      "badge": "Personalizado",
+      "price": "1,497",
+      "period": "/mes",
+      "description": "Para grandes organizaciones con necesidades complejas",
+      "features": [
+        "Leads ilimitados",
+        "Entrenamiento de IA Personalizado",
+        "Solución White-label",
+        "Gerente de Cuenta Dedicado",
+        "Soporte 24/7 por Teléfono",
+        "Integraciones Personalizadas",
+        "Garantía SLA"
+      ],
+      "cta": "Contactar Ventas"
+    }
+  },
+  "cta": {
+    "title": "Deja de Perseguir Leads. Empieza a Cerrar Ventas.",
+    "subtitle": "Únete a cientos de empresas generando leads premium en piloto automático. Comienza tu viaje hoy y ve resultados en solo 48 horas.",
+    "button": "Empezar",
+    "features": {
+      "noCard": "Sin Tarjeta de Crédito",
+      "quickSetup": "Configuración en 5 Minutos",
+      "fastResults": "Resultados en 48 Horas"
+    }
+  },
+  "footer": {
+    "copyright": "© 2024 Rarity Agency. Todos los derechos reservados. Construido para generación de leads premium."
+  },
+  "common": {
+    "loading": "Cargando...",
+    "error": "Error",
+    "success": "Éxito",
+    "cancel": "Cancelar",
+    "save": "Guardar",
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "view": "Ver",
+    "close": "Cerrar",
+    "back": "Atrás",
+    "next": "Siguiente",
+    "previous": "Anterior",
+    "search": "Buscar",
+    "filter": "Filtrar",
+    "sort": "Ordenar",
+    "export": "Exportar",
+    "import": "Importar",
+    "refresh": "Actualizar"
+  },
+  "accessibility": {
+    "skipToContent": "Saltar al contenido principal",
+    "menuToggle": "Alternar menú",
+    "closeModal": "Cerrar modal",
+    "openMenu": "Abrir menú",
+    "closeMenu": "Cerrar menú"
+  }
+}

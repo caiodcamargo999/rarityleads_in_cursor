@@ -4,41 +4,264 @@
         "description": "Rarity Leads is your AI-native platform to attract, qualify, and close clients — without the manual grind."
     },
     "nav": {
+        "dashboard": "Dashboard",
+        "leads": "Leads",
+        "campaigns": "Campaigns",
+        "sequences": "Sequences",
+        "analytics": "Analytics",
+        "settings": "Settings",
         "features": "Features",
         "pricing": "Pricing",
         "results": "Results",
-        "startFree": "Start for Free"
+        "startFree": "Start for Free",
+        "signOut": "Sign Out",
+        "getStarted": "Get Started",
+        "freeStrategyCall": "Free Strategy Call",
+        "confirmSignOut": "Are you sure you want to sign out?",
+        "agencyOwner": "Agency Owner",
+        "performanceManager": "Performance Manager",
+        "sdrSetter": "SDR/Setter",
+        "client": "Client"
     },
     "hero": {
-        "title": "Automate Your Leads. Scale With Precision.",
-        "subtitle": "Rarity Leads is your AI-native platform to attract, qualify, and close clients — without the manual grind.",
-        "cta": "Start for Free"
+        "badge": "Rated #1 Lead Generation Platform",
+        "title": "Generate Premium Leads on Autopilot",
+        "subtitle": "Transform your business with AI-powered lead generation that delivers qualified prospects 24/7. Join 500+ businesses already scaling with Rarity Leads.",
+        "cta": "Get Started",
+        "ctaSecondary": "Free Strategy Call",
+        "stats": {
+            "clients": "Active Clients",
+            "successRate": "Success Rate",
+            "leadGen": "Lead Generation"
+        }
+    },
+    "dashboard": {
+        "welcome": "Welcome back",
+        "subtitle": "Here's what's happening with your lead generation today",
+        "overview": "Performance Overview",
+        "leadsGenerated": "Leads Generated",
+        "conversionRate": "Conversion Rate",
+        "activeCampaigns": "Active Campaigns",
+        "revenue": "Revenue",
+        "recentActivity": "Recent Activity",
+        "topLeads": "Top Leads",
+        "campaignPerformance": "Campaign Performance",
+        "quickActions": "Quick Actions",
+        "createCampaign": "Create Campaign",
+        "importLeads": "Import Leads",
+        "viewReports": "View Reports",
+        "thisMonth": "this month",
+        "noVariation": "No variation"
+    },
+    "analytics": {
+        "title": "Analytics Dashboard",
+        "subtitle": "Monitor your lead generation performance and campaign effectiveness with comprehensive insights",
+        "overview": "Overview",
+        "performanceCharts": "Performance Charts",
+        "acquisitionFunnel": "Acquisition Funnel",
+        "campaignPerformance": "Campaign Performance",
+        "leadSources": "Lead Sources",
+        "revenueTrends": "Revenue Trends",
+        "leadsGenerated": "Leads Generated",
+        "conversionRate": "Conversion Rate",
+        "activeCampaigns": "Active Campaigns",
+        "revenue": "Revenue",
+        "period": {
+            "last7days": "Last 7 days",
+            "last30days": "Last 30 days",
+            "last90days": "Last 90 days"
+        },
+        "noData": "No data available",
+        "thisMonth": "this month",
+        "noVariation": "No variation",
+        "week": "Week",
+        "visitors": "Visitors",
+        "leads": "Leads",
+        "qualified": "Qualified",
+        "customers": "Customers",
+        "conversions": "Conversions",
+        "googleAds": "Google Ads",
+        "facebook": "Facebook",
+        "linkedin": "LinkedIn",
+        "organic": "Organic",
+        "referral": "Referral"
+    },
+    "auth": {
+        "createAccount": "Create Account",
+        "welcomeBack": "Welcome back",
+        "signUpSubtitle": "Join thousands of businesses automating their lead generation with AI-powered tools",
+        "signInSubtitle": "Sign in to your account to continue managing your leads",
+        "continueWithGoogle": "Continue with Google",
+        "continueWithGitHub": "Continue with GitHub",
+        "continueWithEmail": "or continue with email",
+        "emailAddress": "Email address",
+        "password": "Password",
+        "createPassword": "Create a strong password",
+        "signIn": "Sign In",
+        "alreadyHaveAccount": "Already have an account?",
+        "signInInstead": "Sign in instead",
+        "dontHaveAccount": "Don't have an account?",
+        "createAccountLink": "Create an account",
+        "enterEmail": "Enter your email address",
+        "processing": "Processing...",
+        "errors": {
+            "fillAllFields": "Please fill in all fields",
+            "invalidEmail": "Please enter a valid email address",
+            "passwordTooShort": "Password must be at least 8 characters long",
+            "googleAuthFailed": "Google authentication failed",
+            "githubAuthFailed": "GitHub authentication failed"
+        }
     },
     "features": {
+        "title": "Why Businesses Choose Rarity Leads",
+        "subtitle": "Our AI-powered platform combines advanced targeting, intelligent automation, and real-time optimization to deliver results that matter.",
         "one": {
             "title": "AI-Powered SDR That Qualifies Leads for You",
+            "highlight": "Save 15+ hours weekly",
             "description": "Our intelligent chatbot works 24/7 to qualify leads through natural conversations, ensuring only high-intent prospects reach your team."
         },
         "two": {
             "title": "Smart WhatsApp Follow-ups, No Manual Messaging",
+            "highlight": "94% Response Rate",
             "description": "Automate your follow-up sequences with rich media support, intelligent sequencing, and AI-powered response logic."
         },
         "three": {
             "title": "Campaign Intelligence for Google and Meta",
+            "highlight": "-68% Cost Per Lead",
             "description": "Optimize your ad campaigns with AI-driven insights, automated bidding, and real-time performance tracking."
+        },
+        "four": {
+            "title": "Real-Time Lead Scoring",
+            "highlight": "31.2% Conversion Rate",
+            "description": "Advanced AI algorithms score leads in real-time, prioritizing high-value prospects for immediate action."
+        },
+        "five": {
+            "title": "Precision Targeting",
+            "highlight": "500+ Data Points",
+            "description": "Target your ideal customers with laser precision using our proprietary database and AI-powered audience insights."
+        },
+        "six": {
+            "title": "Automated Nurturing Sequences",
+            "highlight": "24/7 Engagement",
+            "description": "Keep prospects engaged with personalized, multi-channel nurturing sequences that adapt based on behavior."
+        }
+    },
+    "testimonials": {
+        "title": "Real Results from Real Businesses",
+        "subtitle": "See how companies like yours are scaling with Rarity Leads",
+        "one": {
+            "quote": "Rarity Leads transformed our lead generation. We went from 20 leads per month to 200+ qualified prospects. The ROI is incredible.",
+            "author": "Marcus Johnson",
+            "title": "CEO, TechFlow Solutions",
+            "metric": "+900%",
+            "metricLabel": "Lead Increase"
+        },
+        "two": {
+            "quote": "The AI qualification is game-changing. Our sales team now focuses only on hot leads, and our conversion rate doubled.",
+            "author": "Sarah Chen",
+            "title": "VP Sales, GrowthCorp",
+            "metric": "+187%",
+            "metricLabel": "Conversion Rate"
+        },
+        "three": {
+            "quote": "Setup was incredibly easy, and results came fast. Within 48 hours, we had our first qualified leads coming in.",
+            "author": "David Rodriguez",
+            "title": "Founder, StartupLab",
+            "metric": "48hrs",
+            "metricLabel": "First Results"
+        }
+    },
+    "pricing": {
+        "title": "Choose Your Growth Plan",
+        "subtitle": "Transparent pricing that scales with your success",
+        "starter": {
+            "name": "Starter",
+            "badge": "Most Popular",
+            "price": "297",
+            "period": "/month",
+            "description": "Perfect for small businesses ready to scale",
+            "features": [
+                "Up to 500 leads/month",
+                "AI Lead Qualification",
+                "WhatsApp Automation",
+                "Basic Analytics",
+                "Email Support"
+            ],
+            "cta": "Start Free Trial"
+        },
+        "professional": {
+            "name": "Professional",
+            "badge": "Best Value",
+            "price": "597",
+            "period": "/month",
+            "description": "For growing businesses that need more power",
+            "features": [
+                "Up to 2,000 leads/month",
+                "Advanced AI Qualification",
+                "Multi-channel Automation",
+                "Advanced Analytics & Reports",
+                "Priority Support",
+                "Custom Integrations",
+                "A/B Testing"
+            ],
+            "cta": "Start Free Trial"
+        },
+        "enterprise": {
+            "name": "Enterprise",
+            "badge": "Custom",
+            "price": "1,497",
+            "period": "/month",
+            "description": "For large organizations with complex needs",
+            "features": [
+                "Unlimited leads",
+                "Custom AI Training",
+                "White-label Solution",
+                "Dedicated Account Manager",
+                "24/7 Phone Support",
+                "Custom Integrations",
+                "SLA Guarantee"
+            ],
+            "cta": "Contact Sales"
         }
     },
     "cta": {
         "title": "Stop Chasing Leads. Start Closing.",
+        "subtitle": "Join hundreds of businesses generating premium leads on autopilot. Start your journey today and see results in 48 hours.",
         "button": "Get Started",
-        "trust": {
-            "clutch": "4.9 Stars on Clutch",
-            "clients": "1,200+ Clients",
-            "ai": "AI-Powered and Human-Approved"
+        "features": {
+            "noCard": "No Credit Card Required",
+            "quickSetup": "Setup in 5 Minutes",
+            "fastResults": "Results in 48 Hours"
         }
+    },
+    "footer": {
+        "copyright": "© 2024 Rarity Agency. All rights reserved. Built for premium lead generation."
+    },
+    "common": {
+        "loading": "Loading...",
+        "error": "Error",
+        "success": "Success",
+        "cancel": "Cancel",
+        "save": "Save",
+        "delete": "Delete",
+        "edit": "Edit",
+        "view": "View",
+        "close": "Close",
+        "back": "Back",
+        "next": "Next",
+        "previous": "Previous",
+        "search": "Search",
+        "filter": "Filter",
+        "sort": "Sort",
+        "export": "Export",
+        "import": "Import",
+        "refresh": "Refresh"
     },
     "accessibility": {
         "skipToContent": "Skip to main content",
-        "menuToggle": "Toggle menu"
+        "menuToggle": "Toggle menu",
+        "closeModal": "Close modal",
+        "openMenu": "Open menu",
+        "closeMenu": "Close menu"
     }
-} 
+}

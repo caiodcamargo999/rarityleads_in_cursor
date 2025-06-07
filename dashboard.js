@@ -1,17 +1,244 @@
-import { initializeModals } from './dashboard-modals.js';
-import { initializeCharts } from './dashboard-charts.js';
-import { 
-    getCampaigns, 
-    getSequences, 
-    getLeads, 
-    getFunnelData, 
-    getCampaignPerformance,
-    getUserProfile
-} from './dashboard-api.js';
+// Dashboard functionality
+document.addEventListener('DOMContentLoaded', function() {
+    initializeDashboard();
+});
 
-const SUPABASE_URL = 'https://yejheyrdsucgzpzwxuxs.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InllamhleXJkc3VjZ3pwend4dXhzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg4MDg2NzQsImV4cCI6MjA2NDM4NDY3NH0.NzCJ8i3SKpABO6ykWRX3nHDYmjVB82KL1wfgaY3trM4';
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+function initializeDashboard() {
+    // Initialize sidebar toggle
+    initializeSidebarToggle();
+
+    // Initialize tooltips
+    initializeTooltips();
+
+    // Initialize charts
+    initializeCharts();
+
+    // Initialize interactive elements
+    initializeInteractiveElements();
+
+    // Simulate real-time updates
+    startRealTimeUpdates();
+}
+
+function initializeSidebarToggle() {
+    const sidebarToggle = document.querySelector('.sidebar-toggle');
+    const sidebar = document.querySelector('.sidebar');
+
+    if (sidebarToggle && sidebar) {
+        sidebarToggle.addEventListener('click', () => {
+            sidebar.classList.toggle('open');
+        });
+
+        // Close sidebar when clicking outside on mobile
+        document.addEventListener('click', (e) => {
+            if (window.innerWidth <= 768 &&
+                !sidebar.contains(e.target) &&
+                !sidebarToggle.contains(e.target)) {
+                sidebar.classList.remove('open');
+            }
+        });
+    }
+}
+
+function initializeTooltips() {
+    const tooltipElements = document.querySelectorAll('[data-tooltip]');
+
+    tooltipElements.forEach(element => {
+        element.addEventListener('mouseenter', showTooltip);
+        element.addEventListener('mouseleave', hideTooltip);
+    });
+}
+
+function showTooltip(e) {
+    const tooltip = document.createElement('div');
+    tooltip.className = 'tooltip-popup';
+    tooltip.textContent = e.target.getAttribute('data-tooltip');
+    document.body.appendChild(tooltip);
+
+    const rect = e.target.getBoundingClientRect();
+    tooltip.style.position = 'absolute';
+    tooltip.style.top = `${rect.bottom + 5}px`;
+    tooltip.style.left = `${rect.left + (rect.width / 2) - (tooltip.offsetWidth / 2)}px`;
+}
+
+function hideTooltip() {
+    const tooltip = document.querySelector('.tooltip-popup');
+    if (tooltip) {
+        tooltip.remove();
+    }
+}
+
+function initializeCharts() {
+    // Initialize leads chart
+    const leadsChart = document.getElementById('leads-chart');
+    if (leadsChart) {
+        const ctx = leadsChart.getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                datasets: [{
+                    label: 'Leads Generated',
+                    data: [65, 89, 120, 151, 189, 247],
+                    borderColor: '#8B5CF6',
+                    backgroundColor: 'rgba(139, 92, 246, 0.1)',
+                    tension: 0.4,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        },
+                        ticks: {
+                            color: '#94A3B8'
+                        }
+                    },
+                    x: {
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        },
+                        ticks: {
+                            color: '#94A3B8'
+                        }
+                    }
+                }
+            }
+        });
+    }
+}
+
+function initializeInteractiveElements() {
+    // Add click handlers for action buttons
+    const actionButtons = document.querySelectorAll('.action-btn, .action-btn-small');
+    actionButtons.forEach(button => {
+        button.addEventListener('click', handleActionClick);
+    });
+
+    // Add hover effects for cards
+    const cards = document.querySelectorAll('.stat-card, .activity-item, .lead-item, .campaign-card');
+    cards.forEach(card => {
+        card.addEventListener('mouseenter', () => {
+            card.style.transform = 'translateY(-2px)';
+        });
+
+        card.addEventListener('mouseleave', () => {
+            card.style.transform = 'translateY(0)';
+        });
+    });
+
+    // Period selector functionality
+    const periodSelect = document.getElementById('analytics-period');
+    if (periodSelect) {
+        periodSelect.addEventListener('change', (e) => {
+            updateAnalyticsPeriod(e.target.value);
+        });
+    }
+}
+
+function handleActionClick(e) {
+    const button = e.currentTarget;
+    const originalText = button.innerHTML;
+
+    // Show loading state
+    button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading...';
+    button.disabled = true;
+
+    // Simulate API call
+    setTimeout(() => {
+        button.innerHTML = originalText;
+        button.disabled = false;
+
+        // Show success message
+        showNotification('Action completed successfully!', 'success');
+    }, 1500);
+}
+
+function updateAnalyticsPeriod(period) {
+    console.log(`Updating analytics for ${period} days`);
+    // Here you would typically fetch new data and update charts
+    showNotification(`Analytics updated for last ${period} days`, 'info');
+}
+
+function startRealTimeUpdates() {
+    // Simulate real-time updates every 30 seconds
+    setInterval(() => {
+        updateMetrics();
+    }, 30000);
+}
+
+function updateMetrics() {
+    // Simulate metric updates
+    const statValues = document.querySelectorAll('.stat-value');
+    statValues.forEach(value => {
+        if (value.textContent.includes('$')) {
+            // Update revenue
+            const current = parseFloat(value.textContent.replace(/[$,]/g, ''));
+            const newValue = current + Math.floor(Math.random() * 100);
+            value.textContent = `$${newValue.toLocaleString()}`;
+        } else if (value.textContent.includes('%')) {
+            // Update percentage
+            const current = parseFloat(value.textContent.replace('%', ''));
+            const change = (Math.random() - 0.5) * 2; // -1 to 1
+            const newValue = Math.max(0, Math.min(100, current + change));
+            value.textContent = `${newValue.toFixed(1)}%`;
+        }
+    });
+}
+
+function showNotification(message, type = 'info') {
+    const notification = document.createElement('div');
+    notification.className = `notification notification-${type}`;
+    notification.textContent = message;
+
+    // Style the notification
+    Object.assign(notification.style, {
+        position: 'fixed',
+        top: '20px',
+        right: '20px',
+        padding: '1rem 1.5rem',
+        borderRadius: '8px',
+        color: 'white',
+        fontWeight: '500',
+        zIndex: '10000',
+        transform: 'translateX(100%)',
+        transition: 'transform 0.3s ease'
+    });
+
+    // Set background color based on type
+    const colors = {
+        success: '#10B981',
+        error: '#EF4444',
+        warning: '#F59E0B',
+        info: '#3B82F6'
+    };
+    notification.style.backgroundColor = colors[type] || colors.info;
+
+    document.body.appendChild(notification);
+
+    // Animate in
+    setTimeout(() => {
+        notification.style.transform = 'translateX(0)';
+    }, 100);
+
+    // Remove after 3 seconds
+    setTimeout(() => {
+        notification.style.transform = 'translateX(100%)';
+        setTimeout(() => {
+            notification.remove();
+        }, 300);
+    }, 3000);
+}
 
 // Initialize dashboard
 export async function initializeDashboard() {

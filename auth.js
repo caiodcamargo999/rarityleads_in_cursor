@@ -197,8 +197,31 @@ const authModal = {
             tab.addEventListener('click', (e) => {
                 const type = e.target.dataset.type;
                 this.show(type);
+
+                // Update tab active state
+                document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+                e.target.classList.add('active');
             });
         });
+
+        // Handle auth switch links
+        document.querySelectorAll('.auth-switch').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const type = e.target.dataset.type;
+                this.show(type);
+
+                // Update tab active state
+                document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+                document.querySelector(`[data-type="${type}"]`).classList.add('active');
+            });
+        });
+
+        // Handle modal overlay click
+        const modalOverlay = document.querySelector('.modal-overlay');
+        if (modalOverlay) {
+            modalOverlay.addEventListener('click', () => this.hide());
+        }
     }
 };
 
@@ -206,6 +229,9 @@ const authModal = {
 document.addEventListener('DOMContentLoaded', () => {
     auth.init();
     authModal.init();
+
+    // Make authModal available globally
+    window.authModal = authModal;
     
     // Handle CTA form submission
     const ctaForm = document.getElementById('cta-form');
