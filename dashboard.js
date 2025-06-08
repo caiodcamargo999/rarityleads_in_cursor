@@ -1,11 +1,13 @@
-// Dashboard functionality with auth protection
+// Dashboard functionality - auth protection handled by central listener
 import { handleSignOut } from './auth-handlers.js';
+import { authListener } from './auth-listener.js';
 
 document.addEventListener('DOMContentLoaded', function() {
     console.log('📊 Dashboard: Starting initialization...');
+    console.log('🎯 Dashboard: Auth protection handled by central listener');
 
-    // Dashboard will only load if auth protection passes
-    // (auth protection is handled in dashboard.html)
+    // Central listener handles all auth validation
+    // Dashboard will only load if user has access
     initializeDashboard();
 });
 

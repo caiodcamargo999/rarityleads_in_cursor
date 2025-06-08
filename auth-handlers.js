@@ -1,15 +1,16 @@
 // Authentication handlers - Clean implementation following React patterns
 import { supabase } from './supabase.js';
 
-// Google OAuth login handler
+// Google OAuth login handler - NO manual redirect logic
 export const handleGoogleLogin = async () => {
     console.log('🔗 Starting Google OAuth login...');
-    
+
     try {
+        // ONLY call Supabase OAuth - NO redirect logic here
         const { data, error } = await supabase.auth.signInWithOAuth({
             provider: 'google',
             options: {
-                redirectTo: `${window.location.origin}/dashboard.html` // Redirect here AFTER successful Google auth
+                redirectTo: `${window.location.origin}/auth.html` // Return to auth page, let listener handle routing
             }
         });
 
@@ -19,8 +20,9 @@ export const handleGoogleLogin = async () => {
         }
 
         console.log('✅ Google OAuth initiated successfully');
-        console.log('🔄 Redirecting to Google...');
-        
+        console.log('📍 OAuth will redirect to Supabase callback, then back to auth.html');
+        console.log('🎯 Central listener will handle all routing logic');
+
         return { data, error: null };
     } catch (error) {
         console.error('💥 Google login failed:', error);

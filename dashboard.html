@@ -14,36 +14,79 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="i18n.js"></script>
-    <script type="module">
-        // Dashboard protection (equivalent to ProtectedRoute in React)
-        import { authGuard } from './auth-guard.js';
+    <script>
+        console.log('🏠 Dashboard: Loading...');
 
+        // Initialize Supabase
+        const supabase = window.supabase.createClient(
+            'https://yejheyrdsucgzpzwxuxs.supabase.co',
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InllamhleXJkc3VjZ3pwend4dXhzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg4MDg2NzQsImV4cCI6MjA2NDM4NDY3NH0.NzCJ8i3SKpABO6ykWRX3nHDYmjVB82KL1wfgaY3trM4'
+        );
+
+        // Check authentication when page loads
         document.addEventListener('DOMContentLoaded', async () => {
-            console.log('🏠 Dashboard: Initializing with auth protection...');
+            console.log('🔍 Dashboard: Checking authentication...');
 
-            // Wait for auth guard to initialize and check authentication
-            const checkAuth = () => {
-                if (authGuard.isLoading) {
-                    // Still loading, check again in 100ms
-                    setTimeout(checkAuth, 100);
+            try {
+                const { data: { session }, error } = await supabase.auth.getSession();
+
+                if (error) {
+                    console.error('❌ Dashboard: Auth error:', error);
+                    window.location.href = '/auth.html';
                     return;
                 }
 
-                // Auth loading complete, check if user is authenticated
-                if (!authGuard.requireAuth()) {
-                    // requireAuth will handle redirect if not authenticated
+                if (!session) {
+                    console.log('🚫 Dashboard: No session found, redirecting to auth');
+                    window.location.href = '/auth.html';
                     return;
                 }
 
-                console.log('✅ Dashboard: Access granted, loading dashboard...');
-                // Dashboard content will load normally
-            };
+                console.log('✅ Dashboard: User authenticated:', session.user.email);
 
-            // Start auth check
-            checkAuth();
+                // Update user email in sidebar
+                const userEmailElement = document.querySelector('.user-email');
+                if (userEmailElement) {
+                    userEmailElement.textContent = session.user.email;
+                }
+
+                // Set up sign out button
+                const signOutBtn = document.getElementById('sign-out-btn');
+                if (signOutBtn) {
+                    signOutBtn.addEventListener('click', async () => {
+                        console.log('👋 Dashboard: Signing out...');
+
+                        try {
+                            const { error } = await supabase.auth.signOut();
+                            if (error) throw error;
+
+                            console.log('✅ Dashboard: Signed out successfully');
+                            window.location.href = '/';
+
+                        } catch (error) {
+                            console.error('❌ Dashboard: Sign out error:', error);
+                            alert('Sign out failed: ' + error.message);
+                        }
+                    });
+                }
+
+            } catch (error) {
+                console.error('💥 Dashboard: Error:', error);
+                window.location.href = '/auth.html';
+            }
+        });
+
+        // Listen for auth changes
+        supabase.auth.onAuthStateChange((event, session) => {
+            console.log('🔄 Dashboard: Auth event:', event);
+
+            if (event === 'SIGNED_OUT') {
+                console.log('👋 Dashboard: User signed out, redirecting...');
+                window.location.href = '/';
+            }
         });
     </script>
-    <script type="module" src="dashboard.js"></script>
+    <script src="dashboard.js"></script>
 </head>
 <body class="dashboard-body">
     <!-- Sidebar Navigation -->

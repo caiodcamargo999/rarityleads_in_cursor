@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Rarity Leads</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #f8fafc;
+            min-height: 100vh;
+        }
+        
+        .header {
+            background: white;
+            border-bottom: 1px solid #e2e8f0;
+            padding: 16px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: #667eea;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        
+        .user-email {
+            color: #64748b;
+            font-size: 14px;
+        }
+        
+        .sign-out-btn {
+            background: #ef4444;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 8px 16px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+        
+        .sign-out-btn:hover {
+            background: #dc2626;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 24px;
+        }
+        
+        .welcome {
+            background: white;
+            border-radius: 12px;
+            padding: 32px;
+            margin-bottom: 32px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .welcome h1 {
+            font-size: 32px;
+            font-weight: 700;
+            color: #1a202c;
+            margin-bottom: 8px;
+        }
+        
+        .welcome p {
+            color: #64748b;
+            font-size: 18px;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+        
+        .stat-card {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .stat-title {
+            color: #64748b;
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+        
+        .stat-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: #1a202c;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #64748b;
+        }
+        
+        .error {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            color: #991b1b;
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 24px;
+        }
+    </style>
+</head>
+<body>
+    <div id="loading" class="loading">
+        <h2>Loading dashboard...</h2>
+        <p>Checking authentication...</p>
+    </div>
+
+    <div id="dashboard" style="display: none;">
+        <header class="header">
+            <div class="logo">🚀 Rarity Leads</div>
+            <div class="user-info">
+                <span id="user-email" class="user-email">Loading...</span>
+                <button id="sign-out" class="sign-out-btn">Sign Out</button>
+            </div>
+        </header>
+
+        <div class="container">
+            <div class="welcome">
+                <h1>Welcome to your dashboard!</h1>
+                <p>You're successfully authenticated with Google OAuth.</p>
+            </div>
+
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="stat-title">Total Leads</div>
+                    <div class="stat-value">0</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-title">Active Campaigns</div>
+                    <div class="stat-value">0</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-title">Conversion Rate</div>
+                    <div class="stat-value">0%</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        // Initialize Supabase
+        const supabase = window.supabase.createClient(
+            'https://yejheyrdsucgzpzwxuxs.supabase.co',
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InllamhleXJkc3VjZ3pwend4dXhzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg4MDg2NzQsImV4cCI6MjA2NDM4NDY3NH0.NzCJ8i3SKpABO6ykWRX3nHDYmjVB82KL1wfgaY3trM4'
+        );
+
+        console.log('🏠 Dashboard loading...');
+
+        // Check authentication
+        async function checkAuth() {
+            try {
+                const { data: { session }, error } = await supabase.auth.getSession();
+                
+                if (error) {
+                    console.error('❌ Auth error:', error);
+                    redirectToAuth();
+                    return;
+                }
+                
+                if (!session) {
+                    console.log('🚫 No session found');
+                    redirectToAuth();
+                    return;
+                }
+                
+                console.log('✅ User authenticated:', session.user.email);
+                
+                // Show dashboard
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('dashboard').style.display = 'block';
+                
+                // Display user email
+                document.getElementById('user-email').textContent = session.user.email;
+                
+                // Set up sign out
+                document.getElementById('sign-out').addEventListener('click', async () => {
+                    console.log('👋 Signing out...');
+                    
+                    try {
+                        const { error } = await supabase.auth.signOut();
+                        if (error) throw error;
+                        
+                        console.log('✅ Signed out successfully');
+                        window.location.href = '/';
+                        
+                    } catch (error) {
+                        console.error('❌ Sign out error:', error);
+                        alert('Sign out failed: ' + error.message);
+                    }
+                });
+                
+            } catch (error) {
+                console.error('💥 Dashboard error:', error);
+                redirectToAuth();
+            }
+        }
+
+        function redirectToAuth() {
+            console.log('🔄 Redirecting to auth page...');
+            window.location.href = '/auth-simple.html';
+        }
+
+        // Check auth when page loads
+        document.addEventListener('DOMContentLoaded', checkAuth);
+
+        // Listen for auth changes
+        supabase.auth.onAuthStateChange((event, session) => {
+            console.log('Auth event:', event);
+            
+            if (event === 'SIGNED_OUT') {
+                console.log('👋 User signed out, redirecting...');
+                window.location.href = '/';
+            }
+        });
+    </script>
+</body>
+</html>
