@@ -21,7 +21,7 @@
   "author": "Rarity Agency",
   "license": "MIT",
   "dependencies": {
-    "@supabase/supabase-js": "^2.39.0"
+    "@supabase/supabase-js": "^2.50.0"
   },
   "devDependencies": {
     "live-server": "^1.2.2"
