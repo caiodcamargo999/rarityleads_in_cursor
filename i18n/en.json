@@ -104,12 +104,23 @@
         "createAccountLink": "Create an account",
         "enterEmail": "Enter your email address",
         "processing": "Processing...",
+        "emailVerificationSent": "Please check your email and click the verification link to complete your registration.",
+        "emailVerificationRequired": "Please verify your email address before signing in.",
+        "resendVerification": "Resend verification email",
+        "didntReceiveEmail": "Didn't receive the email?",
+        "verificationEmailSent": "Verification email sent! Please check your inbox.",
+        "passwordResetSent": "Password reset email sent! Please check your inbox.",
         "errors": {
             "fillAllFields": "Please fill in all fields",
             "invalidEmail": "Please enter a valid email address",
             "passwordTooShort": "Password must be at least 8 characters long",
             "googleAuthFailed": "Google authentication failed",
-            "githubAuthFailed": "GitHub authentication failed"
+            "githubAuthFailed": "GitHub authentication failed",
+            "invalidCredentials": "Invalid email or password. Please try again.",
+            "emailNotConfirmed": "Please verify your email address before signing in.",
+            "userAlreadyExists": "An account with this email already exists.",
+            "signupDisabled": "New registrations are currently disabled.",
+            "rateLimitExceeded": "Too many emails sent. Please wait before requesting another."
         }
     },
     "features": {

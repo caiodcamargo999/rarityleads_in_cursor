@@ -370,9 +370,226 @@
       }
     }
   </style>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="i18n.js"></script>
-  <script defer src="auth.js"></script>
+  <script type="module">
+    // Import clean auth handlers
+    import { handleGoogleLogin, handleEmailSignUp, handleEmailSignIn, onAuthStateChange, getErrorMessage } from './auth-handlers.js';
+
+    // Clean Google login function (equivalent to handleGoogleLogin)
+    async function signInWithGoogle() {
+      console.log('🔗 Starting Google OAuth...');
+
+      const googleBtn = document.getElementById('google-signup');
+      const originalHTML = googleBtn.innerHTML;
+
+      try {
+        // Show loading state
+        googleBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Connecting to Google...';
+        googleBtn.disabled = true;
+
+        // Use clean handler
+        const result = await handleGoogleLogin();
+
+        if (result.error) {
+          throw result.error;
+        }
+
+        console.log('✅ Google OAuth initiated successfully');
+        // OAuth will handle the redirect
+
+      } catch (error) {
+        console.error('❌ Google login failed:', error);
+
+        // Restore button state
+        googleBtn.innerHTML = originalHTML;
+        googleBtn.disabled = false;
+
+        // Show user-friendly error
+        const errorMessage = getErrorMessage(error);
+        alert('❌ ' + errorMessage);
+      }
+    }
+
+    // Clean email signup function
+    async function signUpWithEmail(email, password) {
+      try {
+        const result = await handleEmailSignUp(email, password);
+
+        if (result.error) {
+          throw result.error;
+        }
+
+        console.log('✅ Sign up successful');
+        alert('Conta criada! Verifique seu email para confirmar.');
+        return result;
+      } catch (error) {
+        console.error('❌ Sign up failed:', error);
+        const errorMessage = getErrorMessage(error);
+        alert('❌ ' + errorMessage);
+        return { data: null, error };
+      }
+    }
+
+    // Clean email signin function
+    async function signInWithEmail(email, password) {
+      try {
+        const result = await handleEmailSignIn(email, password);
+
+        if (result.error) {
+          throw result.error;
+        }
+
+        console.log('✅ Sign in successful');
+        // Auth state change will handle redirect
+        return result;
+      } catch (error) {
+        console.error('❌ Sign in failed:', error);
+        const errorMessage = getErrorMessage(error);
+        alert('❌ ' + errorMessage);
+        return { data: null, error };
+      }
+    }
+
+    // Check OAuth configuration
+    async function checkOAuthConfig() {
+      try {
+        // Try to get auth settings to verify configuration
+        const { data: { session }, error } = await supabase.auth.getSession();
+        console.log('📊 Supabase connection verified');
+        return true;
+      } catch (error) {
+        console.error('❌ Supabase connection failed:', error);
+        return false;
+      }
+    }
+
+    // Listen for auth state changes (equivalent to useEffect in React)
+    const authSubscription = onAuthStateChange((event, session) => {
+      if (event === 'SIGNED_IN' && session) {
+        console.log('✅ User signed in successfully:', session.user.email);
+        console.log('🚀 Redirecting to dashboard...');
+
+        // Small delay to ensure state is properly set
+        setTimeout(() => {
+          window.location.href = '/dashboard.html';
+        }, 500);
+      }
+
+      if (event === 'SIGNED_OUT') {
+        console.log('👋 User signed out');
+      }
+    });
+
+    // Wait for DOM to load
+    document.addEventListener('DOMContentLoaded', async () => {
+      console.log('🚀 Auth page loaded with Supabase SDK');
+
+      // Check if user is already signed in
+      const { data: { session }, error } = await supabase.auth.getSession();
+      if (session) {
+        console.log('⚠️ User already has session:', session);
+        console.log('🔄 Clearing existing session for fresh OAuth test...');
+        await supabase.auth.signOut();
+        console.log('✅ Session cleared, ready for OAuth');
+      } else {
+        console.log('✅ No existing session, ready for OAuth');
+      }
+
+      // Verify Supabase connection
+      const isConnected = await checkOAuthConfig();
+      if (!isConnected) {
+        console.error('❌ Supabase not properly configured');
+        alert('Erro de configuração. Verifique as credenciais do Supabase.');
+        return;
+      }
+
+      // Google button
+      const googleBtn = document.getElementById('google-signup');
+      if (googleBtn) {
+        console.log('✅ Google button found and ready');
+        googleBtn.addEventListener('click', async (e) => {
+          e.preventDefault();
+          console.log('🔗 Google button clicked');
+          console.log('🔍 Checking Google OAuth configuration...');
+          console.log('📍 Current URL:', window.location.href);
+          console.log('🌐 Origin:', window.location.origin);
+
+          // Clear any existing sessions first
+          console.log('🧹 Clearing any existing sessions...');
+          await supabase.auth.signOut();
+
+          console.log('🚀 Starting fresh Google OAuth...');
+          await signInWithGoogle();
+        });
+      } else {
+        console.error('❌ Google button not found!');
+      }
+
+      // Form submission
+      const form = document.getElementById('signup-form');
+      if (form) {
+        form.addEventListener('submit', async (e) => {
+          e.preventDefault();
+
+          const email = document.getElementById('email').value;
+          const password = document.getElementById('password').value;
+
+          if (!email || !password) {
+            alert('Preencha todos os campos');
+            return;
+          }
+
+          // Check if it's signup or signin mode
+          const isSignUp = document.querySelector('.auth-title').textContent.includes('Create') ||
+                          document.querySelector('.auth-title').textContent.includes('Criar');
+
+          if (isSignUp) {
+            await signUpWithEmail(email, password);
+          } else {
+            await signInWithEmail(email, password);
+          }
+        });
+      }
+
+      // Mode switching
+      const switchLink = document.getElementById('switch-to-login');
+      if (switchLink) {
+        switchLink.addEventListener('click', (e) => {
+          e.preventDefault();
+
+          const title = document.querySelector('.auth-title');
+          const subtitle = document.querySelector('.auth-subtitle');
+          const submitBtn = document.getElementById('signup-btn');
+          const footer = document.querySelector('.auth-footer p');
+
+          const isSignUp = title.textContent.includes('Create') || title.textContent.includes('Criar');
+
+          if (isSignUp) {
+            // Switch to sign in
+            title.textContent = 'Welcome back';
+            subtitle.textContent = 'Sign in to your account to continue managing your leads';
+            submitBtn.innerHTML = '<span>Sign In</span>';
+            footer.innerHTML = 'Don\'t have an account? <a href="#" id="switch-to-login">Create an account</a>';
+          } else {
+            // Switch to sign up
+            title.textContent = 'Create your account';
+            subtitle.textContent = 'Join thousands of businesses automating their lead generation with AI-powered tools';
+            submitBtn.innerHTML = '<span>Create Account</span>';
+            footer.innerHTML = 'Already have an account? <a href="#" id="switch-to-login">Sign in instead</a>';
+          }
+
+          // Re-attach event listener
+          const newSwitchLink = document.getElementById('switch-to-login');
+          if (newSwitchLink) {
+            newSwitchLink.addEventListener('click', arguments.callee);
+          }
+
+          // Clear form
+          form.reset();
+        });
+      }
+    });
+  </script>
 </head>
 <body>
   <main>
@@ -475,206 +692,6 @@
     </div>
   </main>
 
-  <!-- Enhanced JavaScript -->
-  <script>
-    // Form state management
-    let isSignUp = true;
 
-    // DOM elements
-    const container = document.querySelector('.auth-container');
-    const title = document.querySelector('.auth-title');
-    const subtitle = document.querySelector('.auth-subtitle');
-    const form = document.getElementById('signup-form');
-    const switchLink = document.getElementById('switch-to-login');
-    const submitBtn = document.getElementById('signup-btn');
-    const errorDiv = document.getElementById('auth-error');
-
-    // Switch between sign up and sign in
-    switchLink.addEventListener('click', (e) => {
-      e.preventDefault();
-      toggleAuthMode();
-    });
-
-    function toggleAuthMode() {
-      isSignUp = !isSignUp;
-
-      if (isSignUp) {
-        title.textContent = window.i18n ? window.i18n.t('auth.createAccount') : 'Create your account';
-        subtitle.textContent = window.i18n ? window.i18n.t('auth.signUpSubtitle') : 'Join thousands of businesses automating their lead generation with AI-powered tools';
-        submitBtn.innerHTML = `<span>${window.i18n ? window.i18n.t('auth.createAccount') : 'Create Account'}</span>`;
-        switchLink.innerHTML = window.i18n ? window.i18n.t('auth.signInInstead') : 'Sign in instead';
-        switchLink.parentElement.innerHTML = `${window.i18n ? window.i18n.t('auth.alreadyHaveAccount') : 'Already have an account?'} <a href="#" id="switch-to-login">${window.i18n ? window.i18n.t('auth.signInInstead') : 'Sign in instead'}</a>`;
-      } else {
-        title.textContent = window.i18n ? window.i18n.t('auth.welcomeBack') : 'Welcome back';
-        subtitle.textContent = window.i18n ? window.i18n.t('auth.signInSubtitle') : 'Sign in to your account to continue managing your leads';
-        submitBtn.innerHTML = `<span>${window.i18n ? window.i18n.t('auth.signIn') : 'Sign In'}</span>`;
-        switchLink.innerHTML = window.i18n ? window.i18n.t('auth.createAccountLink') : 'Create an account';
-        switchLink.parentElement.innerHTML = `${window.i18n ? window.i18n.t('auth.dontHaveAccount') : 'Don\'t have an account?'} <a href="#" id="switch-to-login">${window.i18n ? window.i18n.t('auth.createAccountLink') : 'Create an account'}</a>`;
-      }
-
-      // Re-attach event listener
-      document.getElementById('switch-to-login').addEventListener('click', (e) => {
-        e.preventDefault();
-        toggleAuthMode();
-      });
-
-      // Clear form
-      form.reset();
-      hideError();
-    }
-
-    // Form submission
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-
-      const email = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
-
-      if (!validateForm(email, password)) return;
-
-      setLoading(true);
-
-      try {
-        if (isSignUp) {
-          await handleSignUp(email, password);
-        } else {
-          await handleSignIn(email, password);
-        }
-      } catch (error) {
-        showError(error.message);
-      } finally {
-        setLoading(false);
-      }
-    });
-
-    // Social login handlers
-    document.getElementById('google-signup').addEventListener('click', async () => {
-      setLoading(true);
-      try {
-        await handleGoogleAuth();
-      } catch (error) {
-        showError('Google authentication failed');
-      } finally {
-        setLoading(false);
-      }
-    });
-
-    document.getElementById('github-signup').addEventListener('click', async () => {
-      setLoading(true);
-      try {
-        await handleGitHubAuth();
-      } catch (error) {
-        showError('GitHub authentication failed');
-      } finally {
-        setLoading(false);
-      }
-    });
-
-    // Validation
-    function validateForm(email, password) {
-      if (!email || !password) {
-        showError('Please fill in all fields');
-        return false;
-      }
-
-      if (!isValidEmail(email)) {
-        showError('Please enter a valid email address');
-        return false;
-      }
-
-      if (isSignUp && password.length < 8) {
-        showError('Password must be at least 8 characters long');
-        return false;
-      }
-
-      return true;
-    }
-
-    function isValidEmail(email) {
-      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-    }
-
-    // UI helpers
-    function setLoading(loading) {
-      if (loading) {
-        container.classList.add('loading');
-        submitBtn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> ${window.i18n ? window.i18n.t('auth.processing') : 'Processing...'}`;
-      } else {
-        container.classList.remove('loading');
-        const buttonText = isSignUp ?
-          (window.i18n ? window.i18n.t('auth.createAccount') : 'Create Account') :
-          (window.i18n ? window.i18n.t('auth.signIn') : 'Sign In');
-        submitBtn.innerHTML = `<span>${buttonText}</span>`;
-      }
-    }
-
-    function showError(message) {
-      errorDiv.textContent = message;
-      errorDiv.style.display = 'block';
-      errorDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    }
-
-    function hideError() {
-      errorDiv.style.display = 'none';
-    }
-
-    // Auth handlers (integrate with your backend)
-    async function handleSignUp(email, password) {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1500));
-
-      // Replace with actual Supabase integration
-      console.log('Sign up:', { email, password });
-
-      // Redirect to dashboard on success
-      window.location.href = '/dashboard.html';
-    }
-
-    async function handleSignIn(email, password) {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1500));
-
-      // Replace with actual Supabase integration
-      console.log('Sign in:', { email, password });
-
-      // Redirect to dashboard on success
-      window.location.href = '/dashboard.html';
-    }
-
-    async function handleGoogleAuth() {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-
-      // Replace with actual Google OAuth
-      console.log('Google auth');
-
-      // Redirect to dashboard on success
-      window.location.href = '/dashboard.html';
-    }
-
-    async function handleGitHubAuth() {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-
-      // Replace with actual GitHub OAuth
-      console.log('GitHub auth');
-
-      // Redirect to dashboard on success
-      window.location.href = '/dashboard.html';
-    }
-
-    // Input focus effects
-    document.querySelectorAll('.form-input').forEach(input => {
-      input.addEventListener('focus', () => {
-        hideError();
-      });
-    });
-
-    // Add some nice entrance animations
-    setTimeout(() => {
-      container.style.transform = 'translateY(0)';
-      container.style.opacity = '1';
-    }, 100);
-  </script>
 </body>
 </html>

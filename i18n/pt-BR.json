@@ -104,12 +104,23 @@
     "createAccountLink": "Criar uma conta",
     "enterEmail": "Digite seu endereço de email",
     "processing": "Processando...",
+    "emailVerificationSent": "Por favor, verifique seu email e clique no link de verificação para completar seu registro.",
+    "emailVerificationRequired": "Por favor, verifique seu endereço de email antes de fazer login.",
+    "resendVerification": "Reenviar email de verificação",
+    "didntReceiveEmail": "Não recebeu o email?",
+    "verificationEmailSent": "Email de verificação enviado! Por favor, verifique sua caixa de entrada.",
+    "passwordResetSent": "Email de redefinição de senha enviado! Por favor, verifique sua caixa de entrada.",
     "errors": {
       "fillAllFields": "Por favor, preencha todos os campos",
       "invalidEmail": "Por favor, digite um endereço de email válido",
       "passwordTooShort": "A senha deve ter pelo menos 8 caracteres",
       "googleAuthFailed": "Autenticação com Google falhou",
-      "githubAuthFailed": "Autenticação com GitHub falhou"
+      "githubAuthFailed": "Autenticação com GitHub falhou",
+      "invalidCredentials": "Email ou senha inválidos. Por favor, tente novamente.",
+      "emailNotConfirmed": "Por favor, verifique seu endereço de email antes de fazer login.",
+      "userAlreadyExists": "Uma conta com este email já existe.",
+      "signupDisabled": "Novos registros estão atualmente desabilitados.",
+      "rateLimitExceeded": "Muitos emails enviados. Por favor, aguarde antes de solicitar outro."
     }
   },
   "features": {

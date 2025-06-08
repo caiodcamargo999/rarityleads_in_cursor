@@ -1,5 +1,11 @@
-// Dashboard functionality
+// Dashboard functionality with auth protection
+import { handleSignOut } from './auth-handlers.js';
+
 document.addEventListener('DOMContentLoaded', function() {
+    console.log('📊 Dashboard: Starting initialization...');
+
+    // Dashboard will only load if auth protection passes
+    // (auth protection is handled in dashboard.html)
     initializeDashboard();
 });
 
@@ -393,15 +399,20 @@ function setupEventListeners() {
         });
     }
 
-    // Sign out handler
+    // Sign out handler using clean auth handler
     const signOutBtn = document.getElementById('sign-out-btn');
     if (signOutBtn) {
         signOutBtn.addEventListener('click', async () => {
             try {
-                await supabase.auth.signOut();
-                window.location.href = '/';
+                console.log('👋 Dashboard: Signing out user...');
+                const result = await handleSignOut();
+                if (result.error) {
+                    throw result.error;
+                }
+                console.log('✅ Dashboard: Sign out successful');
+                // handleSignOut will handle redirect
             } catch (error) {
-                console.error('Error signing out:', error);
+                console.error('❌ Dashboard: Sign out failed:', error);
                 showError('Failed to sign out. Please try again.');
             }
         });

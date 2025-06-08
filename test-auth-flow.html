@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auth Flow Test - Rarity Leads</title>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f8fafc;
+        }
+        .test-container {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .test-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #1a202c;
+            margin-bottom: 16px;
+        }
+        .test-button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 8px 8px 8px 0;
+            font-size: 14px;
+        }
+        .test-button:hover {
+            background: #5a67d8;
+        }
+        .test-result {
+            background: #f7fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 12px;
+            margin-top: 12px;
+            font-family: monospace;
+            font-size: 12px;
+            white-space: pre-wrap;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .status {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 500;
+            margin-left: 8px;
+        }
+        .status.success { background: #f0fff4; color: #22543d; }
+        .status.error { background: #fed7d7; color: #742a2a; }
+        .status.pending { background: #fef5e7; color: #744210; }
+    </style>
+</head>
+<body>
+    <h1>🧪 Auth Flow Test Suite</h1>
+    <p>Test the new authentication implementation</p>
+
+    <div class="test-container">
+        <div class="test-title">1. Supabase Connection Test</div>
+        <button class="test-button" onclick="testSupabaseConnection()">Test Connection</button>
+        <div id="supabase-result" class="test-result"></div>
+    </div>
+
+    <div class="test-container">
+        <div class="test-title">2. Auth State Test</div>
+        <button class="test-button" onclick="testAuthState()">Check Auth State</button>
+        <button class="test-button" onclick="testSignOut()">Test Sign Out</button>
+        <div id="auth-state-result" class="test-result"></div>
+    </div>
+
+    <div class="test-container">
+        <div class="test-title">3. Google OAuth Test</div>
+        <button class="test-button" onclick="testGoogleOAuth()">Test Google Login</button>
+        <div id="google-result" class="test-result"></div>
+    </div>
+
+    <div class="test-container">
+        <div class="test-title">4. Route Protection Test</div>
+        <button class="test-button" onclick="testDashboardAccess()">Test Dashboard Access</button>
+        <button class="test-button" onclick="testAuthPageAccess()">Test Auth Page Access</button>
+        <div id="route-result" class="test-result"></div>
+    </div>
+
+    <div class="test-container">
+        <div class="test-title">5. Navigation Test</div>
+        <button class="test-button" onclick="navigateToAuth()">Go to Auth Page</button>
+        <button class="test-button" onclick="navigateToDashboard()">Go to Dashboard</button>
+        <button class="test-button" onclick="navigateToHome()">Go to Home</button>
+        <div id="navigation-result" class="test-result"></div>
+    </div>
+
+    <script type="module">
+        import { supabase } from './supabase.js';
+        import { handleGoogleLogin, handleSignOut, getCurrentSession, isAuthenticated } from './auth-handlers.js';
+        import { authGuard } from './auth-guard.js';
+
+        // Make functions available globally for onclick handlers
+        window.testSupabaseConnection = async function() {
+            const result = document.getElementById('supabase-result');
+            result.textContent = 'Testing Supabase connection...\n';
+            
+            try {
+                const { session, error } = await getCurrentSession();
+                
+                if (error) {
+                    throw error;
+                }
+                
+                result.textContent += `✅ Connection successful!\n`;
+                result.textContent += `📊 Session: ${session ? 'Active' : 'None'}\n`;
+                result.textContent += `👤 User: ${session?.user?.email || 'Not signed in'}\n`;
+                result.textContent += `🔗 Provider: ${session?.user?.app_metadata?.provider || 'N/A'}\n`;
+                
+            } catch (error) {
+                result.textContent += `❌ Connection failed: ${error.message}\n`;
+            }
+        };
+
+        window.testAuthState = async function() {
+            const result = document.getElementById('auth-state-result');
+            result.textContent = 'Checking auth state...\n';
+            
+            try {
+                const authenticated = await isAuthenticated();
+                const session = authGuard.session;
+                
+                result.textContent += `🔐 Authenticated: ${authenticated}\n`;
+                result.textContent += `⏳ Loading: ${authGuard.isLoading}\n`;
+                result.textContent += `👤 Current User: ${session?.user?.email || 'None'}\n`;
+                result.textContent += `🕒 Session Expires: ${session?.expires_at ? new Date(session.expires_at * 1000).toLocaleString() : 'N/A'}\n`;
+                
+            } catch (error) {
+                result.textContent += `❌ Auth state check failed: ${error.message}\n`;
+            }
+        };
+
+        window.testSignOut = async function() {
+            const result = document.getElementById('auth-state-result');
+            result.textContent += '\nTesting sign out...\n';
+            
+            try {
+                const signOutResult = await handleSignOut();
+                
+                if (signOutResult.error) {
+                    throw signOutResult.error;
+                }
+                
+                result.textContent += `✅ Sign out successful\n`;
+                
+            } catch (error) {
+                result.textContent += `❌ Sign out failed: ${error.message}\n`;
+            }
+        };
+
+        window.testGoogleOAuth = async function() {
+            const result = document.getElementById('google-result');
+            result.textContent = 'Testing Google OAuth...\n';
+            
+            try {
+                result.textContent += '🔗 Initiating Google OAuth...\n';
+                
+                const oauthResult = await handleGoogleLogin();
+                
+                if (oauthResult.error) {
+                    throw oauthResult.error;
+                }
+                
+                result.textContent += `✅ Google OAuth initiated successfully\n`;
+                result.textContent += `📊 Data: ${JSON.stringify(oauthResult.data, null, 2)}\n`;
+                
+            } catch (error) {
+                result.textContent += `❌ Google OAuth failed: ${error.message}\n`;
+                
+                if (error.message.includes('Provider not found')) {
+                    result.textContent += `\n💡 Fix: Configure Google OAuth in Supabase:\n`;
+                    result.textContent += `   1. Go to Supabase Dashboard\n`;
+                    result.textContent += `   2. Authentication > Providers\n`;
+                    result.textContent += `   3. Enable Google and add Client ID/Secret\n`;
+                }
+            }
+        };
+
+        window.testDashboardAccess = function() {
+            const result = document.getElementById('route-result');
+            result.textContent = 'Testing dashboard access...\n';
+            
+            const canAccess = authGuard.requireAuth();
+            
+            if (canAccess) {
+                result.textContent += `✅ Dashboard access granted\n`;
+            } else {
+                result.textContent += `🚫 Dashboard access denied (will redirect to auth)\n`;
+            }
+        };
+
+        window.testAuthPageAccess = function() {
+            const result = document.getElementById('route-result');
+            result.textContent += '\nTesting auth page access...\n';
+            
+            const canAccess = authGuard.requireGuest();
+            
+            if (canAccess) {
+                result.textContent += `✅ Auth page access granted\n`;
+            } else {
+                result.textContent += `🔄 Already authenticated (will redirect to dashboard)\n`;
+            }
+        };
+
+        window.navigateToAuth = function() {
+            const result = document.getElementById('navigation-result');
+            result.textContent = 'Navigating to auth page...\n';
+            window.location.href = '/auth.html';
+        };
+
+        window.navigateToDashboard = function() {
+            const result = document.getElementById('navigation-result');
+            result.textContent = 'Navigating to dashboard...\n';
+            window.location.href = '/dashboard.html';
+        };
+
+        window.navigateToHome = function() {
+            const result = document.getElementById('navigation-result');
+            result.textContent = 'Navigating to home...\n';
+            window.location.href = '/';
+        };
+
+        // Auto-run basic tests on load
+        document.addEventListener('DOMContentLoaded', async () => {
+            console.log('🧪 Test suite loaded');
+            
+            // Wait a bit for auth to initialize
+            setTimeout(async () => {
+                await window.testSupabaseConnection();
+                await window.testAuthState();
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

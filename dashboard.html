@@ -14,6 +14,35 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="i18n.js"></script>
+    <script type="module">
+        // Dashboard protection (equivalent to ProtectedRoute in React)
+        import { authGuard } from './auth-guard.js';
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            console.log('🏠 Dashboard: Initializing with auth protection...');
+
+            // Wait for auth guard to initialize and check authentication
+            const checkAuth = () => {
+                if (authGuard.isLoading) {
+                    // Still loading, check again in 100ms
+                    setTimeout(checkAuth, 100);
+                    return;
+                }
+
+                // Auth loading complete, check if user is authenticated
+                if (!authGuard.requireAuth()) {
+                    // requireAuth will handle redirect if not authenticated
+                    return;
+                }
+
+                console.log('✅ Dashboard: Access granted, loading dashboard...');
+                // Dashboard content will load normally
+            };
+
+            // Start auth check
+            checkAuth();
+        });
+    </script>
     <script type="module" src="dashboard.js"></script>
 </head>
 <body class="dashboard-body">
