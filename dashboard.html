@@ -13,7 +13,6 @@
     <link rel="stylesheet" href="dashboard.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="i18n.js"></script>
     <script>
         console.log('🏠 Dashboard: Loading...');
 
@@ -61,7 +60,7 @@
                             if (error) throw error;
 
                             console.log('✅ Dashboard: Signed out successfully');
-                            window.location.href = '/';
+                            window.location.href = '/home.html';
 
                         } catch (error) {
                             console.error('❌ Dashboard: Sign out error:', error);
@@ -69,6 +68,9 @@
                         }
                     });
                 }
+
+                // Initialize charts
+                initializeCharts();
 
             } catch (error) {
                 console.error('💥 Dashboard: Error:', error);
@@ -82,11 +84,37 @@
 
             if (event === 'SIGNED_OUT') {
                 console.log('👋 Dashboard: User signed out, redirecting...');
-                window.location.href = '/';
+                window.location.href = '/home.html';
             }
         });
+
+        // Initialize charts function
+        function initializeCharts() {
+            console.log('📊 Initializing charts...');
+
+            // Simple chart initialization without external dependencies
+            const chartCanvas = document.getElementById('leads-chart');
+            if (chartCanvas) {
+                const ctx = chartCanvas.getContext('2d');
+
+                // Simple chart drawing
+                ctx.fillStyle = '#667eea';
+                ctx.fillRect(10, 10, 100, 50);
+                ctx.fillStyle = '#764ba2';
+                ctx.fillRect(120, 20, 100, 40);
+                ctx.fillStyle = '#f093fb';
+                ctx.fillRect(230, 30, 100, 30);
+
+                ctx.fillStyle = '#ffffff';
+                ctx.font = '12px Inter';
+                ctx.fillText('Sample Chart Data', 10, 80);
+            }
+
+            console.log('✅ Charts initialized');
+        }
+
+        console.log('✅ Dashboard script loaded');
     </script>
-    <script src="dashboard.js"></script>
 </head>
 <body class="dashboard-body">
     <!-- Sidebar Navigation -->
