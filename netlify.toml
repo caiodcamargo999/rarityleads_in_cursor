@@ -14,12 +14,16 @@
 
 # Redirect rules for SPA behavior
 [[redirects]]
+  # Root redirects to home page
+  from = "/"
+  to = "/home.html"
+  status = 200
+
+[[redirects]]
   # Handle auth callback from Supabase
   from = "/auth/callback"
   to = "/dashboard.html"
   status = 200
-
-# Root will serve index.html automatically
 
 [[redirects]]
   # Redirect auth to login page

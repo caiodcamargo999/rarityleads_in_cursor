@@ -16,7 +16,7 @@
 - [ ] `app-config.js` has correct Supabase credentials
 - [ ] `netlify.toml` redirects are configured
 - [ ] `package.json` scripts are correct
-- [ ] All file references updated (no auth.html, sign-in.html, index.html)
+- [ ] All file references updated (no auth.html, sign-in.html)
 
 ## 🔧 GitHub Repository Setup
 
