@@ -195,15 +195,20 @@ class I18nManager {
   }
 
   setupLanguageSwitcher() {
-    // Create language switcher if it doesn't exist
-    let languageSwitcher = document.querySelector('.language-selector');
-    
-    if (!languageSwitcher) {
-      languageSwitcher = this.createLanguageSwitcher();
-    }
+    // Find existing language switcher
+    const languageSwitcher = document.querySelector('.language-selector');
 
-    this.updateLanguageSwitcher();
-    this.attachLanguageSwitcherEvents();
+    if (languageSwitcher) {
+      this.updateLanguageSwitcher();
+      this.attachLanguageSwitcherEvents();
+    } else {
+      // Create language switcher if it doesn't exist
+      const createdSwitcher = this.createLanguageSwitcher();
+      if (createdSwitcher) {
+        this.updateLanguageSwitcher();
+        this.attachLanguageSwitcherEvents();
+      }
+    }
   }
 
   createLanguageSwitcher() {
@@ -250,11 +255,19 @@ class I18nManager {
   }
 
   attachLanguageSwitcherEvents() {
+    // Remove existing event listeners to prevent duplicates
+    if (this.languageEventListeners) {
+      this.languageEventListeners.forEach(({ element, event, handler }) => {
+        element.removeEventListener(event, handler);
+      });
+    }
+    this.languageEventListeners = [];
+
     // Toggle dropdown
-    document.addEventListener('click', (e) => {
+    const toggleHandler = (e) => {
       const currentLang = e.target.closest('.current-lang');
       const languageSelector = e.target.closest('.language-selector');
-      
+
       if (currentLang) {
         e.preventDefault();
         languageSelector.classList.toggle('open');
@@ -264,20 +277,29 @@ class I18nManager {
           selector.classList.remove('open');
         });
       }
-    });
+    };
 
     // Language selection
-    document.addEventListener('click', (e) => {
+    const selectionHandler = (e) => {
       const langOption = e.target.closest('.lang-option');
       if (langOption) {
         e.preventDefault();
         const selectedLang = langOption.getAttribute('data-lang');
         this.switchLanguage(selectedLang);
-        
+
         // Close dropdown
         langOption.closest('.language-selector').classList.remove('open');
       }
-    });
+    };
+
+    document.addEventListener('click', toggleHandler);
+    document.addEventListener('click', selectionHandler);
+
+    // Store event listeners for cleanup
+    this.languageEventListeners.push(
+      { element: document, event: 'click', handler: toggleHandler },
+      { element: document, event: 'click', handler: selectionHandler }
+    );
   }
 
   setupMutationObserver() {

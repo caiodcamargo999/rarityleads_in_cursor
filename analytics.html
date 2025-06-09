@@ -9,632 +9,358 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="rarity-design.css">
+    <link rel="stylesheet" href="dashboard.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="app-config.js"></script>
+    <script src="i18n.js"></script>
+    <script src="auth-guard.js"></script>
+    <script src="universal-navigation.js"></script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #43e97b 75%, #38f9d7 100%);
-            min-height: 100vh;
-            color: #1a202c;
-        }
-
-        /* Navigation */
-        .nav {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(226, 232, 240, 0.8);
-            padding: 0 2rem;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-        }
-
-        .nav-container {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            max-width: 1400px;
-            margin: 0 auto;
-            height: 70px;
-        }
-
-        .nav-brand {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-weight: 700;
-            font-size: 20px;
-            color: #1a202c;
-        }
-
-        .nav-brand .logo-icon {
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 18px;
-        }
-
-        .nav-links {
-            display: flex;
-            align-items: center;
-            gap: 2rem;
-        }
-
-        .nav-links a {
-            color: #64748b;
-            text-decoration: none;
-            font-weight: 500;
-            padding: 8px 16px;
-            border-radius: 8px;
-            transition: all 0.2s ease;
-            position: relative;
-        }
-
-        .nav-links a:hover,
-        .nav-links a.active {
-            color: #667eea;
-            background: rgba(102, 126, 234, 0.1);
-        }
-
-        .nav-actions {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .language-selector {
-            position: relative;
-        }
-
-        .current-lang {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 8px 12px;
-            background: white;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 500;
-            color: #374151;
-            transition: all 0.2s ease;
-        }
-
-        .current-lang:hover {
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-        }
-
-        .lang-dropdown {
-            position: absolute;
-            top: 100%;
-            right: 0;
-            background: white;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-            min-width: 160px;
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(-10px);
-            transition: all 0.2s ease;
-            z-index: 1000;
-        }
-
-        .language-selector.open .lang-dropdown {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0);
-        }
-
-        .lang-option {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 12px 16px;
-            color: #374151;
-            text-decoration: none;
-            transition: background 0.2s ease;
-        }
-
-        .lang-option:hover,
-        .lang-option.active {
-            background: #f8fafc;
-            color: #667eea;
-        }
-
-        .role-select {
-            padding: 8px 12px;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
-            background: white;
-            color: #374151;
-            font-size: 14px;
-            cursor: pointer;
-        }
-
-        .btn-secondary {
-            padding: 8px 16px;
-            background: #f8fafc;
-            color: #374151;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .btn-secondary:hover {
-            background: #e2e8f0;
-        }
-
-        /* Main Content */
-        .main-content {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
-
-        .page-header {
-            margin-bottom: 2rem;
-        }
-
-        .page-title {
-            font-size: 32px;
-            font-weight: 700;
-            color: #1a202c;
-            margin-bottom: 8px;
-        }
-
-        .page-subtitle {
-            color: #64748b;
-            font-size: 16px;
-            line-height: 1.5;
-        }
-
-        /* Stats Grid */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-        }
-
-        .stat-card {
-            background: white;
-            border-radius: 16px;
-            padding: 24px;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-            border: 1px solid rgba(226, 232, 240, 0.8);
-            transition: all 0.2s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .stat-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-        }
-
-        .stat-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #43e97b 75%, #38f9d7 100%);
-        }
-
-        .stat-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 16px;
-        }
-
-        .stat-title {
-            font-size: 14px;
-            font-weight: 600;
-            color: #64748b;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .stat-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-            color: white;
-        }
-
-        .stat-icon.leads { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
-        .stat-icon.conversion { background: linear-gradient(135deg, #f093fb 0%, #764ba2 100%); }
-        .stat-icon.campaigns { background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); }
-        .stat-icon.revenue { background: linear-gradient(135deg, #38f9d7 0%, #43e97b 100%); }
-
-        .stat-value {
-            font-size: 36px;
-            font-weight: 700;
-            color: #1a202c;
-            margin-bottom: 8px;
-            line-height: 1;
-        }
-
-        .stat-change {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            font-size: 14px;
-            font-weight: 500;
-        }
-
-        .stat-change.positive { color: #059669; }
-        .stat-change.negative { color: #dc2626; }
-        .stat-change.neutral { color: #64748b; }
-
-        .stat-change i {
-            font-size: 12px;
-        }
-
-        /* Analytics Section */
-        .analytics-section {
-            background: white;
-            border-radius: 16px;
-            padding: 24px;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-            border: 1px solid rgba(226, 232, 240, 0.8);
-            margin-bottom: 2rem;
-        }
-
-        .section-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 24px;
-            padding-bottom: 16px;
-            border-bottom: 1px solid #e2e8f0;
-        }
-
-        .section-title {
-            font-size: 20px;
-            font-weight: 600;
-            color: #1a202c;
-        }
-
-        .section-actions {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .period-select {
-            padding: 8px 12px;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
-            background: white;
-            color: #374151;
-            font-size: 14px;
-            cursor: pointer;
-            min-width: 150px;
-        }
-
-        .period-select:focus {
-            outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-        }
-
-        /* Charts Grid */
-        .charts-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-            gap: 2rem;
-        }
-
-        .chart-card {
-            background: #f8fafc;
-            border-radius: 12px;
-            padding: 20px;
-            border: 1px solid #e2e8f0;
-            position: relative;
-            min-height: 400px;
-        }
-
-        .chart-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 20px;
-        }
-
-        .chart-title {
-            font-size: 16px;
-            font-weight: 600;
-            color: #374151;
-        }
-
+        /* Custom Analytics Styles */
         .chart-container {
             position: relative;
             height: 300px;
             width: 100%;
         }
-
-        .no-data-placeholder {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            text-align: center;
-            color: #9ca3af;
-            font-size: 14px;
-        }
-
-        .no-data-placeholder i {
-            font-size: 48px;
-            margin-bottom: 12px;
-            opacity: 0.5;
-        }
-
-        /* Loading States */
-        .loading {
-            opacity: 0.7;
-            pointer-events: none;
-        }
-
-        .loading::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 20px;
-            height: 20px;
-            margin: -10px 0 0 -10px;
-            border: 2px solid #e2e8f0;
-            border-top: 2px solid #667eea;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .nav-container {
-                padding: 0 1rem;
-            }
-
-            .nav-links {
-                display: none;
-            }
-
-            .main-content {
-                padding: 1rem;
-            }
-
-            .stats-grid {
-                grid-template-columns: 1fr;
-                gap: 1rem;
-            }
-
-            .charts-grid {
-                grid-template-columns: 1fr;
-                gap: 1rem;
-            }
-
-            .chart-card {
-                min-height: 300px;
-            }
-
-            .chart-container {
-                height: 250px;
-            }
-        }
     </style>
 </head>
-<body>
-    <nav class="nav">
-        <div class="nav-container">
-            <div class="nav-brand">
-                <div class="logo-icon">
-                    <i class="fas fa-rocket"></i>
-                </div>
-                <span>Rarity Leads</span>
-            </div>
-            <div class="nav-links">
-                <a href="dashboard.html" data-i18n="nav.dashboard">Dashboard</a>
-                <a href="#" data-i18n="nav.leads">Leads</a>
-                <a href="#" data-i18n="nav.campaigns">Campaigns</a>
-                <a href="#" data-i18n="nav.sequences">Sequences</a>
-                <a href="#" class="active" data-i18n="nav.analytics">Analytics</a>
-                <a href="#" data-i18n="nav.settings">Settings</a>
-            </div>
-            <div class="nav-actions">
-                <div class="language-selector">
-                    <button class="current-lang">
-                        <span class="lang-flag">🇺🇸</span>
-                        <span class="lang-code">EN</span>
-                        <i class="fas fa-chevron-down"></i>
-                    </button>
-                    <div class="lang-dropdown">
-                        <a href="#" data-lang="en" class="lang-option active">
-                            <span class="lang-flag">🇺🇸</span>
-                            <span class="lang-name">English</span>
-                        </a>
-                        <a href="#" data-lang="pt-BR" class="lang-option">
-                            <span class="lang-flag">🇧🇷</span>
-                            <span class="lang-name">Português</span>
-                        </a>
-                        <a href="#" data-lang="es" class="lang-option">
-                            <span class="lang-flag">🇪🇸</span>
-                            <span class="lang-name">Español</span>
-                        </a>
-                        <a href="#" data-lang="fr" class="lang-option">
-                            <span class="lang-flag">🇫🇷</span>
-                            <span class="lang-name">Français</span>
-                        </a>
-                    </div>
-                </div>
-                <select id="role-select" class="role-select">
-                    <option value="agency_owner" data-i18n="nav.agencyOwner">Agency Owner</option>
-                    <option value="performance_manager" data-i18n="nav.performanceManager">Performance Manager</option>
-                    <option value="sdr_setter" data-i18n="nav.sdrSetter">SDR/Setter</option>
-                    <option value="client" data-i18n="nav.client">Client</option>
-                </select>
-                <button id="sign-out-btn" class="btn-secondary" data-i18n="nav.signOut">Sign Out</button>
+<body class="dashboard-body">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar" id="dashboard-sidebar">
+        <div class="sidebar-header">
+            <div class="logo-container">
+                <div class="logo-icon">✨</div>
+                <span class="logo-text">Rarity Leads</span>
             </div>
         </div>
-    </nav>
 
+        <nav class="sidebar-nav">
+            <ul class="nav-menu">
+                <!-- Dashboard -->
+                <li class="nav-item">
+                    <a href="dashboard.html" class="nav-link">
+                        <i class="fas fa-chart-line"></i>
+                        <span data-i18n="nav.dashboard">Dashboard</span>
+                    </a>
+                </li>
+
+                <!-- Prospecting Section -->
+                <li class="nav-item has-submenu">
+                    <a href="#" class="nav-link submenu-toggle">
+                        <i class="fas fa-search"></i>
+                        <span data-i18n="nav.prospecting">Prospecting</span>
+                        <i class="fas fa-chevron-down submenu-arrow"></i>
+                    </a>
+                    <ul class="submenu">
+                        <li class="nav-item">
+                            <a href="prospecting-leads.html" class="nav-link">
+                                <i class="fas fa-users"></i>
+                                <span data-i18n="nav.leads">Leads</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="prospecting-companies.html" class="nav-link">
+                                <i class="fas fa-building"></i>
+                                <span data-i18n="nav.companies">Companies</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <!-- Approaching Section -->
+                <li class="nav-item has-submenu">
+                    <a href="#" class="nav-link submenu-toggle">
+                        <i class="fas fa-paper-plane"></i>
+                        <span data-i18n="nav.approaching">Approaching</span>
+                        <i class="fas fa-chevron-down submenu-arrow"></i>
+                    </a>
+                    <ul class="submenu">
+                        <li class="nav-item">
+                            <a href="approaching-whatsapp.html" class="nav-link">
+                                <i class="fab fa-whatsapp"></i>
+                                <span data-i18n="nav.whatsapp">WhatsApp</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="approaching-instagram.html" class="nav-link">
+                                <i class="fab fa-instagram"></i>
+                                <span data-i18n="nav.instagram">Instagram</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="approaching-facebook.html" class="nav-link">
+                                <i class="fab fa-facebook"></i>
+                                <span data-i18n="nav.facebook">Facebook</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="approaching-x.html" class="nav-link">
+                                <i class="fab fa-x-twitter"></i>
+                                <span data-i18n="nav.x">X (Twitter)</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="approaching-linkedin.html" class="nav-link">
+                                <i class="fab fa-linkedin"></i>
+                                <span data-i18n="nav.linkedin">LinkedIn</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <!-- Analytics -->
+                <li class="nav-item active">
+                    <a href="analytics.html" class="nav-link">
+                        <i class="fas fa-chart-bar"></i>
+                        <span data-i18n="nav.analytics">Analytics</span>
+                    </a>
+                </li>
+
+                <!-- Support -->
+                <li class="nav-item">
+                    <a href="support.html" class="nav-link">
+                        <i class="fas fa-life-ring"></i>
+                        <span data-i18n="nav.support">Support</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="user-profile">
+                <div class="user-avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="user-info">
+                    <div class="user-name" data-i18n="nav.agencyOwner">Agency Owner</div>
+                    <div class="user-email">admin@rarity.com</div>
+                </div>
+                <button class="logout-btn" id="sign-out-btn">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Top Header -->
+    <header class="top-header">
+        <div class="header-left">
+            <button class="sidebar-toggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="breadcrumb">
+                <span class="breadcrumb-item">Analytics</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
     <main class="main-content">
-        <header class="page-header">
-            <h1 class="page-title" data-i18n="analytics.title">Analytics</h1>
-            <p class="page-subtitle" data-i18n="analytics.subtitle">Visualize and analyze your campaign and lead performance data</p>
-        </header>
+        <div class="page-header">
+            <div class="page-title-section">
+                <h1 class="page-title">
+                    <i class="fas fa-chart-bar" style="color: #8B5CF6;"></i>
+                    Analytics
+                </h1>
+                <p class="page-subtitle">Visualize and analyze your campaign and lead performance data</p>
+            </div>
+            <div class="page-actions">
+                <button class="btn btn-outline">
+                    <i class="fas fa-download"></i>
+                    Export Data
+                </button>
+                <button class="btn btn-primary">
+                    <i class="fas fa-plus"></i>
+                    New Report
+                </button>
+            </div>
+        </div>
 
         <!-- Stats Overview -->
-        <div class="stats-grid">
+        <div class="stats-overview">
             <div class="stat-card">
-                <div class="stat-header">
-                    <div class="stat-title" data-i18n="analytics.leadsGenerated">Leads Generated</div>
-                    <div class="stat-icon leads">
-                        <i class="fas fa-users"></i>
-                    </div>
+                <div class="stat-icon" style="background: linear-gradient(135deg, #8B5CF6, #7C3AED);">
+                    <i class="fas fa-users"></i>
                 </div>
-                <div class="stat-value" id="leads-count">1,247</div>
-                <div class="stat-change positive">
-                    <i class="fas fa-arrow-up"></i>
-                    <span>+23% <span data-i18n="analytics.thisMonth">this month</span></span>
+                <div class="stat-content">
+                    <div class="stat-value" id="leads-count">1,247</div>
+                    <div class="stat-label" data-i18n="analytics.leadsGenerated">Leads Generated</div>
+                    <div class="stat-change positive">
+                        <i class="fas fa-arrow-up"></i>
+                        <span>+23% from last month</span>
+                    </div>
                 </div>
             </div>
 
             <div class="stat-card">
-                <div class="stat-header">
-                    <div class="stat-title" data-i18n="analytics.conversionRate">Conversion Rate</div>
-                    <div class="stat-icon conversion">
-                        <i class="fas fa-chart-line"></i>
-                    </div>
+                <div class="stat-icon" style="background: linear-gradient(135deg, #EC4899, #DB2777);">
+                    <i class="fas fa-chart-line"></i>
                 </div>
-                <div class="stat-value" id="conversion-rate">31.2%</div>
-                <div class="stat-change positive">
-                    <i class="fas fa-arrow-up"></i>
-                    <span>+8.4% <span data-i18n="analytics.thisMonth">this month</span></span>
+                <div class="stat-content">
+                    <div class="stat-value" id="conversion-rate">31.2%</div>
+                    <div class="stat-label" data-i18n="analytics.conversionRate">Conversion Rate</div>
+                    <div class="stat-change positive">
+                        <i class="fas fa-arrow-up"></i>
+                        <span>+8.4% from last month</span>
+                    </div>
                 </div>
             </div>
 
             <div class="stat-card">
-                <div class="stat-header">
-                    <div class="stat-title" data-i18n="analytics.activeCampaigns">Active Campaigns</div>
-                    <div class="stat-icon campaigns">
-                        <i class="fas fa-bullhorn"></i>
-                    </div>
+                <div class="stat-icon" style="background: linear-gradient(135deg, #10B981, #059669);">
+                    <i class="fas fa-bullhorn"></i>
                 </div>
-                <div class="stat-value" id="active-campaigns">12</div>
-                <div class="stat-change neutral">
-                    <i class="fas fa-minus"></i>
-                    <span data-i18n="analytics.noVariation">No variation</span>
+                <div class="stat-content">
+                    <div class="stat-value" id="active-campaigns">12</div>
+                    <div class="stat-label" data-i18n="analytics.activeCampaigns">Active Campaigns</div>
+                    <div class="stat-change neutral">
+                        <i class="fas fa-minus"></i>
+                        <span>No variation</span>
+                    </div>
                 </div>
             </div>
 
             <div class="stat-card">
-                <div class="stat-header">
-                    <div class="stat-title" data-i18n="analytics.revenue">Revenue</div>
-                    <div class="stat-icon revenue">
-                        <i class="fas fa-dollar-sign"></i>
-                    </div>
+                <div class="stat-icon" style="background: linear-gradient(135deg, #F59E0B, #D97706);">
+                    <i class="fas fa-dollar-sign"></i>
                 </div>
-                <div class="stat-value" id="revenue-amount">$47,892</div>
-                <div class="stat-change positive">
-                    <i class="fas fa-arrow-up"></i>
-                    <span>+15.3% <span data-i18n="analytics.thisMonth">this month</span></span>
+                <div class="stat-content">
+                    <div class="stat-value" id="revenue-amount">$47,892</div>
+                    <div class="stat-label" data-i18n="analytics.revenue">Revenue</div>
+                    <div class="stat-change positive">
+                        <i class="fas fa-arrow-up"></i>
+                        <span>+15.3% from last month</span>
+                    </div>
                 </div>
             </div>
         </div>
 
         <!-- Analytics Charts -->
-        <section class="analytics-section">
-            <div class="section-header">
-                <h2 class="section-title" data-i18n="analytics.performanceCharts">Performance Charts</h2>
-                <div class="section-actions">
-                    <select id="analytics-period" class="period-select">
+        <div class="content-grid">
+            <div class="content-card">
+                <div class="card-header">
+                    <h3 data-i18n="analytics.acquisitionFunnel">Acquisition Funnel</h3>
+                    <select id="analytics-period" class="btn btn-sm btn-outline">
                         <option value="7" data-i18n="analytics.period.last7days">Last 7 days</option>
                         <option value="30" selected data-i18n="analytics.period.last30days">Last 30 days</option>
                         <option value="90" data-i18n="analytics.period.last90days">Last 90 days</option>
                     </select>
                 </div>
-            </div>
-
-            <div class="charts-grid">
-                <div class="chart-card">
-                    <div class="chart-header">
-                        <h3 class="chart-title" data-i18n="analytics.acquisitionFunnel">Acquisition Funnel</h3>
-                    </div>
+                <div class="card-content">
                     <div class="chart-container">
                         <canvas id="funnel-chart"></canvas>
-                        <div class="no-data-placeholder" style="display: none;">
-                            <i class="fas fa-chart-bar"></i>
-                            <div data-i18n="analytics.noData">No data available</div>
-                        </div>
                     </div>
                 </div>
+            </div>
 
-                <div class="chart-card">
-                    <div class="chart-header">
-                        <h3 class="chart-title" data-i18n="analytics.campaignPerformance">Campaign Performance</h3>
-                    </div>
+            <div class="content-card">
+                <div class="card-header">
+                    <h3 data-i18n="analytics.campaignPerformance">Campaign Performance</h3>
+                </div>
+                <div class="card-content">
                     <div class="chart-container">
                         <canvas id="campaign-chart"></canvas>
-                        <div class="no-data-placeholder" style="display: none;">
-                            <i class="fas fa-chart-line"></i>
-                            <div data-i18n="analytics.noData">No data available</div>
-                        </div>
                     </div>
                 </div>
+            </div>
 
-                <div class="chart-card">
-                    <div class="chart-header">
-                        <h3 class="chart-title" data-i18n="analytics.leadSources">Lead Sources</h3>
-                    </div>
+            <div class="content-card">
+                <div class="card-header">
+                    <h3 data-i18n="analytics.leadSources">Lead Sources</h3>
+                </div>
+                <div class="card-content">
                     <div class="chart-container">
                         <canvas id="sources-chart"></canvas>
                     </div>
                 </div>
+            </div>
 
-                <div class="chart-card">
-                    <div class="chart-header">
-                        <h3 class="chart-title" data-i18n="analytics.revenueTrends">Revenue Trends</h3>
-                    </div>
+            <div class="content-card">
+                <div class="card-header">
+                    <h3 data-i18n="analytics.revenueTrends">Revenue Trends</h3>
+                </div>
+                <div class="card-content">
                     <div class="chart-container">
                         <canvas id="revenue-chart"></canvas>
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
     </main>
 
-    <!-- Scripts -->
-    <script src="i18n.js"></script>
+    <script>
+        console.log('📊 Analytics page loaded');
+
+        // Initialize Supabase
+        let supabase;
+        try {
+            supabase = window.AppUtils.initSupabase();
+        } catch (error) {
+            console.error('Failed to initialize Supabase:', error);
+        }
+
+        // Check authentication
+        document.addEventListener('DOMContentLoaded', async () => {
+            if (!supabase) return;
+
+            try {
+                const { data: { session }, error } = await supabase.auth.getSession();
+
+                if (!session) {
+                    window.location.href = '/';
+                    return;
+                }
+
+                // Update user email
+                const userEmailElement = document.querySelector('.user-email');
+                if (userEmailElement && session.user) {
+                    userEmailElement.textContent = session.user.email;
+                }
+
+                // Setup sign out
+                const signOutBtn = document.getElementById('sign-out-btn');
+                if (signOutBtn) {
+                    signOutBtn.addEventListener('click', async () => {
+                        await supabase.auth.signOut();
+                        window.location.href = '/';
+                    });
+                }
+
+                // Initialize charts and other functionality
+                initializeCharts();
+                setupEventListeners();
+
+            } catch (error) {
+                console.error('Auth error:', error);
+                window.location.href = '/';
+            }
+        });
+
+        // Initialize sidebar menu
+        document.querySelectorAll('.submenu-toggle').forEach(toggle => {
+            toggle.addEventListener('click', (e) => {
+                e.preventDefault();
+                const parentItem = toggle.closest('.nav-item');
+                const submenu = parentItem.querySelector('.submenu');
+                const arrow = toggle.querySelector('.submenu-arrow');
+
+                parentItem.classList.toggle('open');
+
+                if (parentItem.classList.contains('open')) {
+                    arrow.style.transform = 'rotate(180deg)';
+                    submenu.style.maxHeight = submenu.scrollHeight + 'px';
+                } else {
+                    arrow.style.transform = 'rotate(0deg)';
+                    submenu.style.maxHeight = '0';
+                }
+            });
+        });
+    </script>
+
+    <!-- Charts Scripts -->
     <script>
         // Initialize charts with sample data
         document.addEventListener('DOMContentLoaded', function() {

@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="meta.title">Rarity Leads - WhatsApp Approaching</title>
+    <meta name="description" data-i18n="meta.description" content="Automate your WhatsApp outreach with AI-powered messaging">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="dashboard.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="app-config.js"></script>
+    <script src="i18n.js"></script>
+    <script src="auth-guard.js"></script>
+    <script src="universal-navigation.js"></script>
+    <script>
+        console.log('📱 WhatsApp Approaching: Loading...');
+
+        // Initialize Supabase
+        const supabase = window.supabase.createClient(
+            'https://yejheyrdsucgzpzwxuxs.supabase.co',
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InllamhleXJkc3VjZ3pwend4dXhzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg4MDg2NzQsImV4cCI6MjA2NDM4NDY3NH0.NzCJ8i3SKpABO6ykWRX3nHDYmjVB82KL1wfgaY3trM4'
+        );
+
+        // Check authentication when page loads
+        document.addEventListener('DOMContentLoaded', async () => {
+            console.log('🔍 WhatsApp Approaching: Checking authentication...');
+
+            try {
+                const { data: { session }, error } = await supabase.auth.getSession();
+
+                if (error) {
+                    console.error('❌ WhatsApp Approaching: Auth error:', error);
+                    window.location.href = '/auth.html';
+                    return;
+                }
+
+                if (!session) {
+                    console.log('🚫 WhatsApp Approaching: No session found, redirecting to auth');
+                    window.location.href = '/auth.html';
+                    return;
+                }
+
+                console.log('✅ WhatsApp Approaching: User authenticated:', session.user.email);
+
+                // Update user email in sidebar
+                const userEmailElement = document.querySelector('.user-email');
+                if (userEmailElement) {
+                    userEmailElement.textContent = session.user.email;
+                }
+
+                // Set up sign out button
+                const signOutBtn = document.getElementById('sign-out-btn');
+                if (signOutBtn) {
+                    signOutBtn.addEventListener('click', async () => {
+                        console.log('👋 WhatsApp Approaching: Signing out...');
+
+                        try {
+                            const { error } = await supabase.auth.signOut();
+                            if (error) throw error;
+
+                            console.log('✅ WhatsApp Approaching: Signed out successfully');
+                            window.location.href = '/home.html';
+
+                        } catch (error) {
+                            console.error('❌ WhatsApp Approaching: Sign out error:', error);
+                            alert('Sign out failed: ' + error.message);
+                        }
+                    });
+                }
+
+                // Initialize sidebar menu
+                initializeSidebarMenu();
+
+            } catch (error) {
+                console.error('💥 WhatsApp Approaching: Error:', error);
+                window.location.href = '/auth.html';
+            }
+        });
+
+        // Listen for auth changes
+        supabase.auth.onAuthStateChange((event, session) => {
+            console.log('🔄 WhatsApp Approaching: Auth event:', event);
+
+            if (event === 'SIGNED_OUT') {
+                console.log('👋 WhatsApp Approaching: User signed out, redirecting...');
+                window.location.href = '/home.html';
+            }
+        });
+
+        // Initialize sidebar menu functionality
+        function initializeSidebarMenu() {
+            console.log('🔧 Initializing sidebar menu...');
+
+            // Handle submenu toggles
+            document.querySelectorAll('.submenu-toggle').forEach(toggle => {
+                toggle.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const parentItem = toggle.closest('.nav-item');
+                    const submenu = parentItem.querySelector('.submenu');
+                    const arrow = toggle.querySelector('.submenu-arrow');
+
+                    // Toggle submenu
+                    parentItem.classList.toggle('open');
+                    
+                    // Animate arrow
+                    if (parentItem.classList.contains('open')) {
+                        arrow.style.transform = 'rotate(180deg)';
+                        submenu.style.maxHeight = submenu.scrollHeight + 'px';
+                    } else {
+                        arrow.style.transform = 'rotate(0deg)';
+                        submenu.style.maxHeight = '0';
+                    }
+                });
+            });
+
+            // Handle sidebar toggle for mobile
+            const sidebarToggle = document.querySelector('.sidebar-toggle');
+            const sidebar = document.querySelector('.sidebar');
+            
+            if (sidebarToggle && sidebar) {
+                sidebarToggle.addEventListener('click', () => {
+                    sidebar.classList.toggle('collapsed');
+                    document.body.classList.toggle('sidebar-collapsed');
+                });
+            }
+
+            // Set active menu item
+            setActiveMenuItem();
+
+            console.log('✅ Sidebar menu initialized');
+        }
+
+        // Set active menu item based on current page
+        function setActiveMenuItem() {
+            const currentPath = window.location.pathname;
+            const menuItems = document.querySelectorAll('.nav-link');
+
+            menuItems.forEach(item => {
+                const href = item.getAttribute('href');
+                if (href && currentPath.includes(href.replace('.html', ''))) {
+                    // Remove active class from all items
+                    document.querySelectorAll('.nav-item').forEach(navItem => {
+                        navItem.classList.remove('active');
+                    });
+                    
+                    // Add active class to current item
+                    item.closest('.nav-item').classList.add('active');
+                    
+                    // If it's a submenu item, open the parent submenu
+                    const parentSubmenu = item.closest('.submenu');
+                    if (parentSubmenu) {
+                        const parentNavItem = parentSubmenu.closest('.nav-item');
+                        parentNavItem.classList.add('open');
+                        const arrow = parentNavItem.querySelector('.submenu-arrow');
+                        if (arrow) {
+                            arrow.style.transform = 'rotate(180deg)';
+                        }
+                        parentSubmenu.style.maxHeight = parentSubmenu.scrollHeight + 'px';
+                    }
+                }
+            });
+        }
+
+        console.log('✅ WhatsApp Approaching script loaded');
+    </script>
+</head>
+<body class="dashboard-body">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo-container">
+                <div class="logo-icon">✨</div>
+                <span class="logo-text">Rarity Leads</span>
+            </div>
+        </div>
+
+        <nav class="sidebar-nav">
+            <ul class="nav-menu">
+                <!-- Dashboard -->
+                <li class="nav-item">
+                    <a href="dashboard.html" class="nav-link" id="menu-dashboard">
+                        <i class="fas fa-chart-line"></i>
+                        <span data-i18n="nav.dashboard">Dashboard</span>
+                    </a>
+                </li>
+
+                <!-- Prospecting Section -->
+                <li class="nav-item has-submenu">
+                    <a href="#" class="nav-link submenu-toggle" id="submenu-prospecting">
+                        <i class="fas fa-search"></i>
+                        <span data-i18n="nav.prospecting">Prospecting</span>
+                        <i class="fas fa-chevron-down submenu-arrow"></i>
+                    </a>
+                    <ul class="submenu">
+                        <li class="nav-item">
+                            <a href="prospecting-leads.html" class="nav-link">
+                                <i class="fas fa-users"></i>
+                                <span data-i18n="nav.leads">Leads</span>
+                                <span class="badge">24</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="prospecting-companies.html" class="nav-link">
+                                <i class="fas fa-building"></i>
+                                <span data-i18n="nav.companies">Companies</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <!-- Approaching Section -->
+                <li class="nav-item has-submenu open">
+                    <a href="#" class="nav-link submenu-toggle" id="submenu-approaching">
+                        <i class="fas fa-paper-plane"></i>
+                        <span data-i18n="nav.approaching">Approaching</span>
+                        <i class="fas fa-chevron-down submenu-arrow" style="transform: rotate(180deg);"></i>
+                    </a>
+                    <ul class="submenu" style="max-height: 500px;">
+                        <li class="nav-item active">
+                            <a href="approaching-whatsapp.html" class="nav-link">
+                                <i class="fab fa-whatsapp"></i>
+                                <span data-i18n="nav.whatsapp">WhatsApp</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="approaching-instagram.html" class="nav-link">
+                                <i class="fab fa-instagram"></i>
+                                <span data-i18n="nav.instagram">Instagram</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="approaching-facebook.html" class="nav-link">
+                                <i class="fab fa-facebook"></i>
+                                <span data-i18n="nav.facebook">Facebook</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="approaching-x.html" class="nav-link">
+                                <i class="fab fa-x-twitter"></i>
+                                <span data-i18n="nav.x">X (Twitter)</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="approaching-linkedin.html" class="nav-link">
+                                <i class="fab fa-linkedin"></i>
+                                <span data-i18n="nav.linkedin">LinkedIn</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <!-- Analytics -->
+                <li class="nav-item">
+                    <a href="analytics.html" class="nav-link">
+                        <i class="fas fa-chart-bar"></i>
+                        <span data-i18n="nav.analytics">Analytics</span>
+                    </a>
+                </li>
+
+                <!-- Support -->
+                <li class="nav-item">
+                    <a href="support.html" class="nav-link">
+                        <i class="fas fa-life-ring"></i>
+                        <span data-i18n="nav.support">Support</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="user-profile">
+                <div class="user-avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="user-info">
+                    <div class="user-name" data-i18n="nav.agencyOwner">Agency Owner</div>
+                    <div class="user-email">admin@rarity.com</div>
+                </div>
+                <button class="logout-btn" id="sign-out-btn">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Top Header -->
+    <header class="top-header">
+        <div class="header-left">
+            <button class="sidebar-toggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="breadcrumb">
+                <span class="breadcrumb-item" data-i18n="nav.approaching">Approaching</span>
+                <span class="breadcrumb-separator"> / </span>
+                <span class="breadcrumb-item" data-i18n="nav.whatsapp">WhatsApp</span>
+            </div>
+        </div>
+
+        <div class="header-right">
+            <div class="header-actions">
+                <div class="language-selector">
+                    <button class="current-lang">
+                        <span class="lang-flag">🇺🇸</span>
+                        <span class="lang-code">EN</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="lang-dropdown">
+                        <a href="#" data-lang="en" class="lang-option active">
+                            <span class="lang-flag">🇺🇸</span>
+                            <span class="lang-name">English</span>
+                        </a>
+                        <a href="#" data-lang="pt-BR" class="lang-option">
+                            <span class="lang-flag">🇧🇷</span>
+                            <span class="lang-name">Português</span>
+                        </a>
+                        <a href="#" data-lang="es" class="lang-option">
+                            <span class="lang-flag">🇪🇸</span>
+                            <span class="lang-name">Español</span>
+                        </a>
+                        <a href="#" data-lang="fr" class="lang-option">
+                            <span class="lang-flag">🇫🇷</span>
+                            <span class="lang-name">Français</span>
+                        </a>
+                    </div>
+                </div>
+                <button class="header-btn" data-tooltip="Notifications">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-dot"></span>
+                </button>
+                <button class="header-btn" data-tooltip="Help">
+                    <i class="fas fa-question-circle"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Page Header -->
+        <div class="page-header">
+            <div class="page-title">
+                <h1 data-i18n="nav.whatsapp">WhatsApp</h1>
+                <p class="page-subtitle">Automate your WhatsApp outreach with AI-powered messaging</p>
+            </div>
+            <div class="page-actions">
+                <button class="action-btn secondary">
+                    <i class="fas fa-qrcode"></i>
+                    <span>QR Code</span>
+                </button>
+                <button class="action-btn secondary">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
+                </button>
+                <button class="action-btn primary">
+                    <i class="fas fa-plus"></i>
+                    <span>New Campaign</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Content will be added here -->
+        <div class="content-placeholder">
+            <div class="placeholder-icon">
+                <i class="fab fa-whatsapp"></i>
+            </div>
+            <h3>WhatsApp Automation</h3>
+            <p>This page is under development. WhatsApp automation functionality will be implemented here.</p>
+        </div>
+    </main>
+</body>
+</html>

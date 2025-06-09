@@ -20,15 +20,21 @@
   status = 200
 
 [[redirects]]
-  # Redirect root auth to auth.html
-  from = "/auth"
-  to = "/auth.html"
+  # Redirect root to home page
+  from = "/"
+  to = "/home.html"
   status = 301
 
 [[redirects]]
-  # Handle 404s by serving index.html (for SPA routing)
+  # Redirect auth to login page
+  from = "/auth"
+  to = "/login.html"
+  status = 301
+
+[[redirects]]
+  # Handle 404s by serving home page
   from = "/*"
-  to = "/index.html"
+  to = "/home.html"
   status = 404
 
 # Headers for security and performance

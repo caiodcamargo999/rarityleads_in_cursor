@@ -2,7 +2,7 @@
   "name": "rarity-leads",
   "version": "1.0.0",
   "description": "AI-Powered Lead Generation Platform",
-  "main": "index.html",
+  "main": "home.html",
   "scripts": {
     "dev": "live-server --port=3000",
     "build": "echo 'Static site build complete - no build step required'",

@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="meta.title">Rarity Leads - Support</title>
+    <meta name="description" data-i18n="meta.description" content="Get help and support for your Rarity Leads account">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="rarity-design.css">
+    <link rel="stylesheet" href="dashboard.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="app-config.js"></script>
+    <script src="i18n.js"></script>
+    <script src="auth-guard.js"></script>
+    <script src="universal-navigation.js"></script>
+
+</head>
+<body class="dashboard-body">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo-container">
+                <div class="logo-icon">✨</div>
+                <span class="logo-text">Rarity Leads</span>
+            </div>
+        </div>
+
+        <nav class="sidebar-nav">
+            <ul class="nav-menu">
+                <!-- Dashboard -->
+                <li class="nav-item">
+                    <a href="dashboard.html" class="nav-link">
+                        <i class="fas fa-chart-line"></i>
+                        <span data-i18n="nav.dashboard">Dashboard</span>
+                    </a>
+                </li>
+
+                <!-- Prospecting Section -->
+                <li class="nav-item has-submenu">
+                    <a href="#" class="nav-link submenu-toggle">
+                        <i class="fas fa-search"></i>
+                        <span data-i18n="nav.prospecting">Prospecting</span>
+                        <i class="fas fa-chevron-down submenu-arrow"></i>
+                    </a>
+                    <ul class="submenu">
+                        <li class="nav-item">
+                            <a href="prospecting-leads.html" class="nav-link">
+                                <i class="fas fa-users"></i>
+                                <span data-i18n="nav.leads">Leads</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="prospecting-companies.html" class="nav-link">
+                                <i class="fas fa-building"></i>
+                                <span data-i18n="nav.companies">Companies</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <!-- Approaching Section -->
+                <li class="nav-item has-submenu">
+                    <a href="#" class="nav-link submenu-toggle">
+                        <i class="fas fa-paper-plane"></i>
+                        <span data-i18n="nav.approaching">Approaching</span>
+                        <i class="fas fa-chevron-down submenu-arrow"></i>
+                    </a>
+                    <ul class="submenu">
+                        <li class="nav-item">
+                            <a href="approaching-whatsapp.html" class="nav-link">
+                                <i class="fab fa-whatsapp"></i>
+                                <span data-i18n="nav.whatsapp">WhatsApp</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="approaching-instagram.html" class="nav-link">
+                                <i class="fab fa-instagram"></i>
+                                <span data-i18n="nav.instagram">Instagram</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="approaching-facebook.html" class="nav-link">
+                                <i class="fab fa-facebook"></i>
+                                <span data-i18n="nav.facebook">Facebook</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="approaching-x.html" class="nav-link">
+                                <i class="fab fa-x-twitter"></i>
+                                <span data-i18n="nav.x">X (Twitter)</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="approaching-linkedin.html" class="nav-link">
+                                <i class="fab fa-linkedin"></i>
+                                <span data-i18n="nav.linkedin">LinkedIn</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <!-- Analytics -->
+                <li class="nav-item">
+                    <a href="analytics.html" class="nav-link">
+                        <i class="fas fa-chart-bar"></i>
+                        <span data-i18n="nav.analytics">Analytics</span>
+                    </a>
+                </li>
+
+                <!-- Support -->
+                <li class="nav-item active">
+                    <a href="support.html" class="nav-link">
+                        <i class="fas fa-life-ring"></i>
+                        <span data-i18n="nav.support">Support</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="user-profile">
+                <div class="user-avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="user-info">
+                    <div class="user-name" data-i18n="nav.agencyOwner">Agency Owner</div>
+                    <div class="user-email">admin@rarity.com</div>
+                </div>
+                <button class="logout-btn" id="sign-out-btn">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Top Header -->
+    <header class="top-header">
+        <div class="header-left">
+            <button class="sidebar-toggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="breadcrumb">
+                <span class="breadcrumb-item" data-i18n="nav.support">Support</span>
+            </div>
+        </div>
+
+        <div class="header-right">
+            <div class="header-actions">
+                <div class="language-selector">
+                    <button class="current-lang">
+                        <span class="lang-flag">🇺🇸</span>
+                        <span class="lang-code">EN</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="lang-dropdown">
+                        <a href="#" data-lang="en" class="lang-option active">
+                            <span class="lang-flag">🇺🇸</span>
+                            <span class="lang-name">English</span>
+                        </a>
+                        <a href="#" data-lang="pt-BR" class="lang-option">
+                            <span class="lang-flag">🇧🇷</span>
+                            <span class="lang-name">Português</span>
+                        </a>
+                        <a href="#" data-lang="es" class="lang-option">
+                            <span class="lang-flag">🇪🇸</span>
+                            <span class="lang-name">Español</span>
+                        </a>
+                        <a href="#" data-lang="fr" class="lang-option">
+                            <span class="lang-flag">🇫🇷</span>
+                            <span class="lang-name">Français</span>
+                        </a>
+                    </div>
+                </div>
+                <button class="header-btn" data-tooltip="Notifications">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-dot"></span>
+                </button>
+                <button class="header-btn" data-tooltip="Help">
+                    <i class="fas fa-question-circle"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Page Header -->
+        <div class="page-header">
+            <div class="page-title-section">
+                <h1 class="page-title">
+                    <i class="fas fa-life-ring" style="color: #10B981;"></i>
+                    Support Center
+                </h1>
+                <p class="page-subtitle">Get help and support for your Rarity Leads account</p>
+            </div>
+            <div class="page-actions">
+                <button class="btn btn-outline">
+                    <i class="fas fa-envelope"></i>
+                    Contact Support
+                </button>
+                <button class="btn btn-primary">
+                    <i class="fas fa-video"></i>
+                    Schedule Demo
+                </button>
+            </div>
+        </div>
+
+        <!-- Quick Help Cards -->
+        <div class="stats-overview">
+            <div class="stat-card">
+                <div class="stat-icon" style="background: linear-gradient(135deg, #10B981, #059669);">
+                    <i class="fas fa-rocket"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-value">< 2 min</div>
+                    <div class="stat-label">Average Response Time</div>
+                    <div class="stat-change positive">
+                        <i class="fas fa-clock"></i>
+                        <span>24/7 Support Available</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon" style="background: linear-gradient(135deg, #3B82F6, #1D4ED8);">
+                    <i class="fas fa-book"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-value">50+</div>
+                    <div class="stat-label">Help Articles</div>
+                    <div class="stat-change positive">
+                        <i class="fas fa-search"></i>
+                        <span>Searchable Knowledge Base</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon" style="background: linear-gradient(135deg, #8B5CF6, #7C3AED);">
+                    <i class="fas fa-video"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-value">20+</div>
+                    <div class="stat-label">Video Tutorials</div>
+                    <div class="stat-change positive">
+                        <i class="fas fa-play"></i>
+                        <span>Step-by-step Guides</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon" style="background: linear-gradient(135deg, #F59E0B, #D97706);">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-value">98%</div>
+                    <div class="stat-label">Satisfaction Rate</div>
+                    <div class="stat-change positive">
+                        <i class="fas fa-star"></i>
+                        <span>5-star Support Team</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- FAQ Section -->
+        <div class="content-grid">
+            <div class="content-card">
+                <div class="card-header">
+                    <h3>
+                        <i class="fas fa-question-circle" style="color: #8B5CF6;"></i>
+                        Frequently Asked Questions
+                    </h3>
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Search FAQ..." id="faq-search">
+                    </div>
+                </div>
+                <div class="card-content">
+                    <div class="faq-container">
+                        <!-- Getting Started -->
+                        <div class="faq-category">
+                            <h4 class="faq-category-title">
+                                <i class="fas fa-rocket"></i>
+                                Getting Started
+                            </h4>
+
+                            <div class="faq-item">
+                                <div class="faq-question">
+                                    <h5>How do I set up my first campaign?</h5>
+                                    <i class="fas fa-chevron-down"></i>
+                                </div>
+                                <div class="faq-answer">
+                                    <p>Setting up your first campaign is easy:</p>
+                                    <ol>
+                                        <li>Go to <strong>Dashboard</strong> and click "New Campaign"</li>
+                                        <li>Choose your target sector (SaaS, Finance, Healthcare, etc.)</li>
+                                        <li>Set your lead criteria (company size, revenue, location)</li>
+                                        <li>Connect your WhatsApp account(s)</li>
+                                        <li>Create your message templates</li>
+                                        <li>Launch and monitor your campaign</li>
+                                    </ol>
+                                    <p>Our AI will automatically find and qualify leads based on your criteria.</p>
+                                </div>
+                            </div>
+
+                            <div class="faq-item">
+                                <div class="faq-question">
+                                    <h5>How many WhatsApp accounts can I connect?</h5>
+                                    <i class="fas fa-chevron-down"></i>
+                                </div>
+                                <div class="faq-answer">
+                                    <p>The number of WhatsApp accounts depends on your plan:</p>
+                                    <ul>
+                                        <li><strong>Starter:</strong> Up to 2 WhatsApp accounts</li>
+                                        <li><strong>Professional:</strong> Up to 5 WhatsApp accounts</li>
+                                        <li><strong>Enterprise:</strong> Unlimited WhatsApp accounts</li>
+                                    </ul>
+                                    <p>Each account can be managed from a single dashboard with easy switching between numbers.</p>
+                                </div>
+                            </div>
+
+                            <div class="faq-item">
+                                <div class="faq-question">
+                                    <h5>What's the difference between warm and cold leads?</h5>
+                                    <i class="fas fa-chevron-down"></i>
+                                </div>
+                                <div class="faq-answer">
+                                    <p><strong>Warm leads</strong> are prospects who have shown intent signals such as:</p>
+                                    <ul>
+                                        <li>Recent hiring activity</li>
+                                        <li>Funding announcements</li>
+                                        <li>Technology stack changes</li>
+                                        <li>Website activity</li>
+                                    </ul>
+                                    <p><strong>Cold leads</strong> are prospects with no recent activity but match your ICP criteria. Our AI prioritizes warm leads for higher conversion rates.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Features & Functionality -->
+                        <div class="faq-category">
+                            <h4 class="faq-category-title">
+                                <i class="fas fa-cogs"></i>
+                                Features & Functionality
+                            </h4>
+
+                            <div class="faq-item">
+                                <div class="faq-question">
+                                    <h5>How does the AI lead scoring work?</h5>
+                                    <i class="fas fa-chevron-down"></i>
+                                </div>
+                                <div class="faq-answer">
+                                    <p>Our AI analyzes 500+ data points to score leads:</p>
+                                    <ul>
+                                        <li><strong>Firmographics:</strong> Company size, revenue, industry</li>
+                                        <li><strong>Technographics:</strong> Technology stack, tools used</li>
+                                        <li><strong>Behavioral signals:</strong> Website activity, social engagement</li>
+                                        <li><strong>Intent signals:</strong> Recent hiring, funding, expansion</li>
+                                    </ul>
+                                    <p>Leads are scored 0-100, with 80+ being highly qualified prospects ready to engage.</p>
+                                </div>
+                            </div>
+
+                            <div class="faq-item">
+                                <div class="faq-question">
+                                    <h5>Can I integrate with my existing CRM?</h5>
+                                    <i class="fas fa-chevron-down"></i>
+                                </div>
+                                <div class="faq-answer">
+                                    <p>Yes! We support two-way sync with major CRMs:</p>
+                                    <ul>
+                                        <li><strong>HubSpot:</strong> Full integration with contact sync</li>
+                                        <li><strong>Pipedrive:</strong> Deal and contact management</li>
+                                        <li><strong>Salesforce:</strong> Enterprise-level integration</li>
+                                        <li><strong>Custom APIs:</strong> Available for Enterprise plans</li>
+                                    </ul>
+                                    <p>Leads and conversation history automatically sync to your CRM.</p>
+                                </div>
+                            </div>
+
+                            <div class="faq-item">
+                                <div class="faq-question">
+                                    <h5>How does phone number validation work?</h5>
+                                    <i class="fas fa-chevron-down"></i>
+                                </div>
+                                <div class="faq-answer">
+                                    <p>We validate phone numbers through multiple methods:</p>
+                                    <ol>
+                                        <li><strong>WhatsApp Business API:</strong> Checks if number is registered</li>
+                                        <li><strong>Third-party validation:</strong> Numverify, Twilio Lookup</li>
+                                        <li><strong>Real-time verification:</strong> Active status checking</li>
+                                    </ol>
+                                    <p>Numbers are categorized as "WhatsApp-enabled" or "SMS-only" for optimal outreach.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Billing & Plans -->
+                        <div class="faq-category">
+                            <h4 class="faq-category-title">
+                                <i class="fas fa-credit-card"></i>
+                                Billing & Plans
+                            </h4>
+
+                            <div class="faq-item">
+                                <div class="faq-question">
+                                    <h5>Can I change my plan anytime?</h5>
+                                    <i class="fas fa-chevron-down"></i>
+                                </div>
+                                <div class="faq-answer">
+                                    <p>Yes! You can upgrade or downgrade your plan at any time:</p>
+                                    <ul>
+                                        <li><strong>Upgrades:</strong> Take effect immediately with prorated billing</li>
+                                        <li><strong>Downgrades:</strong> Take effect at the next billing cycle</li>
+                                        <li><strong>No contracts:</strong> Cancel anytime with 30-day notice</li>
+                                    </ul>
+                                    <p>Contact support for custom Enterprise arrangements.</p>
+                                </div>
+                            </div>
+
+                            <div class="faq-item">
+                                <div class="faq-question">
+                                    <h5>Is there a free trial available?</h5>
+                                    <i class="fas fa-chevron-down"></i>
+                                </div>
+                                <div class="faq-answer">
+                                    <p>We offer a 14-day free trial with full access to:</p>
+                                    <ul>
+                                        <li>Up to 100 leads</li>
+                                        <li>1 WhatsApp account</li>
+                                        <li>Basic AI features</li>
+                                        <li>Email support</li>
+                                    </ul>
+                                    <p>No credit card required to start your trial!</p>
+                                </div>
+                            </div>
+
+                            <div class="faq-item">
+                                <div class="faq-question">
+                                    <h5>What payment methods do you accept?</h5>
+                                    <i class="fas fa-chevron-down"></i>
+                                </div>
+                                <div class="faq-answer">
+                                    <p>We accept all major payment methods:</p>
+                                    <ul>
+                                        <li>Credit cards (Visa, MasterCard, American Express)</li>
+                                        <li>PayPal</li>
+                                        <li>Bank transfers (Enterprise plans)</li>
+                                        <li>Cryptocurrency (Bitcoin, Ethereum)</li>
+                                    </ul>
+                                    <p>All payments are processed securely through Stripe.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Technical Support -->
+                        <div class="faq-category">
+                            <h4 class="faq-category-title">
+                                <i class="fas fa-tools"></i>
+                                Technical Support
+                            </h4>
+
+                            <div class="faq-item">
+                                <div class="faq-question">
+                                    <h5>My WhatsApp messages aren't sending. What should I do?</h5>
+                                    <i class="fas fa-chevron-down"></i>
+                                </div>
+                                <div class="faq-answer">
+                                    <p>If messages aren't sending, try these steps:</p>
+                                    <ol>
+                                        <li>Check your WhatsApp account status in Settings</li>
+                                        <li>Verify your phone number is validated</li>
+                                        <li>Ensure you haven't exceeded daily limits</li>
+                                        <li>Check if the recipient number is valid</li>
+                                        <li>Restart your campaign if needed</li>
+                                    </ol>
+                                    <p>If issues persist, contact support with your campaign details.</p>
+                                </div>
+                            </div>
+
+                            <div class="faq-item">
+                                <div class="faq-question">
+                                    <h5>How do I export my lead data?</h5>
+                                    <i class="fas fa-chevron-down"></i>
+                                </div>
+                                <div class="faq-answer">
+                                    <p>You can export your data in multiple formats:</p>
+                                    <ul>
+                                        <li><strong>CSV:</strong> For spreadsheet analysis</li>
+                                        <li><strong>Excel:</strong> With formatting and charts</li>
+                                        <li><strong>JSON:</strong> For API integrations</li>
+                                        <li><strong>PDF:</strong> For reports and presentations</li>
+                                    </ul>
+                                    <p>Go to Analytics → Export Data to download your reports.</p>
+                                </div>
+                            </div>
+
+                            <div class="faq-item">
+                                <div class="faq-question">
+                                    <h5>Is my data secure and private?</h5>
+                                    <i class="fas fa-chevron-down"></i>
+                                </div>
+                                <div class="faq-answer">
+                                    <p>Absolutely! We take data security seriously:</p>
+                                    <ul>
+                                        <li><strong>Encryption:</strong> All data encrypted in transit and at rest</li>
+                                        <li><strong>GDPR compliant:</strong> Full compliance with privacy regulations</li>
+                                        <li><strong>SOC 2 certified:</strong> Enterprise-grade security standards</li>
+                                        <li><strong>Regular audits:</strong> Third-party security assessments</li>
+                                    </ul>
+                                    <p>Your data is never shared with third parties without consent.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contact Support Section -->
+        <div class="content-grid">
+            <div class="content-card">
+                <div class="card-header">
+                    <h3>
+                        <i class="fas fa-headset" style="color: #10B981;"></i>
+                        Still Need Help?
+                    </h3>
+                </div>
+                <div class="card-content">
+                    <div class="support-options">
+                        <div class="support-option">
+                            <div class="support-icon">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <div class="support-content">
+                                <h4>Email Support</h4>
+                                <p>Get detailed help via email</p>
+                                <a href="mailto:support@rarityleads.com" class="btn btn-outline">
+                                    support@rarityleads.com
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="support-option">
+                            <div class="support-icon">
+                                <i class="fas fa-comments"></i>
+                            </div>
+                            <div class="support-content">
+                                <h4>Live Chat</h4>
+                                <p>Chat with our support team</p>
+                                <button class="btn btn-primary" onclick="openLiveChat()">
+                                    Start Chat
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="support-option">
+                            <div class="support-icon">
+                                <i class="fas fa-video"></i>
+                            </div>
+                            <div class="support-content">
+                                <h4>Video Call</h4>
+                                <p>Schedule a screen share session</p>
+                                <button class="btn btn-outline" onclick="scheduleCall()">
+                                    Schedule Call
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <style>
+        /* FAQ Styles */
+        .faq-container {
+            max-width: 100%;
+        }
+
+        .faq-category {
+            margin-bottom: 2rem;
+        }
+
+        .faq-category-title {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--gray-200);
+        }
+
+        .faq-item {
+            border: 1px solid var(--gray-200);
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            overflow: hidden;
+        }
+
+        .faq-question {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            cursor: pointer;
+            background: var(--white);
+            transition: background 0.2s ease;
+        }
+
+        .faq-question:hover {
+            background: var(--gray-50);
+        }
+
+        .faq-question h5 {
+            margin: 0;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .faq-question i {
+            color: var(--text-secondary);
+            transition: transform 0.3s ease;
+        }
+
+        .faq-item.open .faq-question i {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            padding: 0 1rem;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            background: var(--gray-50);
+        }
+
+        .faq-item.open .faq-answer {
+            padding: 1rem;
+            max-height: 500px;
+        }
+
+        .faq-answer p, .faq-answer ul, .faq-answer ol {
+            margin-bottom: 0.5rem;
+        }
+
+        .faq-answer ul, .faq-answer ol {
+            padding-left: 1.5rem;
+        }
+
+        .faq-answer li {
+            margin-bottom: 0.25rem;
+        }
+
+        .search-box {
+            position: relative;
+            max-width: 300px;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 8px 12px 8px 36px;
+            border: 1px solid var(--gray-300);
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+        }
+
+        /* Support Options */
+        .support-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .support-option {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1.5rem;
+            border: 1px solid var(--gray-200);
+            border-radius: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .support-option:hover {
+            border-color: var(--primary-color);
+            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.1);
+        }
+
+        .support-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--primary-gradient);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-size: 1.25rem;
+        }
+
+        .support-content h4 {
+            margin: 0 0 0.25rem 0;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .support-content p {
+            margin: 0 0 0.75rem 0;
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        @media (max-width: 768px) {
+            .support-options {
+                grid-template-columns: 1fr;
+            }
+
+            .support-option {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+
+    <script>
+        console.log('🆘 Support page loaded');
+
+        // Initialize Supabase
+        let supabase;
+        try {
+            supabase = window.AppUtils.initSupabase();
+        } catch (error) {
+            console.error('Failed to initialize Supabase:', error);
+        }
+
+        // Check authentication
+        document.addEventListener('DOMContentLoaded', async () => {
+            if (!supabase) return;
+
+            try {
+                const { data: { session }, error } = await supabase.auth.getSession();
+
+                if (!session) {
+                    window.location.href = '/';
+                    return;
+                }
+
+                // Update user email
+                const userEmailElement = document.querySelector('.user-email');
+                if (userEmailElement && session.user) {
+                    userEmailElement.textContent = session.user.email;
+                }
+
+                // Setup sign out
+                const signOutBtn = document.getElementById('sign-out-btn');
+                if (signOutBtn) {
+                    signOutBtn.addEventListener('click', async () => {
+                        await supabase.auth.signOut();
+                        window.location.href = '/';
+                    });
+                }
+
+                // Initialize FAQ functionality
+                initializeFAQ();
+
+            } catch (error) {
+                console.error('Auth error:', error);
+                window.location.href = '/';
+            }
+        });
+
+        // Initialize sidebar menu
+        document.querySelectorAll('.submenu-toggle').forEach(toggle => {
+            toggle.addEventListener('click', (e) => {
+                e.preventDefault();
+                const parentItem = toggle.closest('.nav-item');
+                const submenu = parentItem.querySelector('.submenu');
+                const arrow = toggle.querySelector('.submenu-arrow');
+
+                parentItem.classList.toggle('open');
+
+                if (parentItem.classList.contains('open')) {
+                    arrow.style.transform = 'rotate(180deg)';
+                    submenu.style.maxHeight = submenu.scrollHeight + 'px';
+                } else {
+                    arrow.style.transform = 'rotate(0deg)';
+                    submenu.style.maxHeight = '0';
+                }
+            });
+        });
+
+        // FAQ functionality
+        function initializeFAQ() {
+            // FAQ toggle functionality
+            document.querySelectorAll('.faq-question').forEach(question => {
+                question.addEventListener('click', () => {
+                    const faqItem = question.closest('.faq-item');
+                    faqItem.classList.toggle('open');
+                });
+            });
+
+            // FAQ search functionality
+            const searchInput = document.getElementById('faq-search');
+            if (searchInput) {
+                searchInput.addEventListener('input', (e) => {
+                    const searchTerm = e.target.value.toLowerCase();
+                    const faqItems = document.querySelectorAll('.faq-item');
+
+                    faqItems.forEach(item => {
+                        const question = item.querySelector('.faq-question h5').textContent.toLowerCase();
+                        const answer = item.querySelector('.faq-answer').textContent.toLowerCase();
+
+                        if (question.includes(searchTerm) || answer.includes(searchTerm)) {
+                            item.style.display = 'block';
+                        } else {
+                            item.style.display = 'none';
+                        }
+                    });
+                });
+            }
+        }
+
+        // Support functions
+        function openLiveChat() {
+            alert('Live chat feature coming soon! Please use email support for now.');
+        }
+
+        function scheduleCall() {
+            alert('Video call scheduling coming soon! Please contact support@rarityleads.com to schedule.');
+        }
+    </script>
+</body>
+</html>

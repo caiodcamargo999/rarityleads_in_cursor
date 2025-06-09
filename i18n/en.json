@@ -12,6 +12,7 @@
         "settings": "Settings",
         "features": "Features",
         "pricing": "Pricing",
+        "signIn": "Sign In",
         "results": "Results",
         "startFree": "Start for Free",
         "signOut": "Sign Out",
@@ -21,18 +22,27 @@
         "agencyOwner": "Agency Owner",
         "performanceManager": "Performance Manager",
         "sdrSetter": "SDR/Setter",
-        "client": "Client"
+        "client": "Client",
+        "prospecting": "Prospecting",
+        "companies": "Companies",
+        "approaching": "Approaching",
+        "whatsapp": "WhatsApp",
+        "instagram": "Instagram",
+        "facebook": "Facebook",
+        "x": "X (Twitter)",
+        "linkedin": "LinkedIn",
+        "support": "Support"
     },
     "hero": {
-        "badge": "Rated #1 Lead Generation Platform",
-        "title": "Generate Premium Leads on Autopilot",
-        "subtitle": "Transform your business with AI-powered lead generation that delivers qualified prospects 24/7. Join 500+ businesses already scaling with Rarity Leads.",
-        "cta": "Get Started",
-        "ctaSecondary": "Free Strategy Call",
+        "badge": "🔥 The AI That's Replacing Sales Teams",
+        "title": "Your Competition is Still Cold-Calling. You're Closing Deals.",
+        "subtitle": "While they're burning through call lists, you're getting premium leads delivered on autopilot. Our AI doesn't just find leads—it qualifies them, nurtures them, and serves them ready-to-close. Game over.",
+        "cta": "Steal This Unfair Advantage",
+        "ctaSecondary": "See It In Action (Free Demo)",
         "stats": {
-            "clients": "Active Clients",
-            "successRate": "Success Rate",
-            "leadGen": "Lead Generation"
+            "clients": "50K+ Premium Leads Delivered",
+            "successRate": "94% Response Rate (vs 2% industry avg)",
+            "leadGen": "15+ Hours Back in Your Week"
         }
     },
     "dashboard": {
@@ -124,125 +134,130 @@
         }
     },
     "features": {
-        "title": "Why Businesses Choose Rarity Leads",
-        "subtitle": "Our AI-powered platform combines advanced targeting, intelligent automation, and real-time optimization to deliver results that matter.",
+        "meta": {
+            "title": "Rarity Leads - The AI That's Replacing Sales Teams",
+            "description": "Stop chasing leads. Start closing deals with AI that works 24/7 while you sleep."
+        },
+        "title": "Why Your Competitors Are Panicking 😱",
+        "subtitle": "While they're still playing the old game, you're rewriting the rules. Our AI doesn't just generate leads—it builds relationships, qualifies prospects, and delivers them ready to buy.",
         "one": {
-            "title": "AI-Powered SDR That Qualifies Leads for You",
-            "highlight": "Save 15+ hours weekly",
-            "description": "Our intelligent chatbot works 24/7 to qualify leads through natural conversations, ensuring only high-intent prospects reach your team."
+            "title": "Your AI SDR That Never Takes a Day Off",
+            "highlight": "💰 Save 15+ hours weekly",
+            "description": "Forget hiring expensive SDRs. Our AI has natural conversations, asks the right questions, and only sends you prospects who are ready to buy. It's like having a top performer who works 24/7 for pennies."
         },
         "two": {
-            "title": "Smart WhatsApp Follow-ups, No Manual Messaging",
-            "highlight": "94% Response Rate",
-            "description": "Automate your follow-up sequences with rich media support, intelligent sequencing, and AI-powered response logic."
+            "title": "WhatsApp Magic That Gets 94% Response Rates",
+            "highlight": "🚀 94% Response Rate (Industry: 2%)",
+            "description": "While your competitors get ignored, you're getting replies. Our AI crafts personalized WhatsApp sequences that feel human, build trust, and convert like crazy."
         },
         "three": {
-            "title": "Campaign Intelligence for Google and Meta",
-            "highlight": "-68% Cost Per Lead",
-            "description": "Optimize your ad campaigns with AI-driven insights, automated bidding, and real-time performance tracking."
+            "title": "Campaign Intelligence That Crushes Ad Costs",
+            "highlight": "📉 -68% Cost Per Lead",
+            "description": "Stop bleeding money on ads. Our AI optimizes your Google and Meta campaigns in real-time, finding profitable audiences your competitors don't even know exist."
         },
         "four": {
-            "title": "Real-Time Lead Scoring",
-            "highlight": "31.2% Conversion Rate",
-            "description": "Advanced AI algorithms score leads in real-time, prioritizing high-value prospects for immediate action."
+            "title": "Lead Scoring That Predicts Who Will Buy",
+            "highlight": "🎯 31.2% Conversion Rate",
+            "description": "No more wasting time on tire-kickers. Our AI analyzes 500+ data points to predict who's ready to buy, so you only talk to prospects who convert."
         },
         "five": {
-            "title": "Precision Targeting",
-            "highlight": "500+ Data Points",
-            "description": "Target your ideal customers with laser precision using our proprietary database and AI-powered audience insights."
+            "title": "Targeting So Precise It's Almost Unfair",
+            "highlight": "🔍 500+ Data Points",
+            "description": "Find your exact ideal customer using our proprietary database. We know who they are, where they hang out, and exactly what makes them buy."
         },
         "six": {
-            "title": "Automated Nurturing Sequences",
-            "highlight": "24/7 Engagement",
-            "description": "Keep prospects engaged with personalized, multi-channel nurturing sequences that adapt based on behavior."
+            "title": "Nurturing Sequences That Build Relationships",
+            "highlight": "⚡ 24/7 Engagement",
+            "description": "Turn cold prospects into warm relationships with AI that adapts to every interaction. It's like having a relationship expert working every lead."
         }
     },
     "testimonials": {
-        "title": "Real Results from Real Businesses",
-        "subtitle": "See how companies like yours are scaling with Rarity Leads",
+        "title": "The Results Speak Louder Than Words 📈",
+        "subtitle": "Real businesses, real numbers, real transformations. This could be you next month.",
         "one": {
-            "quote": "Rarity Leads transformed our lead generation. We went from 20 leads per month to 200+ qualified prospects. The ROI is incredible.",
+            "quote": "Holy sh*t. We went from 20 leads per month to 200+ qualified prospects. I literally fired my entire SDR team and our revenue TRIPLED. This AI is insane.",
             "author": "Marcus Johnson",
             "title": "CEO, TechFlow Solutions",
             "metric": "+900%",
-            "metricLabel": "Lead Increase"
+            "metricLabel": "Lead Explosion"
         },
         "two": {
-            "quote": "The AI qualification is game-changing. Our sales team now focuses only on hot leads, and our conversion rate doubled.",
+            "quote": "I was skeptical until I saw the numbers. 94% response rate when industry average is 2%? My sales team went from struggling to closing deals left and right. Game changer.",
             "author": "Sarah Chen",
             "title": "VP Sales, GrowthCorp",
             "metric": "+187%",
-            "metricLabel": "Conversion Rate"
+            "metricLabel": "Conversion Boost"
         },
         "three": {
-            "quote": "Setup was incredibly easy, and results came fast. Within 48 hours, we had our first qualified leads coming in.",
+            "quote": "Setup took 5 minutes. First qualified lead came in 48 hours. First sale closed in 72 hours. ROI was 400% in the first month. This is not normal.",
             "author": "David Rodriguez",
             "title": "Founder, StartupLab",
             "metric": "48hrs",
-            "metricLabel": "First Results"
+            "metricLabel": "To First Sale"
         }
     },
     "pricing": {
-        "title": "Choose Your Growth Plan",
-        "subtitle": "Transparent pricing that scales with your success",
+        "badge": "💰 STOP OVERPAYING FOR LEADS",
+        "title": "Pick Your Unfair Advantage",
+        "subtitle": "One month of this costs less than hiring one SDR. But it works 24/7 and never asks for a raise.",
         "starter": {
             "name": "Starter",
-            "badge": "Most Popular",
+            "badge": "🔥 Most Popular",
             "price": "297",
             "period": "/month",
-            "description": "Perfect for small businesses ready to scale",
+            "description": "Perfect for businesses ready to leave competitors in the dust",
             "features": [
-                "Up to 500 leads/month",
-                "AI Lead Qualification",
-                "WhatsApp Automation",
-                "Basic Analytics",
-                "Email Support"
+                "500 premium leads/month (worth $5,000+)",
+                "AI SDR that never sleeps",
+                "WhatsApp automation that gets 94% replies",
+                "Lead scoring that predicts buyers",
+                "Priority support (we've got your back)"
             ],
-            "cta": "Start Free Trial"
+            "cta": "Steal This Advantage"
         },
         "professional": {
             "name": "Professional",
-            "badge": "Best Value",
+            "badge": "💎 Best ROI",
             "price": "597",
             "period": "/month",
-            "description": "For growing businesses that need more power",
+            "description": "For businesses ready to dominate their market",
             "features": [
-                "Up to 2,000 leads/month",
-                "Advanced AI Qualification",
-                "Multi-channel Automation",
-                "Advanced Analytics & Reports",
-                "Priority Support",
-                "Custom Integrations",
-                "A/B Testing"
+                "2,000 premium leads/month (worth $20,000+)",
+                "Advanced AI that learns your best customers",
+                "Multi-channel automation (WhatsApp, Email, SMS)",
+                "Advanced analytics that reveal hidden opportunities",
+                "VIP support (direct line to our team)",
+                "Custom integrations with your existing tools",
+                "A/B testing that optimizes everything"
             ],
-            "cta": "Start Free Trial"
+            "cta": "Dominate Your Market"
         },
         "enterprise": {
             "name": "Enterprise",
-            "badge": "Custom",
+            "badge": "🚀 Scale Mode",
             "price": "1,497",
             "period": "/month",
-            "description": "For large organizations with complex needs",
+            "description": "For organizations ready to rewrite industry rules",
             "features": [
-                "Unlimited leads",
-                "Custom AI Training",
-                "White-label Solution",
-                "Dedicated Account Manager",
-                "24/7 Phone Support",
-                "Custom Integrations",
-                "SLA Guarantee"
+                "Unlimited premium leads (sky's the limit)",
+                "Custom AI trained on your exact business",
+                "White-label solution (your brand, our tech)",
+                "Dedicated success manager (your personal growth hacker)",
+                "24/7 phone support (we pick up on the first ring)",
+                "Custom integrations built for your workflow",
+                "SLA guarantee (we put our money where our mouth is)"
             ],
-            "cta": "Contact Sales"
+            "cta": "Rewrite The Rules"
         }
     },
     "cta": {
-        "title": "Stop Chasing Leads. Start Closing.",
-        "subtitle": "Join hundreds of businesses generating premium leads on autopilot. Start your journey today and see results in 48 hours.",
-        "button": "Get Started",
+        "title": "Your Competitors Are Reading This Too. Act Fast. ⚡",
+        "subtitle": "Every day you wait is money left on the table. Join 500+ businesses who stopped chasing leads and started closing deals. First qualified lead in 48 hours or your money back.",
+        "button": "Claim My Unfair Advantage",
         "features": {
-            "noCard": "No Credit Card Required",
-            "quickSetup": "Setup in 5 Minutes",
-            "fastResults": "Results in 48 Hours"
+            "noCard": "🚫 No Credit Card (We're That Confident)",
+            "quickSetup": "⚡ Setup in 5 Minutes (Seriously)",
+            "fastResults": "🎯 First Lead in 48 Hours (Guaranteed)"
         }
     },
     "footer": {

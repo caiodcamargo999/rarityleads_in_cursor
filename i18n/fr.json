@@ -17,23 +17,31 @@
     "signOut": "Se Déconnecter",
     "getStarted": "Commencer",
     "freeStrategyCall": "Consultation Stratégique Gratuite",
-    "freeStrategyCall": "Consultation Stratégique Gratuite",
     "confirmSignOut": "Êtes-vous sûr de vouloir vous déconnecter ?",
     "agencyOwner": "Propriétaire d'Agence",
     "performanceManager": "Gestionnaire de Performance",
     "sdrSetter": "SDR/Planificateur",
-    "client": "Client"
+    "client": "Client",
+    "prospecting": "Prospection",
+    "companies": "Entreprises",
+    "approaching": "Approche",
+    "whatsapp": "WhatsApp",
+    "instagram": "Instagram",
+    "facebook": "Facebook",
+    "x": "X (Twitter)",
+    "linkedin": "LinkedIn",
+    "support": "Support"
   },
   "hero": {
-    "badge": "Plateforme #1 de Génération de Leads Évaluée",
-    "title": "Générez des Leads Premium en Pilote Automatique",
-    "subtitle": "Transformez votre entreprise avec la génération de leads alimentée par l'IA qui livre des prospects qualifiés 24h/24 et 7j/7. Rejoignez plus de 500 entreprises déjà en croissance avec Rarity Leads.",
-    "cta": "Commencer",
-    "ctaSecondary": "Consultation Gratuite",
+    "badge": "🔥 L'IA Qui Remplace les Équipes de Vente",
+    "title": "Vos Concurrents Font Encore du Démarchage. Vous Fermez des Affaires.",
+    "subtitle": "Pendant qu'ils brûlent leurs listes téléphoniques, vous recevez des leads premium en automatique. Notre IA ne trouve pas seulement des leads—elle les qualifie, les nourrit et les livre prêts à signer. Game over.",
+    "cta": "Voler Cet Avantage Déloyal",
+    "ctaSecondary": "Voir en Action (Démo Gratuite)",
     "stats": {
-      "clients": "Clients Actifs",
-      "successRate": "Taux de Réussite",
-      "leadGen": "Génération de Leads"
+      "clients": "50K+ Leads Premium Livrés",
+      "successRate": "94% Taux de Réponse (vs 2% industrie)",
+      "leadGen": "15+ Heures Récupérées par Semaine"
     }
   },
   "dashboard": {
@@ -173,6 +181,7 @@
     }
   },
   "pricing": {
+    "badge": "TARIFS",
     "title": "Choisissez Votre Plan de Croissance",
     "subtitle": "Tarifs transparents qui évoluent avec votre succès",
     "starter": {

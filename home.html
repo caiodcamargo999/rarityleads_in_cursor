@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rarity Leads - The Ultimate Lead Generation Solution</title>
+    <title>Rarity Leads - AI-Powered Warm Lead Hunting Platform</title>
+    <meta name="description" content="Find the most qualified decision-makers and enable seamless multi-WhatsApp outreach for rapid engagement and conversion. 94% response rate guaranteed.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -79,6 +80,19 @@
 
         .nav-link:hover {
             color: #667eea;
+        }
+
+        .sign-in-link {
+            background: rgba(102, 126, 234, 0.1);
+            padding: var(--space-sm) var(--space-md);
+            border-radius: var(--radius-md);
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .sign-in-link:hover {
+            background: rgba(102, 126, 234, 0.15);
+            border-color: rgba(102, 126, 234, 0.3);
         }
 
         /* Hero Section - Rarity Agency Style */
@@ -287,6 +301,113 @@
             gap: var(--space-md);
         }
 
+        /* Pricing Section */
+        .pricing {
+            padding: 120px 0;
+            background: var(--white);
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: var(--space-2xl);
+            margin-top: var(--space-3xl);
+        }
+
+        .pricing-card {
+            background: var(--white);
+            border: 2px solid var(--gray-200);
+            border-radius: var(--radius-2xl);
+            padding: var(--space-2xl);
+            text-align: center;
+            position: relative;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-2xl);
+            border-color: #667eea;
+        }
+
+        .pricing-card-featured {
+            border-color: #667eea;
+            transform: scale(1.05);
+            box-shadow: var(--shadow-2xl);
+        }
+
+        .pricing-badge {
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--primary-gradient);
+            color: var(--white);
+            padding: var(--space-sm) var(--space-lg);
+            border-radius: 50px;
+            font-size: var(--font-size-sm);
+            font-weight: 600;
+        }
+
+        .pricing-name {
+            font-size: var(--font-size-2xl);
+            font-weight: 800;
+            margin: var(--space-lg) 0 var(--space-md);
+            color: var(--text-primary);
+        }
+
+        .pricing-price {
+            margin-bottom: var(--space-lg);
+        }
+
+        .pricing-currency {
+            font-size: var(--font-size-xl);
+            font-weight: 600;
+            color: var(--text-secondary);
+            vertical-align: top;
+        }
+
+        .pricing-amount {
+            font-size: var(--font-size-5xl);
+            font-weight: 900;
+            color: var(--text-primary);
+        }
+
+        .pricing-period {
+            font-size: var(--font-size-lg);
+            color: var(--text-secondary);
+        }
+
+        .pricing-description {
+            color: var(--text-secondary);
+            margin-bottom: var(--space-xl);
+            font-size: var(--font-size-md);
+        }
+
+        .pricing-features {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 var(--space-2xl);
+            text-align: left;
+        }
+
+        .pricing-features li {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+            margin-bottom: var(--space-md);
+            color: var(--text-secondary);
+        }
+
+        .pricing-features i {
+            color: #10B981;
+            font-size: var(--font-size-sm);
+        }
+
+        .pricing-cta {
+            width: 100%;
+        }
+
         /* Mobile Responsive */
         @media (max-width: 768px) {
             .hero-title {
@@ -318,13 +439,12 @@
     <nav class="navbar">
         <div class="container">
             <div class="nav-container">
-                <a href="#" class="logo">🚀 Rarity Leads</a>
-                <ul class="nav-menu">
-                    <li><a href="#features" class="nav-link">Features</a></li>
-                    <li><a href="prospecting.html" class="nav-link">Prospecting</a></li>
-                    <li><a href="analytics.html" class="nav-link">Analytics</a></li>
-                    <li><a href="dashboard.html" class="nav-link">Dashboard</a></li>
-                    <li><button class="btn btn-primary" id="get-started-nav">Get Started</button></li>
+                <a href="#" class="logo">✨ Rarity Leads</a>
+                <ul class="nav-menu" id="public-nav-menu">
+                    <li><a href="#features" class="nav-link" data-i18n="nav.features">Features</a></li>
+                    <li><a href="#pricing" class="nav-link" data-i18n="nav.pricing">Pricing</a></li>
+                    <li><a href="login.html" class="nav-link sign-in-link" data-i18n="nav.signIn">Sign In</a></li>
+                    <li><button class="btn btn-primary" id="get-started-nav" data-i18n="nav.getStarted">Get Started</button></li>
                 </ul>
             </div>
         </div>
@@ -334,41 +454,45 @@
     <section class="hero">
         <div class="container">
             <div class="hero-content">
-                <div class="hero-badge">
-                    🏆 Rated #1 Lead Generation Platform
+                <div class="hero-badge" data-i18n="hero.badge">
+                    🎯 AI-Powered Warm Lead Hunting Platform
                 </div>
-                
-                <h1 class="hero-title">
-                    The Ultimate Lead Generation Solution Your Business Has Been Searching For!
+
+                <h1 class="hero-title" data-i18n="hero.title">
+                    Find Decision-Makers. Close Deals. Scale Revenue.
                 </h1>
-                
-                <p class="hero-subtitle">
-                    Boost your return on investment with AI-powered lead generation that delivers qualified prospects 24/7. Join 500+ businesses already scaling with Rarity Leads.
+
+                <p class="hero-subtitle" data-i18n="hero.subtitle">
+                    Stop wasting time on cold outreach. Our AI finds the most qualified decision-makers in your sector and enables seamless multi-WhatsApp outreach for rapid engagement and conversion. 94% response rate guaranteed.
                 </p>
                 
                 <div class="hero-cta">
                     <button class="btn btn-primary btn-large" id="get-started-hero">
                         <i class="fas fa-rocket"></i>
-                        Get Started
+                        <span data-i18n="hero.cta">Start Finding Qualified Leads</span>
                     </button>
                     <button class="btn btn-outline btn-large">
                         <i class="fas fa-play"></i>
-                        Watch Demo
+                        <span data-i18n="hero.ctaSecondary">Watch Demo (2 min)</span>
                     </button>
                 </div>
-                
+
                 <div class="hero-stats">
                     <div class="hero-stat">
-                        <span class="hero-stat-number">500+</span>
-                        <span class="hero-stat-label">Active Clients</span>
+                        <span class="hero-stat-number">31.2%</span>
+                        <span class="hero-stat-label" data-i18n="hero.stats.conversion">Average Conversion Rate</span>
                     </div>
                     <div class="hero-stat">
                         <span class="hero-stat-number">94%</span>
-                        <span class="hero-stat-label">Success Rate</span>
+                        <span class="hero-stat-label" data-i18n="hero.stats.response">WhatsApp Response Rate</span>
                     </div>
                     <div class="hero-stat">
-                        <span class="hero-stat-number">24/7</span>
-                        <span class="hero-stat-label">Lead Generation</span>
+                        <span class="hero-stat-number">15h</span>
+                        <span class="hero-stat-label" data-i18n="hero.stats.timeSaved">Weekly Time Saved</span>
+                    </div>
+                    <div class="hero-stat">
+                        <span class="hero-stat-number">15+</span>
+                        <span class="hero-stat-label" data-i18n="hero.stats.leadGen">Hours Back in Your Week</span>
                     </div>
                 </div>
             </div>
@@ -379,49 +503,88 @@
     <section id="features" class="features">
         <div class="container">
             <div class="section-header">
-                <div class="section-badge">SERVICES</div>
-                <h2 class="section-title">Give your business a boost in sales</h2>
+                <div class="section-badge">CORE FEATURES</div>
+                <h2 class="section-title">Everything You Need to Dominate Your Market</h2>
                 <p class="section-subtitle">
-                    Harness the power of AI to put your business at the forefront of lead generation results.
+                    AI-powered lead hunting, multi-WhatsApp outreach, and intelligent automation in one platform.
                 </p>
             </div>
-            
+
             <div class="features-grid">
                 <div class="feature-card">
                     <div class="feature-icon">
-                        <i class="fas fa-search"></i>
+                        <i class="fas fa-brain"></i>
                     </div>
-                    <h3 class="feature-title">AI-Powered Prospecting</h3>
+                    <h3 class="feature-title">AI SDR</h3>
                     <p class="feature-description">
-                        Advanced AI algorithms identify and qualify high-value prospects automatically, saving you hours of manual research.
+                        Save 15+ hours weekly with AI that finds, qualifies, and scores decision-makers automatically. No more manual research or cold lists.
                     </p>
-                    <a href="prospecting.html" class="feature-link">
+                    <a href="#" class="feature-link">
                         Learn More <i class="fas fa-arrow-right"></i>
                     </a>
                 </div>
-                
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fab fa-whatsapp"></i>
+                    </div>
+                    <h3 class="feature-title">WhatsApp Automation</h3>
+                    <p class="feature-description">
+                        94% response rate with multi-account WhatsApp outreach. Manage multiple phone numbers and accounts from one dashboard.
+                    </p>
+                    <a href="#" class="feature-link">
+                        Learn More <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+
                 <div class="feature-card">
                     <div class="feature-icon">
                         <i class="fas fa-chart-line"></i>
                     </div>
-                    <h3 class="feature-title">Analytics & Insights</h3>
+                    <h3 class="feature-title">Campaign Intelligence</h3>
                     <p class="feature-description">
-                        Real-time analytics and performance insights to optimize your lead generation campaigns for maximum ROI.
+                        -68% cost per lead with AI-driven insights. Real-time analytics, sector benchmarks, and performance optimization.
                     </p>
-                    <a href="analytics.html" class="feature-link">
+                    <a href="#" class="feature-link">
                         Learn More <i class="fas fa-arrow-right"></i>
                     </a>
                 </div>
-                
+
                 <div class="feature-card">
                     <div class="feature-icon">
-                        <i class="fas fa-tachometer-alt"></i>
+                        <i class="fas fa-bullseye"></i>
                     </div>
-                    <h3 class="feature-title">Lead Management</h3>
+                    <h3 class="feature-title">Lead Scoring</h3>
                     <p class="feature-description">
-                        Comprehensive dashboard to manage, track, and nurture your leads through the entire sales funnel.
+                        31.2% conversion rate with AI-powered lead qualification. Focus only on prospects ready to buy.
                     </p>
-                    <a href="dashboard.html" class="feature-link">
+                    <a href="#" class="feature-link">
+                        Learn More <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-crosshairs"></i>
+                    </div>
+                    <h3 class="feature-title">Precision Targeting</h3>
+                    <p class="feature-description">
+                        500+ data points to find your ideal customers. Firmographics, technographics, and behavioral signals.
+                    </p>
+                    <a href="#" class="feature-link">
+                        Learn More <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                    <h3 class="feature-title">Nurturing Sequences</h3>
+                    <p class="feature-description">
+                        24/7 engagement with AI-personalized follow-ups. Never lose a warm lead again.
+                    </p>
+                    <a href="#" class="feature-link">
                         Learn More <i class="fas fa-arrow-right"></i>
                     </a>
                 </div>
@@ -429,29 +592,163 @@
         </div>
     </section>
 
+    <!-- Pricing Section -->
+    <section id="pricing" class="pricing">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-badge" data-i18n="pricing.badge">PRICING</div>
+                <h2 class="section-title" data-i18n="pricing.title">Choose Your Growth Plan</h2>
+                <p class="section-subtitle" data-i18n="pricing.subtitle">Transparent pricing that scales with your success</p>
+            </div>
+
+            <div class="pricing-grid">
+                <!-- Starter Plan -->
+                <div class="pricing-card">
+                    <div class="pricing-badge" data-i18n="pricing.starter.badge">Most Popular</div>
+                    <h3 class="pricing-name" data-i18n="pricing.starter.name">Starter</h3>
+                    <div class="pricing-price">
+                        <span class="pricing-currency">$</span>
+                        <span class="pricing-amount" data-i18n="pricing.starter.price">297</span>
+                        <span class="pricing-period" data-i18n="pricing.starter.period">/month</span>
+                    </div>
+                    <p class="pricing-description" data-i18n="pricing.starter.description">Perfect for small businesses ready to scale</p>
+                    <ul class="pricing-features">
+                        <li><i class="fas fa-check"></i> <span data-i18n="pricing.starter.features.0">Up to 500 leads/month</span></li>
+                        <li><i class="fas fa-check"></i> <span data-i18n="pricing.starter.features.1">AI Lead Qualification</span></li>
+                        <li><i class="fas fa-check"></i> <span data-i18n="pricing.starter.features.2">WhatsApp Automation</span></li>
+                        <li><i class="fas fa-check"></i> <span data-i18n="pricing.starter.features.3">Basic Analytics</span></li>
+                        <li><i class="fas fa-check"></i> <span data-i18n="pricing.starter.features.4">Email Support</span></li>
+                    </ul>
+                    <button class="btn btn-primary btn-large pricing-cta" data-i18n="pricing.starter.cta">Get Started Now</button>
+                </div>
+
+                <!-- Professional Plan -->
+                <div class="pricing-card pricing-card-featured">
+                    <div class="pricing-badge" data-i18n="pricing.professional.badge">Best Value</div>
+                    <h3 class="pricing-name" data-i18n="pricing.professional.name">Professional</h3>
+                    <div class="pricing-price">
+                        <span class="pricing-currency">$</span>
+                        <span class="pricing-amount" data-i18n="pricing.professional.price">597</span>
+                        <span class="pricing-period" data-i18n="pricing.professional.period">/month</span>
+                    </div>
+                    <p class="pricing-description" data-i18n="pricing.professional.description">For growing businesses that need more power</p>
+                    <ul class="pricing-features">
+                        <li><i class="fas fa-check"></i> <span data-i18n="pricing.professional.features.0">Up to 2,000 leads/month</span></li>
+                        <li><i class="fas fa-check"></i> <span data-i18n="pricing.professional.features.1">Advanced AI Qualification</span></li>
+                        <li><i class="fas fa-check"></i> <span data-i18n="pricing.professional.features.2">Multi-channel Automation</span></li>
+                        <li><i class="fas fa-check"></i> <span data-i18n="pricing.professional.features.3">Advanced Analytics & Reports</span></li>
+                        <li><i class="fas fa-check"></i> <span data-i18n="pricing.professional.features.4">Priority Support</span></li>
+                        <li><i class="fas fa-check"></i> <span data-i18n="pricing.professional.features.5">Custom Integrations</span></li>
+                        <li><i class="fas fa-check"></i> <span data-i18n="pricing.professional.features.6">A/B Testing</span></li>
+                    </ul>
+                    <button class="btn btn-primary btn-large pricing-cta" data-i18n="pricing.professional.cta">Get Started Now</button>
+                </div>
+
+                <!-- Enterprise Plan -->
+                <div class="pricing-card">
+                    <div class="pricing-badge" data-i18n="pricing.enterprise.badge">Custom</div>
+                    <h3 class="pricing-name" data-i18n="pricing.enterprise.name">Enterprise</h3>
+                    <div class="pricing-price">
+                        <span class="pricing-currency">$</span>
+                        <span class="pricing-amount" data-i18n="pricing.enterprise.price">1,497</span>
+                        <span class="pricing-period" data-i18n="pricing.enterprise.period">/month</span>
+                    </div>
+                    <p class="pricing-description" data-i18n="pricing.enterprise.description">For large organizations with complex needs</p>
+                    <ul class="pricing-features">
+                        <li><i class="fas fa-check"></i> <span data-i18n="pricing.enterprise.features.0">Unlimited leads</span></li>
+                        <li><i class="fas fa-check"></i> <span data-i18n="pricing.enterprise.features.1">Custom AI Training</span></li>
+                        <li><i class="fas fa-check"></i> <span data-i18n="pricing.enterprise.features.2">White-label Solution</span></li>
+                        <li><i class="fas fa-check"></i> <span data-i18n="pricing.enterprise.features.3">Dedicated Account Manager</span></li>
+                        <li><i class="fas fa-check"></i> <span data-i18n="pricing.enterprise.features.4">24/7 Phone Support</span></li>
+                        <li><i class="fas fa-check"></i> <span data-i18n="pricing.enterprise.features.5">Custom Integrations</span></li>
+                        <li><i class="fas fa-check"></i> <span data-i18n="pricing.enterprise.features.6">SLA Guarantee</span></li>
+                    </ul>
+                    <button class="btn btn-primary btn-large pricing-cta" data-i18n="pricing.enterprise.cta">Get Started Now</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="i18n.js"></script>
+    <script src="app-config.js"></script>
     <script>
         console.log('🏠 Homepage loaded - Rarity Agency Design');
 
-        // Simple navigation scroll effect
-        window.addEventListener('scroll', () => {
-            const navbar = document.querySelector('.navbar');
-            if (window.scrollY > 100) {
-                navbar.classList.add('scrolled');
-            } else {
-                navbar.classList.remove('scrolled');
-            }
-        });
-
-        // Get Started button functionality
-        function redirectToAuth() {
-            console.log('🚀 Redirecting to auth page...');
-            window.location.href = '/auth.html';
+        // Initialize Supabase
+        let supabase;
+        try {
+            supabase = window.AppUtils.initSupabase();
+        } catch (error) {
+            console.error('Failed to initialize Supabase:', error);
         }
 
-        // Add event listeners to all Get Started buttons
-        document.getElementById('get-started-nav').addEventListener('click', redirectToAuth);
-        document.getElementById('get-started-hero').addEventListener('click', redirectToAuth);
+        // Check authentication and show/hide appropriate navigation
+        async function checkAuthAndUpdateNav() {
+            try {
+                if (!supabase) return;
+
+                const { data: { session }, error } = await supabase.auth.getSession();
+
+                if (session && session.user) {
+                    // User is authenticated, redirect to dashboard
+                    console.log('✅ User authenticated, redirecting to dashboard');
+                    window.location.href = '/dashboard.html';
+                    return;
+                }
+
+                // User not authenticated, show public navigation
+                console.log('👤 User not authenticated, showing public navigation');
+
+            } catch (error) {
+                console.error('Auth check error:', error);
+            }
+        }
+
+        // Get Started button functionality (Sign Up)
+        function redirectToAuth() {
+            console.log('🚀 Redirecting to registration page...');
+            window.location.href = '/register.html';
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', async () => {
+            console.log('🔧 Initializing homepage...');
+
+            // Check authentication
+            await checkAuthAndUpdateNav();
+
+            // Simple navigation scroll effect
+            window.addEventListener('scroll', () => {
+                const navbar = document.querySelector('.navbar');
+                if (window.scrollY > 100) {
+                    navbar.classList.add('scrolled');
+                } else {
+                    navbar.classList.remove('scrolled');
+                }
+            });
+
+            // Add event listeners to all Get Started buttons
+            const getStartedButtons = document.querySelectorAll('#get-started-nav, #get-started-hero, .pricing-cta');
+            getStartedButtons.forEach(button => {
+                button.addEventListener('click', redirectToAuth);
+            });
+
+            console.log('✅ Homepage initialized');
+        });
+
+        // Listen for auth changes
+        if (supabase) {
+            supabase.auth.onAuthStateChange((event, session) => {
+                console.log('🔄 Auth event:', event);
+
+                if (event === 'SIGNED_IN' && session) {
+                    console.log('✅ User signed in, redirecting to dashboard');
+                    window.location.href = '/dashboard.html';
+                }
+            });
+        }
 
         console.log('✅ Homepage JavaScript initialized');
     </script>

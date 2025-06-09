@@ -13,6 +13,10 @@
     <link rel="stylesheet" href="dashboard.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="app-config.js"></script>
+    <script src="i18n.js"></script>
+    <script src="auth-guard.js"></script>
+    <script src="universal-navigation.js"></script>
     <script>
         console.log('🏠 Dashboard: Loading...');
 
@@ -24,58 +28,45 @@
 
         // Check authentication when page loads
         document.addEventListener('DOMContentLoaded', async () => {
-            console.log('🔍 Dashboard: Checking authentication...');
+            console.log('📊 Dashboard: Initializing...');
 
-            try {
-                const { data: { session }, error } = await supabase.auth.getSession();
+            // Wait for AuthGuard to initialize and handle route protection
+            setTimeout(() => {
+                if (window.AuthGuard && window.AuthGuard.isUserAuthenticated() && window.AuthGuard.isUserVerified()) {
+                    const user = window.AuthGuard.getUser();
 
-                if (error) {
-                    console.error('❌ Dashboard: Auth error:', error);
-                    window.location.href = '/auth.html';
-                    return;
+                    console.log('✅ Dashboard: User authenticated and verified:', user.email);
+
+                    // Update user email in sidebar
+                    const userEmailElement = document.querySelector('.user-email');
+                    if (userEmailElement && user) {
+                        userEmailElement.textContent = user.email;
+                    }
+
+                    // Set up sign out button
+                    const signOutBtn = document.getElementById('sign-out-btn');
+                    if (signOutBtn) {
+                        signOutBtn.addEventListener('click', async () => {
+                            console.log('👋 Dashboard: Signing out...');
+
+                            try {
+                                await window.AuthGuard.signOut();
+                                console.log('✅ Dashboard: Signed out successfully');
+
+                            } catch (error) {
+                                console.error('❌ Dashboard: Sign out error:', error);
+                                alert('Sign out failed: ' + error.message);
+                            }
+                        });
+                    }
+
+                    // Initialize dashboard functionality
+                    initializeDashboard();
+                } else {
+                    console.log('🚫 Dashboard: User not authenticated or verified');
+                    // AuthGuard will handle the redirect
                 }
-
-                if (!session) {
-                    console.log('🚫 Dashboard: No session found, redirecting to auth');
-                    window.location.href = '/auth.html';
-                    return;
-                }
-
-                console.log('✅ Dashboard: User authenticated:', session.user.email);
-
-                // Update user email in sidebar
-                const userEmailElement = document.querySelector('.user-email');
-                if (userEmailElement) {
-                    userEmailElement.textContent = session.user.email;
-                }
-
-                // Set up sign out button
-                const signOutBtn = document.getElementById('sign-out-btn');
-                if (signOutBtn) {
-                    signOutBtn.addEventListener('click', async () => {
-                        console.log('👋 Dashboard: Signing out...');
-
-                        try {
-                            const { error } = await supabase.auth.signOut();
-                            if (error) throw error;
-
-                            console.log('✅ Dashboard: Signed out successfully');
-                            window.location.href = '/home.html';
-
-                        } catch (error) {
-                            console.error('❌ Dashboard: Sign out error:', error);
-                            alert('Sign out failed: ' + error.message);
-                        }
-                    });
-                }
-
-                // Initialize charts
-                initializeCharts();
-
-            } catch (error) {
-                console.error('💥 Dashboard: Error:', error);
-                window.location.href = '/auth.html';
-            }
+            }, 100);
         });
 
         // Listen for auth changes
@@ -113,12 +104,74 @@
             console.log('✅ Charts initialized');
         }
 
+        // Dashboard-specific functionality
+        function initializeDashboard() {
+            console.log('📊 Initializing dashboard functionality...');
+
+            // Initialize charts
+            initializeCharts();
+
+            // Setup dashboard-specific interactions
+            setupDashboardInteractions();
+
+            console.log('✅ Dashboard functionality initialized');
+        }
+
+        function setupDashboardInteractions() {
+            // Language selector
+            const langSelector = document.querySelector('.language-selector');
+            if (langSelector) {
+                const currentLang = langSelector.querySelector('.current-lang');
+                const dropdown = langSelector.querySelector('.lang-dropdown');
+
+                currentLang.addEventListener('click', () => {
+                    dropdown.classList.toggle('show');
+                });
+
+                // Close dropdown when clicking outside
+                document.addEventListener('click', (e) => {
+                    if (!langSelector.contains(e.target)) {
+                        dropdown.classList.remove('show');
+                    }
+                });
+
+                // Handle language selection
+                dropdown.querySelectorAll('.lang-option').forEach(option => {
+                    option.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        const lang = option.dataset.lang;
+                        console.log('🌐 Language changed to:', lang);
+                        // Language change logic would go here
+                        dropdown.classList.remove('show');
+                    });
+                });
+            }
+
+            // Notification button
+            const notificationBtn = document.querySelector('.header-btn[data-tooltip="Notifications"]');
+            if (notificationBtn) {
+                notificationBtn.addEventListener('click', () => {
+                    console.log('🔔 Notifications clicked');
+                    alert('Notifications feature coming soon!');
+                });
+            }
+
+            // Help button
+            const helpBtn = document.querySelector('.header-btn[data-tooltip="Help"]');
+            if (helpBtn) {
+                helpBtn.addEventListener('click', () => {
+                    console.log('❓ Help clicked');
+                    window.UniversalNavigation.navigate('/support.html');
+                });
+            }
+        }
+
         console.log('✅ Dashboard script loaded');
     </script>
 </head>
 <body class="dashboard-body">
     <!-- Sidebar Navigation -->
-    <aside class="sidebar">
+    <aside class="sidebar" id="dashboard-sidebar">
         <div class="sidebar-header">
             <div class="logo-container">
                 <div class="logo-icon">✨</div>
@@ -128,41 +181,92 @@
 
         <nav class="sidebar-nav">
             <ul class="nav-menu">
+                <!-- Dashboard -->
                 <li class="nav-item active">
-                    <a href="dashboard.html" class="nav-link">
+                    <a href="dashboard.html" class="nav-link" id="menu-dashboard">
                         <i class="fas fa-chart-line"></i>
                         <span data-i18n="nav.dashboard">Dashboard</span>
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="fas fa-users"></i>
-                        <span data-i18n="nav.leads">Leads</span>
-                        <span class="badge">24</span>
+
+                <!-- Prospecting Section -->
+                <li class="nav-item has-submenu">
+                    <a href="#" class="nav-link submenu-toggle" id="submenu-prospecting">
+                        <i class="fas fa-search"></i>
+                        <span data-i18n="nav.prospecting">Prospecting</span>
+                        <i class="fas fa-chevron-down submenu-arrow"></i>
                     </a>
+                    <ul class="submenu">
+                        <li class="nav-item">
+                            <a href="prospecting-leads.html" class="nav-link">
+                                <i class="fas fa-users"></i>
+                                <span data-i18n="nav.leads">Leads</span>
+                                <span class="badge">24</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="prospecting-companies.html" class="nav-link">
+                                <i class="fas fa-building"></i>
+                                <span data-i18n="nav.companies">Companies</span>
+                            </a>
+                        </li>
+                    </ul>
                 </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="fas fa-bullhorn"></i>
-                        <span data-i18n="nav.campaigns">Campaigns</span>
+
+                <!-- Approaching Section -->
+                <li class="nav-item has-submenu">
+                    <a href="#" class="nav-link submenu-toggle" id="submenu-approaching">
+                        <i class="fas fa-paper-plane"></i>
+                        <span data-i18n="nav.approaching">Approaching</span>
+                        <i class="fas fa-chevron-down submenu-arrow"></i>
                     </a>
+                    <ul class="submenu">
+                        <li class="nav-item">
+                            <a href="approaching-whatsapp.html" class="nav-link">
+                                <i class="fab fa-whatsapp"></i>
+                                <span data-i18n="nav.whatsapp">WhatsApp</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="approaching-instagram.html" class="nav-link">
+                                <i class="fab fa-instagram"></i>
+                                <span data-i18n="nav.instagram">Instagram</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="approaching-facebook.html" class="nav-link">
+                                <i class="fab fa-facebook"></i>
+                                <span data-i18n="nav.facebook">Facebook</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="approaching-x.html" class="nav-link">
+                                <i class="fab fa-x-twitter"></i>
+                                <span data-i18n="nav.x">X (Twitter)</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="approaching-linkedin.html" class="nav-link">
+                                <i class="fab fa-linkedin"></i>
+                                <span data-i18n="nav.linkedin">LinkedIn</span>
+                            </a>
+                        </li>
+                    </ul>
                 </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="fas fa-robot"></i>
-                        <span data-i18n="nav.sequences">Sequences</span>
-                    </a>
-                </li>
+
+                <!-- Analytics -->
                 <li class="nav-item">
                     <a href="analytics.html" class="nav-link">
                         <i class="fas fa-chart-bar"></i>
                         <span data-i18n="nav.analytics">Analytics</span>
                     </a>
                 </li>
+
+                <!-- Support -->
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="fas fa-cog"></i>
-                        <span data-i18n="nav.settings">Settings</span>
+                    <a href="support.html" class="nav-link">
+                        <i class="fas fa-life-ring"></i>
+                        <span data-i18n="nav.support">Support</span>
                     </a>
                 </li>
             </ul>

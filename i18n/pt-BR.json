@@ -12,6 +12,7 @@
     "settings": "Configurações",
     "features": "Recursos",
     "pricing": "Preços",
+    "signIn": "Entrar",
     "results": "Resultados",
     "startFree": "Começar Grátis",
     "signOut": "Sair",
@@ -21,18 +22,27 @@
     "agencyOwner": "Proprietário da Agência",
     "performanceManager": "Gerente de Performance",
     "sdrSetter": "SDR/Agendador",
-    "client": "Cliente"
+    "client": "Cliente",
+    "prospecting": "Prospecção",
+    "companies": "Empresas",
+    "approaching": "Abordagem",
+    "whatsapp": "WhatsApp",
+    "instagram": "Instagram",
+    "facebook": "Facebook",
+    "x": "X (Twitter)",
+    "linkedin": "LinkedIn",
+    "support": "Suporte"
   },
   "hero": {
-    "badge": "Plataforma #1 de Geração de Leads Avaliada",
-    "title": "Gere Leads Premium no Piloto Automático",
-    "subtitle": "Transforme seu negócio com geração de leads alimentada por IA que entrega prospects qualificados 24/7. Junte-se a mais de 500 empresas já escalando com Rarity Leads.",
-    "cta": "Começar",
-    "ctaSecondary": "Consultoria Gratuita",
+    "badge": "🔥 A IA Que Está Substituindo Equipes de Vendas",
+    "title": "Sua Concorrência Ainda Faz Cold Call. Você Está Fechando Negócios.",
+    "subtitle": "Enquanto eles queimam listas telefônicas, você recebe leads premium no automático. Nossa IA não só encontra leads—ela qualifica, nutre e entrega prontos para fechar. Game over.",
+    "cta": "Roubar Esta Vantagem Injusta",
+    "ctaSecondary": "Ver em Ação (Demo Grátis)",
     "stats": {
-      "clients": "Clientes Ativos",
-      "successRate": "Taxa de Sucesso",
-      "leadGen": "Geração de Leads"
+      "clients": "50K+ Leads Premium Entregues",
+      "successRate": "94% Taxa de Resposta (vs 2% da indústria)",
+      "leadGen": "15+ Horas de Volta na Sua Semana"
     }
   },
   "dashboard": {
@@ -124,125 +134,130 @@
     }
   },
   "features": {
-    "title": "Por que Empresas Escolhem a Rarity Leads",
-    "subtitle": "Nossa plataforma alimentada por IA combina segmentação avançada, automação inteligente e otimização em tempo real para entregar resultados que realmente importam.",
+    "meta": {
+      "title": "Rarity Leads - A IA Que Está Substituindo Equipes de Vendas",
+      "description": "Pare de perseguir leads. Comece a fechar negócios com IA que trabalha 24/7 enquanto você dorme."
+    },
+    "title": "Por Que Seus Concorrentes Estão Em Pânico 😱",
+    "subtitle": "Enquanto eles ainda jogam o jogo antigo, você está reescrevendo as regras. Nossa IA não só gera leads—ela constrói relacionamentos, qualifica prospects e os entrega prontos para comprar.",
     "one": {
-      "title": "SDR com IA que Qualifica Leads para Você",
-      "highlight": "Economize 15+ horas semanais",
-      "description": "Nosso chatbot inteligente trabalha 24/7 para qualificar leads através de conversas naturais, garantindo que apenas prospects de alta intenção cheguem ao seu time."
+      "title": "Seu SDR com IA Que Nunca Tira Folga",
+      "highlight": "💰 Economize 15+ horas semanais",
+      "description": "Esqueça contratar SDRs caros. Nossa IA tem conversas naturais, faz as perguntas certas e só te envia prospects prontos para comprar. É como ter um top performer que trabalha 24/7 por centavos."
     },
     "two": {
-      "title": "Follow-ups Inteligentes no WhatsApp, Sem Mensagens Manuais",
-      "highlight": "94% Taxa de Resposta",
-      "description": "Automatize suas sequências de follow-up com suporte a mídia rica, sequenciamento inteligente e lógica de resposta com IA."
+      "title": "Mágica do WhatsApp Que Consegue 94% de Resposta",
+      "highlight": "🚀 94% Taxa de Resposta (Indústria: 2%)",
+      "description": "Enquanto seus concorrentes são ignorados, você está recebendo respostas. Nossa IA cria sequências personalizadas no WhatsApp que parecem humanas, constroem confiança e convertem como loucas."
     },
     "three": {
-      "title": "Inteligência de Campanhas para Google e Meta",
-      "highlight": "-68% Custo por Lead",
-      "description": "Otimize suas campanhas de anúncios com insights orientados por IA, lances automatizados e rastreamento de performance em tempo real."
+      "title": "Inteligência de Campanhas Que Esmaga Custos de Anúncios",
+      "highlight": "📉 -68% Custo por Lead",
+      "description": "Pare de sangrar dinheiro em anúncios. Nossa IA otimiza suas campanhas Google e Meta em tempo real, encontrando audiências lucrativas que seus concorrentes nem sabem que existem."
     },
     "four": {
-      "title": "Pontuação de Leads em Tempo Real",
-      "highlight": "31.2% Taxa de Conversão",
-      "description": "Algoritmos avançados de IA pontuam leads em tempo real, priorizando prospects de alto valor para ação imediata."
+      "title": "Pontuação de Leads Que Prevê Quem Vai Comprar",
+      "highlight": "🎯 31.2% Taxa de Conversão",
+      "description": "Chega de perder tempo com enrolões. Nossa IA analisa 500+ pontos de dados para prever quem está pronto para comprar, então você só fala com prospects que convertem."
     },
     "five": {
-      "title": "Segmentação de Precisão",
-      "highlight": "500+ Pontos de Dados",
-      "description": "Segmente seus clientes ideais com precisão laser usando nosso banco de dados proprietário e insights de audiência alimentados por IA."
+      "title": "Segmentação Tão Precisa Que É Quase Injusto",
+      "highlight": "🔍 500+ Pontos de Dados",
+      "description": "Encontre seu cliente ideal exato usando nosso banco de dados proprietário. Sabemos quem eles são, onde ficam e exatamente o que os faz comprar."
     },
     "six": {
-      "title": "Sequências de Nutrição Automatizadas",
-      "highlight": "Engajamento 24/7",
-      "description": "Mantenha prospects engajados com sequências de nutrição personalizadas e multicanal que se adaptam baseadas no comportamento."
+      "title": "Sequências de Nutrição Que Constroem Relacionamentos",
+      "highlight": "⚡ Engajamento 24/7",
+      "description": "Transforme prospects frios em relacionamentos calorosos com IA que se adapta a cada interação. É como ter um especialista em relacionamentos trabalhando cada lead."
     }
   },
   "testimonials": {
-    "title": "Resultados Reais de Empresas Reais",
-    "subtitle": "Veja como empresas como a sua estão escalando com Rarity Leads",
+    "title": "Os Resultados Falam Mais Alto Que Palavras 📈",
+    "subtitle": "Empresas reais, números reais, transformações reais. Você pode ser o próximo mês.",
     "one": {
-      "quote": "Rarity Leads transformou nossa geração de leads. Fomos de 20 leads por mês para 200+ prospects qualificados. O ROI é incrível.",
+      "quote": "Cara, que loucura. Fomos de 20 leads por mês para 200+ prospects qualificados. Literalmente demiti toda minha equipe de SDR e nossa receita TRIPLICOU. Essa IA é insana.",
       "author": "Marcus Johnson",
       "title": "CEO, TechFlow Solutions",
       "metric": "+900%",
-      "metricLabel": "Aumento de Leads"
+      "metricLabel": "Explosão de Leads"
     },
     "two": {
-      "quote": "A qualificação por IA é revolucionária. Nossa equipe de vendas agora foca apenas em leads quentes, e nossa taxa de conversão dobrou.",
+      "quote": "Eu era cético até ver os números. 94% de taxa de resposta quando a média da indústria é 2%? Minha equipe de vendas passou de lutando para fechando negócios direto. Mudou o jogo.",
       "author": "Sarah Chen",
       "title": "VP Vendas, GrowthCorp",
       "metric": "+187%",
-      "metricLabel": "Taxa de Conversão"
+      "metricLabel": "Boost de Conversão"
     },
     "three": {
-      "quote": "A configuração foi incrivelmente fácil, e os resultados vieram rápido. Em 48 horas, tivemos nossos primeiros leads qualificados chegando.",
+      "quote": "Configuração levou 5 minutos. Primeiro lead qualificado em 48 horas. Primeira venda fechada em 72 horas. ROI foi 400% no primeiro mês. Isso não é normal.",
       "author": "David Rodriguez",
       "title": "Fundador, StartupLab",
       "metric": "48h",
-      "metricLabel": "Primeiros Resultados"
+      "metricLabel": "Para Primeira Venda"
     }
   },
   "pricing": {
-    "title": "Escolha Seu Plano de Crescimento",
-    "subtitle": "Preços transparentes que escalam com seu sucesso",
+    "badge": "💰 PARE DE PAGAR CARO POR LEADS",
+    "title": "Escolha Sua Vantagem Injusta",
+    "subtitle": "Um mês disso custa menos que contratar um SDR. Mas trabalha 24/7 e nunca pede aumento.",
     "starter": {
       "name": "Iniciante",
-      "badge": "Mais Popular",
+      "badge": "🔥 Mais Popular",
       "price": "297",
       "period": "/mês",
-      "description": "Perfeito para pequenas empresas prontas para escalar",
+      "description": "Perfeito para empresas prontas para deixar concorrentes no chinelo",
       "features": [
-        "Até 500 leads/mês",
-        "Qualificação de Leads com IA",
-        "Automação WhatsApp",
-        "Analytics Básico",
-        "Suporte por Email"
+        "500 leads premium/mês (vale R$25.000+)",
+        "SDR com IA que nunca dorme",
+        "Automação WhatsApp que consegue 94% de resposta",
+        "Pontuação de leads que prevê compradores",
+        "Suporte prioritário (estamos aqui por você)"
       ],
-      "cta": "Teste Grátis"
+      "cta": "Roubar Esta Vantagem"
     },
     "professional": {
       "name": "Profissional",
-      "badge": "Melhor Valor",
+      "badge": "💎 Melhor ROI",
       "price": "597",
       "period": "/mês",
-      "description": "Para empresas em crescimento que precisam de mais poder",
+      "description": "Para empresas prontas para dominar seu mercado",
       "features": [
-        "Até 2.000 leads/mês",
-        "Qualificação Avançada com IA",
-        "Automação Multicanal",
-        "Analytics e Relatórios Avançados",
-        "Suporte Prioritário",
-        "Integrações Personalizadas",
-        "Testes A/B"
+        "2.000 leads premium/mês (vale R$100.000+)",
+        "IA avançada que aprende seus melhores clientes",
+        "Automação multicanal (WhatsApp, Email, SMS)",
+        "Analytics avançado que revela oportunidades ocultas",
+        "Suporte VIP (linha direta com nossa equipe)",
+        "Integrações customizadas com suas ferramentas",
+        "Testes A/B que otimizam tudo"
       ],
-      "cta": "Teste Grátis"
+      "cta": "Dominar Meu Mercado"
     },
     "enterprise": {
       "name": "Enterprise",
-      "badge": "Personalizado",
+      "badge": "🚀 Modo Escala",
       "price": "1.497",
       "period": "/mês",
-      "description": "Para grandes organizações com necessidades complexas",
+      "description": "Para organizações prontas para reescrever as regras da indústria",
       "features": [
-        "Leads ilimitados",
-        "Treinamento de IA Personalizado",
-        "Solução White-label",
-        "Gerente de Conta Dedicado",
-        "Suporte 24/7 por Telefone",
-        "Integrações Personalizadas",
-        "Garantia SLA"
+        "Leads premium ilimitados (céu é o limite)",
+        "IA customizada treinada no seu negócio exato",
+        "Solução white-label (sua marca, nossa tech)",
+        "Gerente de sucesso dedicado (seu growth hacker pessoal)",
+        "Suporte 24/7 por telefone (atendemos no primeiro toque)",
+        "Integrações customizadas para seu workflow",
+        "Garantia SLA (colocamos nosso dinheiro onde está nossa boca)"
       ],
-      "cta": "Contatar Vendas"
+      "cta": "Reescrever As Regras"
     }
   },
   "cta": {
-    "title": "Pare de Perseguir Leads. Comece a Fechar Vendas.",
-    "subtitle": "Junte-se a centenas de empresas gerando leads premium no piloto automático. Comece sua jornada hoje e veja resultados em apenas 48 horas.",
-    "button": "Começar",
+    "title": "Seus Concorrentes Também Estão Lendo Isso. Aja Rápido. ⚡",
+    "subtitle": "Cada dia que você espera é dinheiro deixado na mesa. Junte-se a 500+ empresas que pararam de perseguir leads e começaram a fechar negócios. Primeiro lead qualificado em 48 horas ou seu dinheiro de volta.",
+    "button": "Reivindicar Minha Vantagem Injusta",
     "features": {
-      "noCard": "Sem Cartão de Crédito",
-      "quickSetup": "Configuração em 5 Minutos",
-      "fastResults": "Resultados em 48 Horas"
+      "noCard": "🚫 Sem Cartão de Crédito (Estamos Tão Confiantes)",
+      "quickSetup": "⚡ Configuração em 5 Minutos (Sério)",
+      "fastResults": "🎯 Primeiro Lead em 48 Horas (Garantido)"
     }
   },
   "footer": {

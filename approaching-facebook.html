@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="meta.title">Rarity Leads - Facebook Approaching</title>
+    <meta name="description" data-i18n="meta.description" content="Automate your Facebook outreach with AI-powered messaging">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="rarity-design.css">
+    <link rel="stylesheet" href="dashboard.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="app-config.js"></script>
+    <script src="i18n.js"></script>
+    <script src="auth-guard.js"></script>
+    <script src="universal-navigation.js"></script>
+</head>
+<body class="dashboard-body">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar" id="dashboard-sidebar">
+        <div class="sidebar-header">
+            <div class="logo-container">
+                <div class="logo-icon">✨</div>
+                <span class="logo-text">Rarity Leads</span>
+            </div>
+        </div>
+
+        <nav class="sidebar-nav">
+            <ul class="nav-menu">
+                <!-- Dashboard -->
+                <li class="nav-item">
+                    <a href="dashboard.html" class="nav-link">
+                        <i class="fas fa-chart-line"></i>
+                        <span data-i18n="nav.dashboard">Dashboard</span>
+                    </a>
+                </li>
+
+                <!-- Prospecting Section -->
+                <li class="nav-item has-submenu">
+                    <a href="#" class="nav-link submenu-toggle">
+                        <i class="fas fa-search"></i>
+                        <span data-i18n="nav.prospecting">Prospecting</span>
+                        <i class="fas fa-chevron-down submenu-arrow"></i>
+                    </a>
+                    <ul class="submenu">
+                        <li class="nav-item">
+                            <a href="prospecting-leads.html" class="nav-link">
+                                <i class="fas fa-users"></i>
+                                <span data-i18n="nav.leads">Leads</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="prospecting-companies.html" class="nav-link">
+                                <i class="fas fa-building"></i>
+                                <span data-i18n="nav.companies">Companies</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <!-- Approaching Section -->
+                <li class="nav-item has-submenu open">
+                    <a href="#" class="nav-link submenu-toggle">
+                        <i class="fas fa-paper-plane"></i>
+                        <span data-i18n="nav.approaching">Approaching</span>
+                        <i class="fas fa-chevron-down submenu-arrow" style="transform: rotate(180deg);"></i>
+                    </a>
+                    <ul class="submenu" style="max-height: 500px;">
+                        <li class="nav-item">
+                            <a href="approaching-whatsapp.html" class="nav-link">
+                                <i class="fab fa-whatsapp"></i>
+                                <span data-i18n="nav.whatsapp">WhatsApp</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="approaching-instagram.html" class="nav-link">
+                                <i class="fab fa-instagram"></i>
+                                <span data-i18n="nav.instagram">Instagram</span>
+                            </a>
+                        </li>
+                        <li class="nav-item active">
+                            <a href="approaching-facebook.html" class="nav-link">
+                                <i class="fab fa-facebook"></i>
+                                <span data-i18n="nav.facebook">Facebook</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="approaching-x.html" class="nav-link">
+                                <i class="fab fa-x-twitter"></i>
+                                <span data-i18n="nav.x">X (Twitter)</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="approaching-linkedin.html" class="nav-link">
+                                <i class="fab fa-linkedin"></i>
+                                <span data-i18n="nav.linkedin">LinkedIn</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <!-- Analytics -->
+                <li class="nav-item">
+                    <a href="analytics.html" class="nav-link">
+                        <i class="fas fa-chart-bar"></i>
+                        <span data-i18n="nav.analytics">Analytics</span>
+                    </a>
+                </li>
+
+                <!-- Support -->
+                <li class="nav-item">
+                    <a href="support.html" class="nav-link">
+                        <i class="fas fa-life-ring"></i>
+                        <span data-i18n="nav.support">Support</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="user-profile">
+                <div class="user-avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="user-info">
+                    <div class="user-name" data-i18n="nav.agencyOwner">Agency Owner</div>
+                    <div class="user-email">admin@rarity.com</div>
+                </div>
+                <button class="logout-btn" id="sign-out-btn">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Top Header -->
+    <header class="top-header">
+        <div class="header-left">
+            <button class="sidebar-toggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="breadcrumb">
+                <span class="breadcrumb-item">Approaching</span>
+                <i class="fas fa-chevron-right"></i>
+                <span class="breadcrumb-item">Facebook</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="page-header">
+            <div class="page-title-section">
+                <h1 class="page-title">
+                    <i class="fab fa-facebook" style="color: #1877F2;"></i>
+                    Facebook Approaching
+                </h1>
+                <p class="page-subtitle">Automate your Facebook outreach with AI-powered messaging and lead generation</p>
+            </div>
+            <div class="page-actions">
+                <button class="btn btn-outline">
+                    <i class="fas fa-download"></i>
+                    Export Data
+                </button>
+                <button class="btn btn-primary">
+                    <i class="fas fa-plus"></i>
+                    New Campaign
+                </button>
+            </div>
+        </div>
+
+        <!-- Stats Overview -->
+        <div class="stats-overview">
+            <div class="stat-card">
+                <div class="stat-icon" style="background: linear-gradient(135deg, #1877F2, #42A5F5);">
+                    <i class="fas fa-paper-plane"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-value">2,134</div>
+                    <div class="stat-label">Messages Sent</div>
+                    <div class="stat-change positive">
+                        <i class="fas fa-arrow-up"></i>
+                        <span>+18% from last month</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon" style="background: linear-gradient(135deg, #42A5F5, #1E88E5);">
+                    <i class="fas fa-reply"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-value">54.7%</div>
+                    <div class="stat-label">Response Rate</div>
+                    <div class="stat-change positive">
+                        <i class="fas fa-arrow-up"></i>
+                        <span>+12% from last month</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon" style="background: linear-gradient(135deg, #1E88E5, #1565C0);">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-value">567</div>
+                    <div class="stat-label">New Connections</div>
+                    <div class="stat-change positive">
+                        <i class="fas fa-arrow-up"></i>
+                        <span>+25% from last month</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon" style="background: linear-gradient(135deg, #1565C0, #0D47A1);">
+                    <i class="fas fa-handshake"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-value">127</div>
+                    <div class="stat-label">Conversions</div>
+                    <div class="stat-change positive">
+                        <i class="fas fa-arrow-up"></i>
+                        <span>+34% from last month</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Content Section -->
+        <div class="content-grid">
+            <div class="content-card">
+                <div class="card-header">
+                    <h3>Facebook Campaigns</h3>
+                    <button class="btn btn-sm btn-primary">
+                        <i class="fas fa-plus"></i>
+                        New Campaign
+                    </button>
+                </div>
+                <div class="card-content">
+                    <div class="empty-state">
+                        <div class="empty-icon">
+                            <i class="fab fa-facebook"></i>
+                        </div>
+                        <h4>Start Your Facebook Outreach</h4>
+                        <p>Create automated Facebook campaigns to reach your target audience through Messenger and posts.</p>
+                        <button class="btn btn-primary">
+                            <i class="fas fa-rocket"></i>
+                            Create First Campaign
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        console.log('📘 Facebook Approaching page loaded');
+
+        // Initialize Supabase
+        let supabase;
+        try {
+            supabase = window.AppUtils.initSupabase();
+        } catch (error) {
+            console.error('Failed to initialize Supabase:', error);
+        }
+
+        // Check authentication
+        document.addEventListener('DOMContentLoaded', async () => {
+            if (!supabase) return;
+
+            try {
+                const { data: { session }, error } = await supabase.auth.getSession();
+                
+                if (!session) {
+                    window.location.href = '/';
+                    return;
+                }
+
+                // Update user email
+                const userEmailElement = document.querySelector('.user-email');
+                if (userEmailElement && session.user) {
+                    userEmailElement.textContent = session.user.email;
+                }
+
+                // Setup sign out
+                const signOutBtn = document.getElementById('sign-out-btn');
+                if (signOutBtn) {
+                    signOutBtn.addEventListener('click', async () => {
+                        await supabase.auth.signOut();
+                        window.location.href = '/';
+                    });
+                }
+
+            } catch (error) {
+                console.error('Auth error:', error);
+                window.location.href = '/';
+            }
+        });
+
+        // Initialize sidebar menu
+        document.querySelectorAll('.submenu-toggle').forEach(toggle => {
+            toggle.addEventListener('click', (e) => {
+                e.preventDefault();
+                const parentItem = toggle.closest('.nav-item');
+                const submenu = parentItem.querySelector('.submenu');
+                const arrow = toggle.querySelector('.submenu-arrow');
+
+                parentItem.classList.toggle('open');
+
+                if (parentItem.classList.contains('open')) {
+                    arrow.style.transform = 'rotate(180deg)';
+                    submenu.style.maxHeight = submenu.scrollHeight + 'px';
+                } else {
+                    arrow.style.transform = 'rotate(0deg)';
+                    submenu.style.maxHeight = '0';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

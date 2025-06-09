@@ -21,18 +21,27 @@
     "agencyOwner": "Propietario de Agencia",
     "performanceManager": "Gerente de Rendimiento",
     "sdrSetter": "SDR/Programador",
-    "client": "Cliente"
+    "client": "Cliente",
+    "prospecting": "Prospección",
+    "companies": "Empresas",
+    "approaching": "Acercamiento",
+    "whatsapp": "WhatsApp",
+    "instagram": "Instagram",
+    "facebook": "Facebook",
+    "x": "X (Twitter)",
+    "linkedin": "LinkedIn",
+    "support": "Soporte"
   },
   "hero": {
-    "badge": "Plataforma #1 de Generación de Leads Evaluada",
-    "title": "Genera Leads Premium en Piloto Automático",
-    "subtitle": "Transforma tu negocio con generación de leads impulsada por IA que entrega prospectos calificados 24/7. Únete a más de 500 empresas ya escalando con Rarity Leads.",
-    "cta": "Empezar",
-    "ctaSecondary": "Consultoría Gratuita",
+    "badge": "🔥 La IA Que Está Reemplazando Equipos de Ventas",
+    "title": "Tu Competencia Aún Hace Llamadas Frías. Tú Estás Cerrando Negocios.",
+    "subtitle": "Mientras ellos queman listas telefónicas, tú recibes leads premium en automático. Nuestra IA no solo encuentra leads—los califica, los nutre y los entrega listos para cerrar. Game over.",
+    "cta": "Robar Esta Ventaja Injusta",
+    "ctaSecondary": "Ver en Acción (Demo Gratis)",
     "stats": {
-      "clients": "Clientes Activos",
-      "successRate": "Tasa de Éxito",
-      "leadGen": "Generación de Leads"
+      "clients": "50K+ Leads Premium Entregados",
+      "successRate": "94% Tasa de Respuesta (vs 2% industria)",
+      "leadGen": "15+ Horas de Vuelta en Tu Semana"
     }
   },
   "dashboard": {
@@ -172,6 +181,7 @@
     }
   },
   "pricing": {
+    "badge": "PRECIOS",
     "title": "Elige Tu Plan de Crecimiento",
     "subtitle": "Precios transparentes que escalan con tu éxito",
     "starter": {
