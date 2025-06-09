@@ -19,11 +19,7 @@
   to = "/dashboard.html"
   status = 200
 
-[[redirects]]
-  # Redirect root to home page
-  from = "/"
-  to = "/home.html"
-  status = 301
+# Root will serve index.html automatically
 
 [[redirects]]
   # Redirect auth to login page
