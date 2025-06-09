@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="rarity-design.css">
     <link rel="stylesheet" href="dashboard.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -118,6 +118,9 @@
         }
 
         function setupDashboardInteractions() {
+            // Initialize navigation
+            initializeNavigation();
+
             // Language selector
             const langSelector = document.querySelector('.language-selector');
             if (langSelector) {
@@ -147,6 +150,48 @@
                 });
             }
 
+            // Quick action buttons
+            const createCampaignBtn = document.getElementById('create-campaign-btn');
+            if (createCampaignBtn) {
+                createCampaignBtn.addEventListener('click', () => {
+                    console.log('📊 Create campaign clicked');
+                    alert('Campaign creation coming soon!');
+                });
+            }
+
+            const createSequenceBtn = document.getElementById('create-sequence-btn');
+            if (createSequenceBtn) {
+                createSequenceBtn.addEventListener('click', () => {
+                    console.log('🤖 Create sequence clicked');
+                    alert('Sequence creation coming soon!');
+                });
+            }
+
+            const connectLinkedInBtn = document.getElementById('connect-linkedin-btn');
+            if (connectLinkedInBtn) {
+                connectLinkedInBtn.addEventListener('click', () => {
+                    console.log('🔗 Connect LinkedIn clicked');
+                    window.location.href = '/approaching-linkedin.html';
+                });
+            }
+
+            const connectClaudeBtn = document.getElementById('connect-claude-btn');
+            if (connectClaudeBtn) {
+                connectClaudeBtn.addEventListener('click', () => {
+                    console.log('🧠 Connect Claude clicked');
+                    alert('Claude AI connection coming soon!');
+                });
+            }
+
+            // Filter leads button
+            const filterLeadsBtn = document.getElementById('filter-leads-btn');
+            if (filterLeadsBtn) {
+                filterLeadsBtn.addEventListener('click', () => {
+                    console.log('🔍 Filter leads clicked');
+                    window.location.href = '/prospecting-leads.html';
+                });
+            }
+
             // Notification button
             const notificationBtn = document.querySelector('.header-btn[data-tooltip="Notifications"]');
             if (notificationBtn) {
@@ -161,8 +206,92 @@
             if (helpBtn) {
                 helpBtn.addEventListener('click', () => {
                     console.log('❓ Help clicked');
-                    window.UniversalNavigation.navigate('/support.html');
+                    window.location.href = '/support.html';
                 });
+            }
+        }
+
+        // Initialize navigation functionality
+        function initializeNavigation() {
+            console.log('🧭 Initializing navigation...');
+
+            // Get current page
+            const currentPage = window.location.pathname.split('/').pop() || 'dashboard.html';
+
+            // Set active navigation item
+            setActiveNavItem(currentPage);
+
+            // Initialize sidebar toggle for mobile
+            initializeSidebarToggle();
+
+            // Add click handlers for navigation links
+            const navLinks = document.querySelectorAll('.nav-link');
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    const href = link.getAttribute('href');
+                    if (href && href !== '#') {
+                        console.log(`🔗 Navigating to: ${href}`);
+                        // Close sidebar on mobile after navigation
+                        if (window.innerWidth <= 1024) {
+                            const sidebar = document.getElementById('dashboard-sidebar');
+                            sidebar.classList.remove('open');
+                        }
+                    }
+                });
+            });
+        }
+
+        // Initialize sidebar toggle functionality
+        function initializeSidebarToggle() {
+            const sidebarToggle = document.querySelector('.sidebar-toggle');
+            const sidebar = document.getElementById('dashboard-sidebar');
+
+            if (sidebarToggle && sidebar) {
+                sidebarToggle.addEventListener('click', () => {
+                    sidebar.classList.toggle('open');
+                    console.log('📱 Sidebar toggled');
+                });
+
+                // Close sidebar when clicking outside on mobile
+                document.addEventListener('click', (e) => {
+                    if (window.innerWidth <= 1024 &&
+                        !sidebar.contains(e.target) &&
+                        !sidebarToggle.contains(e.target) &&
+                        sidebar.classList.contains('open')) {
+                        sidebar.classList.remove('open');
+                    }
+                });
+            }
+        }
+
+        // Set active navigation item based on current page
+        function setActiveNavItem(currentPage) {
+            // Remove active class from all nav items
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+
+            // Map pages to nav item IDs
+            const pageToNavMap = {
+                'dashboard.html': 'menu-dashboard',
+                'prospecting-leads.html': 'menu-leads',
+                'prospecting-companies.html': 'menu-companies',
+                'approaching-whatsapp.html': 'menu-whatsapp',
+                'approaching-linkedin.html': 'menu-linkedin',
+                'approaching-instagram.html': 'menu-instagram',
+                'approaching-facebook.html': 'menu-facebook',
+                'approaching-x.html': 'menu-x',
+                'analytics.html': 'menu-analytics',
+                'support.html': 'menu-support'
+            };
+
+            const navId = pageToNavMap[currentPage];
+            if (navId) {
+                const navLink = document.getElementById(navId);
+                if (navLink) {
+                    navLink.closest('.nav-item').classList.add('active');
+                    console.log(`✅ Set active nav item: ${navId}`);
+                }
             }
         }
 
@@ -180,96 +309,117 @@
         </div>
 
         <nav class="sidebar-nav">
-            <ul class="nav-menu">
-                <!-- Dashboard -->
-                <li class="nav-item active">
-                    <a href="dashboard.html" class="nav-link" id="menu-dashboard">
-                        <i class="fas fa-chart-line"></i>
-                        <span data-i18n="nav.dashboard">Dashboard</span>
-                    </a>
-                </li>
+            <!-- Main Navigation Section -->
+            <div class="nav-section">
+                <div class="nav-section-title">Main</div>
+                <ul class="nav-menu">
+                    <!-- Dashboard -->
+                    <li class="nav-item active">
+                        <a href="dashboard.html" class="nav-link" id="menu-dashboard">
+                            <div class="nav-icon">
+                                <i class="fas fa-home"></i>
+                            </div>
+                            <span class="nav-text" data-i18n="nav.dashboard">Dashboard</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
 
-                <!-- Prospecting Section -->
-                <li class="nav-item has-submenu">
-                    <a href="#" class="nav-link submenu-toggle" id="submenu-prospecting">
-                        <i class="fas fa-search"></i>
-                        <span data-i18n="nav.prospecting">Prospecting</span>
-                        <i class="fas fa-chevron-down submenu-arrow"></i>
-                    </a>
-                    <ul class="submenu">
-                        <li class="nav-item">
-                            <a href="prospecting-leads.html" class="nav-link">
+            <!-- Prospecting Section -->
+            <div class="nav-section">
+                <div class="nav-section-title">Prospecting</div>
+                <ul class="nav-menu">
+                    <li class="nav-item">
+                        <a href="prospecting-leads.html" class="nav-link" id="menu-leads">
+                            <div class="nav-icon">
                                 <i class="fas fa-users"></i>
-                                <span data-i18n="nav.leads">Leads</span>
-                                <span class="badge">24</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="prospecting-companies.html" class="nav-link">
+                            </div>
+                            <span class="nav-text" data-i18n="nav.leads">Leads</span>
+                            <span class="nav-badge">1,247</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="prospecting-companies.html" class="nav-link" id="menu-companies">
+                            <div class="nav-icon">
                                 <i class="fas fa-building"></i>
-                                <span data-i18n="nav.companies">Companies</span>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
+                            </div>
+                            <span class="nav-text" data-i18n="nav.companies">Companies</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
 
-                <!-- Approaching Section -->
-                <li class="nav-item has-submenu">
-                    <a href="#" class="nav-link submenu-toggle" id="submenu-approaching">
-                        <i class="fas fa-paper-plane"></i>
-                        <span data-i18n="nav.approaching">Approaching</span>
-                        <i class="fas fa-chevron-down submenu-arrow"></i>
-                    </a>
-                    <ul class="submenu">
-                        <li class="nav-item">
-                            <a href="approaching-whatsapp.html" class="nav-link">
+            <!-- Outreach Section -->
+            <div class="nav-section">
+                <div class="nav-section-title">Outreach</div>
+                <ul class="nav-menu">
+                    <li class="nav-item">
+                        <a href="approaching-whatsapp.html" class="nav-link" id="menu-whatsapp">
+                            <div class="nav-icon whatsapp">
                                 <i class="fab fa-whatsapp"></i>
-                                <span data-i18n="nav.whatsapp">WhatsApp</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="approaching-instagram.html" class="nav-link">
-                                <i class="fab fa-instagram"></i>
-                                <span data-i18n="nav.instagram">Instagram</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="approaching-facebook.html" class="nav-link">
-                                <i class="fab fa-facebook"></i>
-                                <span data-i18n="nav.facebook">Facebook</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="approaching-x.html" class="nav-link">
-                                <i class="fab fa-x-twitter"></i>
-                                <span data-i18n="nav.x">X (Twitter)</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="approaching-linkedin.html" class="nav-link">
+                            </div>
+                            <span class="nav-text" data-i18n="nav.whatsapp">WhatsApp</span>
+                            <span class="nav-status active"></span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="approaching-linkedin.html" class="nav-link" id="menu-linkedin">
+                            <div class="nav-icon linkedin">
                                 <i class="fab fa-linkedin"></i>
-                                <span data-i18n="nav.linkedin">LinkedIn</span>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
+                            </div>
+                            <span class="nav-text" data-i18n="nav.linkedin">LinkedIn</span>
+                            <span class="nav-status active"></span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="approaching-instagram.html" class="nav-link" id="menu-instagram">
+                            <div class="nav-icon instagram">
+                                <i class="fab fa-instagram"></i>
+                            </div>
+                            <span class="nav-text" data-i18n="nav.instagram">Instagram</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="approaching-facebook.html" class="nav-link" id="menu-facebook">
+                            <div class="nav-icon facebook">
+                                <i class="fab fa-facebook"></i>
+                            </div>
+                            <span class="nav-text" data-i18n="nav.facebook">Facebook</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="approaching-x.html" class="nav-link" id="menu-x">
+                            <div class="nav-icon x-twitter">
+                                <i class="fab fa-x-twitter"></i>
+                            </div>
+                            <span class="nav-text" data-i18n="nav.x">X (Twitter)</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
 
-                <!-- Analytics -->
-                <li class="nav-item">
-                    <a href="analytics.html" class="nav-link">
-                        <i class="fas fa-chart-bar"></i>
-                        <span data-i18n="nav.analytics">Analytics</span>
-                    </a>
-                </li>
-
-                <!-- Support -->
-                <li class="nav-item">
-                    <a href="support.html" class="nav-link">
-                        <i class="fas fa-life-ring"></i>
-                        <span data-i18n="nav.support">Support</span>
-                    </a>
-                </li>
-            </ul>
+            <!-- Analytics & Support Section -->
+            <div class="nav-section">
+                <div class="nav-section-title">Analytics & Support</div>
+                <ul class="nav-menu">
+                    <li class="nav-item">
+                        <a href="analytics.html" class="nav-link" id="menu-analytics">
+                            <div class="nav-icon">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <span class="nav-text" data-i18n="nav.analytics">Analytics</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="support.html" class="nav-link" id="menu-support">
+                            <div class="nav-icon">
+                                <i class="fas fa-headset"></i>
+                            </div>
+                            <span class="nav-text" data-i18n="nav.support">Support</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
         </nav>
 
         <div class="sidebar-footer">
@@ -281,7 +431,7 @@
                     <div class="user-name" data-i18n="nav.agencyOwner">Agency Owner</div>
                     <div class="user-email">admin@rarity.com</div>
                 </div>
-                <button class="logout-btn" id="sign-out-btn">
+                <button class="logout-btn" id="sign-out-btn" data-tooltip="Sign Out">
                     <i class="fas fa-sign-out-alt"></i>
                 </button>
             </div>
