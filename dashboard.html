@@ -506,98 +506,118 @@
         <!-- Welcome Section -->
         <div class="welcome-section">
             <div class="welcome-content">
-                <h1 class="welcome-title">Welcome back! 👋</h1>
-                <p class="welcome-subtitle">Here's what's happening with your lead generation today</p>
+                <div class="welcome-header">
+                    <h1 class="welcome-title">Good morning ✨</h1>
+                    <p class="welcome-subtitle">Ready to convert more leads today?</p>
+                </div>
+                <div class="welcome-stats">
+                    <div class="stat-highlight">
+                        <span class="stat-number">+127</span>
+                        <span class="stat-label">new leads this week</span>
+                    </div>
+                </div>
             </div>
             <div class="quick-actions">
                 <button id="create-campaign-btn" class="action-btn primary">
-                    <i class="fas fa-plus"></i>
-                    <span>New Campaign</span>
-                </button>
-                <button id="create-sequence-btn" class="action-btn secondary">
-                    <i class="fas fa-robot"></i>
-                    <span>New Sequence</span>
+                    <div class="btn-icon">
+                        <i class="fas fa-plus"></i>
+                    </div>
+                    <div class="btn-content">
+                        <span class="btn-title">Create Campaign</span>
+                        <span class="btn-subtitle">Start converting leads</span>
+                    </div>
                 </button>
                 <button id="connect-linkedin-btn" class="action-btn secondary">
-                    <i class="fab fa-linkedin"></i>
-                    <span>Connect LinkedIn</span>
-                </button>
-                <button id="connect-claude-btn" class="action-btn secondary">
-                    <i class="fas fa-brain"></i>
-                    <span>Connect Claude</span>
+                    <div class="btn-icon linkedin">
+                        <i class="fab fa-linkedin"></i>
+                    </div>
+                    <div class="btn-content">
+                        <span class="btn-title">Connect LinkedIn</span>
+                        <span class="btn-subtitle">Expand your reach</span>
+                    </div>
                 </button>
             </div>
         </div>
 
         <!-- Stats Overview -->
         <div class="stats-overview">
-            <div class="stat-card">
-                <div class="stat-icon">
-                    <i class="fas fa-users"></i>
+            <div class="stat-card primary">
+                <div class="stat-header">
+                    <div class="stat-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-trend positive">
+                        <i class="fas fa-trending-up"></i>
+                        <span>+12%</span>
+                    </div>
                 </div>
                 <div class="stat-content">
                     <div class="stat-value">1,247</div>
-                    <div class="stat-label">Total Leads</div>
-                    <div class="stat-change positive">
-                        <i class="fas fa-arrow-up"></i>
-                        <span>+12% from last month</span>
-                    </div>
+                    <div class="stat-label">Active Leads</div>
                 </div>
             </div>
 
-            <div class="stat-card">
-                <div class="stat-icon">
-                    <i class="fas fa-percentage"></i>
+            <div class="stat-card success">
+                <div class="stat-header">
+                    <div class="stat-icon">
+                        <i class="fas fa-target"></i>
+                    </div>
+                    <div class="stat-trend positive">
+                        <i class="fas fa-trending-up"></i>
+                        <span>+5.2%</span>
+                    </div>
                 </div>
                 <div class="stat-content">
                     <div class="stat-value">31.2%</div>
-                    <div class="stat-label">Conversion Rate</div>
-                    <div class="stat-change positive">
-                        <i class="fas fa-arrow-up"></i>
-                        <span>+5% from last month</span>
-                    </div>
+                    <div class="stat-label">Conversion</div>
                 </div>
             </div>
 
-            <div class="stat-card">
-                <div class="stat-icon">
-                    <i class="fas fa-bullhorn"></i>
+            <div class="stat-card warning">
+                <div class="stat-header">
+                    <div class="stat-icon">
+                        <i class="fas fa-rocket"></i>
+                    </div>
+                    <div class="stat-trend neutral">
+                        <span>8 running</span>
+                    </div>
                 </div>
                 <div class="stat-content">
                     <div class="stat-value">8</div>
-                    <div class="stat-label">Active Campaigns</div>
-                    <div class="stat-change neutral">
-                        <i class="fas fa-minus"></i>
-                        <span>No change</span>
-                    </div>
+                    <div class="stat-label">Campaigns</div>
                 </div>
             </div>
 
-            <div class="stat-card">
-                <div class="stat-icon">
-                    <i class="fas fa-dollar-sign"></i>
+            <div class="stat-card revenue">
+                <div class="stat-header">
+                    <div class="stat-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="stat-trend positive">
+                        <i class="fas fa-trending-up"></i>
+                        <span>+18%</span>
+                    </div>
                 </div>
                 <div class="stat-content">
-                    <div class="stat-value">$24,680</div>
+                    <div class="stat-value">$24.6k</div>
                     <div class="stat-label">Revenue</div>
-                    <div class="stat-change positive">
-                        <i class="fas fa-arrow-up"></i>
-                        <span>+18% from last month</span>
-                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- Charts Section -->
-        <div class="charts-section">
-            <div class="chart-card">
-                <div class="chart-header">
-                    <h3>Lead Generation Analytics</h3>
-                    <div class="chart-controls">
+        <!-- Analytics Section -->
+        <div class="analytics-section">
+            <div class="analytics-card main-chart">
+                <div class="card-header">
+                    <div class="header-content">
+                        <h3>Performance Overview</h3>
+                        <p>Track your lead generation progress</p>
+                    </div>
+                    <div class="header-actions">
                         <select id="analytics-period" class="period-select">
-                            <option value="7">Last 7 days</option>
-                            <option value="30" selected>Last 30 days</option>
-                            <option value="90">Last 90 days</option>
+                            <option value="7">7D</option>
+                            <option value="30" selected>30D</option>
+                            <option value="90">90D</option>
                         </select>
                     </div>
                 </div>
@@ -606,98 +626,120 @@
                 </div>
             </div>
 
-            <div class="chart-card">
-                <div class="chart-header">
-                    <h3>Acquisition Funnel</h3>
-                    <div class="chart-info">
-                        <i class="fas fa-info-circle" data-tooltip="Shows the conversion rate at each stage"></i>
+            <div class="analytics-card funnel-chart">
+                <div class="card-header">
+                    <div class="header-content">
+                        <h3>Conversion Funnel</h3>
+                        <p>From visitor to customer</p>
                     </div>
                 </div>
-                <div class="chart-content">
-                    <div class="funnel-stages">
-                        <div class="funnel-stage">
-                            <div class="stage-bar" style="width: 100%"></div>
-                            <div class="stage-info">
-                                <span class="stage-label">Visitors</span>
-                                <span class="stage-value">2,847</span>
-                            </div>
+                <div class="funnel-content">
+                    <div class="funnel-stage">
+                        <div class="stage-progress" style="--progress: 100%"></div>
+                        <div class="stage-info">
+                            <span class="stage-label">Visitors</span>
+                            <span class="stage-value">2,847</span>
+                            <span class="stage-rate">100%</span>
                         </div>
-                        <div class="funnel-stage">
-                            <div class="stage-bar" style="width: 65%"></div>
-                            <div class="stage-info">
-                                <span class="stage-label">Leads</span>
-                                <span class="stage-value">1,850</span>
-                            </div>
+                    </div>
+                    <div class="funnel-stage">
+                        <div class="stage-progress" style="--progress: 65%"></div>
+                        <div class="stage-info">
+                            <span class="stage-label">Leads</span>
+                            <span class="stage-value">1,850</span>
+                            <span class="stage-rate">65%</span>
                         </div>
-                        <div class="funnel-stage">
-                            <div class="stage-bar" style="width: 35%"></div>
-                            <div class="stage-info">
-                                <span class="stage-label">Qualified</span>
-                                <span class="stage-value">996</span>
-                            </div>
+                    </div>
+                    <div class="funnel-stage">
+                        <div class="stage-progress" style="--progress: 35%"></div>
+                        <div class="stage-info">
+                            <span class="stage-label">Qualified</span>
+                            <span class="stage-value">996</span>
+                            <span class="stage-rate">35%</span>
                         </div>
-                        <div class="funnel-stage">
-                            <div class="stage-bar" style="width: 15%"></div>
-                            <div class="stage-info">
-                                <span class="stage-label">Customers</span>
-                                <span class="stage-value">427</span>
-                            </div>
+                    </div>
+                    <div class="funnel-stage">
+                        <div class="stage-progress" style="--progress: 15%"></div>
+                        <div class="stage-info">
+                            <span class="stage-label">Customers</span>
+                            <span class="stage-value">427</span>
+                            <span class="stage-rate">15%</span>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Recent Activity & Leads -->
+        <!-- Activity & Leads Section -->
         <div class="content-grid">
             <div class="activity-card">
                 <div class="card-header">
-                    <h3>Recent Activity</h3>
-                    <button class="view-all-btn">View All</button>
+                    <div class="header-content">
+                        <h3>Latest Activity</h3>
+                        <p>What's happening right now</p>
+                    </div>
+                    <button class="view-all-btn">
+                        <span>View all</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
                 </div>
                 <div class="activity-list">
                     <div class="activity-item">
-                        <div class="activity-icon">
-                            <i class="fas fa-user-plus"></i>
+                        <div class="activity-avatar">
+                            <img src="https://ui-avatars.com/api/?name=Sarah+Johnson&background=8B5CF6&color=fff&size=32" alt="SJ">
                         </div>
                         <div class="activity-content">
-                            <div class="activity-title">New lead from LinkedIn campaign</div>
-                            <div class="activity-meta">Sarah Johnson • TechCorp • 2 minutes ago</div>
+                            <div class="activity-title">Sarah Johnson joined from LinkedIn</div>
+                            <div class="activity-meta">TechCorp CEO • 2m ago</div>
                         </div>
-                        <div class="activity-status new">New</div>
+                        <div class="activity-status new">
+                            <span class="status-dot"></span>
+                            New
+                        </div>
                     </div>
 
                     <div class="activity-item">
-                        <div class="activity-icon">
-                            <i class="fas fa-envelope"></i>
+                        <div class="activity-avatar">
+                            <div class="activity-icon completed">
+                                <i class="fas fa-check"></i>
+                            </div>
                         </div>
                         <div class="activity-content">
                             <div class="activity-title">Email sequence completed</div>
-                            <div class="activity-meta">Marketing Campaign #3 • 15 minutes ago</div>
+                            <div class="activity-meta">Campaign "SaaS Outreach" • 15m ago</div>
                         </div>
-                        <div class="activity-status completed">Completed</div>
+                        <div class="activity-status completed">
+                            <span class="status-dot"></span>
+                            Done
+                        </div>
                     </div>
 
                     <div class="activity-item">
-                        <div class="activity-icon">
-                            <i class="fas fa-calendar-check"></i>
+                        <div class="activity-avatar">
+                            <img src="https://ui-avatars.com/api/?name=John+Smith&background=10B981&color=fff&size=32" alt="JS">
                         </div>
                         <div class="activity-content">
-                            <div class="activity-title">Meeting scheduled</div>
-                            <div class="activity-meta">John Smith • StartupXYZ • 1 hour ago</div>
+                            <div class="activity-title">Meeting scheduled with John</div>
+                            <div class="activity-meta">StartupXYZ Founder • 1h ago</div>
                         </div>
-                        <div class="activity-status scheduled">Scheduled</div>
+                        <div class="activity-status scheduled">
+                            <span class="status-dot"></span>
+                            Scheduled
+                        </div>
                     </div>
 
                     <div class="activity-item">
-                        <div class="activity-icon">
-                            <i class="fas fa-star"></i>
+                        <div class="activity-avatar">
+                            <img src="https://ui-avatars.com/api/?name=Maria+Garcia&background=F59E0B&color=fff&size=32" alt="MG">
                         </div>
                         <div class="activity-content">
-                            <div class="activity-title">Lead qualified</div>
-                            <div class="activity-meta">Maria Garcia • Enterprise Inc • 2 hours ago</div>
+                            <div class="activity-title">Maria became qualified lead</div>
+                            <div class="activity-meta">Enterprise Inc CMO • 2h ago</div>
                         </div>
-                        <div class="activity-status qualified">Qualified</div>
+                        <div class="activity-status qualified">
+                            <span class="status-dot"></span>
+                            Qualified
+                        </div>
                     </div>
                 </div>
             </div>
