@@ -31,7 +31,10 @@
     "facebook": "Facebook",
     "x": "X (Twitter)",
     "linkedin": "LinkedIn",
-    "support": "Suporte"
+    "support": "Suporte",
+    "main": "Principal",
+    "outreach": "Contato",
+    "analyticsSupport": "Analytics e Suporte"
   },
   "hero": {
     "badge": "🔥 A IA Que Está Substituindo Equipes de Vendas",

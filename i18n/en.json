@@ -31,7 +31,10 @@
         "facebook": "Facebook",
         "x": "X (Twitter)",
         "linkedin": "LinkedIn",
-        "support": "Support"
+        "support": "Support",
+        "main": "Main",
+        "outreach": "Outreach",
+        "analyticsSupport": "Analytics & Support"
     },
     "hero": {
         "badge": "🔥 The AI That's Replacing Sales Teams",

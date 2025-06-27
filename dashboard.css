@@ -1,26 +1,76 @@
-/* Support Page Specific Styles */
-.support-section {
-    background: #fff;
-    border-radius: 16px;
-    padding: 2rem 2.5rem;
-    margin-bottom: 2rem;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.03);
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
+
+/* Stat Card Icon Gradients */
+.stat-icon.gradient-purple {
+    background: linear-gradient(135deg, #8B5CF6, #7C3AED);
+    color: var(--white);
 }
-.support-title {
-    font-size: 2rem;
-    font-weight: 700;
-    margin-bottom: 0.5rem;
+
+.stat-icon.gradient-pink {
+    background: linear-gradient(135deg, #EC4899, #DB2777);
+    color: var(--white);
 }
-.support-subtitle {
-    font-size: 1.1rem;
-    color: #393e6e;
-    margin-bottom: 1.5rem;
+
+.stat-icon.gradient-green {
+    background: linear-gradient(135deg, #10B981, #059669);
+    color: var(--white);
 }
-.support-content {
-    font-size: 1.1rem;
-    color: #232946;
-    margin-bottom: 1.5rem;
+
+.stat-icon.gradient-orange {
+    background: linear-gradient(135deg, #F59E0B, #D97706);
+    color: var(--white);
+}
+
+.stat-icon.gradient-blue {
+    background: linear-gradient(135deg, #3B82F6, #1D4ED8);
+    color: var(--white);
+}
+
+.stat-icon.gradient-dark-blue {
+    background: linear-gradient(135deg, #0A66C2, #004182);
+    color: var(--white);
+}
+
+.stat-icon.gradient-darker-blue {
+    background: linear-gradient(135deg, #004182, #002E5F);
+    color: var(--white);
+}
+
+.stat-icon.gradient-darkest-blue {
+    background: linear-gradient(135deg, #002E5F, #001A3C);
+    color: var(--white);
+}
+
+.stat-icon.gradient-red {
+    background: linear-gradient(135deg, #EF4444, #DC2626);
+    color: var(--white);
+}
+
+.stat-icon.gradient-gray {
+    background: linear-gradient(135deg, #6B7280, #4B5563);
+    color: var(--white);
+}
+
+.stat-icon.gradient-black {
+    background: linear-gradient(135deg, #000000, #333333);
+    color: var(--white);
+}
+
+.stat-icon.gradient-instagram {
+    background: linear-gradient(135deg, #E4405F, #F56040);
+    color: var(--white);
+}
+
+.stat-icon.gradient-instagram-alt {
+    background: linear-gradient(135deg, #833AB4, #E4405F);
+    color: var(--white);
+}
+
+.stat-icon.gradient-instagram-dark {
+    background: linear-gradient(135deg, #F56040, #FCAF45);
+    color: var(--white);
+}
+
+.stat-icon.gradient-instagram-light {
+    background: linear-gradient(135deg, #405DE6, #833AB4);
+    color: var(--white);
 }
