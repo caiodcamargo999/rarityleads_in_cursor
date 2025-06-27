@@ -9,82 +9,310 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="rarity-design.css">
     <link rel="stylesheet" href="dashboard.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="app-config.js"></script>
     <script src="i18n.js"></script>
     <script src="auth-guard.js"></script>
     <script src="universal-navigation.js"></script>
+    <style>
+        body, html {
+            background: #f8f9fb;
+            font-family: 'Inter', sans-serif;
+            color: #222;
+            margin: 0;
+            padding: 0;
+        }
+        .sidebar {
+            background: #232946;
+            color: #fff;
+            min-width: 220px;
+            max-width: 260px;
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 2px 0 8px rgba(0,0,0,0.03);
+        }
+        .sidebar-header {
+            padding: 2rem 1.5rem 1rem 1.5rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+        }
+        .logo-icon {
+            font-size: 2rem;
+            margin-right: 0.5rem;
+        }
+        .sidebar-nav {
+            flex: 1;
+            padding: 1rem 0.5rem;
+        }
+        .nav-section-title {
+            font-size: 0.9rem;
+            color: #b8b8d1;
+            margin: 1.5rem 0 0.5rem 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .nav-menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .nav-item {
+            margin-bottom: 0.5rem;
+        }
+        .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 0.7rem 1.2rem;
+            border-radius: 8px;
+            color: #fff;
+            text-decoration: none;
+            font-size: 1rem;
+            transition: background 0.2s;
+        }
+        .nav-link.active, .nav-link:hover {
+            background: #393e6e;
+        }
+        .nav-icon {
+            margin-right: 0.8rem;
+            font-size: 1.2rem;
+        }
+        .sidebar-footer {
+            padding: 1.5rem 1rem;
+            border-top: 1px solid #2d325a;
+            display: flex;
+            align-items: center;
+        }
+        .user-avatar {
+            background: #a7a7e7;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            margin-right: 0.7rem;
+        }
+        .user-info {
+            flex: 1;
+        }
+        .user-name {
+            font-size: 1rem;
+            font-weight: 600;
+        }
+        .user-email {
+            font-size: 0.9rem;
+            color: #b8b8d1;
+        }
+        .logout-btn {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 1.2rem;
+            cursor: pointer;
+            margin-left: 0.5rem;
+        }
+        .top-header {
+            margin-left: 260px;
+            height: 64px;
+            background: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        .main-content {
+            margin-left: 260px;
+            padding: 2.5rem 2rem 2rem 2rem;
+            min-height: 100vh;
+            background: #f8f9fb;
+        }
+        .section-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+        }
+        .companies-list {
+            background: #fff;
+            border-radius: 16px;
+            padding: 2rem 2.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+            margin-bottom: 2rem;
+        }
+        .company-item {
+            display: flex;
+            align-items: center;
+            background: #f3f3fa;
+            border-radius: 8px;
+            padding: 0.8rem 1rem;
+            margin-bottom: 1rem;
+        }
+        .company-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #e0e7ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+        }
+        .company-name {
+            font-weight: 600;
+            font-size: 1rem;
+        }
+        .company-segment, .company-email {
+            font-size: 0.95rem;
+            color: #393e6e;
+        }
+        .company-status {
+            margin-left: auto;
+            font-size: 0.95rem;
+            color: #764ba2;
+            font-weight: 500;
+        }
+        .company-actions {
+            margin-left: 1rem;
+            display: flex;
+            gap: 0.5rem;
+        }
+        .action-btn-small {
+            background: #fff;
+            border: 1px solid #764ba2;
+            color: #764ba2;
+            border-radius: 6px;
+            padding: 0.2rem 0.5rem;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s;
+        }
+        .action-btn-small:hover {
+            background: #764ba2;
+            color: #fff;
+        }
+        @media (max-width: 900px) {
+            .main-content, .top-header {
+                margin-left: 0;
+                padding: 1rem;
+            }
+            .sidebar {
+                position: static;
+                width: 100vw;
+                max-width: 100vw;
+                min-width: 0;
+                height: auto;
+                flex-direction: row;
+                overflow-x: auto;
+            }
+            .sidebar-header, .sidebar-footer {
+                display: none;
+            }
+        }
+    </style>
     <script>
         console.log('🏢 Prospecting Companies: Loading...');
+
+        // Loader utility
+        function showLoader() {
+            let loader = document.getElementById('main-loader');
+            if (!loader) {
+                loader = document.createElement('div');
+                loader.id = 'main-loader';
+                loader.style = 'display:flex;align-items:center;justify-content:center;height:60vh;font-size:2rem;color:#764ba2;';
+                loader.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading...';
+                document.querySelector('main')?.prepend(loader);
+            } else {
+                loader.style.display = 'flex';
+            }
+        }
+        function hideLoader() {
+            const loader = document.getElementById('main-loader');
+            if (loader) loader.style.display = 'none';
+        }
+        function showError(message) {
+            let errorDiv = document.getElementById('main-error');
+            if (!errorDiv) {
+                errorDiv = document.createElement('div');
+                errorDiv.id = 'main-error';
+                errorDiv.style = 'color:#e53e3e;background:#fff3f3;padding:1rem;margin:2rem auto;text-align:center;border-radius:8px;max-width:600px;font-size:1.2rem;';
+                document.querySelector('main')?.prepend(errorDiv);
+            }
+            errorDiv.innerHTML = `<i class=\"fas fa-exclamation-triangle\"></i> ${message}`;
+            errorDiv.style.display = 'block';
+        }
+        function hideError() {
+            const errorDiv = document.getElementById('main-error');
+            if (errorDiv) errorDiv.style.display = 'none';
+        }
 
         // Initialize Supabase
         let supabase;
         try {
             supabase = window.AppUtils.initSupabase();
         } catch (error) {
-            console.error('Failed to initialize Supabase:', error);
+            showError('Failed to initialize Supabase.');
         }
 
         // Check authentication when page loads
         document.addEventListener('DOMContentLoaded', async () => {
-            console.log('🔍 Prospecting Companies: Checking authentication...');
-
+            showLoader();
+            hideError();
             try {
                 if (!supabase) {
-                    window.location.href = '/login.html';
+                    showError('Authentication system not available.');
+                    hideLoader();
+                    setTimeout(() => { window.location.href = '/login.html'; }, 2000);
                     return;
                 }
-
                 const { data: { session }, error } = await supabase.auth.getSession();
-
-                if (error) {
-                    console.error('❌ Prospecting Companies: Auth error:', error);
-                    window.location.href = '/login.html';
+                if (error || !session || !session.user) {
+                    showError('You are not authenticated. Please log in again.');
+                    hideLoader();
+                    setTimeout(() => { window.location.href = '/login.html'; }, 2000);
                     return;
                 }
-
-                if (!session) {
-                    console.log('🚫 Prospecting Companies: No session found, redirecting to login');
-                    window.location.href = '/login.html';
-                    return;
-                }
-
-                console.log('✅ Prospecting Companies: User authenticated:', session.user.email);
-
+                // User authenticated, hide loader and error
+                hideLoader();
+                hideError();
                 // Update user email in sidebar
                 const userEmailElement = document.querySelector('.user-email');
                 if (userEmailElement) {
                     userEmailElement.textContent = session.user.email;
                 }
-
                 // Set up sign out button
                 const signOutBtn = document.getElementById('sign-out-btn');
                 if (signOutBtn) {
                     signOutBtn.addEventListener('click', async () => {
-                        console.log('👋 Prospecting Companies: Signing out...');
-
+                        showLoader();
                         try {
                             const { error } = await supabase.auth.signOut();
                             if (error) throw error;
-
-                            console.log('✅ Prospecting Companies: Signed out successfully');
                             window.location.href = '/home.html';
-
                         } catch (error) {
-                            console.error('❌ Prospecting Companies: Sign out error:', error);
-                            alert('Sign out failed: ' + error.message);
+                            showError('Sign out failed.');
+                            hideLoader();
                         }
                     });
                 }
-
                 // Initialize sidebar menu
                 initializeSidebarMenu();
-
             } catch (error) {
-                console.error('💥 Prospecting Companies: Error:', error);
-                window.location.href = '/auth.html';
+                showError('Failed to load companies. Please try again.');
+                hideLoader();
+                setTimeout(() => { window.location.href = '/login.html'; }, 2000);
             }
         });
 
@@ -183,7 +411,7 @@
         <div class="sidebar-header">
             <div class="logo-container">
                 <div class="logo-icon">✨</div>
-                <span class="logo-text">Rarity Leads</span>
+                <span class="logo-text text-gradient">Rarity Leads</span>
             </div>
         </div>
 

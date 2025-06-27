@@ -17,8 +17,42 @@
     <script src="i18n.js"></script>
     <script src="auth-guard.js"></script>
     <script src="universal-navigation.js"></script>
+    
     <script>
         console.log('🏠 Dashboard: Loading...');
+
+        // Loader utility
+        function showLoader() {
+            let loader = document.getElementById('main-loader');
+            if (!loader) {
+                loader = document.createElement('div');
+                loader.id = 'main-loader';
+                loader.style = 'display:flex;align-items:center;justify-content:center;height:60vh;font-size:2rem;color:#764ba2;';
+                loader.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading...';
+                document.querySelector('main.main-content').prepend(loader);
+            } else {
+                loader.style.display = 'flex';
+            }
+        }
+        function hideLoader() {
+            const loader = document.getElementById('main-loader');
+            if (loader) loader.style.display = 'none';
+        }
+        function showError(message) {
+            let errorDiv = document.getElementById('main-error');
+            if (!errorDiv) {
+                errorDiv = document.createElement('div');
+                errorDiv.id = 'main-error';
+                errorDiv.style = 'color:#e53e3e;background:#fff3f3;padding:1rem;margin:2rem auto;text-align:center;border-radius:8px;max-width:600px;font-size:1.2rem;';
+                document.querySelector('main.main-content').prepend(errorDiv);
+            }
+            errorDiv.innerHTML = `<i class="fas fa-exclamation-triangle"></i> ${message}`;
+            errorDiv.style.display = 'block';
+        }
+        function hideError() {
+            const errorDiv = document.getElementById('main-error');
+            if (errorDiv) errorDiv.style.display = 'none';
+        }
 
         // Initialize Supabase (with error handling)
         let supabase = null;
@@ -30,50 +64,58 @@
                 );
                 console.log('✅ Supabase initialized');
             } else {
-                console.warn('⚠️ Supabase not available, running in demo mode');
+                showError('Supabase not available. Please check your connection.');
             }
         } catch (error) {
+            showError('Supabase initialization failed.');
             console.error('❌ Supabase initialization failed:', error);
         }
 
-        // Check authentication when page loads
+        // Check authentication and load dashboard
         document.addEventListener('DOMContentLoaded', async () => {
-            console.log('📊 Dashboard: Initializing...');
-
-            // Initialize dashboard functionality immediately for testing
-            // In production, this should be wrapped in authentication check
+            showLoader();
+            hideError();
+            if (!supabase) {
+                showError('Authentication system not available.');
+                hideLoader();
+                return;
+            }
             try {
+                const { data: { session }, error } = await supabase.auth.getSession();
+                if (error || !session || !session.user) {
+                    showError('You are not authenticated. Please log in again.');
+                    hideLoader();
+                    setTimeout(() => { window.location.href = '/login.html'; }, 2000);
+                    return;
+                }
+                // User authenticated, hide loader and error
+                hideLoader();
+                hideError();
                 // Initialize dashboard functionality
                 initializeDashboard();
-
                 // Set up sign out button
                 const signOutBtn = document.getElementById('sign-out-btn');
                 if (signOutBtn) {
                     signOutBtn.addEventListener('click', async () => {
-                        console.log('👋 Dashboard: Signing out...');
-
+                        showLoader();
                         try {
                             if (window.AuthGuard) {
                                 await window.AuthGuard.signOut();
-                                console.log('✅ Dashboard: Signed out successfully');
+                                window.location.href = '/home.html';
                             } else {
-                                // Fallback for testing
                                 window.location.href = '/home.html';
                             }
                         } catch (error) {
-                            console.error('❌ Dashboard: Sign out error:', error);
-                            // Fallback redirect
-                            window.location.href = '/home.html';
+                            showError('Sign out failed.');
+                            hideLoader();
                         }
                     });
                 }
-
                 console.log('✅ Dashboard: Initialized successfully');
-
             } catch (error) {
+                showError('Failed to load dashboard. Please try again.');
+                hideLoader();
                 console.error('❌ Dashboard: Initialization error:', error);
-                // Continue with basic functionality even if auth fails
-                initializeDashboard();
             }
         });
 
@@ -318,7 +360,7 @@
         <div class="sidebar-header">
             <div class="logo-container">
                 <div class="logo-icon">✨</div>
-                <span class="logo-text">Rarity Leads</span>
+                <span class="logo-text text-gradient">Rarity Leads</span>
             </div>
         </div>
 
