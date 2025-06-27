@@ -17,8 +17,6 @@
     <script src="auth-guard.js"></script>
     <script src="universal-navigation.js"></script>
     <script>
-        console.log('🔍 Prospecting Leads: Loading...');
-
         // Loader utility
         function showLoader() {
             let loader = document.getElementById('main-loader');
@@ -111,8 +109,6 @@
         let currentDeletingLead = null;
 
         async function initializeLeadsManagement() {
-            console.log('🔄 Initializing Leads Management...');
-
             // Setup event listeners
             setupEventListeners();
 
@@ -121,8 +117,6 @@
 
             // Update stats
             updateLeadsStats();
-
-            console.log('✅ Leads Management initialized');
         }
 
         function setupEventListeners() {
@@ -233,18 +227,13 @@
 
         // Listen for auth changes
         supabase.auth.onAuthStateChange((event, session) => {
-            console.log('🔄 Prospecting Leads: Auth event:', event);
-
             if (event === 'SIGNED_OUT') {
-                console.log('👋 Prospecting Leads: User signed out, redirecting...');
                 window.location.href = '/home.html';
             }
         });
 
         // Initialize sidebar menu functionality
         function initializeSidebarMenu() {
-            console.log('🔧 Initializing sidebar menu...');
-
             // Handle submenu toggles
             document.querySelectorAll('.submenu-toggle').forEach(toggle => {
                 toggle.addEventListener('click', (e) => {
@@ -280,8 +269,6 @@
 
             // Set active menu item
             setActiveMenuItem();
-
-            console.log('✅ Sidebar menu initialized');
         }
 
         // Set active menu item based on current page
@@ -330,12 +317,10 @@
                 leadsData = data || [];
                 filteredLeads = [...leadsData];
 
-                console.log('✅ Loaded leads:', leadsData.length);
                 renderLeadsTable();
                 hideLoadingState();
 
             } catch (error) {
-                console.error('❌ Error loading leads:', error);
                 hideLoadingState();
                 showError('Failed to load leads: ' + error.message);
             }
@@ -356,16 +341,12 @@
                     status: formData.get('status')
                 };
 
-                console.log('📝 Adding new lead:', leadData);
-
                 const { data, error } = await supabase
                     .from('leads')
                     .insert([leadData])
                     .select();
 
                 if (error) throw error;
-
-                console.log('✅ Lead added successfully:', data[0]);
 
                 // Update local data
                 leadsData.unshift(data[0]);
@@ -382,7 +363,6 @@
                 showSuccess('Lead added successfully!');
 
             } catch (error) {
-                console.error('❌ Error adding lead:', error);
                 showError('Failed to add lead: ' + error.message);
             }
         }
@@ -403,8 +383,6 @@
                     status: formData.get('status')
                 };
 
-                console.log('📝 Updating lead:', leadId, leadData);
-
                 const { data, error } = await supabase
                     .from('leads')
                     .update(leadData)
@@ -412,8 +390,6 @@
                     .select();
 
                 if (error) throw error;
-
-                console.log('✅ Lead updated successfully:', data[0]);
 
                 // Update local data
                 const index = leadsData.findIndex(lead => lead.id === leadId);
@@ -430,7 +406,6 @@
                 showSuccess('Lead updated successfully!');
 
             } catch (error) {
-                console.error('❌ Error updating lead:', error);
                 showError('Failed to update lead: ' + error.message);
             }
         }
@@ -440,16 +415,12 @@
             if (!currentDeletingLead) return;
 
             try {
-                console.log('🗑️ Deleting lead:', currentDeletingLead.id);
-
                 const { error } = await supabase
                     .from('leads')
                     .delete()
                     .eq('id', currentDeletingLead.id);
 
                 if (error) throw error;
-
-                console.log('✅ Lead deleted successfully');
 
                 // Update local data
                 leadsData = leadsData.filter(lead => lead.id !== currentDeletingLead.id);
@@ -464,7 +435,6 @@
                 showSuccess('Lead deleted successfully!');
 
             } catch (error) {
-                console.error('❌ Error deleting lead:', error);
                 showError('Failed to delete lead: ' + error.message);
             }
         }
@@ -695,8 +665,6 @@
                 window.i18n.applyTranslations();
             });
         }
-
-        console.log('✅ Prospecting Leads script loaded');
     </script>
 
     

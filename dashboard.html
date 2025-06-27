@@ -19,8 +19,6 @@
     <script src="universal-navigation.js"></script>
     
     <script>
-        console.log('🏠 Dashboard: Loading...');
-
         // Loader utility
         function showLoader() {
             let loader = document.getElementById('main-loader');
@@ -62,13 +60,11 @@
                     'https://yejheyrdsucgzpzwxuxs.supabase.co',
                     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InllamhleXJkc3VjZ3pwend4dXhzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg4MDg2NzQsImV4cCI6MjA2NDM4NDY3NH0.NzCJ8i3SKpABO6ykWRX3nHDYmjVB82KL1wfgaY3trM4'
                 );
-                console.log('✅ Supabase initialized');
             } else {
                 showError('Supabase not available. Please check your connection.');
             }
         } catch (error) {
             showError('Supabase initialization failed.');
-            console.error('❌ Supabase initialization failed:', error);
         }
 
         // Check authentication and load dashboard
@@ -111,11 +107,9 @@
                         }
                     });
                 }
-                console.log('✅ Dashboard: Initialized successfully');
             } catch (error) {
                 showError('Failed to load dashboard. Please try again.');
                 hideLoader();
-                console.error('❌ Dashboard: Initialization error:', error);
             }
         });
 
@@ -123,22 +117,16 @@
         if (supabase && supabase.auth) {
             try {
                 supabase.auth.onAuthStateChange((event, session) => {
-                    console.log('🔄 Dashboard: Auth event:', event);
-
                     if (event === 'SIGNED_OUT') {
-                        console.log('👋 Dashboard: User signed out, redirecting...');
                         window.location.href = '/home.html';
                     }
                 });
             } catch (error) {
-                console.error('❌ Auth listener setup failed:', error);
             }
         }
 
         // Initialize charts function
         function initializeCharts() {
-            console.log('📊 Initializing charts...');
-
             // Simple chart initialization without external dependencies
             const chartCanvas = document.getElementById('leads-chart');
             if (chartCanvas) {
@@ -156,21 +144,15 @@
                 ctx.font = '12px Inter';
                 ctx.fillText('Sample Chart Data', 10, 80);
             }
-
-            console.log('✅ Charts initialized');
         }
 
         // Dashboard-specific functionality
         function initializeDashboard() {
-            console.log('📊 Initializing dashboard functionality...');
-
             // Initialize charts
             initializeCharts();
 
             // Setup dashboard-specific interactions
             setupDashboardInteractions();
-
-            console.log('✅ Dashboard functionality initialized');
         }
 
         function setupDashboardInteractions() {
@@ -199,8 +181,6 @@
                     option.addEventListener('click', (e) => {
                         e.preventDefault();
                         const lang = option.dataset.lang;
-                        console.log('🌐 Language changed to:', lang);
-                        // Language change logic would go here
                         dropdown.classList.remove('show');
                     });
                 });
@@ -210,7 +190,6 @@
             const createCampaignBtn = document.getElementById('create-campaign-btn');
             if (createCampaignBtn) {
                 createCampaignBtn.addEventListener('click', () => {
-                    console.log('📊 Create campaign clicked');
                     alert('Campaign creation coming soon!');
                 });
             }
@@ -218,7 +197,6 @@
             const createSequenceBtn = document.getElementById('create-sequence-btn');
             if (createSequenceBtn) {
                 createSequenceBtn.addEventListener('click', () => {
-                    console.log('🤖 Create sequence clicked');
                     alert('Sequence creation coming soon!');
                 });
             }
@@ -226,7 +204,6 @@
             const connectLinkedInBtn = document.getElementById('connect-linkedin-btn');
             if (connectLinkedInBtn) {
                 connectLinkedInBtn.addEventListener('click', () => {
-                    console.log('🔗 Connect LinkedIn clicked');
                     window.location.href = '/approaching-linkedin.html';
                 });
             }
@@ -234,7 +211,6 @@
             const connectClaudeBtn = document.getElementById('connect-claude-btn');
             if (connectClaudeBtn) {
                 connectClaudeBtn.addEventListener('click', () => {
-                    console.log('🧠 Connect Claude clicked');
                     alert('Claude AI connection coming soon!');
                 });
             }
@@ -243,7 +219,6 @@
             const filterLeadsBtn = document.getElementById('filter-leads-btn');
             if (filterLeadsBtn) {
                 filterLeadsBtn.addEventListener('click', () => {
-                    console.log('🔍 Filter leads clicked');
                     window.location.href = '/prospecting-leads.html';
                 });
             }
@@ -252,7 +227,6 @@
             const notificationBtn = document.querySelector('.header-btn[data-tooltip="Notifications"]');
             if (notificationBtn) {
                 notificationBtn.addEventListener('click', () => {
-                    console.log('🔔 Notifications clicked');
                     alert('Notifications feature coming soon!');
                 });
             }
@@ -261,7 +235,6 @@
             const helpBtn = document.querySelector('.header-btn[data-tooltip="Help"]');
             if (helpBtn) {
                 helpBtn.addEventListener('click', () => {
-                    console.log('❓ Help clicked');
                     window.location.href = '/support.html';
                 });
             }
@@ -269,8 +242,6 @@
 
         // Initialize navigation functionality
         function initializeNavigation() {
-            console.log('🧭 Initializing navigation...');
-
             // Get current page
             const currentPage = window.location.pathname.split('/').pop() || 'dashboard.html';
 
@@ -286,7 +257,6 @@
                 link.addEventListener('click', (e) => {
                     const href = link.getAttribute('href');
                     if (href && href !== '#') {
-                        console.log(`🔗 Navigating to: ${href}`);
                         // Close sidebar on mobile after navigation
                         if (window.innerWidth <= 1024) {
                             const sidebar = document.getElementById('dashboard-sidebar');
@@ -305,7 +275,6 @@
             if (sidebarToggle && sidebar) {
                 sidebarToggle.addEventListener('click', () => {
                     sidebar.classList.toggle('open');
-                    console.log('📱 Sidebar toggled');
                 });
 
                 // Close sidebar when clicking outside on mobile
@@ -346,7 +315,6 @@
                 const navLink = document.getElementById(navId);
                 if (navLink) {
                     navLink.closest('.nav-item').classList.add('active');
-                    console.log(`✅ Set active nav item: ${navId}`);
                 }
             }
         }
@@ -357,8 +325,6 @@
                 window.i18n.applyTranslations();
             });
         }
-
-        console.log('✅ Dashboard script loaded');
     </script>
 </head>
 <body class="dashboard-body dark-theme">
