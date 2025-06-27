@@ -689,6 +689,13 @@
             };
         }
 
+        // Inicializar i18n ao carregar a página
+        if (window.i18n && typeof window.i18n.applyTranslations === 'function') {
+            document.addEventListener('DOMContentLoaded', function() {
+                window.i18n.applyTranslations();
+            });
+        }
+
         console.log('✅ Prospecting Leads script loaded');
     </script>
 
@@ -741,7 +748,7 @@
                 <!-- Approaching Section -->
                 <li class="nav-item has-submenu">
                     <a href="#" class="nav-link submenu-toggle" id="submenu-approaching">
-                        <i class="fas fa-paper-plane"></i>
+                        <i class="fas fa-bullhorn"></i>
                         <span data-i18n="nav.approaching">Approaching</span>
                         <i class="fas fa-chevron-down submenu-arrow"></i>
                     </a>
@@ -750,6 +757,12 @@
                             <a href="approaching-whatsapp.html" class="nav-link">
                                 <i class="fab fa-whatsapp"></i>
                                 <span data-i18n="nav.whatsapp">WhatsApp</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="approaching-linkedin.html" class="nav-link">
+                                <i class="fab fa-linkedin"></i>
+                                <span data-i18n="nav.linkedin">LinkedIn</span>
                             </a>
                         </li>
                         <li class="nav-item">
@@ -767,36 +780,27 @@
                         <li class="nav-item">
                             <a href="approaching-x.html" class="nav-link">
                                 <i class="fab fa-x-twitter"></i>
-                                <span data-i18n="nav.x">X (Twitter)</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="approaching-linkedin.html" class="nav-link">
-                                <i class="fab fa-linkedin"></i>
-                                <span data-i18n="nav.linkedin">LinkedIn</span>
+                                <span data-i18n="nav.x">X</span>
                             </a>
                         </li>
                     </ul>
                 </li>
 
-                <!-- Analytics -->
+                <!-- Analytics & Support Section -->
                 <li class="nav-item">
                     <a href="analytics.html" class="nav-link">
                         <i class="fas fa-chart-bar"></i>
                         <span data-i18n="nav.analytics">Analytics</span>
                     </a>
                 </li>
-
-                <!-- Support -->
                 <li class="nav-item">
                     <a href="support.html" class="nav-link">
-                        <i class="fas fa-life-ring"></i>
+                        <i class="fas fa-headset"></i>
                         <span data-i18n="nav.support">Support</span>
                     </a>
                 </li>
             </ul>
         </nav>
-
         <div class="sidebar-footer">
             <div class="user-profile">
                 <div class="user-avatar">
@@ -806,7 +810,7 @@
                     <div class="user-name" data-i18n="nav.agencyOwner">Agency Owner</div>
                     <div class="user-email">admin@rarity.com</div>
                 </div>
-                <button class="logout-btn" id="sign-out-btn">
+                <button class="logout-btn" id="sign-out-btn" data-tooltip="Sign Out">
                     <i class="fas fa-sign-out-alt"></i>
                 </button>
             </div>

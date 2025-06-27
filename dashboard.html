@@ -351,6 +351,13 @@
             }
         }
 
+        // Inicializar i18n ao carregar a página
+        if (window.i18n && typeof window.i18n.applyTranslations === 'function') {
+            document.addEventListener('DOMContentLoaded', function() {
+                window.i18n.applyTranslations();
+            });
+        }
+
         console.log('✅ Dashboard script loaded');
     </script>
 </head>
@@ -367,7 +374,7 @@
         <nav class="sidebar-nav">
             <!-- Main Navigation Section -->
             <div class="nav-section">
-                <div class="nav-section-title">Main</div>
+                <div class="nav-section-title" data-i18n="nav.main">Main</div>
                 <ul class="nav-menu">
                     <!-- Dashboard -->
                     <li class="nav-item active">
@@ -383,7 +390,7 @@
 
             <!-- Prospecting Section -->
             <div class="nav-section">
-                <div class="nav-section-title">Prospecting</div>
+                <div class="nav-section-title" data-i18n="nav.prospecting">Prospecting</div>
                 <ul class="nav-menu">
                     <li class="nav-item">
                         <a href="prospecting-leads.html" class="nav-link" id="menu-leads">
@@ -407,29 +414,27 @@
 
             <!-- Outreach Section -->
             <div class="nav-section">
-                <div class="nav-section-title">Outreach</div>
+                <div class="nav-section-title" data-i18n="nav.outreach">Outreach</div>
                 <ul class="nav-menu">
                     <li class="nav-item">
                         <a href="approaching-whatsapp.html" class="nav-link" id="menu-whatsapp">
-                            <div class="nav-icon whatsapp">
+                            <div class="nav-icon">
                                 <i class="fab fa-whatsapp"></i>
                             </div>
                             <span class="nav-text" data-i18n="nav.whatsapp">WhatsApp</span>
-                            <span class="nav-status active"></span>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a href="approaching-linkedin.html" class="nav-link" id="menu-linkedin">
-                            <div class="nav-icon linkedin">
+                            <div class="nav-icon">
                                 <i class="fab fa-linkedin"></i>
                             </div>
                             <span class="nav-text" data-i18n="nav.linkedin">LinkedIn</span>
-                            <span class="nav-status active"></span>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a href="approaching-instagram.html" class="nav-link" id="menu-instagram">
-                            <div class="nav-icon instagram">
+                            <div class="nav-icon">
                                 <i class="fab fa-instagram"></i>
                             </div>
                             <span class="nav-text" data-i18n="nav.instagram">Instagram</span>
@@ -437,7 +442,7 @@
                     </li>
                     <li class="nav-item">
                         <a href="approaching-facebook.html" class="nav-link" id="menu-facebook">
-                            <div class="nav-icon facebook">
+                            <div class="nav-icon">
                                 <i class="fab fa-facebook"></i>
                             </div>
                             <span class="nav-text" data-i18n="nav.facebook">Facebook</span>
@@ -445,10 +450,10 @@
                     </li>
                     <li class="nav-item">
                         <a href="approaching-x.html" class="nav-link" id="menu-x">
-                            <div class="nav-icon x-twitter">
+                            <div class="nav-icon">
                                 <i class="fab fa-x-twitter"></i>
                             </div>
-                            <span class="nav-text" data-i18n="nav.x">X (Twitter)</span>
+                            <span class="nav-text" data-i18n="nav.x">X</span>
                         </a>
                     </li>
                 </ul>
@@ -456,12 +461,12 @@
 
             <!-- Analytics & Support Section -->
             <div class="nav-section">
-                <div class="nav-section-title">Analytics & Support</div>
+                <div class="nav-section-title" data-i18n="nav.analyticsSupport">Analytics & Support</div>
                 <ul class="nav-menu">
                     <li class="nav-item">
                         <a href="analytics.html" class="nav-link" id="menu-analytics">
                             <div class="nav-icon">
-                                <i class="fas fa-chart-line"></i>
+                                <i class="fas fa-chart-bar"></i>
                             </div>
                             <span class="nav-text" data-i18n="nav.analytics">Analytics</span>
                         </a>
