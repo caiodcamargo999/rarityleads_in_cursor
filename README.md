@@ -1,11 +1,11 @@
 # 🚀 Rarity Leads - AI-Powered Lead Generation Platform
 
-[![Netlify Status](https://api.netlify.com/api/v1/badges/your-badge-id/deploy-status)](https://app.netlify.com/sites/your-site-name/deploys)
-[![GitHub](https://img.shields.io/github/license/yourusername/rarity-leads)](LICENSE)
+[![Netlify Status](https://api.netlify.com/api/v1/badges/your-badge-id/deploy-status)](https://rarityleads.netlify.app/deploys)
+[![GitHub](https://img.shields.io/github/license/caiodcamargo999/rarity-leads)](LICENSE)
 [![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](package.json)
 
 ## 🌐 Live Demo
-**🔗 [https://your-site-name.netlify.app](https://your-site-name.netlify.app)**
+**🔗 (https://rarityleads.netlify.app/)**
 
 Rarity Leads is a modern, AI-native platform for automated lead acquisition and qualification with bulletproof authentication. Built with pure HTML, CSS, and JavaScript, featuring multi-channel outreach capabilities and comprehensive lead management.
 
