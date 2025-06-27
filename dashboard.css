@@ -2,34 +2,6 @@
 :root {
     --sidebar-width: 280px;
     --header-height: 70px;
-    --primary-color: #8B5CF6;
-    --secondary-color: #EC4899;
-    --success-color: #10B981;
-    --warning-color: #F59E0B;
-    --error-color: #EF4444;
-    --info-color: #3B82F6;
-
-    --bg-primary: #0F0F23;
-    --bg-secondary: #1A1B3A;
-    --bg-tertiary: #252653;
-    --bg-card: rgba(255, 255, 255, 0.05);
-    --bg-hover: rgba(255, 255, 255, 0.1);
-
-    --text-primary: #FFFFFF;
-    --text-secondary: #94A3B8;
-    --text-muted: #64748B;
-
-    --border-color: rgba(255, 255, 255, 0.1);
-    --border-hover: rgba(139, 92, 246, 0.3);
-
-    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-
-    --gradient-primary: linear-gradient(135deg, #8B5CF6 0%, #EC4899 100%);
-    --gradient-secondary: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%);
-    --gradient-success: linear-gradient(135deg, #10B981 0%, #059669 100%);
 }
 
 /* Dashboard Body */
@@ -54,7 +26,7 @@
         rgba(30, 41, 59, 0.95) 50%,
         rgba(15, 23, 42, 0.98) 100%);
     backdrop-filter: blur(24px);
-    border-right: 1px solid rgba(148, 163, 184, 0.08);
+    border-right: 1px solid var(--border-color);
     z-index: 1000;
     display: flex;
     flex-direction: column;
@@ -72,13 +44,7 @@
     left: 0;
     width: 3px;
     height: 100%;
-    background: linear-gradient(180deg,
-        transparent 0%,
-        rgba(139, 92, 246, 0.8) 15%,
-        rgba(59, 130, 246, 0.8) 35%,
-        rgba(16, 185, 129, 0.8) 65%,
-        rgba(245, 158, 11, 0.8) 85%,
-        transparent 100%);
+    background: var(--primary-gradient);
     animation: sidebarAccent 6s ease-in-out infinite;
 }
 
@@ -95,7 +61,7 @@
 
 .sidebar-header {
     padding: 2rem 1.5rem;
-    border-bottom: 1px solid rgba(148, 163, 184, 0.08);
+    border-bottom: 1px solid var(--border-color);
     position: relative;
     background: linear-gradient(135deg,
         rgba(139, 92, 246, 0.05) 0%,
@@ -109,11 +75,7 @@
     left: 1.5rem;
     right: 1.5rem;
     height: 1px;
-    background: linear-gradient(90deg,
-        transparent,
-        rgba(139, 92, 246, 0.4),
-        rgba(59, 130, 246, 0.4),
-        transparent);
+    background: var(--primary-gradient);
 }
 
 .logo-container {
@@ -130,10 +92,7 @@
 .logo-icon {
     width: 48px;
     height: 48px;
-    background: linear-gradient(135deg,
-        #8B5CF6 0%,
-        #EC4899 50%,
-        #F59E0B 100%);
+    background: var(--primary-gradient);
     border-radius: 16px;
     display: flex;
     align-items: center;
@@ -172,7 +131,7 @@
 .logo-text {
     font-size: 1.5rem;
     font-weight: 900;
-    background: linear-gradient(135deg, #ffffff 0%, #e2e8f0 100%);
+    background: linear-gradient(135deg, var(--white) 0%, var(--gray-200) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -227,7 +186,7 @@
 
 .nav-link:hover {
     color: var(--text-primary);
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--bg-hover);
     transform: translateX(4px);
 }
 
@@ -257,18 +216,18 @@
     align-items: center;
     justify-content: center;
     border-radius: 10px;
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--bg-hover);
     transition: all 0.3s ease;
     flex-shrink: 0;
 }
 
 .nav-link:hover .nav-icon {
-    background: rgba(255, 255, 255, 0.1);
+    background: var(--bg-hover);
     transform: scale(1.05);
 }
 
 .nav-item.active .nav-icon {
-    background: var(--gradient-primary);
+    background: var(--primary-gradient);
     color: white;
     box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
 }
@@ -311,7 +270,7 @@
 
 /* Navigation Badges */
 .nav-badge {
-    background: var(--gradient-primary);
+    background: var(--primary-gradient);
     color: white;
     font-size: 0.75rem;
     font-weight: 600;
@@ -352,12 +311,12 @@
 }
 
 .sidebar-nav::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.1);
+    background: var(--bg-hover);
     border-radius: 2px;
 }
 
 .sidebar-nav::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 255, 255, 0.2);
+    background: var(--bg-hover);
 }
 
 /* Sidebar Footer */
@@ -376,7 +335,7 @@
 .user-avatar {
     width: 40px;
     height: 40px;
-    background: var(--gradient-secondary);
+    background: var(--secondary-gradient);
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -513,7 +472,7 @@
         rgba(15, 23, 42, 0.95) 0%,
         rgba(30, 41, 59, 0.98) 100%);
     backdrop-filter: blur(24px);
-    border-bottom: 1px solid rgba(148, 163, 184, 0.08);
+    border-bottom: 1px solid var(--border-color);
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -532,11 +491,7 @@
     left: 0;
     right: 0;
     height: 1px;
-    background: linear-gradient(90deg,
-        transparent,
-        rgba(139, 92, 246, 0.3),
-        rgba(59, 130, 246, 0.3),
-        transparent);
+    background: var(--primary-gradient);
 }
 
 .header-left {
@@ -575,10 +530,10 @@
 }
 
 .breadcrumb-item {
-    color: rgba(255, 255, 255, 0.9);
+    color: var(--text-primary);
     font-weight: 700;
     font-size: 1.125rem;
-    background: linear-gradient(135deg, #ffffff 0%, #e2e8f0 100%);
+    background: linear-gradient(135deg, var(--white) 0%, var(--gray-200) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -599,11 +554,9 @@
 
 .header-btn {
     position: relative;
-    background: linear-gradient(135deg,
-        rgba(255, 255, 255, 0.05) 0%,
-        rgba(255, 255, 255, 0.02) 100%);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    color: rgba(255, 255, 255, 0.7);
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary);
     cursor: pointer;
     padding: 0.875rem;
     border-radius: 14px;
@@ -615,11 +568,9 @@
 }
 
 .header-btn:hover {
-    color: rgba(255, 255, 255, 0.95);
-    background: linear-gradient(135deg,
-        rgba(255, 255, 255, 0.1) 0%,
-        rgba(255, 255, 255, 0.05) 100%);
-    border-color: rgba(139, 92, 246, 0.3);
+    color: var(--text-primary);
+    background: var(--bg-hover);
+    border-color: var(--border-hover);
     transform: translateY(-2px);
     box-shadow:
         0 8px 24px rgba(139, 92, 246, 0.15),
@@ -632,9 +583,9 @@
     right: 6px;
     width: 10px;
     height: 10px;
-    background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
+    background: var(--secondary-gradient);
     border-radius: 50%;
-    border: 2px solid rgba(15, 23, 42, 0.8);
+    border: 2px solid var(--bg-primary);
     box-shadow:
         0 0 12px rgba(239, 68, 68, 0.6),
         0 2px 4px rgba(0, 0, 0, 0.2);
@@ -661,11 +612,9 @@
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    background: linear-gradient(135deg,
-        rgba(255, 255, 255, 0.08) 0%,
-        rgba(255, 255, 255, 0.04) 100%);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    color: rgba(255, 255, 255, 0.8);
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary);
     padding: 0.75rem 1rem;
     border-radius: 12px;
     cursor: pointer;
@@ -676,11 +625,9 @@
 }
 
 .lang-toggle:hover {
-    background: linear-gradient(135deg,
-        rgba(255, 255, 255, 0.12) 0%,
-        rgba(255, 255, 255, 0.06) 100%);
-    border-color: rgba(139, 92, 246, 0.3);
-    color: rgba(255, 255, 255, 0.95);
+    background: var(--bg-hover);
+    border-color: var(--border-hover);
+    color: var(--text-primary);
     transform: translateY(-1px);
     box-shadow:
         0 6px 20px rgba(139, 92, 246, 0.1),
@@ -691,11 +638,9 @@
     position: absolute;
     top: calc(100% + 0.5rem);
     right: 0;
-    background: linear-gradient(135deg,
-        rgba(15, 23, 42, 0.98) 0%,
-        rgba(30, 41, 59, 0.95) 100%);
+    background: var(--bg-secondary);
     backdrop-filter: blur(24px);
-    border: 1px solid rgba(148, 163, 184, 0.15);
+    border: 1px solid var(--border-color);
     border-radius: 16px;
     padding: 0.5rem;
     min-width: 140px;
@@ -721,7 +666,7 @@
     align-items: center;
     gap: 0.75rem;
     padding: 0.75rem 1rem;
-    color: rgba(255, 255, 255, 0.7);
+    color: var(--text-secondary);
     cursor: pointer;
     border-radius: 12px;
     transition: all 0.2s ease;
@@ -730,19 +675,15 @@
 }
 
 .lang-option:hover {
-    background: linear-gradient(135deg,
-        rgba(139, 92, 246, 0.15) 0%,
-        rgba(59, 130, 246, 0.1) 100%);
-    color: rgba(255, 255, 255, 0.95);
+    background: var(--bg-hover);
+    color: var(--text-primary);
     transform: translateX(2px);
 }
 
 .lang-option.active {
-    background: linear-gradient(135deg,
-        rgba(139, 92, 246, 0.2) 0%,
-        rgba(59, 130, 246, 0.15) 100%);
-    color: #ffffff;
-    border: 1px solid rgba(139, 92, 246, 0.3);
+    background: var(--primary-gradient);
+    color: var(--white);
+    border: 1px solid var(--border-color);
 }
 
 .lang-flag {
@@ -805,7 +746,7 @@
         rgba(59, 130, 246, 0.08) 50%,
         rgba(16, 185, 129, 0.06) 100%);
     border-radius: 32px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--border-color);
     position: relative;
     overflow: hidden;
     backdrop-filter: blur(20px);
@@ -847,7 +788,7 @@
 .welcome-title {
     font-size: 3rem;
     font-weight: 800;
-    background: linear-gradient(135deg, #ffffff 0%, #e2e8f0 100%);
+    background: linear-gradient(135deg, var(--white) 0%, var(--gray-200) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -858,7 +799,7 @@
 }
 
 .welcome-subtitle {
-    color: rgba(255, 255, 255, 0.8);
+    color: var(--text-primary);
     font-size: 1.25rem;
     font-weight: 500;
     line-height: 1.4;
@@ -902,7 +843,7 @@
 
 .stat-highlight .stat-label {
     font-size: 0.9rem;
-    color: rgba(255, 255, 255, 0.9);
+    color: var(--text-primary);
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.05em;
@@ -980,11 +921,8 @@
 }
 
 .action-btn.primary {
-    background: linear-gradient(135deg,
-        #8B5CF6 0%,
-        #EC4899 50%,
-        #F59E0B 100%);
-    color: white;
+    background: var(--primary-gradient);
+    color: var(--white);
     box-shadow:
         0 12px 40px rgba(139, 92, 246, 0.4),
         0 4px 12px rgba(236, 72, 153, 0.3),
@@ -1013,7 +951,7 @@
 
 .action-btn.primary .btn-icon {
     background: rgba(255, 255, 255, 0.25);
-    color: white;
+    color: var(--white);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
@@ -1026,11 +964,9 @@
 }
 
 .action-btn.secondary {
-    background: linear-gradient(135deg,
-        rgba(255, 255, 255, 0.1) 0%,
-        rgba(255, 255, 255, 0.05) 100%);
+    background: var(--bg-card);
     color: var(--text-primary);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    border: 1px solid var(--border-color);
     backdrop-filter: blur(30px);
     box-shadow:
         0 8px 32px rgba(0, 0, 0, 0.1),
@@ -1054,10 +990,8 @@
 }
 
 .action-btn.secondary:hover {
-    background: linear-gradient(135deg,
-        rgba(255, 255, 255, 0.15) 0%,
-        rgba(255, 255, 255, 0.08) 100%);
-    border-color: rgba(139, 92, 246, 0.4);
+    background: var(--bg-hover);
+    border-color: var(--border-hover);
     transform: translateY(-4px) scale(1.01);
     box-shadow:
         0 16px 48px rgba(139, 92, 246, 0.25),
@@ -1073,10 +1007,8 @@
 }
 
 .stat-card {
-    background: linear-gradient(135deg,
-        rgba(255, 255, 255, 0.1) 0%,
-        rgba(255, 255, 255, 0.05) 100%);
-    border: 1px solid rgba(255, 255, 255, 0.15);
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
     border-radius: 28px;
     padding: 2.5rem;
     transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
@@ -1128,7 +1060,7 @@
 
 .stat-card:hover {
     transform: translateY(-8px) scale(1.02);
-    border-color: rgba(255, 255, 255, 0.25);
+    border-color: var(--border-hover);
     box-shadow:
         0 32px 64px rgba(0, 0, 0, 0.15),
         0 16px 32px rgba(0, 0, 0, 0.1),
@@ -1140,7 +1072,7 @@
         rgba(139, 92, 246, 0.2) 0%,
         rgba(139, 92, 246, 0.1) 50%,
         rgba(99, 102, 241, 0.08) 100%);
-    border-color: rgba(139, 92, 246, 0.3);
+    border-color: var(--border-hover);
     box-shadow:
         0 8px 32px rgba(139, 92, 246, 0.2),
         inset 0 1px 0 rgba(255, 255, 255, 0.1);
@@ -1151,7 +1083,7 @@
         rgba(16, 185, 129, 0.2) 0%,
         rgba(16, 185, 129, 0.1) 50%,
         rgba(5, 150, 105, 0.08) 100%);
-    border-color: rgba(16, 185, 129, 0.3);
+    border-color: var(--success-color);
     box-shadow:
         0 8px 32px rgba(16, 185, 129, 0.2),
         inset 0 1px 0 rgba(255, 255, 255, 0.1);
@@ -1162,7 +1094,7 @@
         rgba(245, 158, 11, 0.2) 0%,
         rgba(245, 158, 11, 0.1) 50%,
         rgba(217, 119, 6, 0.08) 100%);
-    border-color: rgba(245, 158, 11, 0.3);
+    border-color: var(--warning-color);
     box-shadow:
         0 8px 32px rgba(245, 158, 11, 0.2),
         inset 0 1px 0 rgba(255, 255, 255, 0.1);
@@ -1173,7 +1105,7 @@
         rgba(59, 130, 246, 0.2) 0%,
         rgba(59, 130, 246, 0.1) 50%,
         rgba(37, 99, 235, 0.08) 100%);
-    border-color: rgba(59, 130, 246, 0.3);
+    border-color: var(--info-color);
     box-shadow:
         0 8px 32px rgba(59, 130, 246, 0.2),
         inset 0 1px 0 rgba(255, 255, 255, 0.1);
@@ -1189,7 +1121,7 @@
 .stat-icon {
     width: 48px;
     height: 48px;
-    background: rgba(255, 255, 255, 0.1);
+    background: var(--bg-hover);
     border-radius: 14px;
     display: flex;
     align-items: center;
@@ -1230,7 +1162,7 @@
 .stat-value {
     font-size: 3rem;
     font-weight: 900;
-    background: linear-gradient(135deg, #ffffff 0%, #e2e8f0 100%);
+    background: linear-gradient(135deg, var(--white) 0%, var(--gray-200) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -1243,7 +1175,7 @@
 
 .stat-label {
     font-size: 0.9rem;
-    color: rgba(255, 255, 255, 0.8);
+    color: var(--text-primary);
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.08em;
@@ -1259,10 +1191,8 @@
 }
 
 .analytics-card {
-    background: linear-gradient(135deg,
-        rgba(255, 255, 255, 0.08) 0%,
-        rgba(255, 255, 255, 0.04) 100%);
-    border: 1px solid rgba(255, 255, 255, 0.15);
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
     border-radius: 32px;
     padding: 2.5rem;
     backdrop-filter: blur(40px);
@@ -1296,7 +1226,7 @@
 
 .analytics-card:hover {
     transform: translateY(-8px) scale(1.01);
-    border-color: rgba(255, 255, 255, 0.25);
+    border-color: var(--border-hover);
     box-shadow:
         0 32px 80px rgba(0, 0, 0, 0.15),
         0 16px 32px rgba(139, 92, 246, 0.1),
@@ -1313,7 +1243,7 @@
 .header-content h3 {
     font-size: 1.75rem;
     font-weight: 800;
-    background: linear-gradient(135deg, #ffffff 0%, #e2e8f0 100%);
+    background: linear-gradient(135deg, var(--white) 0%, var(--gray-200) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -1325,7 +1255,7 @@
 
 .header-content p {
     font-size: 1rem;
-    color: rgba(255, 255, 255, 0.7);
+    color: var(--text-secondary);
     font-weight: 600;
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
@@ -1337,9 +1267,9 @@
 
 .period-select {
     padding: 0.75rem 1rem;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--border-color);
     border-radius: 12px;
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--bg-card);
     color: var(--text-primary);
     font-size: 0.875rem;
     font-weight: 500;
@@ -1348,15 +1278,15 @@
 }
 
 .period-select:hover {
-    background: rgba(255, 255, 255, 0.08);
-    border-color: rgba(255, 255, 255, 0.15);
+    background: var(--bg-hover);
+    border-color: var(--border-hover);
 }
 
 .chart-content {
     height: 320px;
     position: relative;
     border-radius: 16px;
-    background: rgba(255, 255, 255, 0.02);
+    background: var(--bg-card);
     padding: 1rem;
 }
 
@@ -1372,15 +1302,15 @@
 .funnel-stage {
     position: relative;
     padding: 1.5rem;
-    background: rgba(255, 255, 255, 0.02);
+    background: var(--bg-card);
     border-radius: 16px;
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-color);
     transition: all 0.3s ease;
 }
 
 .funnel-stage:hover {
-    background: rgba(255, 255, 255, 0.04);
-    border-color: rgba(255, 255, 255, 0.1);
+    background: var(--bg-hover);
+    border-color: var(--border-hover);
 }
 
 .stage-progress {
@@ -1388,7 +1318,7 @@
     top: 0;
     left: 0;
     height: 4px;
-    background: var(--gradient-primary);
+    background: var(--primary-gradient);
     border-radius: 2px 2px 0 0;
     width: var(--progress);
     transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
@@ -1419,7 +1349,7 @@
     color: var(--text-secondary);
     font-size: 0.875rem;
     padding: 0.25rem 0.75rem;
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--bg-card);
     border-radius: 12px;
 }
 
@@ -1504,16 +1434,16 @@
     align-items: center;
     gap: 1rem;
     padding: 1.25rem;
-    background: rgba(255, 255, 255, 0.02);
+    background: var(--bg-card);
     border-radius: 16px;
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-color);
     transition: all 0.3s ease;
     position: relative;
 }
 
 .activity-item:hover {
-    background: rgba(255, 255, 255, 0.05);
-    border-color: rgba(255, 255, 255, 0.1);
+    background: var(--bg-hover);
+    border-color: var(--border-hover);
     transform: translateX(4px);
 }
 
@@ -1663,13 +1593,13 @@
     align-items: center;
     gap: 1rem;
     padding: 1rem;
-    background: rgba(255, 255, 255, 0.02);
+    background: var(--bg-card);
     border-radius: 12px;
     transition: all 0.2s ease;
 }
 
 .lead-item:hover {
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--bg-hover);
     transform: translateY(-1px);
 }
 
@@ -1803,7 +1733,7 @@
 }
 
 .campaign-card {
-    background: rgba(255, 255, 255, 0.02);
+    background: var(--bg-card);
     border: 1px solid var(--border-color);
     border-radius: 12px;
     padding: 1.5rem;
@@ -1811,7 +1741,7 @@
 }
 
 .campaign-card:hover {
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--bg-hover);
     border-color: var(--border-hover);
     transform: translateY(-2px);
 }
