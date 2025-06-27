@@ -208,9 +208,9 @@ class AuthGuard {
     isPublicPage() {
         const publicPaths = [
             '/',
-            '/home.html',
-            '/register.html',
-            '/login.html'
+            window.AppConfig.routes.home,
+            window.AppConfig.routes.register,
+            window.AppConfig.routes.login
         ];
 
         return publicPaths.includes(window.location.pathname);
@@ -218,28 +218,15 @@ class AuthGuard {
 
     isAuthPage() {
         const authPaths = [
-            '/register.html',
-            '/login.html'
+            window.AppConfig.routes.register,
+            window.AppConfig.routes.login
         ];
 
         return authPaths.includes(window.location.pathname);
     }
 
     isProtectedPage() {
-        const protectedPaths = [
-            '/dashboard.html',
-            '/analytics.html',
-            '/support.html',
-            '/prospecting-leads.html',
-            '/prospecting-companies.html',
-            '/approaching-whatsapp.html',
-            '/approaching-instagram.html',
-            '/approaching-facebook.html',
-            '/approaching-x.html',
-            '/approaching-linkedin.html'
-        ];
-        
-        return protectedPaths.includes(window.location.pathname);
+        return window.AppConfig.auth.protectedRoutes.includes(window.location.pathname);
     }
 
     // Public methods for external use
