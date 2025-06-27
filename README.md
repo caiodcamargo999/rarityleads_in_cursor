@@ -5,7 +5,7 @@
 [![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](package.json)
 
 ## 🌐 Live Demo
-**🔗 ([https://rarityleads.netlify.app/])**
+**🔗 (https://rarityleads.netlify.app/)**
 
 Rarity Leads is a modern, AI-native platform for automated lead acquisition and qualification with bulletproof authentication. Built with pure HTML, CSS, and JavaScript, featuring multi-channel outreach capabilities and comprehensive lead management.
 
