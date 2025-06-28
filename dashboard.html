@@ -10,11 +10,24 @@
     <script src="https://unpkg.com/feather-icons"></script>
 </head>
 <body>
+    <header class="main-header">
+        <div class="header-left">
+            <button class="menu-toggle-btn" id="menu-toggle-btn" aria-label="Open menu">
+                <i data-feather="menu"></i>
+            </button>
+            <img src="rarity-logo.jpg" alt="Rarity Leads Logo" class="header-logo">
+        </div>
+        <div class="header-center">
+            <h1 class="dashboard-title" data-i18n="dashboard.header">Client Acquisition Dashboard</h1>
+        </div>
+        <div class="header-right">
+            <div class="language-selector" id="language-selector"></div>
+            <div class="user-email" id="user-email" aria-label="User email">user@email.com</div>
+            <button class="logout-btn" id="logout-btn" data-i18n="auth.logout">Logout</button>
+        </div>
+    </header>
     <div class="dashboard-layout">
-        <aside class="sidebar" role="navigation" aria-label="Main navigation">
-            <div class="sidebar-header">
-                <div class="sidebar-logo"><img src="rarity-logo.jpg" alt="Rarity Leads Logo" style="height:40px;width:auto;object-fit:contain;display:block;margin:0 auto;"></div>
-            </div>
+        <aside class="sidebar" id="sidebar" role="navigation" aria-label="Main navigation">
             <nav class="sidebar-nav">
                 <ul>
                     <li><a href="dashboard.html" class="active"><i class="nav-icon" data-feather="home"></i><span data-i18n="nav.dashboard">Dashboard</span></a></li>
@@ -29,20 +42,8 @@
                     <li><a href="support.html"><i class="nav-icon" data-feather="help-circle"></i><span data-i18n="nav.support">Support</span></a></li>
                 </ul>
             </nav>
-            <div class="sidebar-footer">
-                <button class="logout-btn" id="logout-btn" data-i18n="auth.logout">Logout</button>
-            </div>
         </aside>
         <main class="main-content" role="main">
-            <header class="dashboard-header">
-                <button class="menu-toggle-btn" id="menu-toggle-btn" aria-label="Toggle menu">
-                    <i data-feather="menu"></i>
-                </button>
-                <h1 class="dashboard-title" data-i18n="dashboard.header">Client Acquisition Dashboard</h1>
-                <div class="header-actions">
-                    <div class="user-email" id="user-email" aria-label="User email">user@email.com</div>
-                </div>
-            </header>
             <section class="metrics-grid" role="region" aria-label="Dashboard metrics">
                 <div class="metric-card" role="article">
                     <div class="metric-label" data-i18n="dashboard.metrics.leads">Qualified Leads</div>
@@ -76,129 +77,40 @@
                     </div>
                 </div>
             </div>
-            <section id="hidden-section" class="hidden-section" style="display: none;" role="region" aria-label="Hidden content">
-                <h2 data-i18n="dashboard.hiddenSection.title">This is a Hidden Section</h2>
-                <p data-i18n="dashboard.hiddenSection.paragraph">This section is initially hidden and is revealed by clicking the button in the header.</p>
-            </section>
         </main>
     </div>
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="app-config.js"></script>
     <script src="i18n.js"></script>
     <script>
         feather.replace();
-
-        // Dashboard Module
-        const Dashboard = {
-            supabase: null,
-            currentLanguage: 'en',
-            
-            async init() {
-                this.supabase = window.AppUtils ? window.AppUtils.initSupabase() : null;
-                await this.checkAuth();
-                await this.initI18n();
-                this.bindEvents();
-                this.loadMetrics();
-                feather.replace(); // Re-run feather after dynamic content is loaded
-            },
-            
-            async checkAuth() {
-                if (!this.supabase) return;
-                const { data: { session } } = await this.supabase.auth.getSession();
-                if (!session || !session.user || !session.user.email_confirmed_at) {
-                    window.location.href = '/register.html';
-                    return;
-                }
-                document.getElementById('user-email').textContent = session.user.email;
-            },
-            
-            async initI18n() {
-                if (window.i18n) {
-                    this.currentLanguage = await window.i18n.detectLanguage();
-                    await window.i18n.translatePage();
-                }
-            },
-            
-            bindEvents() {
-                // Logout
-                document.getElementById('logout-btn').addEventListener('click', () => this.logout());
-
-                // Menu toggle
-                const menuToggleBtn = document.getElementById('menu-toggle-btn');
-                const sidebar = document.querySelector('.sidebar');
-                menuToggleBtn.addEventListener('click', () => {
-                    sidebar.classList.toggle('open');
-                });
-                
-                // Tabs
-                const tabFunnel = document.getElementById('tab-funnel');
-                const tabCalendar = document.getElementById('tab-calendar');
-                const funnelView = document.getElementById('funnel-view');
-                const calendarView = document.getElementById('calendar-view');
-                
-                tabFunnel.addEventListener('click', () => this.switchTab('funnel', tabFunnel, tabCalendar, funnelView, calendarView));
-                tabCalendar.addEventListener('click', () => this.switchTab('calendar', tabCalendar, tabFunnel, calendarView, funnelView));
-                
-                // Hidden section toggle
-                const showHiddenSectionBtn = document.getElementById('show-hidden-section-btn');
-                const hiddenSection = document.getElementById('hidden-section');
-
-                showHiddenSectionBtn.addEventListener('click', () => {
-                    const isHidden = hiddenSection.style.display === 'none';
-                    hiddenSection.style.display = isHidden ? 'block' : 'none';
-                    
-                    const newTextKey = isHidden ? 'dashboard.buttons.hideHiddenSection' : 'dashboard.buttons.showHiddenSection';
-                    if (window.i18n) {
-                        const newText = window.i18n.t(newTextKey);
-                        showHiddenSectionBtn.textContent = newText;
-                        showHiddenSectionBtn.setAttribute('data-i18n', newTextKey);
-                    } else {
-                        showHiddenSectionBtn.textContent = isHidden ? 'Hide Section' : 'Show Hidden Section';
-                    }
-                });
-
-                // Keyboard navigation
-                document.addEventListener('keydown', (e) => this.handleKeyboard(e));
-            },
-            
-            switchTab(activeTab, activeButton, inactiveButton, activeView, inactiveView) {
-                activeButton.classList.add('active');
-                activeButton.setAttribute('aria-selected', 'true');
-                inactiveButton.classList.remove('active');
-                inactiveButton.setAttribute('aria-selected', 'false');
-                activeView.style.display = '';
-                inactiveView.style.display = 'none';
-            },
-            
-            handleKeyboard(e) {
-                // Tab navigation with arrow keys
-                if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
-                    const tabs = document.querySelectorAll('.tab');
-                    const activeTab = document.querySelector('.tab.active');
-                    const currentIndex = Array.from(tabs).indexOf(activeTab);
-                    
-                    if (e.key === 'ArrowLeft' && currentIndex > 0) {
-                        tabs[currentIndex - 1].click();
-                    } else if (e.key === 'ArrowRight' && currentIndex < tabs.length - 1) {
-                        tabs[currentIndex + 1].click();
-                    }
-                }
-            },
-            
-            async logout() {
-                if (this.supabase) await this.supabase.auth.signOut();
-                window.location.href = '/register.html';
-            },
-            
-            async loadMetrics() {
-                // Placeholder for real data loading
-                // In production, this would fetch from Supabase
-                console.log('Loading dashboard metrics...');
+        // Sidebar mobile drawer logic
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('sidebar-overlay');
+        const menuBtn = document.getElementById('menu-toggle-btn');
+        menuBtn.addEventListener('click', () => {
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('active');
+        });
+        overlay.addEventListener('click', () => {
+            sidebar.classList.remove('open');
+            overlay.classList.remove('active');
+        });
+        // i18n and user info
+        document.addEventListener('DOMContentLoaded', async () => {
+            if (window.i18n) {
+                await window.i18n.translatePage();
             }
-        };
-        
-        // Initialize dashboard when DOM is ready
-        document.addEventListener('DOMContentLoaded', () => Dashboard.init());
+            // User email
+            if (window.AppUtils && window.AppUtils.initSupabase) {
+                const supabase = window.AppUtils.initSupabase();
+                const { data: { session } } = await supabase.auth.getSession();
+                if (session && session.user) {
+                    document.getElementById('user-email').textContent = session.user.email;
+                }
+            }
+        });
     </script>
 </body>
 </html>
