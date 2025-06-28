@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Rarity Leads - Bem-vindo</title>
+  <title>Rarity Leads - Lead Generation Reinvented</title>
   <link rel="stylesheet" href="rarity-design.css">
   <link rel="stylesheet" href="dashboard.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
@@ -14,51 +14,61 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      background: linear-gradient(135deg, #8B5CF6 0%, #6366F1 100%);
+      background: #18181b;
       font-family: 'Inter', sans-serif;
       color: #fff;
       margin: 0;
     }
     .landing-container {
-      background: rgba(255,255,255,0.07);
-      border-radius: 24px;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.12);
-      padding: 48px 32px;
+      background: rgba(255,255,255,0.04);
+      border-radius: 20px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.10);
+      padding: 56px 40px 40px 40px;
       max-width: 420px;
       text-align: center;
-      margin: 32px 0;
+      margin: 48px 0 24px 0;
     }
     .logo {
-      font-size: 2.5rem;
+      font-size: 2.7rem;
       font-weight: 700;
-      margin-bottom: 12px;
-      letter-spacing: 1px;
+      margin-bottom: 18px;
+      letter-spacing: 0.5px;
       color: #fff;
-      text-shadow: 0 2px 8px rgba(139,92,246,0.2);
+      text-shadow: none;
+    }
+    .headline {
+      font-size: 1.6rem;
+      font-weight: 600;
+      margin-bottom: 18px;
+      color: #fff;
+      line-height: 1.2;
     }
     .subtitle {
-      font-size: 1.1rem;
-      color: #e0e7ff;
-      margin-bottom: 32px;
+      font-size: 1.08rem;
+      color: #cbd5e1;
+      margin-bottom: 36px;
+      font-weight: 400;
     }
     .cta-btn {
       display: block;
       width: 100%;
       margin: 12px 0;
-      padding: 14px 0;
+      padding: 15px 0;
       border: none;
       border-radius: 8px;
-      font-size: 1.1rem;
+      font-size: 1.13rem;
       font-weight: 600;
       cursor: pointer;
-      transition: background 0.2s, color 0.2s;
+      transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+      box-shadow: 0 2px 8px rgba(139,92,246,0.08);
     }
     .cta-btn.signup {
       background: #fff;
-      color: #8B5CF6;
+      color: #18181b;
     }
     .cta-btn.signup:hover {
       background: #ede9fe;
+      color: #8B5CF6;
     }
     .cta-btn.signin {
       background: transparent;
@@ -70,22 +80,36 @@
       color: #8B5CF6;
     }
     .footer {
-      margin-top: 32px;
-      color: #c7d2fe;
-      font-size: 0.95rem;
+      margin-top: 24px;
+      color: #a1a1aa;
+      font-size: 0.98rem;
       text-align: center;
+      letter-spacing: 0.01em;
+    }
+    @media (max-width: 600px) {
+      .landing-container {
+        padding: 32px 12px 24px 12px;
+        max-width: 98vw;
+      }
+      .logo {
+        font-size: 2rem;
+      }
+      .headline {
+        font-size: 1.15rem;
+      }
     }
   </style>
 </head>
 <body>
   <div class="landing-container">
-    <div class="logo">✨ Rarity Leads</div>
-    <div class="subtitle">Aumente suas conversões com a plataforma inteligente de prospecção e análise de leads.</div>
-    <button class="cta-btn signup" onclick="window.location.href='register.html'">Criar Conta</button>
-    <button class="cta-btn signin" onclick="window.location.href='login.html'">Entrar</button>
+    <div class="logo">Rarity Leads</div>
+    <div class="headline">Work Less. Earn More. Enjoy Life.</div>
+    <div class="subtitle">Automate your lead generation. Focus on what matters. Start for free and see how top agencies scale with Rarity Leads.</div>
+    <button class="cta-btn signup" onclick="window.location.href='register.html'">Start For Free</button>
+    <button class="cta-btn signin" onclick="window.location.href='login.html'">Sign In</button>
   </div>
   <div class="footer">
-    &copy; 2024 Rarity Leads. Todos os direitos reservados.
+    &copy; 2024 Rarity Leads. All rights reserved.
   </div>
 </body>
 </html> 
