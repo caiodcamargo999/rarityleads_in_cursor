@@ -24,8 +24,9 @@
                 <span class="logo-text text-gradient">Rarity Leads</span>
             </a>
             <div class="nav-links">
-                <a href="/login.html" class="nav-link">Already have an account? <strong>Sign In</strong></a>
+                <a href="/login.html" class="nav-link" data-i18n="register.alreadyAccount">Already have an account? <strong>Sign In</strong></a>
             </div>
+            <div class="language-selector"></div>
         </div>
     </nav>
 
@@ -34,8 +35,8 @@
         <div class="auth-container">
             <!-- Header -->
             <div class="auth-header">
-                <h1 class="auth-title">Create your free account</h1>
-                <p class="auth-subtitle">Start finding qualified leads in minutes</p>
+                <h1 class="auth-title" data-i18n="register.createAccount">Create your free account</h1>
+                <p class="auth-subtitle" data-i18n="register.subtitle">Start finding qualified leads in minutes</p>
             </div>
 
             <!-- Registration Form -->
@@ -43,7 +44,7 @@
                 <!-- Google Sign Up -->
                 <button type="button" id="google-signup" class="btn btn-google btn-large">
                     <i class="fab fa-google"></i>
-                    <span>Sign up with Google</span>
+                    <span data-i18n="register.signupGoogle">Sign up with Google</span>
                 </button>
 
                 <!-- Divider -->
@@ -54,51 +55,51 @@
                 <!-- Email Sign Up Form -->
                 <form id="email-signup-form" class="auth-form">
                     <div class="form-group">
-                        <label for="email" class="form-label">Email address</label>
+                        <label for="email" class="form-label" data-i18n="register.email">Email address</label>
                         <input 
                             type="email" 
                             id="email" 
                             name="email" 
                             class="form-input" 
-                            placeholder="Enter your email"
+                            placeholder="" data-i18n="register.emailPlaceholder"
                             required
                         >
                     </div>
 
                     <div class="form-group">
-                        <label for="password" class="form-label">Password</label>
+                        <label for="password" class="form-label" data-i18n="register.password">Password</label>
                         <input 
                             type="password" 
                             id="password" 
                             name="password" 
                             class="form-input" 
-                            placeholder="Create a password"
+                            placeholder="" data-i18n="register.passwordPlaceholder"
                             minlength="6"
                             required
                         >
-                        <div class="form-hint">Must be at least 6 characters</div>
+                        <div class="form-hint" data-i18n="register.passwordHint">Must be at least 6 characters</div>
                     </div>
 
                     <div class="form-group">
-                        <label for="confirm-password" class="form-label">Confirm Password</label>
+                        <label for="confirm-password" class="form-label" data-i18n="register.confirmPassword">Confirm Password</label>
                         <input 
                             type="password" 
                             id="confirm-password" 
                             name="confirm-password" 
                             class="form-input" 
-                            placeholder="Confirm your password"
+                            placeholder="" data-i18n="register.confirmPasswordPlaceholder"
                             required
                         >
                     </div>
 
                     <button type="submit" id="email-signup-btn" class="btn btn-primary btn-large">
-                        <span>Create Account</span>
+                        <span data-i18n="register.createAccountBtn">Create Account</span>
                     </button>
                 </form>
 
                 <!-- Terms -->
                 <div class="auth-terms">
-                    <p>By creating an account, you agree to our <a href="#" class="link">Terms of Service</a> and <a href="#" class="link">Privacy Policy</a></p>
+                    <p data-i18n-html="register.terms">By creating an account, you agree to our <a href='terms.html' class='link'>Terms of Service</a> and <a href='privacy.html' class='link'>Privacy Policy</a></p>
                 </div>
             </div>
 
@@ -107,12 +108,12 @@
                 <div class="verification-icon">
                     <i class="fas fa-envelope-circle-check"></i>
                 </div>
-                <h3>Please check your email to verify your account</h3>
-                <p>We've sent a verification link to <strong id="user-email"></strong></p>
-                <p class="verification-note">Click the link in the email to complete your registration and access your dashboard.</p>
+                <h3 data-i18n="register.checkEmail">Please check your email to verify your account</h3>
+                <p data-i18n-html="register.verificationSent">We've sent a verification link to <strong id="user-email"></strong></p>
+                <p class="verification-note" data-i18n="register.verificationNote">Click the link in the email to complete your registration and access your dashboard.</p>
                 <div class="verification-actions">
-                    <button id="resend-email" class="btn btn-outline">Resend Email</button>
-                    <a href="/login.html" class="btn btn-primary">Go to Sign In</a>
+                    <button id="resend-email" class="btn btn-outline" data-i18n="register.resendEmail">Resend Email</button>
+                    <a href="/login.html" class="btn btn-primary" data-i18n="register.goToSignIn">Go to Sign In</a>
                 </div>
             </div>
 
@@ -201,17 +202,17 @@
             
             // Validation
             if (!email || !password || !confirmPassword) {
-                showError('Please fill in all fields');
+                showError('register.fillAllFields');
                 return;
             }
             
             if (password !== confirmPassword) {
-                showError('Passwords do not match');
+                showError('register.passwordsNoMatch');
                 return;
             }
             
             if (password.length < 6) {
-                showError('Password must be at least 6 characters');
+                showError('register.passwordMinLength');
                 return;
             }
 
@@ -320,12 +321,12 @@
         }
 
         // Utility functions
-        function showError(message) {
-            showMessage(message, 'error');
+        function showError(messageKey) {
+            showMessage(window.i18n ? window.i18n.t(messageKey) : messageKey, 'error');
         }
 
-        function showSuccess(message) {
-            showMessage(message, 'success');
+        function showSuccess(messageKey) {
+            showMessage(window.i18n ? window.i18n.t(messageKey) : messageKey, 'success');
         }
 
         function showMessage(message, type) {

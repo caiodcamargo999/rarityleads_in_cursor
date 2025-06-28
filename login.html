@@ -24,8 +24,9 @@
                 <span class="logo-text text-gradient">Rarity Leads</span>
             </a>
             <div class="nav-links">
-                <a href="/register.html" class="nav-link">Don't have an account? <strong>Sign Up</strong></a>
+                <a href="/register.html" class="nav-link" data-i18n="login.noAccount">Don't have an account? <strong>Sign Up</strong></a>
             </div>
+            <div class="language-selector"></div>
         </div>
     </nav>
 
@@ -34,8 +35,8 @@
         <div class="auth-container">
             <!-- Header -->
             <div class="auth-header">
-                <h1 class="auth-title">Welcome back</h1>
-                <p class="auth-subtitle">Sign in to your Rarity Leads account</p>
+                <h1 class="auth-title" data-i18n="login.welcome">Welcome back</h1>
+                <p class="auth-subtitle" data-i18n="login.subtitle">Sign in to your Rarity Leads account</p>
             </div>
 
             <!-- Login Form -->
@@ -43,7 +44,7 @@
                 <!-- Google Sign In -->
                 <button type="button" id="google-signin" class="btn btn-google btn-large">
                     <i class="fab fa-google"></i>
-                    <span>Sign in with Google</span>
+                    <span data-i18n="login.signinGoogle">Sign in with Google</span>
                 </button>
 
                 <!-- Divider -->
@@ -54,25 +55,25 @@
                 <!-- Email Sign In Form -->
                 <form id="email-signin-form" class="auth-form">
                     <div class="form-group">
-                        <label for="email" class="form-label">Email address</label>
+                        <label for="email" class="form-label" data-i18n="login.email">Email address</label>
                         <input 
                             type="email" 
                             id="email" 
                             name="email" 
                             class="form-input" 
-                            placeholder="Enter your email"
+                            placeholder="" data-i18n="login.emailPlaceholder"
                             required
                         >
                     </div>
 
                     <div class="form-group">
-                        <label for="password" class="form-label">Password</label>
+                        <label for="password" class="form-label" data-i18n="login.password">Password</label>
                         <input 
                             type="password" 
                             id="password" 
                             name="password" 
                             class="form-input" 
-                            placeholder="Enter your password"
+                            placeholder="" data-i18n="login.passwordPlaceholder"
                             required
                         >
                     </div>
@@ -83,11 +84,11 @@
                             <span class="checkmark"></span>
                             Remember me
                         </label>
-                        <a href="#" class="link">Forgot password?</a>
+                        <a href="forgot.html" class="link" data-i18n="login.forgot">Forgot password?</a>
                     </div>
 
                     <button type="submit" id="email-signin-btn" class="btn btn-primary btn-large">
-                        <span>Sign In</span>
+                        <span data-i18n="login.signinBtn">Sign In</span>
                     </button>
                 </form>
             </div>
@@ -97,12 +98,12 @@
                 <div class="warning-icon">
                     <i class="fas fa-exclamation-triangle"></i>
                 </div>
-                <h3>Please verify your email to access your account</h3>
-                <p>We've sent a verification link to <strong id="unverified-email"></strong></p>
-                <p class="warning-note">Click the link in the email to verify your account and access your dashboard.</p>
+                <h3 data-i18n="login.verifyEmail">Please verify your email to access your account</h3>
+                <p data-i18n-html="login.verificationSent">We've sent a verification link to <strong id="unverified-email"></strong></p>
+                <p class="warning-note" data-i18n="login.verificationNote">Click the link in the email to verify your account and access your dashboard.</p>
                 <div class="verification-actions">
-                    <button id="resend-verification" class="btn btn-outline">Resend Verification Email</button>
-                    <button id="try-again" class="btn btn-primary">Try Again</button>
+                    <button id="resend-verification" class="btn btn-outline" data-i18n="login.resendVerification">Resend Verification Email</button>
+                    <button id="try-again" class="btn btn-primary" data-i18n="login.tryAgain">Try Again</button>
                 </div>
             </div>
 
@@ -185,7 +186,7 @@
             const password = document.getElementById('password').value;
             
             if (!email || !password) {
-                showError('Please fill in all fields');
+                showError('login.fillAllFields');
                 return;
             }
 
@@ -281,12 +282,12 @@
         }
 
         // Utility functions
-        function showError(message) {
-            showMessage(message, 'error');
+        function showError(messageKey) {
+            showMessage(window.i18n ? window.i18n.t(messageKey) : messageKey, 'error');
         }
 
-        function showSuccess(message) {
-            showMessage(message, 'success');
+        function showSuccess(messageKey) {
+            showMessage(window.i18n ? window.i18n.t(messageKey) : messageKey, 'success');
         }
 
         function showMessage(message, type) {
