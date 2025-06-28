@@ -137,23 +137,20 @@ DEPOIS: "Good morning ✨ Ready to convert more leads today?"
 
 ---
 
-## 🎨 **Sistema de Cores Melhorado**
+## 🎨 **Sistema de Cores Estabelecido**
 
-### **Gradientes:**
-- **Primary**: #8B5CF6 → #EC4899
-- **Success**: #10B981 → #059669
-- **Cards**: Gradientes sutis com 3-5% opacity
+### **Paleta Principal:**
+- **Background Primary**: `#121212` (Quase preto, para o fundo principal)
+- **Background Secondary**: `#1E1E1E` (Cinza escuro, para cards e elementos secundários)
+- **Text Primary**: `#FFFFFF` (Branco, para texto principal e títulos)
+- **Text Secondary**: `#A0A0A0` (Cinza claro, para texto de apoio e legendas)
+- **Accent Primary**: `#BB86FC` (Roxo, para botões primários, links e destaques)
+- **Accent Secondary**: `#03DAC6` (Ciano, para ícones e indicadores de sucesso)
+- **Border Color**: `#333333` (Cinza, para bordas sutis)
 
-### **Status Colors:**
-- **New**: Blue (#3B82F6)
-- **Completed**: Green (#10B981)
-- **Scheduled**: Orange (#F59E0B)
-- **Qualified**: Purple (#8B5CF6)
-
-### **Backgrounds:**
-- **Cards**: rgba(255, 255, 255, 0.03)
-- **Borders**: rgba(255, 255, 255, 0.08)
-- **Hover**: rgba(255, 255, 255, 0.05)
+### **Cores de Status:**
+- **Success**: `#10B981` (Verde)
+- **Error**: `#F44336` (Vermelho)
 
 ---
 

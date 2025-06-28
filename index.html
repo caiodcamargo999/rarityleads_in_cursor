@@ -1,161 +1,110 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Rarity Leads - AI-Powered Client Acquisition</title>
-  <link rel="stylesheet" href="rarity-design.css">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-  <style>
-    body { margin: 0; background: #18181b; color: #fff; font-family: 'Inter', sans-serif; line-height: 1.5; }
-    .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
-    .hero { padding: 80px 0 48px 0; text-align: center; }
-    .hero-title { font-size: 2.7rem; font-weight: 700; margin-bottom: 18px; letter-spacing: -1px; }
-    .hero-subtitle { font-size: 1.25rem; color: #cbd5e1; margin-bottom: 36px; font-weight: 400; }
-    .hero-cta { display: flex; justify-content: center; gap: 16px; margin-bottom: 32px; }
-    .btn { padding: 15px 32px; border-radius: 8px; font-size: 1.13rem; font-weight: 600; border: none; cursor: pointer; transition: background 0.2s, color 0.2s, box-shadow 0.2s; }
-    .btn-primary { background: #fff; color: #18181b; }
-    .btn-primary:hover { background: #ede9fe; color: #8B5CF6; }
-    .btn-outline { background: transparent; color: #fff; border: 2px solid #fff; }
-    .btn-outline:hover { background: #fff; color: #8B5CF6; }
-    .trust-bar { margin: 0 auto 48px auto; text-align: center; color: #a1a1aa; font-size: 1.05rem; letter-spacing: 0.01em; }
-    .trust-logos { display: flex; justify-content: center; gap: 32px; margin-top: 16px; flex-wrap: wrap; }
-    .trust-logo { width: 100px; height: 32px; background: #23232b; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 1rem; color: #a1a1aa; font-weight: 600; opacity: 0.7; }
-    .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 32px; margin: 64px 0 48px 0; }
-    .feature { background: rgba(255,255,255,0.03); border-radius: 14px; padding: 32px 24px; text-align: left; box-shadow: 0 2px 8px rgba(0,0,0,0.04); min-height: 180px; }
-    .feature-title { font-size: 1.18rem; font-weight: 600; margin-bottom: 10px; color: #fff; }
-    .feature-desc { color: #cbd5e1; font-size: 1rem; }
-    .how-it-works { margin: 64px 0 48px 0; text-align: center; }
-    .steps { display: flex; flex-wrap: wrap; justify-content: center; gap: 32px; margin-top: 32px; }
-    .step { background: rgba(255,255,255,0.03); border-radius: 14px; padding: 32px 24px; min-width: 220px; max-width: 260px; text-align: left; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
-    .step-title { font-size: 1.1rem; font-weight: 600; margin-bottom: 8px; color: #fff; }
-    .step-desc { color: #cbd5e1; font-size: 0.98rem; }
-    .testimonials { margin: 64px 0 48px 0; text-align: center; }
-    .testimonial-list { display: flex; flex-wrap: wrap; justify-content: center; gap: 32px; margin-top: 32px; }
-    .testimonial { background: rgba(255,255,255,0.03); border-radius: 14px; padding: 32px 24px; max-width: 340px; text-align: left; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
-    .testimonial-quote { font-size: 1.05rem; color: #fff; margin-bottom: 16px; font-style: italic; }
-    .testimonial-author { color: #a1a1aa; font-size: 0.98rem; font-weight: 600; }
-    .pricing { margin: 64px 0 48px 0; text-align: center; }
-    .pricing-title { font-size: 2rem; font-weight: 700; margin-bottom: 18px; }
-    .pricing-table { display: flex; flex-wrap: wrap; justify-content: center; gap: 32px; margin-top: 32px; }
-    .plan { background: rgba(255,255,255,0.03); border-radius: 14px; padding: 32px 24px; min-width: 220px; max-width: 300px; text-align: left; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
-    .plan-title { font-size: 1.15rem; font-weight: 600; margin-bottom: 8px; color: #fff; }
-    .plan-price { font-size: 2rem; font-weight: 700; margin-bottom: 8px; color: #D50057; }
-    .plan-features { color: #cbd5e1; font-size: 0.98rem; margin-bottom: 16px; }
-    .cta-final { margin: 64px 0 48px 0; text-align: center; }
-    .footer { margin-top: 32px; color: #a1a1aa; font-size: 0.98rem; text-align: center; letter-spacing: 0.01em; padding-bottom: 24px; }
-    @media (max-width: 800px) { .features, .testimonial-list, .steps, .pricing-table { flex-direction: column; display: flex; gap: 24px; } .container { padding: 0 8px; } }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rarity Leads - Your Automated Sales Team</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="landing-styles.css">
+    <script src="https://unpkg.com/feather-icons"></script>
 </head>
 <body>
-  <div class="container">
-    <!-- Hero Section -->
-    <section class="hero">
-      <div class="hero-title">AI-powered warm lead hunting for faster deals, deeper conversations, and scalable outreach — with zero guesswork.</div>
-      <div class="hero-subtitle">Rarity Leads is your AI-native platform to attract, qualify, and close clients — without the manual grind.</div>
-      <div class="hero-cta">
-        <button class="btn btn-primary" onclick="window.location.href='register.html'">Start For Free</button>
-        <button class="btn btn-outline" onclick="window.location.href='login.html'">Sign In</button>
-      </div>
-    </section>
-    <!-- Trust Bar -->
-    <div class="trust-bar">
-      Trusted by top agencies and creators
-      <div class="trust-logos">
-        <div class="trust-logo">AgencyOne</div>
-        <div class="trust-logo">GrowthLab</div>
-        <div class="trust-logo">NextGen</div>
-        <div class="trust-logo">ScaleUp</div>
-      </div>
-    </div>
-    <!-- Features -->
-    <section class="features" id="features">
-      <div class="feature">
-        <div class="feature-title">AI-Powered SDR That Qualifies Leads for You</div>
-        <div class="feature-desc">Stop wasting time on cold leads. Our AI SDR engages, qualifies, and routes only the best prospects to your team — so you focus on closing, not chasing.</div>
-      </div>
-      <div class="feature">
-        <div class="feature-title">Smart WhatsApp Follow-ups, No Manual Messaging</div>
-        <div class="feature-desc">Automate personalized WhatsApp sequences and never let a hot lead go cold. Every follow-up is timely, relevant, and humanized.</div>
-      </div>
-      <div class="feature">
-        <div class="feature-title">Campaign Intelligence for Google and Meta</div>
-        <div class="feature-desc">Launch, optimize, and analyze paid campaigns from one place. Get actionable insights and suggestions to maximize ROI.</div>
-      </div>
-    </section>
-    <!-- How It Works -->
-    <section class="how-it-works">
-      <h2>How It Works</h2>
-      <div class="steps">
-        <div class="step">
-          <div class="step-title">1. Create your free account</div>
-          <div class="step-desc">Sign up in seconds. No credit card required.</div>
-        </div>
-        <div class="step">
-          <div class="step-title">2. Connect your channels</div>
-          <div class="step-desc">Integrate WhatsApp, LinkedIn, and more with a click.</div>
-        </div>
-        <div class="step">
-          <div class="step-title">3. Watch qualified leads flow in</div>
-          <div class="step-desc">Let our AI do the heavy lifting while you focus on closing deals.</div>
-        </div>
-      </div>
-    </section>
-    <!-- Testimonials -->
-    <section class="testimonials">
-      <h2>What Our Users Say</h2>
-      <div class="testimonial-list">
-        <div class="testimonial">
-          <div class="testimonial-quote">“Rarity Leads changed the way we do business. More leads, less effort.”</div>
-          <div class="testimonial-author">Sarah Chen, Agency Owner</div>
-        </div>
-        <div class="testimonial">
-          <div class="testimonial-quote">“We scaled our pipeline 3x in 2 months. The automation is next level.”</div>
-          <div class="testimonial-author">David Rodriguez, GrowthLab</div>
-        </div>
-        <div class="testimonial">
-          <div class="testimonial-quote">“I spend less time prospecting and more time closing. Highly recommend.”</div>
-          <div class="testimonial-author">Marcus Johnson, NextGen</div>
-        </div>
-      </div>
-    </section>
-    <!-- Pricing -->
-    <section class="pricing" id="pricing">
-      <div class="pricing-title">Simple Pricing for Scalable Growth</div>
-      <div class="pricing-table">
-        <div class="plan">
-          <div class="plan-title">Starter</div>
-          <div class="plan-price">$97/mo</div>
-          <div class="plan-features">Up to 500 leads/month<br>AI Qualification<br>WhatsApp Automation<br>Email Support</div>
-          <button class="btn btn-primary" onclick="window.location.href='register.html'">Start for Free</button>
-        </div>
-        <div class="plan">
-          <div class="plan-title">Pro</div>
-          <div class="plan-price">$297/mo</div>
-          <div class="plan-features">Up to 2,500 leads/month<br>All Starter features<br>Campaign Intelligence<br>Priority Support</div>
-          <button class="btn btn-primary" onclick="window.location.href='register.html'">Start for Free</button>
-        </div>
-        <div class="plan">
-          <div class="plan-title">Enterprise</div>
-          <div class="plan-price">Custom</div>
-          <div class="plan-features">Unlimited leads<br>All Pro features<br>Dedicated Success Manager<br>Custom Integrations</div>
-          <button class="btn btn-primary" onclick="window.location.href='register.html'">Start for Free</button>
-        </div>
-      </div>
-    </section>
-    <!-- Final CTA -->
-    <section class="cta-final" id="cta-footer">
-      <div class="hero-title" style="font-size:2rem;">Stop Chasing Leads. Start Closing.</div>
-      <div class="hero-cta" style="margin-top:24px;">
-        <button class="btn btn-primary" onclick="window.location.href='register.html'">Get Started</button>
-      </div>
-      <div class="trust-bar" style="margin-top:32px;">
-        <span>4.9 Stars on Clutch</span> &nbsp;|&nbsp; <span>1,200+ Clients</span> &nbsp;|&nbsp; <span>AI-Powered and Human-Approved</span>
-      </div>
-    </section>
-  </div>
-  <div class="footer">
-    &copy; 2024 Rarity Leads. All rights reserved.
-  </div>
+    <header class="main-header">
+        <nav class="main-nav">
+            <div class="logo">Rarity Leads</div>
+            <div class="nav-links">
+                <a href="#features">Features</a>
+                <a href="#pricing">Pricing</a>
+                <a href="/login.html" class="btn btn-outline">Sign In</a>
+                <a href="/register.html" class="btn btn-primary">Get Started Free</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="hero-content">
+                <h1 class="hero-title">Your AI Sales Team, Ready in Seconds.</h1>
+                <p class="hero-subtitle">Rarity Leads automates the entire top-of-funnel, from finding and qualifying leads to booking meetings. Scale your revenue, not your headcount.</p>
+                <div class="hero-cta">
+                    <a href="/register.html" class="btn btn-primary btn-large">Claim Your Free Trial</a>
+                </div>
+            </div>
+        </section>
+
+        <section class="features-section" id="features">
+            <h2 class="section-title">The End of Manual Prospecting</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <i data-feather="cpu"></i>
+                    <h3>Your 24/7 AI Sales Rep</h3>
+                    <p>Deploy an AI agent that identifies ideal customers, engages them in human-like conversations, and qualifies their interest—so your team only talks to meeting-ready leads.</p>
+                </div>
+                <div class="feature-card">
+                    <i data-feather="send"></i>
+                    <h3>Automated Outreach That Converts</h3>
+                    <p>Connect with prospects across any channel—WhatsApp, LinkedIn, & Email. Our AI crafts and sends personalized follow-ups at the perfect time, ensuring no opportunity is missed.</p>
+                </div>
+                <div class="feature-card">
+                    <i data-feather="bar-chart-2"></i>
+                    <h3>Intelligence That Drives ROI</h3>
+                    <p>Move beyond vanity metrics. Rarity analyzes your entire sales funnel, providing actionable insights to optimize campaigns, lower acquisition costs, and maximize your return.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="pricing-section" id="pricing">
+            <h2 class="section-title">Simple, Transparent Pricing. No Surprises.</h2>
+            <div class="pricing-cards">
+                <div class="pricing-card">
+                    <h3>Growth</h3>
+                    <p class="price">$97<span>/mo</span></p>
+                    <ul>
+                        <li><i data-feather="check"></i>Up to 500 Qualified Leads</li>
+                        <li><i data-feather="check"></i>AI-Powered SDR</li>
+                        <li><i data-feather="check"></i>Multi-Channel Outreach</li>
+                        <li><i data-feather="check"></i>Email & Chat Support</li>
+                    </ul>
+                    <a href="/register.html" class="btn btn-outline">Choose Plan</a>
+                </div>
+                <div class="pricing-card popular">
+                    <h3>Scale</h3>
+                    <p class="price">$297<span>/mo</span></p>
+                    <ul>
+                        <li><i data-feather="check"></i>Up to 2,500 Qualified Leads</li>
+                        <li><i data-feather="check"></i>Everything in Growth</li>
+                        <li><i data-feather="check"></i>Campaign Intelligence</li>
+                        <li><i data-feather="check"></i>Priority Support</li>
+                    </ul>
+                    <a href="/register.html" class="btn btn-primary">Choose Plan</a>
+                </div>
+                <div class="pricing-card">
+                    <h3>Enterprise</h3>
+                    <p class="price">Custom</p>
+                    <ul>
+                        <li><i data-feather="check"></i>Unlimited Leads</li>
+                        <li><i data-feather="check"></i>Everything in Scale</li>
+                        <li><i data-feather="check"></i>Dedicated Success Manager</li>
+                        <li><i data-feather="check"></i>Custom Integrations</li>
+                    </ul>
+                    <a href="/register.html" class="btn btn-outline">Contact Sales</a>
+                </div>
+            </div>
+        </section>
+
+        <section class="final-cta">
+            <h2>Ready to Build Your Unfair Advantage?</h2>
+            <p>Join hundreds of high-growth companies that trust Rarity Leads to build their sales pipeline on autopilot.</p>
+            <a href="/register.html" class="btn btn-primary btn-large">Get Started for Free</a>
+        </section>
+    </main>
+
+    <footer class="main-footer">
+        <p>&copy; 2024 Rarity Leads. All rights reserved.</p>
+    </footer>
+
+    <script>
+        feather.replace();
+    </script>
 </body>
-</html> 
+</html>

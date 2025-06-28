@@ -3,128 +3,99 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rarity Leads - Access Your Account</title>
-    <link rel="stylesheet" href="rarity-design.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <style>
-        body { margin: 0; background: #18181b; color: #fff; font-family: 'Inter', sans-serif; display: flex; align-items: center; justify-content: center; min-height: 100vh; }
-        .auth-container { background: rgba(255,255,255,0.04); border-radius: 18px; box-shadow: 0 8px 32px rgba(0,0,0,0.10); padding: 48px 32px; max-width: 400px; width: 100%; text-align: center; }
-        .auth-title { font-size: 2rem; font-weight: 700; margin-bottom: 12px; }
-        .auth-subtitle { font-size: 1.08rem; color: #cbd5e1; margin-bottom: 32px; font-weight: 400; }
-        .btn { display: block; width: 100%; margin: 12px 0; padding: 14px 0; border: none; border-radius: 8px; font-size: 1.1rem; font-weight: 600; cursor: pointer; transition: background 0.2s, color 0.2s; }
-        .btn-primary { background: #fff; color: #18181b; }
-        .btn-primary:hover { background: #ede9fe; color: #8B5CF6; }
-        .btn-google { background: #fff; color: #18181b; border: 1px solid #e5e7eb; display: flex; align-items: center; justify-content: center; gap: 8px; }
-        .btn-google:hover { background: #ede9fe; color: #8B5CF6; }
-        .divider { margin: 24px 0; color: #a1a1aa; font-size: 0.98rem; position: relative; }
-        .divider:before, .divider:after { content: ""; display: inline-block; width: 40%; height: 1px; background: #23232b; vertical-align: middle; margin: 0 8px; }
-        .form-group { margin-bottom: 18px; text-align: left; }
-        .form-label { display: block; margin-bottom: 6px; color: #cbd5e1; font-size: 0.98rem; font-weight: 500; }
-        .form-input { width: 100%; padding: 12px; border-radius: 6px; border: 1px solid #23232b; background: #23232b; color: #fff; font-size: 1rem; margin-bottom: 2px; }
-        .form-input:focus { outline: 2px solid #8B5CF6; border-color: #8B5CF6; }
-        .form-hint { color: #a1a1aa; font-size: 0.92rem; margin-top: 2px; }
-        .toggle-link { color: #8B5CF6; cursor: pointer; font-weight: 600; text-decoration: underline; margin-top: 18px; display: inline-block; }
-        .message { margin: 18px 0; padding: 12px; border-radius: 8px; font-size: 1rem; }
-        .message-success { background: #10B98122; color: #10B981; }
-        .message-error { background: #D5005722; color: #D50057; }
-        @media (max-width: 600px) { .auth-container { padding: 24px 8px; } .auth-title { font-size: 1.3rem; } }
-    </style>
+    <title data-i18n="register.title">Sign Up - Rarity Leads</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="auth-styles.css">
+    <script src="https://unpkg.com/feather-icons"></script>
 </head>
-<body>
-    <div class="auth-container">
-        <div class="auth-title" id="auth-title">Create your free account</div>
-        <div class="auth-subtitle" id="auth-subtitle">Automate your lead generation. Focus on what matters.</div>
-        <button class="btn btn-google" id="google-auth-btn"><img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" style="width:20px;vertical-align:middle;"> <span id="google-btn-text">Sign up with Google</span></button>
-        <div class="divider">OR</div>
-        <form id="auth-form">
-            <div class="form-group">
-                <label for="email" class="form-label">Email address</label>
-                <input type="email" id="email" name="email" class="form-input" placeholder="Enter your email" required>
+<body class="auth-body">
+    <nav class="auth-nav">
+        <div class="nav-container">
+            <a href="/index.html" class="logo" data-i18n="common.brand">Rarity Leads</a>
+            <div class="nav-links">
+                <a href="/login.html" data-i18n="register.haveAccountLink">Already have an account? <strong>Sign In</strong></a>
             </div>
-            <div class="form-group">
-                <label for="password" class="form-label">Password</label>
-                <input type="password" id="password" name="password" class="form-input" placeholder="Create a password" minlength="6" required>
-                <div class="form-hint">Must be at least 6 characters</div>
+        </div>
+    </nav>
+
+    <main class="auth-main">
+        <div class="auth-container">
+            <div class="auth-header">
+                <h1 class="auth-title" data-i18n="register.createAccount">Create Your Account</h1>
+                <p class="auth-subtitle" data-i18n="register.subtitle">Start your journey with AI-powered lead generation.</p>
             </div>
-            <button type="submit" class="btn btn-primary" id="auth-submit-btn">Create Account</button>
-        </form>
-        <div class="toggle-link" id="toggle-link">Already have an account? Sign In</div>
-        <div id="message-container"></div>
-    </div>
+
+            <div class="auth-logo" style="text-align:center;margin-bottom:32px;">
+                <img src="rarity-logo.jpg" alt="Rarity Leads Logo" style="height:40px;width:auto;object-fit:contain;">
+            </div>
+
+            <div class="auth-form-container">
+                <button type="button" id="google-signup" class="btn-google">
+                    <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" width="20">
+                    <span data-i18n="register.signupGoogle">Sign up with Google</span>
+                </button>
+
+                <div class="auth-divider" data-i18n="register.or">or</div>
+
+                <form id="email-signup-form" class="auth-form">
+                    <div class="form-group">
+                        <label for="email" class="form-label" data-i18n="register.email">Email address</label>
+                        <input type="email" id="email" name="email" class="form-input" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password" class="form-label" data-i18n="register.password">Password</label>
+                        <input type="password" id="password" name="password" class="form-input" minlength="6" required>
+                    </div>
+
+                    <button type="submit" id="email-signup-btn" class="btn-primary">
+                        <span data-i18n="register.signupBtn">Create Account</span>
+                    </button>
+                </form>
+            </div>
+
+            <div id="message-container"></div>
+        </div>
+    </main>
+
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="app-config.js"></script>
+    <script src="i18n.js"></script>
     <script>
-        // Mode: true = register, false = login
-        let isRegisterMode = true;
-        const supabase = window.AppUtils ? window.AppUtils.initSupabase() : null;
-        const title = document.getElementById('auth-title');
-        const subtitle = document.getElementById('auth-subtitle');
-        const submitBtn = document.getElementById('auth-submit-btn');
-        const toggleLink = document.getElementById('toggle-link');
-        const googleBtn = document.getElementById('google-auth-btn');
-        const googleBtnText = document.getElementById('google-btn-text');
-        const form = document.getElementById('auth-form');
-        const messageContainer = document.getElementById('message-container');
-
-        function setMode(register) {
-            isRegisterMode = register;
-            title.textContent = register ? 'Create your free account' : 'Welcome back';
-            subtitle.textContent = register ? 'Automate your lead generation. Focus on what matters.' : 'Sign in to your account to continue.';
-            submitBtn.textContent = register ? 'Create Account' : 'Sign In';
-            googleBtnText.textContent = register ? 'Sign up with Google' : 'Sign in with Google';
-            toggleLink.textContent = register ? 'Already have an account? Sign In' : "Don't have an account? Sign Up";
-        }
-        toggleLink.onclick = () => setMode(!isRegisterMode);
-
-        googleBtn.onclick = async () => {
-            if (!supabase) return showMessage('Auth system unavailable', 'error');
-            googleBtn.disabled = true;
-            googleBtnText.textContent = isRegisterMode ? 'Connecting...' : 'Connecting...';
-            const { error } = await supabase.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: window.location.origin + '/dashboard.html' } });
-            if (error) showMessage(error.message, 'error');
-            googleBtn.disabled = false;
-            googleBtnText.textContent = isRegisterMode ? 'Sign up with Google' : 'Sign in with Google';
-        };
-
-        form.onsubmit = async (e) => {
-            e.preventDefault();
-            if (!supabase) return showMessage('Auth system unavailable', 'error');
-            const email = form.email.value.trim();
-            const password = form.password.value;
-            submitBtn.disabled = true;
-            submitBtn.textContent = isRegisterMode ? 'Creating...' : 'Signing in...';
-            try {
-                if (isRegisterMode) {
-                    const { error } = await supabase.auth.signUp({ email, password, options: { emailRedirectTo: window.location.origin + '/dashboard.html' } });
-                    if (error) throw error;
-                    showMessage('Please check your email to verify your account.', 'success');
-                } else {
-                    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-                    if (error) throw error;
-                    // Check if email is verified
-                    if (data.user && !data.user.email_confirmed_at) {
-                        showMessage('Please verify your email to access your account.', 'error');
-                    } else {
-                        window.location.href = '/dashboard.html';
-                    }
-                }
-            } catch (err) {
-                showMessage(err.message || 'Authentication failed', 'error');
+        document.addEventListener('DOMContentLoaded', () => {
+            const supabase = window.AppUtils.initSupabase();
+            if (!supabase) {
+                console.error('Supabase not initialized');
+                return;
             }
-            submitBtn.disabled = false;
-            submitBtn.textContent = isRegisterMode ? 'Create Account' : 'Sign In';
-        };
 
-        function showMessage(msg, type) {
-            messageContainer.innerHTML = `<div class="message message-${type}">${msg}</div>`;
-        }
+            const signupForm = document.getElementById('email-signup-form');
+            const googleSignUpBtn = document.getElementById('google-signup');
+            const messageContainer = document.getElementById('message-container');
 
-        // On load, check session
-        document.addEventListener('DOMContentLoaded', async () => {
-            if (!supabase) return;
-            const { data: { session } } = await supabase.auth.getSession();
-            if (session && session.user && session.user.email_confirmed_at) {
-                window.location.href = '/dashboard.html';
+            // Google Sign Up
+            googleSignUpBtn.addEventListener('click', async () => {
+                await supabase.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: `${window.location.origin}/dashboard.html` } });
+            });
+
+            // Email Sign Up
+            signupForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const email = signupForm.email.value;
+                const password = signupForm.password.value;
+                const { error } = await supabase.auth.signUp({ email, password, options: { emailRedirectTo: `${window.location.origin}/dashboard.html` } });
+
+                if (error) {
+                    showMessage(error.message, 'error');
+                } else {
+                    showMessage('Please check your email to verify your account.', 'success');
+                    signupForm.reset();
+                }
+            });
+
+            function showMessage(message, type) {
+                messageContainer.innerHTML = `<div class="message message-${type}">${message}</div>`;
+                setTimeout(() => messageContainer.innerHTML = '', 5000);
             }
         });
     </script>
