@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title data-i18n="meta.title">Rarity Leads - Analytics</title>
-    <meta name="description" data-i18n="meta.description" content="Visualize and analyze your campaign and lead performance data">
+    <title data-i18n="analytics.title">Rarity Leads - Analytics</title>
+    <meta name="description" data-i18n="analytics.subtitle" content="Monitor your lead generation performance and campaign effectiveness with comprehensive insights">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -13,596 +13,462 @@
     <link rel="stylesheet" href="dashboard.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="app-config.js"></script>
-    <script src="i18n.js"></script>
-    <script src="auth-guard.js"></script>
-    <script src="universal-navigation.js"></script>
-    
+    <style>
+        body { margin: 0; background: #18181b; color: #fff; font-family: 'Inter', sans-serif; }
+        .dashboard-layout { display: flex; min-height: 100vh; }
+        .sidebar { width: 240px; background: #1e1e23; padding: 32px 0 0 0; display: flex; flex-direction: column; }
+        .sidebar-logo { font-size: 1.5rem; font-weight: 700; color: #fff; text-align: center; margin-bottom: 32px; letter-spacing: -0.5px; }
+        .sidebar-nav { flex: 1; }
+        .sidebar-nav ul { list-style: none; padding: 0; margin: 0; }
+        .sidebar-nav li { margin-bottom: 8px; }
+        .sidebar-nav a { display: block; padding: 12px 32px; color: #cbd5e1; text-decoration: none; border-left: 4px solid transparent; font-weight: 500; transition: background 0.2s, color 0.2s, border-color 0.2s; }
+        .sidebar-nav a.active, .sidebar-nav a:hover { background: #23232b; color: #fff; border-left: 4px solid #D50057; }
+        .sidebar-footer { padding: 24px 32px; border-top: 1px solid #23232b; text-align: center; }
+        .logout-btn { background: none; border: none; color: #8B5CF6; font-weight: 600; cursor: pointer; font-size: 1rem; }
+        .main-content { flex: 1; padding: 48px 40px 32px 40px; display: flex; flex-direction: column; }
+        .analytics-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 32px; }
+        .analytics-title { font-size: 2rem; font-weight: 700; }
+        .analytics-subtitle { color: #a1a1aa; font-size: 1rem; font-weight: 500; margin-top: 8px; }
+        .metrics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 32px; margin-bottom: 40px; }
+        .metric-card { background: rgba(255,255,255,0.03); border-radius: 14px; padding: 32px 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+        .metric-label { color: #cbd5e1; font-size: 1rem; margin-bottom: 8px; }
+        .metric-value { font-size: 2rem; font-weight: 700; color: #D50057; margin-bottom: 4px; }
+        .metric-trend { font-size: 0.98rem; color: #10B981; }
+        .metric-trend.negative { color: #EF4444; }
+        .metric-trend.neutral { color: #6B7280; }
+        .tabs { display: flex; gap: 24px; margin-bottom: 32px; }
+        .tab { padding: 10px 24px; border-radius: 8px 8px 0 0; background: #23232b; color: #cbd5e1; font-weight: 500; cursor: pointer; border: none; outline: none; transition: background 0.2s, color 0.2s; }
+        .tab.active, .tab:hover { background: #fff; color: #18181b; }
+        .tab-content { background: rgba(255,255,255,0.03); border-radius: 0 0 14px 14px; padding: 32px 24px; min-height: 400px; }
+        .chart-container { position: relative; height: 300px; margin-top: 24px; }
+        .period-selector { display: flex; gap: 16px; align-items: center; margin-bottom: 24px; }
+        .period-btn { padding: 8px 16px; background: #23232b; color: #cbd5e1; border: none; border-radius: 6px; cursor: pointer; font-size: 0.9rem; transition: background 0.2s, color 0.2s; }
+        .period-btn.active, .period-btn:hover { background: #D50057; color: #fff; }
+        .export-btn { padding: 12px 24px; background: #D50057; color: #fff; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+        .export-btn:hover { background: #B91C5B; }
+        @media (max-width: 900px) { .main-content { padding: 32px 8px; } .sidebar { width: 64px; padding: 16px 0 0 0; } .sidebar-logo { font-size: 1rem; margin-bottom: 16px; } .sidebar-nav a { padding: 12px 8px; font-size: 0.95rem; } }
+        @media (max-width: 600px) { .dashboard-layout { flex-direction: column; } .sidebar { width: 100vw; flex-direction: row; padding: 0; } .sidebar-nav ul { display: flex; flex-direction: row; } .sidebar-nav li { margin: 0 4px; } .main-content { padding: 16px 4px; } .metrics-grid { grid-template-columns: 1fr; } }
+    </style>
 </head>
-<body class="dashboard-body">
-    <!-- Sidebar Navigation -->
-    <aside class="sidebar" id="dashboard-sidebar">
-        <div class="sidebar-header">
-            <div class="logo-container">
-                <div class="logo-icon">✨</div>
-                <span class="logo-text text-gradient">Rarity Leads</span>
+<body>
+    <div class="dashboard-layout">
+        <aside class="sidebar" role="navigation" aria-label="Main navigation">
+            <div class="sidebar-logo" data-i18n="common.brand">Rarity Leads</div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="dashboard.html" data-i18n="nav.dashboard">Dashboard</a></li>
+                    <li><a href="prospecting-leads.html" data-i18n="nav.leads">Leads</a></li>
+                    <li><a href="prospecting-companies.html" data-i18n="nav.companies">Companies</a></li>
+                    <li><a href="approaching-whatsapp.html" data-i18n="nav.whatsapp">WhatsApp</a></li>
+                    <li><a href="approaching-linkedin.html" data-i18n="nav.linkedin">LinkedIn</a></li>
+                    <li><a href="approaching-instagram.html" data-i18n="nav.instagram">Instagram</a></li>
+                    <li><a href="approaching-facebook.html" data-i18n="nav.facebook">Facebook</a></li>
+                    <li><a href="approaching-x.html" data-i18n="nav.x">X</a></li>
+                    <li><a href="analytics.html" class="active" data-i18n="nav.analytics">Analytics</a></li>
+                    <li><a href="support.html" data-i18n="nav.support">Support</a></li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer">
+                <button class="logout-btn" id="logout-btn" data-i18n="auth.logout">Logout</button>
             </div>
-        </div>
-
-        <nav class="sidebar-nav">
-            <ul class="nav-menu">
-                <!-- Dashboard -->
-                <li class="nav-item">
-                    <a href="dashboard.html" class="nav-link">
-                        <i class="fas fa-chart-line"></i>
-                        <span data-i18n="nav.dashboard">Dashboard</span>
-                    </a>
-                </li>
-
-                <!-- Prospecting Section -->
-                <li class="nav-item has-submenu">
-                    <a href="#" class="nav-link submenu-toggle">
-                        <i class="fas fa-search"></i>
-                        <span data-i18n="nav.prospecting">Prospecting</span>
-                        <i class="fas fa-chevron-down submenu-arrow"></i>
-                    </a>
-                    <ul class="submenu">
-                        <li class="nav-item">
-                            <a href="prospecting-leads.html" class="nav-link">
-                                <i class="fas fa-users"></i>
-                                <span data-i18n="nav.leads">Leads</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="prospecting-companies.html" class="nav-link">
-                                <i class="fas fa-building"></i>
-                                <span data-i18n="nav.companies">Companies</span>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-
-                <!-- Approaching Section -->
-                <li class="nav-item has-submenu">
-                    <a href="#" class="nav-link submenu-toggle">
-                        <i class="fas fa-bullhorn"></i>
-                        <span data-i18n="nav.approaching">Approaching</span>
-                        <i class="fas fa-chevron-down submenu-arrow"></i>
-                    </a>
-                    <ul class="submenu">
-                        <li class="nav-item">
-                            <a href="approaching-whatsapp.html" class="nav-link">
-                                <i class="fab fa-whatsapp"></i>
-                                <span data-i18n="nav.whatsapp">WhatsApp</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="approaching-linkedin.html" class="nav-link">
-                                <i class="fab fa-linkedin"></i>
-                                <span data-i18n="nav.linkedin">LinkedIn</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="approaching-instagram.html" class="nav-link">
-                                <i class="fab fa-instagram"></i>
-                                <span data-i18n="nav.instagram">Instagram</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="approaching-facebook.html" class="nav-link">
-                                <i class="fab fa-facebook"></i>
-                                <span data-i18n="nav.facebook">Facebook</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="approaching-x.html" class="nav-link">
-                                <i class="fab fa-x-twitter"></i>
-                                <span data-i18n="nav.x">X</span>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-
-                <!-- Analytics & Support Section -->
-                <li class="nav-item">
-                    <a href="analytics.html" class="nav-link">
-                        <i class="fas fa-chart-bar"></i>
-                        <span data-i18n="nav.analytics">Analytics</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="support.html" class="nav-link">
-                        <i class="fas fa-headset"></i>
-                        <span data-i18n="nav.support">Support</span>
-                    </a>
-                </li>
-            </ul>
-        </nav>
-        <div class="sidebar-footer">
-            <div class="user-profile">
-                <div class="user-avatar">
-                    <i class="fas fa-user"></i>
+        </aside>
+        <main class="main-content" role="main">
+            <div class="analytics-header">
+                <div>
+                    <div class="analytics-title" data-i18n="analytics.title">Analytics Dashboard</div>
+                    <div class="analytics-subtitle" data-i18n="analytics.subtitle">Monitor your lead generation performance and campaign effectiveness with comprehensive insights</div>
                 </div>
-                <div class="user-info">
-                    <div class="user-name" data-i18n="nav.agencyOwner">Agency Owner</div>
-                    <div class="user-email">admin@rarity.com</div>
-                </div>
-                <button class="logout-btn" id="sign-out-btn" data-tooltip="Sign Out">
-                    <i class="fas fa-sign-out-alt"></i>
-                </button>
-            </div>
-        </div>
-    </aside>
-
-    <!-- Top Header -->
-    <header class="top-header">
-        <div class="header-left">
-            <button class="sidebar-toggle">
-                <i class="fas fa-bars"></i>
-            </button>
-            <div class="breadcrumb">
-                <span class="breadcrumb-item">Analytics</span>
-            </div>
-        </div>
-    </header>
-
-    <!-- Main Content -->
-    <main class="main-content">
-        <div class="page-header">
-            <div class="page-title-section">
-                <h1 class="page-title">
-                    <i class="fas fa-chart-bar" style="color: #8B5CF6;"></i>
-                    Analytics
-                </h1>
-                <p class="page-subtitle">Visualize and analyze your campaign and lead performance data</p>
-            </div>
-            <div class="page-actions">
-                <button class="btn btn-outline">
+                <button class="export-btn" id="export-btn" data-i18n="analytics.exportData">
                     <i class="fas fa-download"></i>
                     Export Data
                 </button>
-                <button class="btn btn-primary">
-                    <i class="fas fa-plus"></i>
-                    New Report
-                </button>
             </div>
-        </div>
-
-        <!-- Stats Overview -->
-        <div class="stats-overview">
-            <div class="stat-card">
-                <div class="stat-icon gradient-purple">
-                    <i class="fas fa-users"></i>
+            <div class="metrics-grid" role="region" aria-label="Analytics metrics">
+                <div class="metric-card" role="article">
+                    <div class="metric-label" data-i18n="analytics.leadsGenerated">Leads Generated</div>
+                    <div class="metric-value" id="leads-count" aria-live="polite">1,247</div>
+                    <div class="metric-trend" data-i18n="analytics.leadsGenerated.trend">+23% from last month</div>
                 </div>
-                <div class="stat-content">
-                    <div class="stat-value" id="leads-count">1,247</div>
-                    <div class="stat-label" data-i18n="analytics.leadsGenerated">Leads Generated</div>
-                    <div class="stat-change positive">
-                        <i class="fas fa-arrow-up"></i>
-                        <span>+23% from last month</span>
+                <div class="metric-card" role="article">
+                    <div class="metric-label" data-i18n="analytics.conversionRate">Conversion Rate</div>
+                    <div class="metric-value" id="conversion-rate" aria-live="polite">31.2%</div>
+                    <div class="metric-trend" data-i18n="analytics.conversionRate.trend">+8.4% from last month</div>
+                </div>
+                <div class="metric-card" role="article">
+                    <div class="metric-label" data-i18n="analytics.activeCampaigns">Active Campaigns</div>
+                    <div class="metric-value" id="active-campaigns" aria-live="polite">12</div>
+                    <div class="metric-trend neutral" data-i18n="analytics.activeCampaigns.trend">No variation</div>
+                </div>
+                <div class="metric-card" role="article">
+                    <div class="metric-label" data-i18n="analytics.revenue">Revenue</div>
+                    <div class="metric-value" id="revenue-amount" aria-live="polite">$47,892</div>
+                    <div class="metric-trend" data-i18n="analytics.revenue.trend">+15.3% from last month</div>
+                </div>
+            </div>
+            <div class="tabs" role="tablist" aria-label="Analytics views">
+                <button class="tab active" id="tab-overview" role="tab" aria-selected="true" aria-controls="overview-view" data-i18n="analytics.tabs.overview">Overview</button>
+                <button class="tab" id="tab-funnel" role="tab" aria-selected="false" aria-controls="funnel-view" data-i18n="analytics.tabs.funnel">Funnel</button>
+                <button class="tab" id="tab-sources" role="tab" aria-selected="false" aria-controls="sources-view" data-i18n="analytics.tabs.sources">Sources</button>
+                <button class="tab" id="tab-revenue" role="tab" aria-selected="false" aria-controls="revenue-view" data-i18n="analytics.tabs.revenue">Revenue</button>
+            </div>
+            <div class="tab-content" id="tab-content">
+                <div id="overview-view" role="tabpanel" aria-labelledby="tab-overview">
+                    <div class="period-selector">
+                        <button class="period-btn" data-period="7" data-i18n="analytics.period.last7days">Last 7 days</button>
+                        <button class="period-btn active" data-period="30" data-i18n="analytics.period.last30days">Last 30 days</button>
+                        <button class="period-btn" data-period="90" data-i18n="analytics.period.last90days">Last 90 days</button>
                     </div>
-                </div>
-            </div>
-
-            <div class="stat-card">
-                <div class="stat-icon gradient-pink">
-                    <i class="fas fa-chart-line"></i>
-                </div>
-                <div class="stat-content">
-                    <div class="stat-value" id="conversion-rate">31.2%</div>
-                    <div class="stat-label" data-i18n="analytics.conversionRate">Conversion Rate</div>
-                    <div class="stat-change positive">
-                        <i class="fas fa-arrow-up"></i>
-                        <span>+8.4% from last month</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="stat-card">
-                <div class="stat-icon gradient-green">
-                    <i class="fas fa-bullhorn"></i>
-                </div>
-                <div class="stat-content">
-                    <div class="stat-value" id="active-campaigns">12</div>
-                    <div class="stat-label" data-i18n="analytics.activeCampaigns">Active Campaigns</div>
-                    <div class="stat-change neutral">
-                        <i class="fas fa-minus"></i>
-                        <span>No variation</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="stat-card">
-                <div class="stat-icon gradient-orange">
-                    <i class="fas fa-dollar-sign"></i>
-                </div>
-                <div class="stat-content">
-                    <div class="stat-value" id="revenue-amount">$47,892</div>
-                    <div class="stat-label" data-i18n="analytics.revenue">Revenue</div>
-                    <div class="stat-change positive">
-                        <i class="fas fa-arrow-up"></i>
-                        <span>+15.3% from last month</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Analytics Charts -->
-        <div class="content-grid">
-            <div class="content-card">
-                <div class="card-header">
-                    <h3 data-i18n="analytics.acquisitionFunnel">Acquisition Funnel</h3>
-                    <select id="analytics-period" class="btn btn-sm btn-outline">
-                        <option value="7" data-i18n="analytics.period.last7days">Last 7 days</option>
-                        <option value="30" selected data-i18n="analytics.period.last30days">Last 30 days</option>
-                        <option value="90" data-i18n="analytics.period.last90days">Last 90 days</option>
-                    </select>
-                </div>
-                <div class="card-content">
                     <div class="chart-container">
-                        <canvas id="funnel-chart"></canvas>
+                        <canvas id="overview-chart" aria-label="Overview chart"></canvas>
                     </div>
                 </div>
-            </div>
-
-            <div class="content-card">
-                <div class="card-header">
-                    <h3 data-i18n="analytics.campaignPerformance">Campaign Performance</h3>
-                </div>
-                <div class="card-content">
+                <div id="funnel-view" role="tabpanel" aria-labelledby="tab-funnel" style="display:none;">
+                    <h3 data-i18n="analytics.funnel.title">Acquisition Funnel</h3>
+                    <p data-i18n="analytics.funnel.description">Track your lead journey from first touch to conversion</p>
                     <div class="chart-container">
-                        <canvas id="campaign-chart"></canvas>
+                        <canvas id="funnel-chart" aria-label="Funnel chart"></canvas>
                     </div>
                 </div>
-            </div>
-
-            <div class="content-card">
-                <div class="card-header">
-                    <h3 data-i18n="analytics.leadSources">Lead Sources</h3>
-                </div>
-                <div class="card-content">
+                <div id="sources-view" role="tabpanel" aria-labelledby="tab-sources" style="display:none;">
+                    <h3 data-i18n="analytics.sources.title">Lead Sources</h3>
+                    <p data-i18n="analytics.sources.description">Identify your most effective lead generation channels</p>
                     <div class="chart-container">
-                        <canvas id="sources-chart"></canvas>
+                        <canvas id="sources-chart" aria-label="Sources chart"></canvas>
                     </div>
                 </div>
-            </div>
-
-            <div class="content-card">
-                <div class="card-header">
-                    <h3 data-i18n="analytics.revenueTrends">Revenue Trends</h3>
-                </div>
-                <div class="card-content">
+                <div id="revenue-view" role="tabpanel" aria-labelledby="tab-revenue" style="display:none;">
+                    <h3 data-i18n="analytics.revenue.title">Revenue Trends</h3>
+                    <p data-i18n="analytics.revenue.description">Monitor your revenue growth and patterns</p>
                     <div class="chart-container">
-                        <canvas id="revenue-chart"></canvas>
+                        <canvas id="revenue-chart" aria-label="Revenue chart"></canvas>
                     </div>
                 </div>
             </div>
-        </div>
-    </main>
-
+        </main>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="app-config.js"></script>
+    <script src="i18n.js"></script>
     <script>
-        // Initialize Supabase
-        let supabase;
-        try {
-            supabase = window.AppUtils.initSupabase();
-        } catch (error) {
-            console.error('Failed to initialize Supabase:', error);
-        }
-
-        // Check authentication
-        document.addEventListener('DOMContentLoaded', async () => {
-            if (!supabase) return;
-
-            try {
-                const { data: { session }, error } = await supabase.auth.getSession();
-
-                if (!session) {
-                    window.location.href = '/';
+        // Analytics Module
+        const Analytics = {
+            supabase: null,
+            currentLanguage: 'en',
+            charts: {},
+            currentPeriod: 30,
+            
+            async init() {
+                this.supabase = window.AppUtils ? window.AppUtils.initSupabase() : null;
+                await this.checkAuth();
+                await this.initI18n();
+                this.bindEvents();
+                this.initializeCharts();
+                this.animateCounters();
+            },
+            
+            async checkAuth() {
+                if (!this.supabase) return;
+                const { data: { session } } = await this.supabase.auth.getSession();
+                if (!session || !session.user || !session.user.email_confirmed_at) {
+                    window.location.href = '/register.html';
                     return;
                 }
-
-                // Update user email
-                const userEmailElement = document.querySelector('.user-email');
-                if (userEmailElement && session.user) {
-                    userEmailElement.textContent = session.user.email;
+            },
+            
+            async initI18n() {
+                if (window.i18n) {
+                    this.currentLanguage = await window.i18n.detectLanguage();
+                    await window.i18n.translatePage();
                 }
-
-                // Setup sign out
-                const signOutBtn = document.getElementById('sign-out-btn');
-                if (signOutBtn) {
-                    signOutBtn.addEventListener('click', async () => {
-                        await supabase.auth.signOut();
-                        window.location.href = '/';
-                    });
+            },
+            
+            bindEvents() {
+                // Logout
+                document.getElementById('logout-btn').addEventListener('click', () => this.logout());
+                
+                // Tabs
+                const tabs = document.querySelectorAll('.tab');
+                tabs.forEach(tab => {
+                    tab.addEventListener('click', () => this.switchTab(tab));
+                });
+                
+                // Period selector
+                const periodBtns = document.querySelectorAll('.period-btn');
+                periodBtns.forEach(btn => {
+                    btn.addEventListener('click', () => this.changePeriod(btn));
+                });
+                
+                // Export
+                document.getElementById('export-btn').addEventListener('click', () => this.exportData());
+                
+                // Keyboard navigation
+                document.addEventListener('keydown', (e) => this.handleKeyboard(e));
+            },
+            
+            switchTab(activeTab) {
+                // Update tab states
+                document.querySelectorAll('.tab').forEach(tab => {
+                    tab.classList.remove('active');
+                    tab.setAttribute('aria-selected', 'false');
+                });
+                activeTab.classList.add('active');
+                activeTab.setAttribute('aria-selected', 'true');
+                
+                // Show corresponding content
+                const targetId = activeTab.getAttribute('aria-controls');
+                document.querySelectorAll('[role="tabpanel"]').forEach(panel => {
+                    panel.style.display = 'none';
+                });
+                document.getElementById(targetId).style.display = '';
+                
+                // Update charts if needed
+                this.updateCharts();
+            },
+            
+            changePeriod(activeBtn) {
+                document.querySelectorAll('.period-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                activeBtn.classList.add('active');
+                this.currentPeriod = parseInt(activeBtn.dataset.period);
+                this.updateCharts();
+            },
+            
+            handleKeyboard(e) {
+                // Tab navigation with arrow keys
+                if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+                    const tabs = document.querySelectorAll('.tab');
+                    const activeTab = document.querySelector('.tab.active');
+                    const currentIndex = Array.from(tabs).indexOf(activeTab);
+                    
+                    if (e.key === 'ArrowLeft' && currentIndex > 0) {
+                        tabs[currentIndex - 1].click();
+                    } else if (e.key === 'ArrowRight' && currentIndex < tabs.length - 1) {
+                        tabs[currentIndex + 1].click();
+                    }
                 }
-
-                // Initialize charts and other functionality
-                initializeCharts();
-                setupEventListeners();
-
-            } catch (error) {
-                console.error('Auth error:', error);
-                window.location.href = '/';
-            }
-        });
-
-        // Initialize sidebar menu
-        document.querySelectorAll('.submenu-toggle').forEach(toggle => {
-            toggle.addEventListener('click', (e) => {
-                e.preventDefault();
-                const parentItem = toggle.closest('.nav-item');
-                const submenu = parentItem.querySelector('.submenu');
-                const arrow = toggle.querySelector('.submenu-arrow');
-
-                parentItem.classList.toggle('open');
-
-                if (parentItem.classList.contains('open')) {
-                    arrow.style.transform = 'rotate(180deg)';
-                    submenu.style.maxHeight = submenu.scrollHeight + 'px';
-                } else {
-                    arrow.style.transform = 'rotate(0deg)';
-                    submenu.style.maxHeight = '0';
-                }
-            });
-        });
-
-        // Inicializar i18n ao carregar a página
-        if (window.i18n && typeof window.i18n.applyTranslations === 'function') {
-            document.addEventListener('DOMContentLoaded', function() {
-                window.i18n.applyTranslations();
-            });
-        }
-    </script>
-
-    <!-- Charts Scripts -->
-    <script>
-        // Initialize charts with sample data
-        document.addEventListener('DOMContentLoaded', function() {
-            initializeCharts();
-            setupEventListeners();
-        });
-
-        function initializeCharts() {
-            // Funnel Chart
-            const funnelCtx = document.getElementById('funnel-chart').getContext('2d');
-            window.funnelChart = new Chart(funnelCtx, {
-                type: 'doughnut',
-                data: {
-                    labels: [
-                        window.i18n ? window.i18n.t('analytics.visitors') : 'Visitors',
-                        window.i18n ? window.i18n.t('analytics.leads') : 'Leads',
-                        window.i18n ? window.i18n.t('analytics.qualified') : 'Qualified',
-                        window.i18n ? window.i18n.t('analytics.customers') : 'Customers'
-                    ],
-                    datasets: [{
-                        data: [10000, 1247, 389, 127],
-                        backgroundColor: [
-                            'rgba(102, 126, 234, 0.8)',
-                            'rgba(240, 147, 251, 0.8)',
-                            'rgba(79, 172, 254, 0.8)',
-                            'rgba(67, 233, 123, 0.8)'
-                        ],
-                        borderWidth: 0
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            position: 'bottom',
-                            labels: {
-                                padding: 20,
-                                usePointStyle: true
+            },
+            
+            async logout() {
+                if (this.supabase) await this.supabase.auth.signOut();
+                window.location.href = '/register.html';
+            },
+            
+            exportData() {
+                // Placeholder for export functionality
+                console.log('Exporting analytics data...');
+                alert('Export functionality coming soon');
+            },
+            
+            initializeCharts() {
+                this.createOverviewChart();
+                this.createFunnelChart();
+                this.createSourcesChart();
+                this.createRevenueChart();
+            },
+            
+            createOverviewChart() {
+                const ctx = document.getElementById('overview-chart').getContext('2d');
+                this.charts.overview = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+                        datasets: [{
+                            label: 'Leads Generated',
+                            data: [65, 89, 123, 156],
+                            borderColor: '#D50057',
+                            backgroundColor: 'rgba(213, 0, 87, 0.1)',
+                            tension: 0.4,
+                            fill: true
+                        }, {
+                            label: 'Conversions',
+                            data: [20, 28, 38, 49],
+                            borderColor: '#8B5CF6',
+                            backgroundColor: 'rgba(139, 92, 246, 0.1)',
+                            tension: 0.4,
+                            fill: true
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                                labels: { color: '#fff' }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: { color: '#cbd5e1' },
+                                grid: { color: 'rgba(203, 213, 225, 0.1)' }
+                            },
+                            x: {
+                                ticks: { color: '#cbd5e1' },
+                                grid: { color: 'rgba(203, 213, 225, 0.1)' }
                             }
                         }
                     }
-                }
-            });
-
-            // Campaign Performance Chart
-            const campaignCtx = document.getElementById('campaign-chart').getContext('2d');
-            window.campaignChart = new Chart(campaignCtx, {
-                type: 'line',
-                data: {
-                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-                    datasets: [{
-                        label: window.i18n ? window.i18n.t('analytics.leadsGenerated') : 'Leads Generated',
-                        data: [65, 89, 123, 156, 189, 247],
-                        borderColor: 'rgb(102, 126, 234)',
-                        backgroundColor: 'rgba(102, 126, 234, 0.1)',
-                        tension: 0.4,
-                        fill: true
-                    }, {
-                        label: window.i18n ? window.i18n.t('analytics.conversions') : 'Conversions',
-                        data: [20, 28, 38, 49, 59, 77],
-                        borderColor: 'rgb(240, 147, 251)',
-                        backgroundColor: 'rgba(240, 147, 251, 0.1)',
-                        tension: 0.4,
-                        fill: true
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            position: 'top'
-                        }
+                });
+            },
+            
+            createFunnelChart() {
+                const ctx = document.getElementById('funnel-chart').getContext('2d');
+                this.charts.funnel = new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Visitors', 'Leads', 'Qualified', 'Customers'],
+                        datasets: [{
+                            data: [10000, 1247, 389, 127],
+                            backgroundColor: [
+                                '#D50057',
+                                '#8B5CF6',
+                                '#06B6D4',
+                                '#10B981'
+                            ],
+                            borderWidth: 0
+                        }]
                     },
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
-                    }
-                }
-            });
-
-            // Lead Sources Chart
-            const sourcesCtx = document.getElementById('sources-chart').getContext('2d');
-            window.sourcesChart = new Chart(sourcesCtx, {
-                type: 'bar',
-                data: {
-                    labels: [
-                        window.i18n ? window.i18n.t('analytics.googleAds') : 'Google Ads',
-                        window.i18n ? window.i18n.t('analytics.facebook') : 'Facebook',
-                        window.i18n ? window.i18n.t('analytics.linkedin') : 'LinkedIn',
-                        window.i18n ? window.i18n.t('analytics.organic') : 'Organic',
-                        window.i18n ? window.i18n.t('analytics.referral') : 'Referral'
-                    ],
-                    datasets: [{
-                        label: window.i18n ? window.i18n.t('analytics.leads') : 'Leads',
-                        data: [423, 312, 189, 156, 167],
-                        backgroundColor: [
-                            'rgba(102, 126, 234, 0.8)',
-                            'rgba(240, 147, 251, 0.8)',
-                            'rgba(79, 172, 254, 0.8)',
-                            'rgba(67, 233, 123, 0.8)',
-                            'rgba(251, 191, 36, 0.8)'
-                        ],
-                        borderRadius: 8,
-                        borderSkipped: false
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            display: false
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
-                    }
-                }
-            });
-
-            // Revenue Trends Chart
-            const revenueCtx = document.getElementById('revenue-chart').getContext('2d');
-            new Chart(revenueCtx, {
-                type: 'line',
-                data: {
-                    labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
-                    datasets: [{
-                        label: 'Revenue ($)',
-                        data: [8500, 12300, 15600, 18900],
-                        borderColor: 'rgb(67, 233, 123)',
-                        backgroundColor: 'rgba(67, 233, 123, 0.1)',
-                        tension: 0.4,
-                        fill: true,
-                        pointBackgroundColor: 'rgb(67, 233, 123)',
-                        pointBorderColor: '#fff',
-                        pointBorderWidth: 2,
-                        pointRadius: 6
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            display: false
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            ticks: {
-                                callback: function(value) {
-                                    return '$' + value.toLocaleString();
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: {
+                                    padding: 20,
+                                    usePointStyle: true,
+                                    color: '#fff'
                                 }
                             }
                         }
                     }
-                }
-            });
-        }
-
-        function setupEventListeners() {
-            // Period selector
-            document.getElementById('analytics-period').addEventListener('change', function(e) {
-                const period = e.target.value;
-                console.log('Period changed to:', period);
-                // Here you would typically reload the charts with new data
-            });
-
-            // Sign out button
-            document.getElementById('sign-out-btn').addEventListener('click', function() {
-                const confirmMessage = window.i18n ? window.i18n.t('nav.confirmSignOut') : 'Are you sure you want to sign out?';
-                if (confirm(confirmMessage)) {
-                    window.location.href = 'auth.html';
-                }
-            });
-
-            // Language change listener
-            document.addEventListener('languageChanged', function() {
-                updateChartsLabels();
-            });
-        }
-
-        function updateChartsLabels() {
-            // Update all chart labels when language changes
-            if (window.funnelChart) {
-                window.funnelChart.data.labels = [
-                    window.i18n ? window.i18n.t('analytics.visitors') : 'Visitors',
-                    window.i18n ? window.i18n.t('analytics.leads') : 'Leads',
-                    window.i18n ? window.i18n.t('analytics.qualified') : 'Qualified',
-                    window.i18n ? window.i18n.t('analytics.customers') : 'Customers'
-                ];
-                window.funnelChart.update();
-            }
-
-            if (window.campaignChart) {
-                window.campaignChart.data.datasets[0].label = window.i18n ? window.i18n.t('analytics.leadsGenerated') : 'Leads Generated';
-                window.campaignChart.data.datasets[1].label = window.i18n ? window.i18n.t('analytics.conversions') : 'Conversions';
-                window.campaignChart.update();
-            }
-
-            if (window.sourcesChart) {
-                window.sourcesChart.data.labels = [
-                    window.i18n ? window.i18n.t('analytics.googleAds') : 'Google Ads',
-                    window.i18n ? window.i18n.t('analytics.facebook') : 'Facebook',
-                    window.i18n ? window.i18n.t('analytics.linkedin') : 'LinkedIn',
-                    window.i18n ? window.i18n.t('analytics.organic') : 'Organic',
-                    window.i18n ? window.i18n.t('analytics.referral') : 'Referral'
-                ];
-                window.sourcesChart.data.datasets[0].label = window.i18n ? window.i18n.t('analytics.leads') : 'Leads';
-                window.sourcesChart.update();
-            }
-        }
-
-        // Animate counters on page load
-        function animateCounters() {
-            const counters = document.querySelectorAll('.stat-value');
-            counters.forEach(counter => {
-                const target = parseInt(counter.textContent.replace(/[^0-9]/g, ''));
-                const increment = target / 100;
-                let current = 0;
-
-                const timer = setInterval(() => {
-                    current += increment;
-                    if (current >= target) {
-                        current = target;
-                        clearInterval(timer);
+                });
+            },
+            
+            createSourcesChart() {
+                const ctx = document.getElementById('sources-chart').getContext('2d');
+                this.charts.sources = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Google Ads', 'Facebook', 'LinkedIn', 'Organic', 'Referral'],
+                        datasets: [{
+                            label: 'Leads',
+                            data: [423, 312, 189, 156, 167],
+                            backgroundColor: [
+                                '#D50057',
+                                '#8B5CF6',
+                                '#06B6D4',
+                                '#10B981',
+                                '#F59E0B'
+                            ],
+                            borderRadius: 8
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: { color: '#cbd5e1' },
+                                grid: { color: 'rgba(203, 213, 225, 0.1)' }
+                            },
+                            x: {
+                                ticks: { color: '#cbd5e1' },
+                                grid: { color: 'rgba(203, 213, 225, 0.1)' }
+                            }
+                        }
                     }
-
-                    if (counter.textContent.includes('$')) {
-                        counter.textContent = '$' + Math.floor(current).toLocaleString();
-                    } else if (counter.textContent.includes('%')) {
-                        counter.textContent = (current / 10).toFixed(1) + '%';
-                    } else {
-                        counter.textContent = Math.floor(current).toLocaleString();
+                });
+            },
+            
+            createRevenueChart() {
+                const ctx = document.getElementById('revenue-chart').getContext('2d');
+                this.charts.revenue = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+                        datasets: [{
+                            label: 'Revenue ($)',
+                            data: [8500, 12300, 15600, 18900],
+                            borderColor: '#10B981',
+                            backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                            tension: 0.4,
+                            fill: true,
+                            pointBackgroundColor: '#10B981',
+                            pointBorderColor: '#fff',
+                            pointBorderWidth: 2,
+                            pointRadius: 6
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    color: '#cbd5e1',
+                                    callback: function(value) {
+                                        return '$' + value.toLocaleString();
+                                    }
+                                },
+                                grid: { color: 'rgba(203, 213, 225, 0.1)' }
+                            },
+                            x: {
+                                ticks: { color: '#cbd5e1' },
+                                grid: { color: 'rgba(203, 213, 225, 0.1)' }
+                            }
+                        }
                     }
-                }, 20);
-            });
-        }
-
-        // Start counter animation after page load
-        setTimeout(animateCounters, 500);
+                });
+            },
+            
+            updateCharts() {
+                // Placeholder for updating charts with new period data
+                console.log('Updating charts for period:', this.currentPeriod);
+            },
+            
+            animateCounters() {
+                const counters = document.querySelectorAll('.metric-value');
+                counters.forEach(counter => {
+                    const text = counter.textContent;
+                    const isCurrency = text.includes('$');
+                    const isPercentage = text.includes('%');
+                    const target = parseFloat(text.replace(/[^0-9.]/g, ''));
+                    
+                    let current = 0;
+                    const increment = target / 50;
+                    
+                    const timer = setInterval(() => {
+                        current += increment;
+                        if (current >= target) {
+                            current = target;
+                            clearInterval(timer);
+                        }
+                        
+                        if (isCurrency) {
+                            counter.textContent = '$' + Math.floor(current).toLocaleString();
+                        } else if (isPercentage) {
+                            counter.textContent = current.toFixed(1) + '%';
+                        } else {
+                            counter.textContent = Math.floor(current).toLocaleString();
+                        }
+                    }, 30);
+                });
+            }
+        };
+        
+        // Initialize analytics when DOM is ready
+        document.addEventListener('DOMContentLoaded', () => Analytics.init());
     </script>
 </body>
 </html>

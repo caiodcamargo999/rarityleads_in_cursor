@@ -3,6 +3,9 @@
         "title": "Rarity Leads - AI-Powered Lead Generation Platform",
         "description": "Rarity Leads is your AI-native platform to attract, qualify, and close clients — without the manual grind."
     },
+    "common": {
+        "brand": "Rarity Leads"
+    },
     "nav": {
         "dashboard": "Dashboard",
         "leads": "Leads",
@@ -49,6 +52,8 @@
         }
     },
     "dashboard": {
+        "title": "Rarity Leads - Dashboard",
+        "header": "Client Acquisition Dashboard",
         "welcome": "Welcome back",
         "subtitle": "Here's what's happening with your lead generation today",
         "overview": "Performance Overview",
@@ -64,11 +69,32 @@
         "importLeads": "Import Leads",
         "viewReports": "View Reports",
         "thisMonth": "this month",
-        "noVariation": "No variation"
+        "noVariation": "No variation",
+        "metrics": {
+            "leads": "Qualified Leads",
+            "leads.trend": "+23% this month",
+            "campaigns": "Active Campaigns",
+            "campaigns.trend": "No change",
+            "appointments": "Appointments Scheduled",
+            "appointments.trend": "+8.4%"
+        },
+        "tabs": {
+            "funnel": "Funnel View",
+            "calendar": "Calendar View"
+        },
+        "funnel": {
+            "title": "Lead Funnel",
+            "description": "Visualize your lead journey from first touch to closed deal. Coming soon: interactive funnel analytics."
+        },
+        "calendar": {
+            "title": "Appointments Calendar",
+            "description": "See all your scheduled appointments in one place. Calendar integration coming soon."
+        }
     },
     "analytics": {
         "title": "Analytics Dashboard",
         "subtitle": "Monitor your lead generation performance and campaign effectiveness with comprehensive insights",
+        "exportData": "Export Data",
         "overview": "Overview",
         "performanceCharts": "Performance Charts",
         "acquisitionFunnel": "Acquisition Funnel",
@@ -76,9 +102,13 @@
         "leadSources": "Lead Sources",
         "revenueTrends": "Revenue Trends",
         "leadsGenerated": "Leads Generated",
+        "leadsGenerated.trend": "+23% from last month",
         "conversionRate": "Conversion Rate",
+        "conversionRate.trend": "+8.4% from last month",
         "activeCampaigns": "Active Campaigns",
+        "activeCampaigns.trend": "No variation",
         "revenue": "Revenue",
+        "revenue.trend": "+15.3% from last month",
         "period": {
             "last7days": "Last 7 days",
             "last30days": "Last 30 days",
@@ -97,7 +127,25 @@
         "facebook": "Facebook",
         "linkedin": "LinkedIn",
         "organic": "Organic",
-        "referral": "Referral"
+        "referral": "Referral",
+        "tabs": {
+            "overview": "Overview",
+            "funnel": "Funnel",
+            "sources": "Sources",
+            "revenue": "Revenue"
+        },
+        "funnel": {
+            "title": "Acquisition Funnel",
+            "description": "Track your lead journey from first touch to conversion"
+        },
+        "sources": {
+            "title": "Lead Sources",
+            "description": "Identify your most effective lead generation channels"
+        },
+        "revenue": {
+            "title": "Revenue Trends",
+            "description": "Monitor your revenue growth and patterns"
+        }
     },
     "auth": {
         "createAccount": "Create Account",
@@ -111,6 +159,7 @@
         "password": "Password",
         "createPassword": "Create a strong password",
         "signIn": "Sign In",
+        "logout": "Logout",
         "alreadyHaveAccount": "Already have an account?",
         "signInInstead": "Sign in instead",
         "dontHaveAccount": "Don't have an account?",
@@ -134,6 +183,338 @@
             "userAlreadyExists": "An account with this email already exists.",
             "signupDisabled": "New registrations are currently disabled.",
             "rateLimitExceeded": "Too many emails sent. Please wait before requesting another."
+        }
+    },
+    "leads": {
+        "title": "Lead Prospecting",
+        "subtitle": "Discover, qualify, and manage your leads with AI-powered prospecting tools",
+        "addLead": "Add Lead",
+        "metrics": {
+            "total": "Total Leads",
+            "hot": "Hot Leads",
+            "warm": "Warm Leads",
+            "converted": "Converted"
+        },
+        "tabs": {
+            "all": "All Leads",
+            "hot": "Hot Leads",
+            "warm": "Warm Leads",
+            "converted": "Converted"
+        },
+        "search": {
+            "placeholder": "Search leads by name, email, or company..."
+        },
+        "filters": {
+            "allStatus": "All Status",
+            "new": "New",
+            "warm": "Warm",
+            "hot": "Hot",
+            "cold": "Cold",
+            "converted": "Converted",
+            "allScores": "All Scores",
+            "highScore": "High (80+)",
+            "mediumScore": "Medium (50-79)",
+            "lowScore": "Low (0-49)",
+            "clear": "Clear Filters"
+        },
+        "table": {
+            "name": "Name",
+            "email": "Email",
+            "position": "Position",
+            "score": "Score",
+            "status": "Status",
+            "added": "Added",
+            "actions": "Actions"
+        },
+        "empty": {
+            "title": "No leads found",
+            "description": "Start by adding your first lead or adjust your filters."
+        },
+        "hot": {
+            "title": "Hot Leads",
+            "description": "High-priority leads ready for immediate follow-up"
+        },
+        "warm": {
+            "title": "Warm Leads",
+            "description": "Leads showing interest and ready for nurturing"
+        },
+        "converted": {
+            "title": "Converted Leads",
+            "description": "Successfully converted leads and customers"
+        },
+        "actions": {
+            "edit": "Edit",
+            "delete": "Delete"
+        }
+    },
+    "companies": {
+        "title": "Company Prospecting",
+        "subtitle": "Discover and prospect companies with AI-powered targeting and qualification tools",
+        "addCompany": "Add Company",
+        "metrics": {
+            "total": "Total Companies",
+            "targeted": "Targeted",
+            "contacted": "Contacted",
+            "converted": "Converted"
+        },
+        "tabs": {
+            "all": "All Companies",
+            "targeted": "Targeted",
+            "contacted": "Contacted",
+            "converted": "Converted"
+        },
+        "search": {
+            "placeholder": "Search companies by name, industry, or location..."
+        },
+        "filters": {
+            "allIndustries": "All Industries",
+            "technology": "Technology",
+            "healthcare": "Healthcare",
+            "finance": "Finance",
+            "retail": "Retail",
+            "manufacturing": "Manufacturing",
+            "allSizes": "All Sizes",
+            "startup": "Startup (1-50)",
+            "small": "Small (51-200)",
+            "medium": "Medium (201-1000)",
+            "large": "Large (1000+)",
+            "clear": "Clear Filters"
+        },
+        "empty": {
+            "title": "No companies found",
+            "description": "Start by adding your first company or adjust your filters."
+        },
+        "targeted": {
+            "title": "Targeted Companies",
+            "description": "Companies identified as potential prospects based on your criteria"
+        },
+        "contacted": {
+            "title": "Contacted Companies",
+            "description": "Companies that have been reached out to for business opportunities"
+        },
+        "converted": {
+            "title": "Converted Companies",
+            "description": "Companies that have become clients or partners"
+        },
+        "actions": {
+            "view": "View",
+            "edit": "Edit",
+            "contact": "Contact"
+        }
+    },
+    "facebook": {
+        "title": "Facebook Automation",
+        "subtitle": "Automate your Facebook outreach with AI-powered messaging and achieve 89% response rates",
+        "connect": "Connect Facebook",
+        "newCampaign": "New Campaign",
+        "metrics": {
+            "messagesSent": "Messages Sent",
+            "responseRate": "Response Rate",
+            "activeCampaigns": "Active Campaigns",
+            "conversions": "Conversions"
+        },
+        "tabs": {
+            "campaigns": "Campaigns",
+            "templates": "Templates",
+            "analytics": "Analytics",
+            "settings": "Settings"
+        },
+        "status": {
+            "connected": "Facebook connected",
+            "disconnected": "Facebook not connected"
+        },
+        "empty": {
+            "title": "No campaigns found",
+            "description": "Start by creating your first Facebook campaign."
+        },
+        "templates": {
+            "title": "Message Templates",
+            "description": "Create and manage your Facebook message templates for consistent outreach"
+        },
+        "analytics": {
+            "title": "Facebook Analytics",
+            "description": "Track your Facebook campaign performance and engagement metrics"
+        },
+        "settings": {
+            "title": "Facebook Settings",
+            "description": "Configure your Facebook integration and automation preferences"
+        },
+        "actions": {
+            "view": "View",
+            "edit": "Edit",
+            "start": "Start"
+        }
+    },
+    "instagram": {
+        "title": "Instagram Automation",
+        "subtitle": "Automate your Instagram outreach with AI-powered messaging and achieve 92% response rates",
+        "connect": "Connect Instagram",
+        "newCampaign": "New Campaign",
+        "metrics": {
+            "messagesSent": "Messages Sent",
+            "responseRate": "Response Rate",
+            "activeCampaigns": "Active Campaigns",
+            "conversions": "Conversions"
+        },
+        "tabs": {
+            "campaigns": "Campaigns",
+            "templates": "Templates",
+            "analytics": "Analytics",
+            "settings": "Settings"
+        },
+        "status": {
+            "connected": "Instagram connected",
+            "disconnected": "Instagram not connected"
+        },
+        "empty": {
+            "title": "No campaigns found",
+            "description": "Start by creating your first Instagram campaign."
+        },
+        "templates": {
+            "title": "Message Templates",
+            "description": "Create and manage your Instagram message templates for consistent outreach"
+        },
+        "analytics": {
+            "title": "Instagram Analytics",
+            "description": "Track your Instagram campaign performance and engagement metrics"
+        },
+        "settings": {
+            "title": "Instagram Settings",
+            "description": "Configure your Instagram integration and automation preferences"
+        },
+        "actions": {
+            "view": "View",
+            "edit": "Edit",
+            "start": "Start"
+        }
+    },
+    "linkedin": {
+        "title": "LinkedIn Automation",
+        "subtitle": "Automate your LinkedIn outreach with AI-powered messaging and achieve 87% response rates",
+        "connect": "Connect LinkedIn",
+        "newCampaign": "New Campaign",
+        "metrics": {
+            "connectionsMade": "Connections Made",
+            "responseRate": "Response Rate",
+            "activeCampaigns": "Active Campaigns",
+            "conversions": "Conversions"
+        },
+        "tabs": {
+            "campaigns": "Campaigns",
+            "templates": "Templates",
+            "analytics": "Analytics",
+            "settings": "Settings"
+        },
+        "status": {
+            "connected": "LinkedIn connected",
+            "disconnected": "LinkedIn not connected"
+        },
+        "empty": {
+            "title": "No campaigns found",
+            "description": "Start by creating your first LinkedIn campaign."
+        },
+        "templates": {
+            "title": "Message Templates",
+            "description": "Create and manage your LinkedIn message templates for consistent outreach"
+        },
+        "analytics": {
+            "title": "LinkedIn Analytics",
+            "description": "Track your LinkedIn campaign performance and engagement metrics"
+        },
+        "settings": {
+            "title": "LinkedIn Settings",
+            "description": "Configure your LinkedIn integration and automation preferences"
+        },
+        "actions": {
+            "view": "View",
+            "edit": "Edit",
+            "start": "Start"
+        }
+    },
+    "whatsapp": {
+        "title": "WhatsApp Automation",
+        "subtitle": "Automate your WhatsApp outreach with AI-powered messaging and achieve 94% response rates",
+        "connectQR": "Connect QR",
+        "newCampaign": "New Campaign",
+        "metrics": {
+            "messagesSent": "Messages Sent",
+            "responseRate": "Response Rate",
+            "activeCampaigns": "Active Campaigns",
+            "conversions": "Conversions"
+        },
+        "tabs": {
+            "campaigns": "Campaigns",
+            "templates": "Templates",
+            "analytics": "Analytics",
+            "settings": "Settings"
+        },
+        "status": {
+            "connected": "WhatsApp connected",
+            "disconnected": "WhatsApp not connected"
+        },
+        "empty": {
+            "title": "No campaigns found",
+            "description": "Start by creating your first WhatsApp campaign."
+        },
+        "templates": {
+            "title": "Message Templates",
+            "description": "Create and manage your WhatsApp message templates for consistent outreach"
+        },
+        "analytics": {
+            "title": "WhatsApp Analytics",
+            "description": "Track your WhatsApp campaign performance and engagement metrics"
+        },
+        "settings": {
+            "title": "WhatsApp Settings",
+            "description": "Configure your WhatsApp integration and automation preferences"
+        },
+        "actions": {
+            "view": "View",
+            "edit": "Edit",
+            "start": "Start"
+        }
+    },
+    "x": {
+        "title": "X (Twitter) Automation",
+        "subtitle": "Automate your X (Twitter) outreach with AI-powered messaging and achieve 91% response rates",
+        "connect": "Connect X",
+        "newCampaign": "New Campaign",
+        "metrics": {
+            "messagesSent": "Messages Sent",
+            "responseRate": "Response Rate",
+            "activeCampaigns": "Active Campaigns",
+            "conversions": "Conversions"
+        },
+        "tabs": {
+            "campaigns": "Campaigns",
+            "templates": "Templates",
+            "analytics": "Analytics",
+            "settings": "Settings"
+        },
+        "status": {
+            "connected": "X connected",
+            "disconnected": "X not connected"
+        },
+        "empty": {
+            "title": "No campaigns found",
+            "description": "Start by creating your first X campaign."
+        },
+        "templates": {
+            "title": "Message Templates",
+            "description": "Create and manage your X message templates for consistent outreach"
+        },
+        "analytics": {
+            "title": "X Analytics",
+            "description": "Track your X campaign performance and engagement metrics"
+        },
+        "settings": {
+            "title": "X Settings",
+            "description": "Configure your X integration and automation preferences"
+        },
+        "actions": {
+            "view": "View",
+            "edit": "Edit",
+            "start": "Start"
         }
     },
     "features": {

@@ -3,110 +3,156 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Rarity Leads - Lead Generation Reinvented</title>
+  <title>Rarity Leads - AI-Powered Client Acquisition</title>
   <link rel="stylesheet" href="rarity-design.css">
-  <link rel="stylesheet" href="dashboard.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
-    body {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      background: #18181b;
-      font-family: 'Inter', sans-serif;
-      color: #fff;
-      margin: 0;
-    }
-    .landing-container {
-      background: rgba(255,255,255,0.04);
-      border-radius: 20px;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.10);
-      padding: 56px 40px 40px 40px;
-      max-width: 420px;
-      text-align: center;
-      margin: 48px 0 24px 0;
-    }
-    .logo {
-      font-size: 2.7rem;
-      font-weight: 700;
-      margin-bottom: 18px;
-      letter-spacing: 0.5px;
-      color: #fff;
-      text-shadow: none;
-    }
-    .headline {
-      font-size: 1.6rem;
-      font-weight: 600;
-      margin-bottom: 18px;
-      color: #fff;
-      line-height: 1.2;
-    }
-    .subtitle {
-      font-size: 1.08rem;
-      color: #cbd5e1;
-      margin-bottom: 36px;
-      font-weight: 400;
-    }
-    .cta-btn {
-      display: block;
-      width: 100%;
-      margin: 12px 0;
-      padding: 15px 0;
-      border: none;
-      border-radius: 8px;
-      font-size: 1.13rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background 0.2s, color 0.2s, box-shadow 0.2s;
-      box-shadow: 0 2px 8px rgba(139,92,246,0.08);
-    }
-    .cta-btn.signup {
-      background: #fff;
-      color: #18181b;
-    }
-    .cta-btn.signup:hover {
-      background: #ede9fe;
-      color: #8B5CF6;
-    }
-    .cta-btn.signin {
-      background: transparent;
-      color: #fff;
-      border: 2px solid #fff;
-    }
-    .cta-btn.signin:hover {
-      background: #fff;
-      color: #8B5CF6;
-    }
-    .footer {
-      margin-top: 24px;
-      color: #a1a1aa;
-      font-size: 0.98rem;
-      text-align: center;
-      letter-spacing: 0.01em;
-    }
-    @media (max-width: 600px) {
-      .landing-container {
-        padding: 32px 12px 24px 12px;
-        max-width: 98vw;
-      }
-      .logo {
-        font-size: 2rem;
-      }
-      .headline {
-        font-size: 1.15rem;
-      }
-    }
+    body { margin: 0; background: #18181b; color: #fff; font-family: 'Inter', sans-serif; line-height: 1.5; }
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+    .hero { padding: 80px 0 48px 0; text-align: center; }
+    .hero-title { font-size: 2.7rem; font-weight: 700; margin-bottom: 18px; letter-spacing: -1px; }
+    .hero-subtitle { font-size: 1.25rem; color: #cbd5e1; margin-bottom: 36px; font-weight: 400; }
+    .hero-cta { display: flex; justify-content: center; gap: 16px; margin-bottom: 32px; }
+    .btn { padding: 15px 32px; border-radius: 8px; font-size: 1.13rem; font-weight: 600; border: none; cursor: pointer; transition: background 0.2s, color 0.2s, box-shadow 0.2s; }
+    .btn-primary { background: #fff; color: #18181b; }
+    .btn-primary:hover { background: #ede9fe; color: #8B5CF6; }
+    .btn-outline { background: transparent; color: #fff; border: 2px solid #fff; }
+    .btn-outline:hover { background: #fff; color: #8B5CF6; }
+    .trust-bar { margin: 0 auto 48px auto; text-align: center; color: #a1a1aa; font-size: 1.05rem; letter-spacing: 0.01em; }
+    .trust-logos { display: flex; justify-content: center; gap: 32px; margin-top: 16px; flex-wrap: wrap; }
+    .trust-logo { width: 100px; height: 32px; background: #23232b; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 1rem; color: #a1a1aa; font-weight: 600; opacity: 0.7; }
+    .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 32px; margin: 64px 0 48px 0; }
+    .feature { background: rgba(255,255,255,0.03); border-radius: 14px; padding: 32px 24px; text-align: left; box-shadow: 0 2px 8px rgba(0,0,0,0.04); min-height: 180px; }
+    .feature-title { font-size: 1.18rem; font-weight: 600; margin-bottom: 10px; color: #fff; }
+    .feature-desc { color: #cbd5e1; font-size: 1rem; }
+    .how-it-works { margin: 64px 0 48px 0; text-align: center; }
+    .steps { display: flex; flex-wrap: wrap; justify-content: center; gap: 32px; margin-top: 32px; }
+    .step { background: rgba(255,255,255,0.03); border-radius: 14px; padding: 32px 24px; min-width: 220px; max-width: 260px; text-align: left; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+    .step-title { font-size: 1.1rem; font-weight: 600; margin-bottom: 8px; color: #fff; }
+    .step-desc { color: #cbd5e1; font-size: 0.98rem; }
+    .testimonials { margin: 64px 0 48px 0; text-align: center; }
+    .testimonial-list { display: flex; flex-wrap: wrap; justify-content: center; gap: 32px; margin-top: 32px; }
+    .testimonial { background: rgba(255,255,255,0.03); border-radius: 14px; padding: 32px 24px; max-width: 340px; text-align: left; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+    .testimonial-quote { font-size: 1.05rem; color: #fff; margin-bottom: 16px; font-style: italic; }
+    .testimonial-author { color: #a1a1aa; font-size: 0.98rem; font-weight: 600; }
+    .pricing { margin: 64px 0 48px 0; text-align: center; }
+    .pricing-title { font-size: 2rem; font-weight: 700; margin-bottom: 18px; }
+    .pricing-table { display: flex; flex-wrap: wrap; justify-content: center; gap: 32px; margin-top: 32px; }
+    .plan { background: rgba(255,255,255,0.03); border-radius: 14px; padding: 32px 24px; min-width: 220px; max-width: 300px; text-align: left; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+    .plan-title { font-size: 1.15rem; font-weight: 600; margin-bottom: 8px; color: #fff; }
+    .plan-price { font-size: 2rem; font-weight: 700; margin-bottom: 8px; color: #D50057; }
+    .plan-features { color: #cbd5e1; font-size: 0.98rem; margin-bottom: 16px; }
+    .cta-final { margin: 64px 0 48px 0; text-align: center; }
+    .footer { margin-top: 32px; color: #a1a1aa; font-size: 0.98rem; text-align: center; letter-spacing: 0.01em; padding-bottom: 24px; }
+    @media (max-width: 800px) { .features, .testimonial-list, .steps, .pricing-table { flex-direction: column; display: flex; gap: 24px; } .container { padding: 0 8px; } }
   </style>
 </head>
 <body>
-  <div class="landing-container">
-    <div class="logo">Rarity Leads</div>
-    <div class="headline">Work Less. Earn More. Enjoy Life.</div>
-    <div class="subtitle">Automate your lead generation. Focus on what matters. Start for free and see how top agencies scale with Rarity Leads.</div>
-    <button class="cta-btn signup" onclick="window.location.href='register.html'">Start For Free</button>
-    <button class="cta-btn signin" onclick="window.location.href='login.html'">Sign In</button>
+  <div class="container">
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="hero-title">AI-powered warm lead hunting for faster deals, deeper conversations, and scalable outreach — with zero guesswork.</div>
+      <div class="hero-subtitle">Rarity Leads is your AI-native platform to attract, qualify, and close clients — without the manual grind.</div>
+      <div class="hero-cta">
+        <button class="btn btn-primary" onclick="window.location.href='register.html'">Start For Free</button>
+        <button class="btn btn-outline" onclick="window.location.href='login.html'">Sign In</button>
+      </div>
+    </section>
+    <!-- Trust Bar -->
+    <div class="trust-bar">
+      Trusted by top agencies and creators
+      <div class="trust-logos">
+        <div class="trust-logo">AgencyOne</div>
+        <div class="trust-logo">GrowthLab</div>
+        <div class="trust-logo">NextGen</div>
+        <div class="trust-logo">ScaleUp</div>
+      </div>
+    </div>
+    <!-- Features -->
+    <section class="features" id="features">
+      <div class="feature">
+        <div class="feature-title">AI-Powered SDR That Qualifies Leads for You</div>
+        <div class="feature-desc">Stop wasting time on cold leads. Our AI SDR engages, qualifies, and routes only the best prospects to your team — so you focus on closing, not chasing.</div>
+      </div>
+      <div class="feature">
+        <div class="feature-title">Smart WhatsApp Follow-ups, No Manual Messaging</div>
+        <div class="feature-desc">Automate personalized WhatsApp sequences and never let a hot lead go cold. Every follow-up is timely, relevant, and humanized.</div>
+      </div>
+      <div class="feature">
+        <div class="feature-title">Campaign Intelligence for Google and Meta</div>
+        <div class="feature-desc">Launch, optimize, and analyze paid campaigns from one place. Get actionable insights and suggestions to maximize ROI.</div>
+      </div>
+    </section>
+    <!-- How It Works -->
+    <section class="how-it-works">
+      <h2>How It Works</h2>
+      <div class="steps">
+        <div class="step">
+          <div class="step-title">1. Create your free account</div>
+          <div class="step-desc">Sign up in seconds. No credit card required.</div>
+        </div>
+        <div class="step">
+          <div class="step-title">2. Connect your channels</div>
+          <div class="step-desc">Integrate WhatsApp, LinkedIn, and more with a click.</div>
+        </div>
+        <div class="step">
+          <div class="step-title">3. Watch qualified leads flow in</div>
+          <div class="step-desc">Let our AI do the heavy lifting while you focus on closing deals.</div>
+        </div>
+      </div>
+    </section>
+    <!-- Testimonials -->
+    <section class="testimonials">
+      <h2>What Our Users Say</h2>
+      <div class="testimonial-list">
+        <div class="testimonial">
+          <div class="testimonial-quote">“Rarity Leads changed the way we do business. More leads, less effort.”</div>
+          <div class="testimonial-author">Sarah Chen, Agency Owner</div>
+        </div>
+        <div class="testimonial">
+          <div class="testimonial-quote">“We scaled our pipeline 3x in 2 months. The automation is next level.”</div>
+          <div class="testimonial-author">David Rodriguez, GrowthLab</div>
+        </div>
+        <div class="testimonial">
+          <div class="testimonial-quote">“I spend less time prospecting and more time closing. Highly recommend.”</div>
+          <div class="testimonial-author">Marcus Johnson, NextGen</div>
+        </div>
+      </div>
+    </section>
+    <!-- Pricing -->
+    <section class="pricing" id="pricing">
+      <div class="pricing-title">Simple Pricing for Scalable Growth</div>
+      <div class="pricing-table">
+        <div class="plan">
+          <div class="plan-title">Starter</div>
+          <div class="plan-price">$97/mo</div>
+          <div class="plan-features">Up to 500 leads/month<br>AI Qualification<br>WhatsApp Automation<br>Email Support</div>
+          <button class="btn btn-primary" onclick="window.location.href='register.html'">Start for Free</button>
+        </div>
+        <div class="plan">
+          <div class="plan-title">Pro</div>
+          <div class="plan-price">$297/mo</div>
+          <div class="plan-features">Up to 2,500 leads/month<br>All Starter features<br>Campaign Intelligence<br>Priority Support</div>
+          <button class="btn btn-primary" onclick="window.location.href='register.html'">Start for Free</button>
+        </div>
+        <div class="plan">
+          <div class="plan-title">Enterprise</div>
+          <div class="plan-price">Custom</div>
+          <div class="plan-features">Unlimited leads<br>All Pro features<br>Dedicated Success Manager<br>Custom Integrations</div>
+          <button class="btn btn-primary" onclick="window.location.href='register.html'">Start for Free</button>
+        </div>
+      </div>
+    </section>
+    <!-- Final CTA -->
+    <section class="cta-final" id="cta-footer">
+      <div class="hero-title" style="font-size:2rem;">Stop Chasing Leads. Start Closing.</div>
+      <div class="hero-cta" style="margin-top:24px;">
+        <button class="btn btn-primary" onclick="window.location.href='register.html'">Get Started</button>
+      </div>
+      <div class="trust-bar" style="margin-top:32px;">
+        <span>4.9 Stars on Clutch</span> &nbsp;|&nbsp; <span>1,200+ Clients</span> &nbsp;|&nbsp; <span>AI-Powered and Human-Approved</span>
+      </div>
+    </section>
   </div>
   <div class="footer">
     &copy; 2024 Rarity Leads. All rights reserved.

@@ -3,704 +3,188 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title data-i18n="meta.title">Rarity Leads - Dashboard</title>
-    <meta name="description" data-i18n="meta.description" content="Here's what's happening with your lead generation today">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title data-i18n="dashboard.title">Rarity Leads - Dashboard</title>
     <link rel="stylesheet" href="rarity-design.css">
     <link rel="stylesheet" href="dashboard.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { margin: 0; background: #18181b; color: #fff; font-family: 'Inter', sans-serif; }
+        .dashboard-layout { display: flex; min-height: 100vh; }
+        .sidebar { width: 240px; background: #1e1e23; padding: 32px 0 0 0; display: flex; flex-direction: column; }
+        .sidebar-logo { font-size: 1.5rem; font-weight: 700; color: #fff; text-align: center; margin-bottom: 32px; letter-spacing: -0.5px; }
+        .sidebar-nav { flex: 1; }
+        .sidebar-nav ul { list-style: none; padding: 0; margin: 0; }
+        .sidebar-nav li { margin-bottom: 8px; }
+        .sidebar-nav a { display: block; padding: 12px 32px; color: #cbd5e1; text-decoration: none; border-left: 4px solid transparent; font-weight: 500; transition: background 0.2s, color 0.2s, border-color 0.2s; }
+        .sidebar-nav a.active, .sidebar-nav a:hover { background: #23232b; color: #fff; border-left: 4px solid #D50057; }
+        .sidebar-footer { padding: 24px 32px; border-top: 1px solid #23232b; text-align: center; }
+        .logout-btn { background: none; border: none; color: #8B5CF6; font-weight: 600; cursor: pointer; font-size: 1rem; }
+        .main-content { flex: 1; padding: 48px 40px 32px 40px; display: flex; flex-direction: column; }
+        .dashboard-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 32px; }
+        .dashboard-title { font-size: 2rem; font-weight: 700; }
+        .user-email { color: #a1a1aa; font-size: 1rem; font-weight: 500; }
+        .metrics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 32px; margin-bottom: 40px; }
+        .metric-card { background: rgba(255,255,255,0.03); border-radius: 14px; padding: 32px 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+        .metric-label { color: #cbd5e1; font-size: 1rem; margin-bottom: 8px; }
+        .metric-value { font-size: 2rem; font-weight: 700; color: #D50057; margin-bottom: 4px; }
+        .metric-trend { font-size: 0.98rem; color: #10B981; }
+        .tabs { display: flex; gap: 24px; margin-bottom: 32px; }
+        .tab { padding: 10px 24px; border-radius: 8px 8px 0 0; background: #23232b; color: #cbd5e1; font-weight: 500; cursor: pointer; border: none; outline: none; transition: background 0.2s, color 0.2s; }
+        .tab.active, .tab:hover { background: #fff; color: #18181b; }
+        .tab-content { background: rgba(255,255,255,0.03); border-radius: 0 0 14px 14px; padding: 32px 24px; min-height: 220px; }
+        @media (max-width: 900px) { .main-content { padding: 32px 8px; } .sidebar { width: 64px; padding: 16px 0 0 0; } .sidebar-logo { font-size: 1rem; margin-bottom: 16px; } .sidebar-nav a { padding: 12px 8px; font-size: 0.95rem; } }
+        @media (max-width: 600px) { .dashboard-layout { flex-direction: column; } .sidebar { width: 100vw; flex-direction: row; padding: 0; } .sidebar-nav ul { display: flex; flex-direction: row; } .sidebar-nav li { margin: 0 4px; } .main-content { padding: 16px 4px; } }
+    </style>
+</head>
+<body>
+    <div class="dashboard-layout">
+        <aside class="sidebar" role="navigation" aria-label="Main navigation">
+            <div class="sidebar-logo" data-i18n="common.brand">Rarity Leads</div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="dashboard.html" class="active" data-i18n="nav.dashboard">Dashboard</a></li>
+                    <li><a href="prospecting-leads.html" data-i18n="nav.leads">Leads</a></li>
+                    <li><a href="prospecting-companies.html" data-i18n="nav.companies">Companies</a></li>
+                    <li><a href="approaching-whatsapp.html" data-i18n="nav.whatsapp">WhatsApp</a></li>
+                    <li><a href="approaching-linkedin.html" data-i18n="nav.linkedin">LinkedIn</a></li>
+                    <li><a href="approaching-instagram.html" data-i18n="nav.instagram">Instagram</a></li>
+                    <li><a href="approaching-facebook.html" data-i18n="nav.facebook">Facebook</a></li>
+                    <li><a href="approaching-x.html" data-i18n="nav.x">X</a></li>
+                    <li><a href="analytics.html" data-i18n="nav.analytics">Analytics</a></li>
+                    <li><a href="support.html" data-i18n="nav.support">Support</a></li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer">
+                <button class="logout-btn" id="logout-btn" data-i18n="auth.logout">Logout</button>
+            </div>
+        </aside>
+        <main class="main-content" role="main">
+            <div class="dashboard-header">
+                <div class="dashboard-title" data-i18n="dashboard.header">Client Acquisition Dashboard</div>
+                <div class="user-email" id="user-email" aria-label="User email">user@email.com</div>
+            </div>
+            <div class="metrics-grid" role="region" aria-label="Dashboard metrics">
+                <div class="metric-card" role="article">
+                    <div class="metric-label" data-i18n="dashboard.metrics.leads">Qualified Leads</div>
+                    <div class="metric-value" id="leads-count" aria-live="polite">1,247</div>
+                    <div class="metric-trend" data-i18n="dashboard.metrics.leads.trend">+23% this month</div>
+                </div>
+                <div class="metric-card" role="article">
+                    <div class="metric-label" data-i18n="dashboard.metrics.campaigns">Active Campaigns</div>
+                    <div class="metric-value" id="active-campaigns" aria-live="polite">12</div>
+                    <div class="metric-trend" data-i18n="dashboard.metrics.campaigns.trend">No change</div>
+                </div>
+                <div class="metric-card" role="article">
+                    <div class="metric-label" data-i18n="dashboard.metrics.appointments">Appointments Scheduled</div>
+                    <div class="metric-value" id="appointments" aria-live="polite">34</div>
+                    <div class="metric-trend" data-i18n="dashboard.metrics.appointments.trend">+8.4%</div>
+                </div>
+            </div>
+            <div class="tabs" role="tablist" aria-label="Dashboard views">
+                <button class="tab active" id="tab-funnel" role="tab" aria-selected="true" aria-controls="funnel-view" data-i18n="dashboard.tabs.funnel">Funnel View</button>
+                <button class="tab" id="tab-calendar" role="tab" aria-selected="false" aria-controls="calendar-view" data-i18n="dashboard.tabs.calendar">Calendar View</button>
+            </div>
+            <div class="tab-content" id="tab-content">
+                <div id="funnel-view" role="tabpanel" aria-labelledby="tab-funnel">
+                    <h3 data-i18n="dashboard.funnel.title">Lead Funnel</h3>
+                    <p data-i18n="dashboard.funnel.description">Visualize your lead journey from first touch to closed deal. Coming soon: interactive funnel analytics.</p>
+                </div>
+                <div id="calendar-view" role="tabpanel" aria-labelledby="tab-calendar" style="display:none;">
+                    <h3 data-i18n="dashboard.calendar.title">Appointments Calendar</h3>
+                    <p data-i18n="dashboard.calendar.description">See all your scheduled appointments in one place. Calendar integration coming soon.</p>
+                </div>
+            </div>
+        </main>
+    </div>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="app-config.js"></script>
     <script src="i18n.js"></script>
-    <script src="auth-guard.js"></script>
-    <script src="universal-navigation.js"></script>
-    
     <script>
-        // Loader utility
-        function showLoader() {
-            let loader = document.getElementById('main-loader');
-            if (!loader) {
-                loader = document.createElement('div');
-                loader.id = 'main-loader';
-                loader.style = 'display:flex;align-items:center;justify-content:center;height:60vh;font-size:2rem;color:#764ba2;';
-                loader.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading...';
-                document.querySelector('main.main-content').prepend(loader);
-            } else {
-                loader.style.display = 'flex';
-            }
-        }
-        function hideLoader() {
-            const loader = document.getElementById('main-loader');
-            if (loader) loader.style.display = 'none';
-        }
-        function showError(message) {
-            let errorDiv = document.getElementById('main-error');
-            if (!errorDiv) {
-                errorDiv = document.createElement('div');
-                errorDiv.id = 'main-error';
-                errorDiv.style = 'color:#e53e3e;background:#fff3f3;padding:1rem;margin:2rem auto;text-align:center;border-radius:8px;max-width:600px;font-size:1.2rem;';
-                document.querySelector('main.main-content').prepend(errorDiv);
-            }
-            errorDiv.innerHTML = `<i class="fas fa-exclamation-triangle"></i> ${message}`;
-            errorDiv.style.display = 'block';
-        }
-        function hideError() {
-            const errorDiv = document.getElementById('main-error');
-            if (errorDiv) errorDiv.style.display = 'none';
-        }
-
-        // Initialize Supabase (with error handling)
-        let supabase = null;
-        try {
-            if (window.supabase) {
-                supabase = window.supabase.createClient(
-                    'https://yejheyrdsucgzpzwxuxs.supabase.co',
-                    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InllamhleXJkc3VjZ3pwend4dXhzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg4MDg2NzQsImV4cCI6MjA2NDM4NDY3NH0.NzCJ8i3SKpABO6ykWRX3nHDYmjVB82KL1wfgaY3trM4'
-                );
-            } else {
-                showError('Supabase not available. Please check your connection.');
-            }
-        } catch (error) {
-            showError('Supabase initialization failed.');
-        }
-
-        // Check authentication and load dashboard
-        document.addEventListener('DOMContentLoaded', async () => {
-            showLoader();
-            hideError();
-            if (!supabase) {
-                showError('Authentication system not available.');
-                hideLoader();
-                return;
-            }
-            try {
-                const { data: { session }, error } = await supabase.auth.getSession();
-                if (error || !session || !session.user) {
-                    showError('You are not authenticated. Please log in again.');
-                    hideLoader();
-                    setTimeout(() => { window.location.href = '/login.html'; }, 2000);
+        // Dashboard Module
+        const Dashboard = {
+            supabase: null,
+            currentLanguage: 'en',
+            
+            async init() {
+                this.supabase = window.AppUtils ? window.AppUtils.initSupabase() : null;
+                await this.checkAuth();
+                await this.initI18n();
+                this.bindEvents();
+                this.loadMetrics();
+            },
+            
+            async checkAuth() {
+                if (!this.supabase) return;
+                const { data: { session } } = await this.supabase.auth.getSession();
+                if (!session || !session.user || !session.user.email_confirmed_at) {
+                    window.location.href = '/register.html';
                     return;
                 }
-                // User authenticated, hide loader and error
-                hideLoader();
-                hideError();
-                // Initialize dashboard functionality
-                initializeDashboard();
-                // Set up sign out button
-                const signOutBtn = document.getElementById('sign-out-btn');
-                if (signOutBtn) {
-                    signOutBtn.addEventListener('click', async () => {
-                        showLoader();
-                        try {
-                            if (window.AuthGuard) {
-                                await window.AuthGuard.signOut();
-                                window.location.href = '/home.html';
-                            } else {
-                                window.location.href = '/home.html';
-                            }
-                        } catch (error) {
-                            showError('Sign out failed.');
-                            hideLoader();
-                        }
-                    });
+                document.getElementById('user-email').textContent = session.user.email;
+            },
+            
+            async initI18n() {
+                if (window.i18n) {
+                    this.currentLanguage = await window.i18n.detectLanguage();
+                    await window.i18n.translatePage();
                 }
-            } catch (error) {
-                showError('Failed to load dashboard. Please try again.');
-                hideLoader();
-            }
-        });
-
-        // Listen for auth changes (with error handling)
-        if (supabase && supabase.auth) {
-            try {
-                supabase.auth.onAuthStateChange((event, session) => {
-                    if (event === 'SIGNED_OUT') {
-                        window.location.href = '/home.html';
+            },
+            
+            bindEvents() {
+                // Logout
+                document.getElementById('logout-btn').addEventListener('click', () => this.logout());
+                
+                // Tabs
+                const tabFunnel = document.getElementById('tab-funnel');
+                const tabCalendar = document.getElementById('tab-calendar');
+                const funnelView = document.getElementById('funnel-view');
+                const calendarView = document.getElementById('calendar-view');
+                
+                tabFunnel.addEventListener('click', () => this.switchTab('funnel', tabFunnel, tabCalendar, funnelView, calendarView));
+                tabCalendar.addEventListener('click', () => this.switchTab('calendar', tabCalendar, tabFunnel, calendarView, funnelView));
+                
+                // Keyboard navigation
+                document.addEventListener('keydown', (e) => this.handleKeyboard(e));
+            },
+            
+            switchTab(activeTab, activeButton, inactiveButton, activeView, inactiveView) {
+                activeButton.classList.add('active');
+                activeButton.setAttribute('aria-selected', 'true');
+                inactiveButton.classList.remove('active');
+                inactiveButton.setAttribute('aria-selected', 'false');
+                activeView.style.display = '';
+                inactiveView.style.display = 'none';
+            },
+            
+            handleKeyboard(e) {
+                // Tab navigation with arrow keys
+                if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+                    const tabs = document.querySelectorAll('.tab');
+                    const activeTab = document.querySelector('.tab.active');
+                    const currentIndex = Array.from(tabs).indexOf(activeTab);
+                    
+                    if (e.key === 'ArrowLeft' && currentIndex > 0) {
+                        tabs[currentIndex - 1].click();
+                    } else if (e.key === 'ArrowRight' && currentIndex < tabs.length - 1) {
+                        tabs[currentIndex + 1].click();
                     }
-                });
-            } catch (error) {
-            }
-        }
-
-        // Initialize charts function
-        function initializeCharts() {
-            // Simple chart initialization without external dependencies
-            const chartCanvas = document.getElementById('leads-chart');
-            if (chartCanvas) {
-                const ctx = chartCanvas.getContext('2d');
-
-                // Simple chart drawing
-                ctx.fillStyle = '#667eea';
-                ctx.fillRect(10, 10, 100, 50);
-                ctx.fillStyle = '#764ba2';
-                ctx.fillRect(120, 20, 100, 40);
-                ctx.fillStyle = '#f093fb';
-                ctx.fillRect(230, 30, 100, 30);
-
-                ctx.fillStyle = '#ffffff';
-                ctx.font = '12px Inter';
-                ctx.fillText('Sample Chart Data', 10, 80);
-            }
-        }
-
-        // Dashboard-specific functionality
-        function initializeDashboard() {
-            // Initialize charts
-            initializeCharts();
-
-            // Setup dashboard-specific interactions
-            setupDashboardInteractions();
-        }
-
-        function setupDashboardInteractions() {
-            // Initialize navigation
-            initializeNavigation();
-
-            // Language selector
-            const langSelector = document.querySelector('.language-selector');
-            if (langSelector) {
-                const currentLang = langSelector.querySelector('.current-lang');
-                const dropdown = langSelector.querySelector('.lang-dropdown');
-
-                currentLang.addEventListener('click', () => {
-                    dropdown.classList.toggle('show');
-                });
-
-                // Close dropdown when clicking outside
-                document.addEventListener('click', (e) => {
-                    if (!langSelector.contains(e.target)) {
-                        dropdown.classList.remove('show');
-                    }
-                });
-
-                // Handle language selection
-                dropdown.querySelectorAll('.lang-option').forEach(option => {
-                    option.addEventListener('click', (e) => {
-                        e.preventDefault();
-                        const lang = option.dataset.lang;
-                        dropdown.classList.remove('show');
-                    });
-                });
-            }
-
-            // Quick action buttons
-            const createCampaignBtn = document.getElementById('create-campaign-btn');
-            if (createCampaignBtn) {
-                createCampaignBtn.addEventListener('click', () => {
-                    alert('Campaign creation coming soon!');
-                });
-            }
-
-            const createSequenceBtn = document.getElementById('create-sequence-btn');
-            if (createSequenceBtn) {
-                createSequenceBtn.addEventListener('click', () => {
-                    alert('Sequence creation coming soon!');
-                });
-            }
-
-            const connectLinkedInBtn = document.getElementById('connect-linkedin-btn');
-            if (connectLinkedInBtn) {
-                connectLinkedInBtn.addEventListener('click', () => {
-                    window.location.href = '/approaching-linkedin.html';
-                });
-            }
-
-            const connectClaudeBtn = document.getElementById('connect-claude-btn');
-            if (connectClaudeBtn) {
-                connectClaudeBtn.addEventListener('click', () => {
-                    alert('Claude AI connection coming soon!');
-                });
-            }
-
-            // Filter leads button
-            const filterLeadsBtn = document.getElementById('filter-leads-btn');
-            if (filterLeadsBtn) {
-                filterLeadsBtn.addEventListener('click', () => {
-                    window.location.href = '/prospecting-leads.html';
-                });
-            }
-
-            // Notification button
-            const notificationBtn = document.querySelector('.header-btn[data-tooltip="Notifications"]');
-            if (notificationBtn) {
-                notificationBtn.addEventListener('click', () => {
-                    alert('Notifications feature coming soon!');
-                });
-            }
-
-            // Help button
-            const helpBtn = document.querySelector('.header-btn[data-tooltip="Help"]');
-            if (helpBtn) {
-                helpBtn.addEventListener('click', () => {
-                    window.location.href = '/support.html';
-                });
-            }
-        }
-
-        // Initialize navigation functionality
-        function initializeNavigation() {
-            // Get current page
-            const currentPage = window.location.pathname.split('/').pop() || 'dashboard.html';
-
-            // Set active navigation item
-            setActiveNavItem(currentPage);
-
-            // Initialize sidebar toggle for mobile
-            initializeSidebarToggle();
-
-            // Add click handlers for navigation links
-            const navLinks = document.querySelectorAll('.nav-link');
-            navLinks.forEach(link => {
-                link.addEventListener('click', (e) => {
-                    const href = link.getAttribute('href');
-                    if (href && href !== '#') {
-                        // Close sidebar on mobile after navigation
-                        if (window.innerWidth <= 1024) {
-                            const sidebar = document.getElementById('dashboard-sidebar');
-                            sidebar.classList.remove('open');
-                        }
-                    }
-                });
-            });
-        }
-
-        // Initialize sidebar toggle functionality
-        function initializeSidebarToggle() {
-            const sidebarToggle = document.querySelector('.sidebar-toggle');
-            const sidebar = document.getElementById('dashboard-sidebar');
-
-            if (sidebarToggle && sidebar) {
-                sidebarToggle.addEventListener('click', () => {
-                    sidebar.classList.toggle('open');
-                });
-
-                // Close sidebar when clicking outside on mobile
-                document.addEventListener('click', (e) => {
-                    if (window.innerWidth <= 1024 &&
-                        !sidebar.contains(e.target) &&
-                        !sidebarToggle.contains(e.target) &&
-                        sidebar.classList.contains('open')) {
-                        sidebar.classList.remove('open');
-                    }
-                });
-            }
-        }
-
-        // Set active navigation item based on current page
-        function setActiveNavItem(currentPage) {
-            // Remove active class from all nav items
-            document.querySelectorAll('.nav-item').forEach(item => {
-                item.classList.remove('active');
-            });
-
-            // Map pages to nav item IDs
-            const pageToNavMap = {
-                'dashboard.html': 'menu-dashboard',
-                'prospecting-leads.html': 'menu-leads',
-                'prospecting-companies.html': 'menu-companies',
-                'approaching-whatsapp.html': 'menu-whatsapp',
-                'approaching-linkedin.html': 'menu-linkedin',
-                'approaching-instagram.html': 'menu-instagram',
-                'approaching-facebook.html': 'menu-facebook',
-                'approaching-x.html': 'menu-x',
-                'analytics.html': 'menu-analytics',
-                'support.html': 'menu-support'
-            };
-
-            const navId = pageToNavMap[currentPage];
-            if (navId) {
-                const navLink = document.getElementById(navId);
-                if (navLink) {
-                    navLink.closest('.nav-item').classList.add('active');
                 }
+            },
+            
+            async logout() {
+                if (this.supabase) await this.supabase.auth.signOut();
+                window.location.href = '/register.html';
+            },
+            
+            async loadMetrics() {
+                // Placeholder for real data loading
+                // In production, this would fetch from Supabase
+                console.log('Loading dashboard metrics...');
             }
-        }
-
-        // Inicializar i18n ao carregar a página
-        if (window.i18n && typeof window.i18n.applyTranslations === 'function') {
-            document.addEventListener('DOMContentLoaded', function() {
-                window.i18n.applyTranslations();
-            });
-        }
+        };
+        
+        // Initialize dashboard when DOM is ready
+        document.addEventListener('DOMContentLoaded', () => Dashboard.init());
     </script>
-</head>
-<body class="dashboard-body dark-theme">
-    <!-- Sidebar Navigation -->
-    <aside class="sidebar" id="dashboard-sidebar">
-        <div class="sidebar-header">
-            <div class="logo-container">
-                <div class="logo-icon">✨</div>
-                <span class="logo-text text-gradient">Rarity Leads</span>
-            </div>
-        </div>
-
-        <nav class="sidebar-nav">
-            <!-- Main Navigation Section -->
-            <div class="nav-section">
-                <div class="nav-section-title" data-i18n="nav.main">Main</div>
-                <ul class="nav-menu">
-                    <!-- Dashboard -->
-                    <li class="nav-item active">
-                        <a href="dashboard.html" class="nav-link" id="menu-dashboard">
-                            <div class="nav-icon">
-                                <i class="fas fa-home"></i>
-                            </div>
-                            <span class="nav-text" data-i18n="nav.dashboard">Dashboard</span>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-
-            <!-- Prospecting Section -->
-            <div class="nav-section">
-                <div class="nav-section-title" data-i18n="nav.prospecting">Prospecting</div>
-                <ul class="nav-menu">
-                    <li class="nav-item">
-                        <a href="prospecting-leads.html" class="nav-link" id="menu-leads">
-                            <div class="nav-icon">
-                                <i class="fas fa-users"></i>
-                            </div>
-                            <span class="nav-text" data-i18n="nav.leads">Leads</span>
-                            <span class="nav-badge">1,247</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="prospecting-companies.html" class="nav-link" id="menu-companies">
-                            <div class="nav-icon">
-                                <i class="fas fa-building"></i>
-                            </div>
-                            <span class="nav-text" data-i18n="nav.companies">Companies</span>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-
-            <!-- Outreach Section -->
-            <div class="nav-section">
-                <div class="nav-section-title" data-i18n="nav.outreach">Outreach</div>
-                <ul class="nav-menu">
-                    <li class="nav-item">
-                        <a href="approaching-whatsapp.html" class="nav-link" id="menu-whatsapp">
-                            <div class="nav-icon">
-                                <i class="fab fa-whatsapp"></i>
-                            </div>
-                            <span class="nav-text" data-i18n="nav.whatsapp">WhatsApp</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="approaching-linkedin.html" class="nav-link" id="menu-linkedin">
-                            <div class="nav-icon">
-                                <i class="fab fa-linkedin"></i>
-                            </div>
-                            <span class="nav-text" data-i18n="nav.linkedin">LinkedIn</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="approaching-instagram.html" class="nav-link" id="menu-instagram">
-                            <div class="nav-icon">
-                                <i class="fab fa-instagram"></i>
-                            </div>
-                            <span class="nav-text" data-i18n="nav.instagram">Instagram</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="approaching-facebook.html" class="nav-link" id="menu-facebook">
-                            <div class="nav-icon">
-                                <i class="fab fa-facebook"></i>
-                            </div>
-                            <span class="nav-text" data-i18n="nav.facebook">Facebook</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="approaching-x.html" class="nav-link" id="menu-x">
-                            <div class="nav-icon">
-                                <i class="fab fa-x-twitter"></i>
-                            </div>
-                            <span class="nav-text" data-i18n="nav.x">X</span>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-
-            <!-- Analytics & Support Section -->
-            <div class="nav-section">
-                <div class="nav-section-title" data-i18n="nav.analyticsSupport">Analytics & Support</div>
-                <ul class="nav-menu">
-                    <li class="nav-item">
-                        <a href="analytics.html" class="nav-link" id="menu-analytics">
-                            <div class="nav-icon">
-                                <i class="fas fa-chart-bar"></i>
-                            </div>
-                            <span class="nav-text" data-i18n="nav.analytics">Analytics</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="support.html" class="nav-link" id="menu-support">
-                            <div class="nav-icon">
-                                <i class="fas fa-headset"></i>
-                            </div>
-                            <span class="nav-text" data-i18n="nav.support">Support</span>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </nav>
-
-        <div class="sidebar-footer">
-            <div class="user-profile">
-                <div class="user-avatar">
-                    <i class="fas fa-user"></i>
-                </div>
-                <div class="user-info">
-                    <div class="user-name" data-i18n="nav.agencyOwner">Agency Owner</div>
-                    <div class="user-email">admin@rarity.com</div>
-                </div>
-                <button class="logout-btn" id="sign-out-btn" data-tooltip="Sign Out">
-                    <i class="fas fa-sign-out-alt"></i>
-                </button>
-            </div>
-        </div>
-    </aside>
-
-    <!-- Top Header -->
-    <header class="top-header">
-        <div class="header-left">
-            <button class="sidebar-toggle">
-                <i class="fas fa-bars"></i>
-            </button>
-            <div class="breadcrumb">
-                <span class="breadcrumb-item">Dashboard</span>
-            </div>
-        </div>
-
-        <div class="header-right">
-            <div class="header-actions">
-                <div class="language-selector">
-                    <button class="current-lang">
-                        <span class="lang-flag">🇺🇸</span>
-                        <span class="lang-code">EN</span>
-                        <i class="fas fa-chevron-down"></i>
-                    </button>
-                    <div class="lang-dropdown">
-                        <a href="#" data-lang="en" class="lang-option active">
-                            <span class="lang-flag">🇺🇸</span>
-                            <span class="lang-name">English</span>
-                        </a>
-                        <a href="#" data-lang="pt-BR" class="lang-option">
-                            <span class="lang-flag">🇧🇷</span>
-                            <span class="lang-name">Português</span>
-                        </a>
-                        <a href="#" data-lang="es" class="lang-option">
-                            <span class="lang-flag">🇪🇸</span>
-                            <span class="lang-name">Español</span>
-                        </a>
-                        <a href="#" data-lang="fr" class="lang-option">
-                            <span class="lang-flag">🇫🇷</span>
-                            <span class="lang-name">Français</span>
-                        </a>
-                    </div>
-                </div>
-                <button class="header-btn" data-tooltip="Notifications">
-                    <i class="fas fa-bell"></i>
-                    <span class="notification-dot"></span>
-                </button>
-                <button class="header-btn" data-tooltip="Help">
-                    <i class="fas fa-question-circle"></i>
-                </button>
-            </div>
-        </div>
-    </header>
-
-    <!-- Main Content -->
-    <main class="main-content">
-        <!-- Welcome Section -->
-        <section class="welcome-section">
-            <h1 class="page-title">Good morning</h1>
-            <p class="page-subtitle">Ready to convert more leads today?</p>
-            <div class="stat-highlight">+127 new leads this week</div>
-            <div class="welcome-actions">
-                <button class="btn btn-primary">Create Campaign</button>
-                <button class="btn btn-outline">Connect LinkedIn</button>
-            </div>
-        </section>
-
-        <!-- Stats Cards Modernized -->
-        <div class="stats-overview">
-            <div class="stat-card">
-                <div class="stat-label">Active Leads</div>
-                <div class="stat-value">1,247</div>
-                <div class="stat-trend positive">+12% this week</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-label">Conversion</div>
-                <div class="stat-value">31.2%</div>
-                <div class="stat-trend positive">+5.2%</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-label">Active Campaigns</div>
-                <div class="stat-value">12</div>
-                <div class="stat-trend neutral">No change</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-label">Revenue</div>
-                <div class="stat-value">$24.6k</div>
-                <div class="stat-trend positive">+15.3%</div>
-            </div>
-        </div>
-
-        <!-- Analytics Section -->
-        <section class="analytics-section">
-            <div class="analytics-header">
-                <div class="analytics-title">Performance Overview</div>
-                <div class="analytics-desc">Monitor your lead generation and campaign effectiveness in real time.</div>
-            </div>
-            <div class="analytics-grid">
-                <div class="analytics-card">
-                    <div class="card-title">From visitor to customer</div>
-                    <div class="card-desc">Track your funnel conversion at every stage.</div>
-                    <div class="funnel-progress">
-                        <!-- Animated progress bars for each stage -->
-                    </div>
-                </div>
-                <div class="analytics-card">
-                    <div class="card-title">Campaign Performance</div>
-                    <div class="card-desc">See which campaigns are driving results.</div>
-                    <div class="campaign-chart"></div>
-                </div>
-                <div class="analytics-card">
-                    <div class="card-title">Lead Sources</div>
-                    <div class="card-desc">Where your best leads are coming from.</div>
-                    <div class="sources-chart"></div>
-                </div>
-                <div class="analytics-card">
-                    <div class="card-title">Revenue Trends</div>
-                    <div class="card-desc">Follow your revenue growth over time.</div>
-                    <div class="revenue-chart"></div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Activity Feed -->
-        <section class="activity-feed">
-            <div class="feed-header">What's happening right now</div>
-            <ul class="feed-list">
-                <li class="feed-item">
-                    <div class="feed-avatar"></div>
-                    <div class="feed-content">
-                        <span class="feed-user">Sarah Chen</span> converted a lead from LinkedIn.
-                        <span class="feed-time">2 min ago</span>
-                    </div>
-                </li>
-                <li class="feed-item">
-                    <div class="feed-avatar"></div>
-                    <div class="feed-content">
-                        <span class="feed-user">David Rodriguez</span> closed a deal worth $2,400.
-                        <span class="feed-time">10 min ago</span>
-                    </div>
-                </li>
-                <!-- More feed items -->
-            </ul>
-        </section>
-
-        <!-- Campaigns & Performance -->
-        <div class="bottom-section">
-            <div class="campaigns-overview">
-                <div class="card-header">
-                    <h3>Active Campaigns</h3>
-                    <button id="view-all-campaigns" class="view-all-btn">View All</button>
-                </div>
-                <div class="campaigns-grid">
-                    <div class="campaign-card">
-                        <div class="campaign-header">
-                            <div class="campaign-info">
-                                <h4>LinkedIn Outreach Q1</h4>
-                                <span class="campaign-platform linkedin">
-                                    <i class="fab fa-linkedin"></i>
-                                    LinkedIn
-                                </span>
-                            </div>
-                            <div class="campaign-status active">Active</div>
-                        </div>
-                        <div class="campaign-metrics">
-                            <div class="metric">
-                                <span class="metric-value">247</span>
-                                <span class="metric-label">Leads</span>
-                            </div>
-                            <div class="metric">
-                                <span class="metric-value">31.2%</span>
-                                <span class="metric-label">Conv. Rate</span>
-                            </div>
-                            <div class="metric">
-                                <span class="metric-value">$12.50</span>
-                                <span class="metric-label">Cost/Lead</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="campaign-card">
-                        <div class="campaign-header">
-                            <div class="campaign-info">
-                                <h4>Facebook Lead Gen</h4>
-                                <span class="campaign-platform facebook">
-                                    <i class="fab fa-facebook"></i>
-                                    Facebook
-                                </span>
-                            </div>
-                            <div class="campaign-status active">Active</div>
-                        </div>
-                        <div class="campaign-metrics">
-                            <div class="metric">
-                                <span class="metric-value">189</span>
-                                <span class="metric-label">Leads</span>
-                            </div>
-                            <div class="metric">
-                                <span class="metric-value">28.7%</span>
-                                <span class="metric-label">Conv. Rate</span>
-                            </div>
-                            <div class="metric">
-                                <span class="metric-value">$15.80</span>
-                                <span class="metric-label">Cost/Lead</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="campaign-card">
-                        <div class="campaign-header">
-                            <div class="campaign-info">
-                                <h4>Google Ads Campaign</h4>
-                                <span class="campaign-platform google">
-                                    <i class="fab fa-google"></i>
-                                    Google
-                                </span>
-                            </div>
-                            <div class="campaign-status paused">Paused</div>
-                        </div>
-                        <div class="campaign-metrics">
-                            <div class="metric">
-                                <span class="metric-value">156</span>
-                                <span class="metric-label">Leads</span>
-                            </div>
-                            <div class="metric">
-                                <span class="metric-value">24.1%</span>
-                                <span class="metric-label">Conv. Rate</span>
-                            </div>
-                            <div class="metric">
-                                <span class="metric-value">$18.90</span>
-                                <span class="metric-label">Cost/Lead</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </main>
-
-    <!-- Modals -->
-    <div id="create-campaign-modal" class="modal"></div>
-    <div id="create-sequence-modal" class="modal"></div>
-    <div id="filter-leads-modal" class="modal"></div>
 </body>
 </html> 

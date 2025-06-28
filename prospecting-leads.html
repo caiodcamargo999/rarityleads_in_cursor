@@ -3,1153 +3,459 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title data-i18n="meta.title">Rarity Leads - Prospecting Leads</title>
-    <meta name="description" data-i18n="meta.description" content="Manage and prospect your leads with AI-powered tools">
+    <title data-i18n="leads.title">Rarity Leads - Lead Prospecting</title>
+    <meta name="description" data-i18n="leads.subtitle" content="Discover, qualify, and manage your leads with AI-powered prospecting tools">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="rarity-design.css">
     <link rel="stylesheet" href="dashboard.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="app-config.js"></script>
-    <script src="i18n.js"></script>
-    <script src="auth-guard.js"></script>
-    <script src="universal-navigation.js"></script>
-    <script>
-        // Loader utility
-        function showLoader() {
-            let loader = document.getElementById('main-loader');
-            if (!loader) {
-                loader = document.createElement('div');
-                loader.id = 'main-loader';
-                loader.style = 'display:flex;align-items:center;justify-content:center;height:60vh;font-size:2rem;color:#764ba2;';
-                loader.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading...';
-                document.querySelector('main')?.prepend(loader);
-            } else {
-                loader.style.display = 'flex';
-            }
-        }
-        function hideLoader() {
-            const loader = document.getElementById('main-loader');
-            if (loader) loader.style.display = 'none';
-        }
-        function showError(message) {
-            let errorDiv = document.getElementById('main-error');
-            if (!errorDiv) {
-                errorDiv = document.createElement('div');
-                errorDiv.id = 'main-error';
-                errorDiv.style = 'color:#e53e3e;background:#fff3f3;padding:1rem;margin:2rem auto;text-align:center;border-radius:8px;max-width:600px;font-size:1.2rem;';
-                document.querySelector('main')?.prepend(errorDiv);
-            }
-            errorDiv.innerHTML = `<i class=\"fas fa-exclamation-triangle\"></i> ${message}`;
-            errorDiv.style.display = 'block';
-        }
-        function hideError() {
-            const errorDiv = document.getElementById('main-error');
-            if (errorDiv) errorDiv.style.display = 'none';
-        }
-
-        // Initialize Supabase
-        const supabase = window.supabase.createClient(
-            'https://yejheyrdsucgzpzwxuxs.supabase.co',
-            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InllamhleXJkc3VjZ3pwend4dXhzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg4MDg2NzQsImV4cCI6MjA2NDM4NDY3NH0.NzCJ8i3SKpABO6ykWRX3nHDYmjVB82KL1wfgaY3trM4'
-        );
-
-        // Check authentication when page loads
-        document.addEventListener('DOMContentLoaded', async () => {
-            showLoader();
-            hideError();
-            try {
-                const { data: { session }, error } = await supabase.auth.getSession();
-                if (error || !session || !session.user) {
-                    showError('You are not authenticated. Please log in again.');
-                    hideLoader();
-                    setTimeout(() => { window.location.href = '/login.html'; }, 2000);
-                    return;
-                }
-                // User authenticated, hide loader and error
-                hideLoader();
-                hideError();
-                // Update user email in sidebar
-                const userEmailElement = document.querySelector('.user-email');
-                if (userEmailElement) {
-                    userEmailElement.textContent = session.user.email;
-                }
-                // Set up sign out button
-                const signOutBtn = document.getElementById('sign-out-btn');
-                if (signOutBtn) {
-                    signOutBtn.addEventListener('click', async () => {
-                        showLoader();
-                        try {
-                            const { error } = await supabase.auth.signOut();
-                            if (error) throw error;
-                            window.location.href = '/home.html';
-                        } catch (error) {
-                            showError('Sign out failed.');
-                            hideLoader();
-                        }
-                    });
-                }
-                // Initialize sidebar menu
-                initializeSidebarMenu();
-                // Initialize leads management
-                initializeLeadsManagement();
-            } catch (error) {
-                showError('Failed to load leads. Please try again.');
-                hideLoader();
-                setTimeout(() => { window.location.href = '/login.html'; }, 2000);
-            }
-        });
-
-        // Leads Management System
-        let leadsData = [];
-        let filteredLeads = [];
-        let currentEditingLead = null;
-        let currentDeletingLead = null;
-
-        async function initializeLeadsManagement() {
-            // Setup event listeners
-            setupEventListeners();
-
-            // Load leads data
-            await loadLeads();
-
-            // Update stats
-            updateLeadsStats();
-        }
-
-        function setupEventListeners() {
-            // Add Lead Button
-            const addLeadBtn = document.getElementById('add-lead-btn');
-            const addFirstLeadBtn = document.getElementById('add-first-lead');
-
-            if (addLeadBtn) {
-                addLeadBtn.addEventListener('click', () => openAddLeadModal());
-            }
-
-            if (addFirstLeadBtn) {
-                addFirstLeadBtn.addEventListener('click', () => openAddLeadModal());
-            }
-
-            // Search and Filters
-            const searchInput = document.getElementById('leads-search');
-            const statusFilter = document.getElementById('status-filter');
-            const scoreFilter = document.getElementById('score-filter');
-            const clearFiltersBtn = document.getElementById('clear-filters');
-
-            if (searchInput) {
-                searchInput.addEventListener('input', debounce(filterLeads, 300));
-            }
-
-            if (statusFilter) {
-                statusFilter.addEventListener('change', filterLeads);
-            }
-
-            if (scoreFilter) {
-                scoreFilter.addEventListener('change', filterLeads);
-            }
-
-            if (clearFiltersBtn) {
-                clearFiltersBtn.addEventListener('click', clearFilters);
-            }
-
-            // Modal Event Listeners
-            setupModalEventListeners();
-        }
-
-        function setupModalEventListeners() {
-            // Add Lead Modal
-            const addModal = document.getElementById('add-lead-modal');
-            const closeAddModal = document.getElementById('close-add-modal');
-            const cancelAddLead = document.getElementById('cancel-add-lead');
-            const addLeadForm = document.getElementById('add-lead-form');
-
-            if (closeAddModal) {
-                closeAddModal.addEventListener('click', () => closeModal('add-lead-modal'));
-            }
-
-            if (cancelAddLead) {
-                cancelAddLead.addEventListener('click', () => closeModal('add-lead-modal'));
-            }
-
-            if (addLeadForm) {
-                addLeadForm.addEventListener('submit', handleAddLead);
-            }
-
-            // Edit Lead Modal
-            const editModal = document.getElementById('edit-lead-modal');
-            const closeEditModal = document.getElementById('close-edit-modal');
-            const cancelEditLead = document.getElementById('cancel-edit-lead');
-            const editLeadForm = document.getElementById('edit-lead-form');
-
-            if (closeEditModal) {
-                closeEditModal.addEventListener('click', () => closeModal('edit-lead-modal'));
-            }
-
-            if (cancelEditLead) {
-                cancelEditLead.addEventListener('click', () => closeModal('edit-lead-modal'));
-            }
-
-            if (editLeadForm) {
-                editLeadForm.addEventListener('submit', handleEditLead);
-            }
-
-            // Delete Lead Modal
-            const deleteModal = document.getElementById('delete-lead-modal');
-            const closeDeleteModal = document.getElementById('close-delete-modal');
-            const cancelDeleteLead = document.getElementById('cancel-delete-lead');
-            const confirmDeleteLead = document.getElementById('confirm-delete-lead');
-
-            if (closeDeleteModal) {
-                closeDeleteModal.addEventListener('click', () => closeModal('delete-lead-modal'));
-            }
-
-            if (cancelDeleteLead) {
-                cancelDeleteLead.addEventListener('click', () => closeModal('delete-lead-modal'));
-            }
-
-            if (confirmDeleteLead) {
-                confirmDeleteLead.addEventListener('click', handleDeleteLead);
-            }
-
-            // Close modals when clicking outside
-            [addModal, editModal, deleteModal].forEach(modal => {
-                if (modal) {
-                    modal.addEventListener('click', (e) => {
-                        if (e.target === modal) {
-                            closeModal(modal.id);
-                        }
-                    });
-                }
-            });
-        }
-
-        // Listen for auth changes
-        supabase.auth.onAuthStateChange((event, session) => {
-            if (event === 'SIGNED_OUT') {
-                window.location.href = '/home.html';
-            }
-        });
-
-        // Initialize sidebar menu functionality
-        function initializeSidebarMenu() {
-            // Handle submenu toggles
-            document.querySelectorAll('.submenu-toggle').forEach(toggle => {
-                toggle.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    const parentItem = toggle.closest('.nav-item');
-                    const submenu = parentItem.querySelector('.submenu');
-                    const arrow = toggle.querySelector('.submenu-arrow');
-
-                    // Toggle submenu
-                    parentItem.classList.toggle('open');
-                    
-                    // Animate arrow
-                    if (parentItem.classList.contains('open')) {
-                        arrow.style.transform = 'rotate(180deg)';
-                        submenu.style.maxHeight = submenu.scrollHeight + 'px';
-                    } else {
-                        arrow.style.transform = 'rotate(0deg)';
-                        submenu.style.maxHeight = '0';
-                    }
-                });
-            });
-
-            // Handle sidebar toggle for mobile
-            const sidebarToggle = document.querySelector('.sidebar-toggle');
-            const sidebar = document.querySelector('.sidebar');
-            
-            if (sidebarToggle && sidebar) {
-                sidebarToggle.addEventListener('click', () => {
-                    sidebar.classList.toggle('collapsed');
-                    document.body.classList.toggle('sidebar-collapsed');
-                });
-            }
-
-            // Set active menu item
-            setActiveMenuItem();
-        }
-
-        // Set active menu item based on current page
-        function setActiveMenuItem() {
-            const currentPath = window.location.pathname;
-            const menuItems = document.querySelectorAll('.nav-link');
-
-            menuItems.forEach(item => {
-                const href = item.getAttribute('href');
-                if (href && currentPath.includes(href.replace('.html', ''))) {
-                    // Remove active class from all items
-                    document.querySelectorAll('.nav-item').forEach(navItem => {
-                        navItem.classList.remove('active');
-                    });
-                    
-                    // Add active class to current item
-                    item.closest('.nav-item').classList.add('active');
-                    
-                    // If it's a submenu item, open the parent submenu
-                    const parentSubmenu = item.closest('.submenu');
-                    if (parentSubmenu) {
-                        const parentNavItem = parentSubmenu.closest('.nav-item');
-                        parentNavItem.classList.add('open');
-                        const arrow = parentNavItem.querySelector('.submenu-arrow');
-                        if (arrow) {
-                            arrow.style.transform = 'rotate(180deg)';
-                        }
-                        parentSubmenu.style.maxHeight = parentSubmenu.scrollHeight + 'px';
-                    }
-                }
-            });
-        }
-
-        // Load Leads from Supabase
-        async function loadLeads() {
-            try {
-                showLoadingState();
-
-                const { data, error } = await supabase
-                    .from('leads')
-                    .select('*')
-                    .order('created_at', { ascending: false });
-
-                if (error) throw error;
-
-                leadsData = data || [];
-                filteredLeads = [...leadsData];
-
-                renderLeadsTable();
-                hideLoadingState();
-
-            } catch (error) {
-                hideLoadingState();
-                showError('Failed to load leads: ' + error.message);
-            }
-        }
-
-        // Add New Lead
-        async function handleAddLead(e) {
-            e.preventDefault();
-
-            try {
-                const formData = new FormData(e.target);
-                const leadData = {
-                    lead_name: formData.get('lead_name'),
-                    position: formData.get('position'),
-                    email: formData.get('email'),
-                    phone: formData.get('phone'),
-                    lead_score: parseInt(formData.get('lead_score')) || 0,
-                    status: formData.get('status')
-                };
-
-                const { data, error } = await supabase
-                    .from('leads')
-                    .insert([leadData])
-                    .select();
-
-                if (error) throw error;
-
-                // Update local data
-                leadsData.unshift(data[0]);
-                filteredLeads = [...leadsData];
-
-                // Update UI
-                renderLeadsTable();
-                updateLeadsStats();
-                closeModal('add-lead-modal');
-
-                // Reset form
-                e.target.reset();
-
-                showSuccess('Lead added successfully!');
-
-            } catch (error) {
-                showError('Failed to add lead: ' + error.message);
-            }
-        }
-
-        // Edit Lead
-        async function handleEditLead(e) {
-            e.preventDefault();
-
-            try {
-                const formData = new FormData(e.target);
-                const leadId = formData.get('id');
-                const leadData = {
-                    lead_name: formData.get('lead_name'),
-                    position: formData.get('position'),
-                    email: formData.get('email'),
-                    phone: formData.get('phone'),
-                    lead_score: parseInt(formData.get('lead_score')) || 0,
-                    status: formData.get('status')
-                };
-
-                const { data, error } = await supabase
-                    .from('leads')
-                    .update(leadData)
-                    .eq('id', leadId)
-                    .select();
-
-                if (error) throw error;
-
-                // Update local data
-                const index = leadsData.findIndex(lead => lead.id === leadId);
-                if (index !== -1) {
-                    leadsData[index] = data[0];
-                    filteredLeads = [...leadsData];
-                }
-
-                // Update UI
-                renderLeadsTable();
-                updateLeadsStats();
-                closeModal('edit-lead-modal');
-
-                showSuccess('Lead updated successfully!');
-
-            } catch (error) {
-                showError('Failed to update lead: ' + error.message);
-            }
-        }
-
-        // Delete Lead
-        async function handleDeleteLead() {
-            if (!currentDeletingLead) return;
-
-            try {
-                const { error } = await supabase
-                    .from('leads')
-                    .delete()
-                    .eq('id', currentDeletingLead.id);
-
-                if (error) throw error;
-
-                // Update local data
-                leadsData = leadsData.filter(lead => lead.id !== currentDeletingLead.id);
-                filteredLeads = [...leadsData];
-
-                // Update UI
-                renderLeadsTable();
-                updateLeadsStats();
-                closeModal('delete-lead-modal');
-
-                currentDeletingLead = null;
-                showSuccess('Lead deleted successfully!');
-
-            } catch (error) {
-                showError('Failed to delete lead: ' + error.message);
-            }
-        }
-
-        // Filter Leads
-        function filterLeads() {
-            const searchTerm = document.getElementById('leads-search')?.value.toLowerCase() || '';
-            const statusFilter = document.getElementById('status-filter')?.value || '';
-            const scoreFilter = document.getElementById('score-filter')?.value || '';
-
-            filteredLeads = leadsData.filter(lead => {
-                // Search filter
-                const matchesSearch = !searchTerm ||
-                    lead.lead_name?.toLowerCase().includes(searchTerm) ||
-                    lead.email?.toLowerCase().includes(searchTerm) ||
-                    lead.position?.toLowerCase().includes(searchTerm);
-
-                // Status filter
-                const matchesStatus = !statusFilter || lead.status === statusFilter;
-
-                // Score filter
-                let matchesScore = true;
-                if (scoreFilter === 'high') {
-                    matchesScore = lead.lead_score >= 80;
-                } else if (scoreFilter === 'medium') {
-                    matchesScore = lead.lead_score >= 50 && lead.lead_score < 80;
-                } else if (scoreFilter === 'low') {
-                    matchesScore = lead.lead_score < 50;
-                }
-
-                return matchesSearch && matchesStatus && matchesScore;
-            });
-
-            renderLeadsTable();
-        }
-
-        // Clear Filters
-        function clearFilters() {
-            document.getElementById('leads-search').value = '';
-            document.getElementById('status-filter').value = '';
-            document.getElementById('score-filter').value = '';
-
-            filteredLeads = [...leadsData];
-            renderLeadsTable();
-        }
-
-        // Render Leads Table
-        function renderLeadsTable() {
-            const tableBody = document.getElementById('leads-table-body');
-            const emptyState = document.getElementById('leads-empty');
-            const tableContainer = document.querySelector('.leads-table-container');
-
-            if (!tableBody) return;
-
-            // Show/hide empty state
-            if (filteredLeads.length === 0) {
-                if (emptyState) emptyState.style.display = 'flex';
-                if (tableContainer) tableContainer.style.display = 'none';
-                return;
-            } else {
-                if (emptyState) emptyState.style.display = 'none';
-                if (tableContainer) tableContainer.style.display = 'block';
-            }
-
-            // Render table rows
-            tableBody.innerHTML = filteredLeads.map(lead => `
-                <tr data-lead-id="${lead.id}">
-                    <td>
-                        <input type="checkbox" class="lead-checkbox" value="${lead.id}">
-                    </td>
-                    <td>
-                        <div class="lead-info">
-                            <div class="lead-name">${lead.lead_name || 'N/A'}</div>
-                            <div class="lead-meta">${lead.email || 'No email'}</div>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="contact-info">
-                            <div class="contact-email">${lead.email || 'N/A'}</div>
-                            <div class="contact-phone">${lead.phone || 'N/A'}</div>
-                        </div>
-                    </td>
-                    <td>
-                        <span class="position">${lead.position || 'N/A'}</span>
-                    </td>
-                    <td>
-                        <div class="score-badge ${getScoreClass(lead.lead_score)}">
-                            ${lead.lead_score || 0}
-                        </div>
-                    </td>
-                    <td>
-                        <span class="status-badge ${lead.status || 'new'}">${formatStatus(lead.status)}</span>
-                    </td>
-                    <td>
-                        <span class="date">${formatDate(lead.created_at)}</span>
-                    </td>
-                    <td>
-                        <div class="action-buttons">
-                            <button class="action-btn small" onclick="openEditLeadModal('${lead.id}')" title="Edit">
-                                <i class="fas fa-edit"></i>
-                            </button>
-                            <button class="action-btn small danger" onclick="openDeleteLeadModal('${lead.id}')" title="Delete">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </div>
-                    </td>
-                </tr>
-            `).join('');
-        }
-
-        // Update Leads Stats
-        function updateLeadsStats() {
-            const totalLeads = leadsData.length;
-            const hotLeads = leadsData.filter(lead => lead.status === 'hot').length;
-            const warmLeads = leadsData.filter(lead => lead.status === 'warm').length;
-            const convertedLeads = leadsData.filter(lead => lead.status === 'converted').length;
-
-            document.getElementById('total-leads').textContent = totalLeads;
-            document.getElementById('hot-leads').textContent = hotLeads;
-            document.getElementById('warm-leads').textContent = warmLeads;
-            document.getElementById('converted-leads').textContent = convertedLeads;
-        }
-
-        // Modal Functions
-        function openAddLeadModal() {
-            document.getElementById('add-lead-modal').style.display = 'flex';
-        }
-
-        function openEditLeadModal(leadId) {
-            const lead = leadsData.find(l => l.id === leadId);
-            if (!lead) return;
-
-            currentEditingLead = lead;
-
-            // Populate form
-            document.getElementById('edit-lead-id').value = lead.id;
-            document.getElementById('edit-lead-name').value = lead.lead_name || '';
-            document.getElementById('edit-lead-position').value = lead.position || '';
-            document.getElementById('edit-lead-email').value = lead.email || '';
-            document.getElementById('edit-lead-phone').value = lead.phone || '';
-            document.getElementById('edit-lead-score').value = lead.lead_score || '';
-            document.getElementById('edit-lead-status').value = lead.status || 'new';
-
-            document.getElementById('edit-lead-modal').style.display = 'flex';
-        }
-
-        function openDeleteLeadModal(leadId) {
-            const lead = leadsData.find(l => l.id === leadId);
-            if (!lead) return;
-
-            currentDeletingLead = lead;
-            document.querySelector('.delete-lead-name').textContent = lead.lead_name || 'Unknown Lead';
-            document.getElementById('delete-lead-modal').style.display = 'flex';
-        }
-
-        function closeModal(modalId) {
-            document.getElementById(modalId).style.display = 'none';
-
-            // Reset current editing/deleting lead
-            if (modalId === 'edit-lead-modal') {
-                currentEditingLead = null;
-            } else if (modalId === 'delete-lead-modal') {
-                currentDeletingLead = null;
-            }
-        }
-
-        // Utility Functions
-        function getScoreClass(score) {
-            if (score >= 80) return 'high';
-            if (score >= 50) return 'medium';
-            return 'low';
-        }
-
-        function formatStatus(status) {
-            const statusMap = {
-                'new': 'New',
-                'warm': 'Warm',
-                'hot': 'Hot',
-                'cold': 'Cold',
-                'converted': 'Converted'
-            };
-            return statusMap[status] || 'New';
-        }
-
-        function formatDate(dateString) {
-            if (!dateString) return 'N/A';
-            const date = new Date(dateString);
-            return date.toLocaleDateString('en-US', {
-                month: 'short',
-                day: 'numeric',
-                year: 'numeric'
-            });
-        }
-
-        function showLoadingState() {
-            const loading = document.getElementById('leads-loading');
-            const tableContainer = document.querySelector('.leads-table-container');
-
-            if (loading) loading.style.display = 'flex';
-            if (tableContainer) tableContainer.style.display = 'none';
-        }
-
-        function hideLoadingState() {
-            const loading = document.getElementById('leads-loading');
-            if (loading) loading.style.display = 'none';
-        }
-
-        function showSuccess(message) {
-            // Simple alert for now - can be replaced with toast notification
-            alert('✅ ' + message);
-        }
-
-        function debounce(func, wait) {
-            let timeout;
-            return function executedFunction(...args) {
-                const later = () => {
-                    clearTimeout(timeout);
-                    func(...args);
-                };
-                clearTimeout(timeout);
-                timeout = setTimeout(later, wait);
-            };
-        }
-
-        // Inicializar i18n ao carregar a página
-        if (window.i18n && typeof window.i18n.applyTranslations === 'function') {
-            document.addEventListener('DOMContentLoaded', function() {
-                window.i18n.applyTranslations();
-            });
-        }
-    </script>
-
-    
+    <style>
+        body { margin: 0; background: #18181b; color: #fff; font-family: 'Inter', sans-serif; }
+        .dashboard-layout { display: flex; min-height: 100vh; }
+        .sidebar { width: 240px; background: #1e1e23; padding: 32px 0 0 0; display: flex; flex-direction: column; }
+        .sidebar-logo { font-size: 1.5rem; font-weight: 700; color: #fff; text-align: center; margin-bottom: 32px; letter-spacing: -0.5px; }
+        .sidebar-nav { flex: 1; }
+        .sidebar-nav ul { list-style: none; padding: 0; margin: 0; }
+        .sidebar-nav li { margin-bottom: 8px; }
+        .sidebar-nav a { display: block; padding: 12px 32px; color: #cbd5e1; text-decoration: none; border-left: 4px solid transparent; font-weight: 500; transition: background 0.2s, color 0.2s, border-color 0.2s; }
+        .sidebar-nav a.active, .sidebar-nav a:hover { background: #23232b; color: #fff; border-left: 4px solid #D50057; }
+        .sidebar-footer { padding: 24px 32px; border-top: 1px solid #23232b; text-align: center; }
+        .logout-btn { background: none; border: none; color: #8B5CF6; font-weight: 600; cursor: pointer; font-size: 1rem; }
+        .main-content { flex: 1; padding: 48px 40px 32px 40px; display: flex; flex-direction: column; }
+        .leads-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 32px; }
+        .leads-title { font-size: 2rem; font-weight: 700; }
+        .leads-subtitle { color: #a1a1aa; font-size: 1rem; font-weight: 500; margin-top: 8px; }
+        .metrics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 24px; margin-bottom: 32px; }
+        .metric-card { background: rgba(255,255,255,0.03); border-radius: 12px; padding: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+        .metric-icon { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; }
+        .metric-icon.new { background: rgba(59, 130, 246, 0.2); color: #3B82F6; }
+        .metric-icon.hot { background: rgba(239, 68, 68, 0.2); color: #EF4444; }
+        .metric-icon.warm { background: rgba(245, 158, 11, 0.2); color: #F59E0B; }
+        .metric-icon.converted { background: rgba(34, 197, 94, 0.2); color: #22C55E; }
+        .metric-value { font-size: 1.75rem; font-weight: 700; color: #fff; margin-bottom: 4px; }
+        .metric-label { color: #cbd5e1; font-size: 0.9rem; }
+        .tabs { display: flex; gap: 24px; margin-bottom: 32px; }
+        .tab { padding: 10px 24px; border-radius: 8px 8px 0 0; background: #23232b; color: #cbd5e1; font-weight: 500; cursor: pointer; border: none; outline: none; transition: background 0.2s, color 0.2s; }
+        .tab.active, .tab:hover { background: #fff; color: #18181b; }
+        .tab-content { background: rgba(255,255,255,0.03); border-radius: 0 0 12px 12px; padding: 32px; min-height: 400px; }
+        .search-filters { display: flex; gap: 16px; margin-bottom: 24px; align-items: center; flex-wrap: wrap; }
+        .search-input { flex: 1; min-width: 300px; padding: 12px 16px; background: #23232b; border: 1px solid #374151; border-radius: 8px; color: #fff; font-size: 0.9rem; }
+        .search-input::placeholder { color: #9CA3AF; }
+        .filter-select { padding: 12px 16px; background: #23232b; border: 1px solid #374151; border-radius: 8px; color: #fff; font-size: 0.9rem; min-width: 150px; }
+        .clear-filters-btn { padding: 12px 16px; background: none; border: 1px solid #374151; border-radius: 8px; color: #cbd5e1; font-size: 0.9rem; cursor: pointer; transition: all 0.2s; }
+        .clear-filters-btn:hover { background: #23232b; color: #fff; }
+        .add-lead-btn { padding: 12px 24px; background: #D50057; color: #fff; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+        .add-lead-btn:hover { background: #B91C5B; }
+        .leads-table { width: 100%; border-collapse: collapse; margin-top: 24px; }
+        .leads-table th { text-align: left; padding: 16px; background: #23232b; color: #cbd5e1; font-weight: 600; font-size: 0.9rem; }
+        .leads-table td { padding: 16px; border-bottom: 1px solid #374151; }
+        .leads-table tr:hover { background: rgba(255,255,255,0.02); }
+        .status-badge { padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 500; }
+        .status-new { background: rgba(59, 130, 246, 0.2); color: #3B82F6; }
+        .status-hot { background: rgba(239, 68, 68, 0.2); color: #EF4444; }
+        .status-warm { background: rgba(245, 158, 11, 0.2); color: #F59E0B; }
+        .status-cold { background: rgba(107, 114, 128, 0.2); color: #6B7280; }
+        .status-converted { background: rgba(34, 197, 94, 0.2); color: #22C55E; }
+        .score-badge { padding: 4px 8px; border-radius: 4px; font-size: 0.8rem; font-weight: 600; }
+        .score-high { background: rgba(34, 197, 94, 0.2); color: #22C55E; }
+        .score-medium { background: rgba(245, 158, 11, 0.2); color: #F59E0B; }
+        .score-low { background: rgba(239, 68, 68, 0.2); color: #EF4444; }
+        .action-btn { padding: 6px 12px; background: none; border: 1px solid #374151; border-radius: 6px; color: #cbd5e1; font-size: 0.8rem; cursor: pointer; margin-right: 8px; transition: all 0.2s; }
+        .action-btn:hover { background: #23232b; color: #fff; }
+        .action-btn.primary { background: #D50057; border-color: #D50057; color: #fff; }
+        .action-btn.primary:hover { background: #B91C5B; }
+        .empty-state { text-align: center; padding: 64px 32px; }
+        .empty-icon { font-size: 4rem; color: #6B7280; margin-bottom: 24px; }
+        .empty-title { font-size: 1.5rem; font-weight: 600; margin-bottom: 12px; }
+        .empty-description { color: #9CA3AF; margin-bottom: 32px; }
+        @media (max-width: 900px) { .main-content { padding: 32px 8px; } .sidebar { width: 64px; padding: 16px 0 0 0; } .sidebar-logo { font-size: 1rem; margin-bottom: 16px; } .sidebar-nav a { padding: 12px 8px; font-size: 0.95rem; } .search-filters { flex-direction: column; align-items: stretch; } .search-input { min-width: auto; } }
+        @media (max-width: 600px) { .dashboard-layout { flex-direction: column; } .sidebar { width: 100vw; flex-direction: row; padding: 0; } .sidebar-nav ul { display: flex; flex-direction: row; } .sidebar-nav li { margin: 0 4px; } .main-content { padding: 16px 4px; } .metrics-grid { grid-template-columns: 1fr; } .leads-table { font-size: 0.8rem; } .leads-table th, .leads-table td { padding: 8px; } }
+    </style>
 </head>
-<body class="dashboard-body">
-    <!-- Sidebar Navigation -->
-    <aside class="sidebar">
-        <div class="sidebar-header">
-            <div class="logo-container">
-                <div class="logo-icon">✨</div>
-                <span class="logo-text text-gradient">Rarity Leads</span>
+<body>
+    <div class="dashboard-layout">
+        <aside class="sidebar" role="navigation" aria-label="Main navigation">
+            <div class="sidebar-logo" data-i18n="common.brand">Rarity Leads</div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="dashboard.html" data-i18n="nav.dashboard">Dashboard</a></li>
+                    <li><a href="prospecting-leads.html" class="active" data-i18n="nav.leads">Leads</a></li>
+                    <li><a href="prospecting-companies.html" data-i18n="nav.companies">Companies</a></li>
+                    <li><a href="approaching-whatsapp.html" data-i18n="nav.whatsapp">WhatsApp</a></li>
+                    <li><a href="approaching-linkedin.html" data-i18n="nav.linkedin">LinkedIn</a></li>
+                    <li><a href="approaching-instagram.html" data-i18n="nav.instagram">Instagram</a></li>
+                    <li><a href="approaching-facebook.html" data-i18n="nav.facebook">Facebook</a></li>
+                    <li><a href="approaching-x.html" data-i18n="nav.x">X</a></li>
+                    <li><a href="analytics.html" data-i18n="nav.analytics">Analytics</a></li>
+                    <li><a href="support.html" data-i18n="nav.support">Support</a></li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer">
+                <button class="logout-btn" id="logout-btn" data-i18n="auth.logout">Logout</button>
             </div>
-        </div>
-
-        <nav class="sidebar-nav">
-            <ul class="nav-menu">
-                <!-- Dashboard -->
-                <li class="nav-item">
-                    <a href="dashboard.html" class="nav-link" id="menu-dashboard">
-                        <i class="fas fa-chart-line"></i>
-                        <span data-i18n="nav.dashboard">Dashboard</span>
-                    </a>
-                </li>
-
-                <!-- Prospecting Section -->
-                <li class="nav-item has-submenu open">
-                    <a href="#" class="nav-link submenu-toggle" id="submenu-prospecting">
-                        <i class="fas fa-search"></i>
-                        <span data-i18n="nav.prospecting">Prospecting</span>
-                        <i class="fas fa-chevron-down submenu-arrow" style="transform: rotate(180deg);"></i>
-                    </a>
-                    <ul class="submenu" style="max-height: 500px;">
-                        <li class="nav-item active">
-                            <a href="prospecting-leads.html" class="nav-link">
-                                <i class="fas fa-users"></i>
-                                <span data-i18n="nav.leads">Leads</span>
-                                <span class="badge">24</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="prospecting-companies.html" class="nav-link">
-                                <i class="fas fa-building"></i>
-                                <span data-i18n="nav.companies">Companies</span>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-
-                <!-- Approaching Section -->
-                <li class="nav-item has-submenu">
-                    <a href="#" class="nav-link submenu-toggle" id="submenu-approaching">
-                        <i class="fas fa-bullhorn"></i>
-                        <span data-i18n="nav.approaching">Approaching</span>
-                        <i class="fas fa-chevron-down submenu-arrow"></i>
-                    </a>
-                    <ul class="submenu">
-                        <li class="nav-item">
-                            <a href="approaching-whatsapp.html" class="nav-link">
-                                <i class="fab fa-whatsapp"></i>
-                                <span data-i18n="nav.whatsapp">WhatsApp</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="approaching-linkedin.html" class="nav-link">
-                                <i class="fab fa-linkedin"></i>
-                                <span data-i18n="nav.linkedin">LinkedIn</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="approaching-instagram.html" class="nav-link">
-                                <i class="fab fa-instagram"></i>
-                                <span data-i18n="nav.instagram">Instagram</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="approaching-facebook.html" class="nav-link">
-                                <i class="fab fa-facebook"></i>
-                                <span data-i18n="nav.facebook">Facebook</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="approaching-x.html" class="nav-link">
-                                <i class="fab fa-x-twitter"></i>
-                                <span data-i18n="nav.x">X</span>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-
-                <!-- Analytics & Support Section -->
-                <li class="nav-item">
-                    <a href="analytics.html" class="nav-link">
-                        <i class="fas fa-chart-bar"></i>
-                        <span data-i18n="nav.analytics">Analytics</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="support.html" class="nav-link">
-                        <i class="fas fa-headset"></i>
-                        <span data-i18n="nav.support">Support</span>
-                    </a>
-                </li>
-            </ul>
-        </nav>
-        <div class="sidebar-footer">
-            <div class="user-profile">
-                <div class="user-avatar">
-                    <i class="fas fa-user"></i>
+        </aside>
+        <main class="main-content" role="main">
+            <div class="leads-header">
+                <div>
+                    <div class="leads-title" data-i18n="leads.title">Lead Prospecting</div>
+                    <div class="leads-subtitle" data-i18n="leads.subtitle">Discover, qualify, and manage your leads with AI-powered prospecting tools</div>
                 </div>
-                <div class="user-info">
-                    <div class="user-name" data-i18n="nav.agencyOwner">Agency Owner</div>
-                    <div class="user-email">admin@rarity.com</div>
-                </div>
-                <button class="logout-btn" id="sign-out-btn" data-tooltip="Sign Out">
-                    <i class="fas fa-sign-out-alt"></i>
-                </button>
-            </div>
-        </div>
-    </aside>
-
-    <!-- Top Header -->
-    <header class="top-header">
-        <div class="header-left">
-            <button class="sidebar-toggle">
-                <i class="fas fa-bars"></i>
-            </button>
-            <div class="breadcrumb">
-                <span class="breadcrumb-item" data-i18n="nav.prospecting">Prospecting</span>
-                <span class="breadcrumb-separator"> / </span>
-                <span class="breadcrumb-item" data-i18n="nav.leads">Leads</span>
-            </div>
-        </div>
-
-        <div class="header-right">
-            <div class="header-actions">
-                <div class="language-selector">
-                    <button class="current-lang">
-                        <span class="lang-flag">🇺🇸</span>
-                        <span class="lang-code">EN</span>
-                        <i class="fas fa-chevron-down"></i>
-                    </button>
-                    <div class="lang-dropdown">
-                        <a href="#" data-lang="en" class="lang-option active">
-                            <span class="lang-flag">🇺🇸</span>
-                            <span class="lang-name">English</span>
-                        </a>
-                        <a href="#" data-lang="pt-BR" class="lang-option">
-                            <span class="lang-flag">🇧🇷</span>
-                            <span class="lang-name">Português</span>
-                        </a>
-                        <a href="#" data-lang="es" class="lang-option">
-                            <span class="lang-flag">🇪🇸</span>
-                            <span class="lang-name">Español</span>
-                        </a>
-                        <a href="#" data-lang="fr" class="lang-option">
-                            <span class="lang-flag">🇫🇷</span>
-                            <span class="lang-name">Français</span>
-                        </a>
-                    </div>
-                </div>
-                <button class="header-btn" data-tooltip="Notifications">
-                    <i class="fas fa-bell"></i>
-                    <span class="notification-dot"></span>
-                </button>
-                <button class="header-btn" data-tooltip="Help">
-                    <i class="fas fa-question-circle"></i>
-                </button>
-            </div>
-        </div>
-    </header>
-
-    <!-- Main Content -->
-    <main class="main-content">
-        <!-- Page Header -->
-        <div class="page-header">
-            <div class="page-title">
-                <h1 data-i18n="nav.leads">Leads</h1>
-                <p class="page-subtitle">Manage and prospect your leads with AI-powered tools</p>
-            </div>
-            <div class="page-actions">
-                <button class="action-btn secondary">
-                    <i class="fas fa-filter"></i>
-                    <span>Filter</span>
-                </button>
-                <button class="action-btn secondary">
-                    <i class="fas fa-download"></i>
-                    <span>Export</span>
-                </button>
-                <button class="action-btn primary" id="add-lead-btn">
+                <button class="add-lead-btn" id="add-lead-btn" data-i18n="leads.addLead">
                     <i class="fas fa-plus"></i>
-                    <span>Add Lead</span>
+                    Add Lead
                 </button>
             </div>
-        </div>
-
-        <!-- Leads Management Content -->
-        <div class="leads-content">
-            <!-- Filters and Search -->
-            <div class="leads-filters">
-                <div class="search-container">
-                    <div class="search-input-wrapper">
-                        <i class="fas fa-search search-icon"></i>
-                        <input type="text" id="leads-search" placeholder="Search leads by name, email, or company..." class="search-input">
-                    </div>
-                </div>
-
-                <div class="filter-controls">
-                    <select id="status-filter" class="filter-select">
-                        <option value="">All Status</option>
-                        <option value="new">New</option>
-                        <option value="warm">Warm</option>
-                        <option value="hot">Hot</option>
-                        <option value="cold">Cold</option>
-                        <option value="converted">Converted</option>
-                    </select>
-
-                    <select id="score-filter" class="filter-select">
-                        <option value="">All Scores</option>
-                        <option value="high">High (80+)</option>
-                        <option value="medium">Medium (50-79)</option>
-                        <option value="low">Low (0-49)</option>
-                    </select>
-
-                    <button id="clear-filters" class="filter-btn secondary">
-                        <i class="fas fa-times"></i>
-                        Clear Filters
-                    </button>
-                </div>
-            </div>
-
-            <!-- Leads Stats -->
-            <div class="leads-stats">
-                <div class="stat-card">
-                    <div class="stat-icon new">
+            <div class="metrics-grid" role="region" aria-label="Lead metrics">
+                <div class="metric-card" role="article">
+                    <div class="metric-icon new">
                         <i class="fas fa-user-plus"></i>
                     </div>
-                    <div class="stat-content">
-                        <span class="stat-number" id="total-leads">0</span>
-                        <span class="stat-label">Total Leads</span>
-                    </div>
+                    <div class="metric-value" id="total-leads" aria-live="polite">0</div>
+                    <div class="metric-label" data-i18n="leads.metrics.total">Total Leads</div>
                 </div>
-
-                <div class="stat-card">
-                    <div class="stat-icon hot">
+                <div class="metric-card" role="article">
+                    <div class="metric-icon hot">
                         <i class="fas fa-fire"></i>
                     </div>
-                    <div class="stat-content">
-                        <span class="stat-number" id="hot-leads">0</span>
-                        <span class="stat-label">Hot Leads</span>
-                    </div>
+                    <div class="metric-value" id="hot-leads" aria-live="polite">0</div>
+                    <div class="metric-label" data-i18n="leads.metrics.hot">Hot Leads</div>
                 </div>
-
-                <div class="stat-card">
-                    <div class="stat-icon warm">
+                <div class="metric-card" role="article">
+                    <div class="metric-icon warm">
                         <i class="fas fa-thermometer-half"></i>
                     </div>
-                    <div class="stat-content">
-                        <span class="stat-number" id="warm-leads">0</span>
-                        <span class="stat-label">Warm Leads</span>
-                    </div>
+                    <div class="metric-value" id="warm-leads" aria-live="polite">0</div>
+                    <div class="metric-label" data-i18n="leads.metrics.warm">Warm Leads</div>
                 </div>
-
-                <div class="stat-card">
-                    <div class="stat-icon converted">
+                <div class="metric-card" role="article">
+                    <div class="metric-icon converted">
                         <i class="fas fa-check-circle"></i>
                     </div>
-                    <div class="stat-content">
-                        <span class="stat-number" id="converted-leads">0</span>
-                        <span class="stat-label">Converted</span>
-                    </div>
+                    <div class="metric-value" id="converted-leads" aria-live="polite">0</div>
+                    <div class="metric-label" data-i18n="leads.metrics.converted">Converted</div>
                 </div>
             </div>
-
-            <!-- Leads Table -->
-            <div class="leads-table-container">
-                <div class="table-header">
-                    <h3>All Leads</h3>
-                    <div class="table-actions">
-                        <button id="export-leads" class="action-btn secondary">
-                            <i class="fas fa-download"></i>
-                            Export
-                        </button>
-                        <button id="bulk-actions" class="action-btn secondary">
-                            <i class="fas fa-tasks"></i>
-                            Bulk Actions
-                        </button>
-                    </div>
-                </div>
-
-                <div class="table-wrapper">
-                    <table class="leads-table" id="leads-table">
-                        <thead>
-                            <tr>
-                                <th>
-                                    <input type="checkbox" id="select-all-leads">
-                                </th>
-                                <th>Lead</th>
-                                <th>Contact</th>
-                                <th>Position</th>
-                                <th>Score</th>
-                                <th>Status</th>
-                                <th>Added</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="leads-table-body">
-                            <!-- Leads will be loaded here -->
-                        </tbody>
-                    </table>
-                </div>
-
-                <!-- Loading State -->
-                <div id="leads-loading" class="loading-state" style="display: none;">
-                    <div class="loading-spinner"></div>
-                    <p>Loading leads...</p>
-                </div>
-
-                <!-- Empty State -->
-                <div id="leads-empty" class="empty-state" style="display: none;">
-                    <div class="empty-icon">
-                        <i class="fas fa-users"></i>
-                    </div>
-                    <h3>No leads found</h3>
-                    <p>Start by adding your first lead or adjust your filters.</p>
-                    <button id="add-first-lead" class="action-btn primary">
-                        <i class="fas fa-plus"></i>
-                        Add Your First Lead
-                    </button>
-                </div>
+            <div class="tabs" role="tablist" aria-label="Lead views">
+                <button class="tab active" id="tab-all" role="tab" aria-selected="true" aria-controls="all-leads-view" data-i18n="leads.tabs.all">All Leads</button>
+                <button class="tab" id="tab-hot" role="tab" aria-selected="false" aria-controls="hot-leads-view" data-i18n="leads.tabs.hot">Hot Leads</button>
+                <button class="tab" id="tab-warm" role="tab" aria-selected="false" aria-controls="warm-leads-view" data-i18n="leads.tabs.warm">Warm Leads</button>
+                <button class="tab" id="tab-converted" role="tab" aria-selected="false" aria-controls="converted-leads-view" data-i18n="leads.tabs.converted">Converted</button>
             </div>
-        </div>
-    </main>
-
-    <!-- Add Lead Modal -->
-    <div id="add-lead-modal" class="modal" style="display: none;">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>Add New Lead</h3>
-                <button class="modal-close" id="close-add-modal">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-
-            <form id="add-lead-form" class="modal-form">
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="lead-name">Full Name *</label>
-                        <input type="text" id="lead-name" name="lead_name" required placeholder="John Smith">
-                    </div>
-                    <div class="form-group">
-                        <label for="lead-position">Position</label>
-                        <input type="text" id="lead-position" name="position" placeholder="CEO, CTO, VP Sales...">
-                    </div>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="lead-email">Email</label>
-                        <input type="email" id="lead-email" name="email" placeholder="john@company.com">
-                    </div>
-                    <div class="form-group">
-                        <label for="lead-phone">Phone</label>
-                        <input type="tel" id="lead-phone" name="phone" placeholder="+1-555-0123">
-                    </div>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="lead-score">Lead Score</label>
-                        <input type="number" id="lead-score" name="lead_score" min="0" max="100" placeholder="85">
-                        <small>Score from 0-100 based on qualification</small>
-                    </div>
-                    <div class="form-group">
-                        <label for="lead-status">Status</label>
-                        <select id="lead-status" name="status">
-                            <option value="new">New</option>
-                            <option value="warm">Warm</option>
-                            <option value="hot">Hot</option>
-                            <option value="cold">Cold</option>
-                            <option value="converted">Converted</option>
+            <div class="tab-content" id="tab-content">
+                <div id="all-leads-view" role="tabpanel" aria-labelledby="tab-all">
+                    <div class="search-filters">
+                        <input type="text" class="search-input" id="leads-search" placeholder="Search leads by name, email, or company..." data-i18n="leads.search.placeholder">
+                        <select class="filter-select" id="status-filter">
+                            <option value="" data-i18n="leads.filters.allStatus">All Status</option>
+                            <option value="new" data-i18n="leads.filters.new">New</option>
+                            <option value="warm" data-i18n="leads.filters.warm">Warm</option>
+                            <option value="hot" data-i18n="leads.filters.hot">Hot</option>
+                            <option value="cold" data-i18n="leads.filters.cold">Cold</option>
+                            <option value="converted" data-i18n="leads.filters.converted">Converted</option>
                         </select>
-                    </div>
-                </div>
-
-                <div class="form-actions">
-                    <button type="button" id="cancel-add-lead" class="btn secondary">Cancel</button>
-                    <button type="submit" class="btn primary">
-                        <i class="fas fa-plus"></i>
-                        Add Lead
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- Edit Lead Modal -->
-    <div id="edit-lead-modal" class="modal" style="display: none;">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>Edit Lead</h3>
-                <button class="modal-close" id="close-edit-modal">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-
-            <form id="edit-lead-form" class="modal-form">
-                <input type="hidden" id="edit-lead-id" name="id">
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="edit-lead-name">Full Name *</label>
-                        <input type="text" id="edit-lead-name" name="lead_name" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="edit-lead-position">Position</label>
-                        <input type="text" id="edit-lead-position" name="position">
-                    </div>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="edit-lead-email">Email</label>
-                        <input type="email" id="edit-lead-email" name="email">
-                    </div>
-                    <div class="form-group">
-                        <label for="edit-lead-phone">Phone</label>
-                        <input type="tel" id="edit-lead-phone" name="phone">
-                    </div>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="edit-lead-score">Lead Score</label>
-                        <input type="number" id="edit-lead-score" name="lead_score" min="0" max="100">
-                    </div>
-                    <div class="form-group">
-                        <label for="edit-lead-status">Status</label>
-                        <select id="edit-lead-status" name="status">
-                            <option value="new">New</option>
-                            <option value="warm">Warm</option>
-                            <option value="hot">Hot</option>
-                            <option value="cold">Cold</option>
-                            <option value="converted">Converted</option>
+                        <select class="filter-select" id="score-filter">
+                            <option value="" data-i18n="leads.filters.allScores">All Scores</option>
+                            <option value="high" data-i18n="leads.filters.highScore">High (80+)</option>
+                            <option value="medium" data-i18n="leads.filters.mediumScore">Medium (50-79)</option>
+                            <option value="low" data-i18n="leads.filters.lowScore">Low (0-49)</option>
                         </select>
+                        <button class="clear-filters-btn" id="clear-filters" data-i18n="leads.filters.clear">Clear Filters</button>
+                    </div>
+                    <div class="leads-table-container">
+                        <table class="leads-table" id="leads-table" role="table" aria-label="Leads table">
+                            <thead>
+                                <tr>
+                                    <th scope="col" data-i18n="leads.table.name">Name</th>
+                                    <th scope="col" data-i18n="leads.table.email">Email</th>
+                                    <th scope="col" data-i18n="leads.table.position">Position</th>
+                                    <th scope="col" data-i18n="leads.table.score">Score</th>
+                                    <th scope="col" data-i18n="leads.table.status">Status</th>
+                                    <th scope="col" data-i18n="leads.table.added">Added</th>
+                                    <th scope="col" data-i18n="leads.table.actions">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="leads-table-body">
+                                <!-- Leads will be loaded here -->
+                            </tbody>
+                        </table>
+                        <div id="leads-empty" class="empty-state" style="display:none;">
+                            <div class="empty-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <h3 class="empty-title" data-i18n="leads.empty.title">No leads found</h3>
+                            <p class="empty-description" data-i18n="leads.empty.description">Start by adding your first lead or adjust your filters.</p>
+                            <button class="add-lead-btn" id="add-first-lead" data-i18n="leads.addLead">
+                                <i class="fas fa-plus"></i>
+                                Add Your First Lead
+                            </button>
+                        </div>
                     </div>
                 </div>
-
-                <div class="form-actions">
-                    <button type="button" id="cancel-edit-lead" class="btn secondary">Cancel</button>
-                    <button type="submit" class="btn primary">
-                        <i class="fas fa-save"></i>
-                        Save Changes
-                    </button>
+                <div id="hot-leads-view" role="tabpanel" aria-labelledby="tab-hot" style="display:none;">
+                    <h3 data-i18n="leads.hot.title">Hot Leads</h3>
+                    <p data-i18n="leads.hot.description">High-priority leads ready for immediate follow-up</p>
+                    <!-- Hot leads content -->
                 </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- Delete Confirmation Modal -->
-    <div id="delete-lead-modal" class="modal" style="display: none;">
-        <div class="modal-content small">
-            <div class="modal-header">
-                <h3>Delete Lead</h3>
-                <button class="modal-close" id="close-delete-modal">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-
-            <div class="modal-body">
-                <div class="delete-warning">
-                    <i class="fas fa-exclamation-triangle"></i>
-                    <p>Are you sure you want to delete this lead?</p>
-                    <p class="delete-lead-name"></p>
-                    <small>This action cannot be undone.</small>
+                <div id="warm-leads-view" role="tabpanel" aria-labelledby="tab-warm" style="display:none;">
+                    <h3 data-i18n="leads.warm.title">Warm Leads</h3>
+                    <p data-i18n="leads.warm.description">Leads showing interest and ready for nurturing</p>
+                    <!-- Warm leads content -->
+                </div>
+                <div id="converted-leads-view" role="tabpanel" aria-labelledby="tab-converted" style="display:none;">
+                    <h3 data-i18n="leads.converted.title">Converted Leads</h3>
+                    <p data-i18n="leads.converted.description">Successfully converted leads and customers</p>
+                    <!-- Converted leads content -->
                 </div>
             </div>
-
-            <div class="form-actions">
-                <button type="button" id="cancel-delete-lead" class="btn secondary">Cancel</button>
-                <button type="button" id="confirm-delete-lead" class="btn danger">
-                    <i class="fas fa-trash"></i>
-                    Delete Lead
-                </button>
-            </div>
-        </div>
+        </main>
     </div>
+    <script src="app-config.js"></script>
+    <script src="i18n.js"></script>
+    <script>
+        // Leads Module
+        const Leads = {
+            supabase: null,
+            currentLanguage: 'en',
+            leadsData: [],
+            filteredLeads: [],
+            currentTab: 'all',
+            
+            async init() {
+                this.supabase = window.AppUtils ? window.AppUtils.initSupabase() : null;
+                await this.checkAuth();
+                await this.initI18n();
+                this.bindEvents();
+                this.loadLeads();
+            },
+            
+            async checkAuth() {
+                if (!this.supabase) return;
+                const { data: { session } } = await this.supabase.auth.getSession();
+                if (!session || !session.user || !session.user.email_confirmed_at) {
+                    window.location.href = '/register.html';
+                    return;
+                }
+            },
+            
+            async initI18n() {
+                if (window.i18n) {
+                    this.currentLanguage = await window.i18n.detectLanguage();
+                    await window.i18n.translatePage();
+                }
+            },
+            
+            bindEvents() {
+                // Logout
+                document.getElementById('logout-btn').addEventListener('click', () => this.logout());
+                
+                // Tabs
+                const tabs = document.querySelectorAll('.tab');
+                tabs.forEach(tab => {
+                    tab.addEventListener('click', () => this.switchTab(tab));
+                });
+                
+                // Search and filters
+                document.getElementById('leads-search').addEventListener('input', (e) => this.filterLeads());
+                document.getElementById('status-filter').addEventListener('change', () => this.filterLeads());
+                document.getElementById('score-filter').addEventListener('change', () => this.filterLeads());
+                document.getElementById('clear-filters').addEventListener('click', () => this.clearFilters());
+                
+                // Add lead buttons
+                document.getElementById('add-lead-btn').addEventListener('click', () => this.openAddLeadModal());
+                document.getElementById('add-first-lead').addEventListener('click', () => this.openAddLeadModal());
+                
+                // Keyboard navigation
+                document.addEventListener('keydown', (e) => this.handleKeyboard(e));
+            },
+            
+            switchTab(activeTab) {
+                // Update tab states
+                document.querySelectorAll('.tab').forEach(tab => {
+                    tab.classList.remove('active');
+                    tab.setAttribute('aria-selected', 'false');
+                });
+                activeTab.classList.add('active');
+                activeTab.setAttribute('aria-selected', 'true');
+                
+                // Show corresponding content
+                const targetId = activeTab.getAttribute('aria-controls');
+                document.querySelectorAll('[role="tabpanel"]').forEach(panel => {
+                    panel.style.display = 'none';
+                });
+                document.getElementById(targetId).style.display = '';
+                
+                this.currentTab = activeTab.id.replace('tab-', '');
+                this.filterLeads();
+            },
+            
+            handleKeyboard(e) {
+                // Tab navigation with arrow keys
+                if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+                    const tabs = document.querySelectorAll('.tab');
+                    const activeTab = document.querySelector('.tab.active');
+                    const currentIndex = Array.from(tabs).indexOf(activeTab);
+                    
+                    if (e.key === 'ArrowLeft' && currentIndex > 0) {
+                        tabs[currentIndex - 1].click();
+                    } else if (e.key === 'ArrowRight' && currentIndex < tabs.length - 1) {
+                        tabs[currentIndex + 1].click();
+                    }
+                }
+            },
+            
+            async logout() {
+                if (this.supabase) await this.supabase.auth.signOut();
+                window.location.href = '/register.html';
+            },
+            
+            async loadLeads() {
+                try {
+                    if (!this.supabase) return;
+                    
+                    const { data, error } = await this.supabase
+                        .from('leads')
+                        .select('*')
+                        .order('created_at', { ascending: false });
+                    
+                    if (error) throw error;
+                    
+                    this.leadsData = data || [];
+                    this.filteredLeads = [...this.leadsData];
+                    this.renderLeadsTable();
+                    this.updateMetrics();
+                    
+                } catch (error) {
+                    console.error('Failed to load leads:', error);
+                    this.showError('Failed to load leads');
+                }
+            },
+            
+            filterLeads() {
+                const searchTerm = document.getElementById('leads-search').value.toLowerCase();
+                const statusFilter = document.getElementById('status-filter').value;
+                const scoreFilter = document.getElementById('score-filter').value;
+                
+                this.filteredLeads = this.leadsData.filter(lead => {
+                    const matchesSearch = !searchTerm || 
+                        lead.lead_name?.toLowerCase().includes(searchTerm) ||
+                        lead.email?.toLowerCase().includes(searchTerm) ||
+                        lead.position?.toLowerCase().includes(searchTerm);
+                    
+                    const matchesStatus = !statusFilter || lead.status === statusFilter;
+                    
+                    const matchesScore = !scoreFilter || this.getScoreClass(lead.lead_score) === scoreFilter;
+                    
+                    return matchesSearch && matchesStatus && matchesScore;
+                });
+                
+                this.renderLeadsTable();
+            },
+            
+            clearFilters() {
+                document.getElementById('leads-search').value = '';
+                document.getElementById('status-filter').value = '';
+                document.getElementById('score-filter').value = '';
+                this.filterLeads();
+            },
+            
+            renderLeadsTable() {
+                const tbody = document.getElementById('leads-table-body');
+                const emptyState = document.getElementById('leads-empty');
+                
+                if (this.filteredLeads.length === 0) {
+                    tbody.innerHTML = '';
+                    emptyState.style.display = 'block';
+                    return;
+                }
+                
+                emptyState.style.display = 'none';
+                
+                tbody.innerHTML = this.filteredLeads.map(lead => `
+                    <tr>
+                        <td>${lead.lead_name || 'N/A'}</td>
+                        <td>${lead.email || 'N/A'}</td>
+                        <td>${lead.position || 'N/A'}</td>
+                        <td><span class="score-badge score-${this.getScoreClass(lead.lead_score)}">${lead.lead_score || 0}</span></td>
+                        <td><span class="status-badge status-${lead.status || 'new'}">${this.formatStatus(lead.status)}</span></td>
+                        <td>${this.formatDate(lead.created_at)}</td>
+                        <td>
+                            <button class="action-btn" onclick="Leads.editLead('${lead.id}')" data-i18n="leads.actions.edit">Edit</button>
+                            <button class="action-btn" onclick="Leads.deleteLead('${lead.id}')" data-i18n="leads.actions.delete">Delete</button>
+                        </td>
+                    </tr>
+                `).join('');
+            },
+            
+            updateMetrics() {
+                const total = this.leadsData.length;
+                const hot = this.leadsData.filter(lead => lead.status === 'hot').length;
+                const warm = this.leadsData.filter(lead => lead.status === 'warm').length;
+                const converted = this.leadsData.filter(lead => lead.status === 'converted').length;
+                
+                document.getElementById('total-leads').textContent = total;
+                document.getElementById('hot-leads').textContent = hot;
+                document.getElementById('warm-leads').textContent = warm;
+                document.getElementById('converted-leads').textContent = converted;
+            },
+            
+            getScoreClass(score) {
+                if (score >= 80) return 'high';
+                if (score >= 50) return 'medium';
+                return 'low';
+            },
+            
+            formatStatus(status) {
+                const statusMap = {
+                    'new': 'New',
+                    'warm': 'Warm',
+                    'hot': 'Hot',
+                    'cold': 'Cold',
+                    'converted': 'Converted'
+                };
+                return statusMap[status] || 'New';
+            },
+            
+            formatDate(dateString) {
+                if (!dateString) return 'N/A';
+                const date = new Date(dateString);
+                return date.toLocaleDateString('en-US', {
+                    month: 'short',
+                    day: 'numeric',
+                    year: 'numeric'
+                });
+            },
+            
+            openAddLeadModal() {
+                // Placeholder for add lead modal
+                console.log('Opening add lead modal...');
+                alert('Add lead functionality coming soon');
+            },
+            
+            editLead(leadId) {
+                // Placeholder for edit lead functionality
+                console.log('Editing lead:', leadId);
+                alert('Edit lead functionality coming soon');
+            },
+            
+            deleteLead(leadId) {
+                // Placeholder for delete lead functionality
+                if (confirm('Are you sure you want to delete this lead?')) {
+                    console.log('Deleting lead:', leadId);
+                    alert('Delete lead functionality coming soon');
+                }
+            },
+            
+            showError(message) {
+                console.error(message);
+                // Placeholder for error display
+            }
+        };
+        
+        // Initialize leads when DOM is ready
+        document.addEventListener('DOMContentLoaded', () => Leads.init());
+    </script>
 </body>
 </html>

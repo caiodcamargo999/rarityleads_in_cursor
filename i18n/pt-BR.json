@@ -3,6 +3,9 @@
     "title": "Rarity Leads - Plataforma de Geração de Leads com IA",
     "description": "Rarity Leads é sua plataforma nativa de IA para atrair, qualificar e fechar clientes — sem o trabalho manual."
   },
+  "common": {
+    "brand": "Rarity Leads"
+  },
   "nav": {
     "dashboard": "Dashboard",
     "leads": "Leads",
@@ -49,6 +52,8 @@
     }
   },
   "dashboard": {
+    "title": "Rarity Leads - Dashboard",
+    "header": "Dashboard de Aquisição de Clientes",
     "welcome": "Bem-vindo de volta",
     "subtitle": "Veja o que está acontecendo com sua geração de leads hoje",
     "overview": "Visão Geral de Performance",
@@ -57,28 +62,53 @@
     "activeCampaigns": "Campanhas Ativas",
     "revenue": "Receita",
     "recentActivity": "Atividade Recente",
-    "topLeads": "Top Leads",
-    "campaignPerformance": "Performance de Campanhas",
+    "topLeads": "Melhores Leads",
+    "campaignPerformance": "Performance das Campanhas",
     "quickActions": "Ações Rápidas",
     "createCampaign": "Criar Campanha",
     "importLeads": "Importar Leads",
     "viewReports": "Ver Relatórios",
     "thisMonth": "este mês",
-    "noVariation": "Sem variação"
+    "noVariation": "Sem variação",
+    "metrics": {
+      "leads": "Leads Qualificados",
+      "leads.trend": "+23% este mês",
+      "campaigns": "Campanhas Ativas",
+      "campaigns.trend": "Sem mudança",
+      "appointments": "Agendamentos",
+      "appointments.trend": "+8.4%"
+    },
+    "tabs": {
+      "funnel": "Funil de Vendas",
+      "calendar": "Calendário"
+    },
+    "funnel": {
+      "title": "Funil de Leads",
+      "description": "Visualize a jornada do seu lead desde o primeiro contato até o fechamento. Em breve: analytics interativo do funil."
+    },
+    "calendar": {
+      "title": "Calendário de Agendamentos",
+      "description": "Veja todos os seus agendamentos em um só lugar. Integração com calendário em breve."
+    }
   },
   "analytics": {
-    "title": "Painel de Análises",
-    "subtitle": "Monitore o desempenho da sua geração de leads e eficácia das campanhas com insights abrangentes",
+    "title": "Dashboard de Analytics",
+    "subtitle": "Monitore o desempenho da sua geração de leads e a eficácia das campanhas com insights abrangentes",
+    "exportData": "Exportar Dados",
     "overview": "Visão Geral",
-    "performanceCharts": "Gráficos de Desempenho",
+    "performanceCharts": "Gráficos de Performance",
     "acquisitionFunnel": "Funil de Aquisição",
-    "campaignPerformance": "Desempenho das Campanhas",
+    "campaignPerformance": "Performance das Campanhas",
     "leadSources": "Fontes de Leads",
     "revenueTrends": "Tendências de Receita",
     "leadsGenerated": "Leads Gerados",
+    "leadsGenerated.trend": "+23% do mês passado",
     "conversionRate": "Taxa de Conversão",
+    "conversionRate.trend": "+8.4% do mês passado",
     "activeCampaigns": "Campanhas Ativas",
+    "activeCampaigns.trend": "Sem variação",
     "revenue": "Receita",
+    "revenue.trend": "+15.3% do mês passado",
     "period": {
       "last7days": "Últimos 7 dias",
       "last30days": "Últimos 30 dias",
@@ -97,7 +127,25 @@
     "facebook": "Facebook",
     "linkedin": "LinkedIn",
     "organic": "Orgânico",
-    "referral": "Indicação"
+    "referral": "Referência",
+    "tabs": {
+      "overview": "Visão Geral",
+      "funnel": "Funil",
+      "sources": "Fontes",
+      "revenue": "Receita"
+    },
+    "funnel": {
+      "title": "Funil de Aquisição",
+      "description": "Acompanhe a jornada do seu lead desde o primeiro contato até a conversão"
+    },
+    "sources": {
+      "title": "Fontes de Leads",
+      "description": "Identifique seus canais mais eficazes de geração de leads"
+    },
+    "revenue": {
+      "title": "Tendências de Receita",
+      "description": "Monitore o crescimento e padrões da sua receita"
+    }
   },
   "auth": {
     "createAccount": "Criar Conta",
@@ -134,7 +182,8 @@
       "userAlreadyExists": "Uma conta com este email já existe.",
       "signupDisabled": "Novos registros estão atualmente desabilitados.",
       "rateLimitExceeded": "Muitos emails enviados. Por favor, aguarde antes de solicitar outro."
-    }
+    },
+    "logout": "Logout"
   },
   "features": {
     "meta": {
@@ -172,6 +221,221 @@
       "title": "Sequências de Nutrição Que Constroem Relacionamentos",
       "highlight": "⚡ Engajamento 24/7",
       "description": "Transforme prospects frios em relacionamentos calorosos com IA que se adapta a cada interação. É como ter um especialista em relacionamentos trabalhando cada lead."
+    },
+    "whatsapp": {
+      "title": "Automação WhatsApp",
+      "subtitle": "Automatize sua abordagem no WhatsApp com mensagens com IA e alcance 94% de taxa de resposta",
+      "connectQR": "Conectar QR",
+      "newCampaign": "Nova Campanha",
+      "metrics": {
+        "messagesSent": "Mensagens Enviadas",
+        "responseRate": "Taxa de Resposta",
+        "activeCampaigns": "Campanhas Ativas",
+        "conversions": "Conversões"
+      },
+      "tabs": {
+        "campaigns": "Campanhas",
+        "templates": "Modelos",
+        "analytics": "Analytics",
+        "settings": "Configurações"
+      },
+      "status": {
+        "connected": "WhatsApp conectado",
+        "disconnected": "WhatsApp não conectado"
+      },
+      "empty": {
+        "title": "Nenhuma campanha encontrada",
+        "description": "Comece criando sua primeira campanha no WhatsApp."
+      },
+      "templates": {
+        "title": "Modelos de Mensagem",
+        "description": "Crie e gerencie seus modelos de mensagem do WhatsApp para abordagem consistente"
+      },
+      "analytics": {
+        "title": "Analytics do WhatsApp",
+        "description": "Acompanhe o desempenho da sua campanha no WhatsApp e métricas de engajamento"
+      },
+      "settings": {
+        "title": "Configurações do WhatsApp",
+        "description": "Configure sua integração do WhatsApp e preferências de automação"
+      },
+      "actions": {
+        "view": "Visualizar",
+        "edit": "Editar",
+        "start": "Iniciar"
+      }
+    },
+    "instagram": {
+      "title": "Automação Instagram",
+      "subtitle": "Automatize sua abordagem no Instagram com mensagens com IA e alcance 92% de taxa de resposta",
+      "connect": "Conectar Instagram",
+      "newCampaign": "Nova Campanha",
+      "metrics": {
+        "messagesSent": "Mensagens Enviadas",
+        "responseRate": "Taxa de Resposta",
+        "activeCampaigns": "Campanhas Ativas",
+        "conversions": "Conversões"
+      },
+      "tabs": {
+        "campaigns": "Campanhas",
+        "templates": "Modelos",
+        "analytics": "Analytics",
+        "settings": "Configurações"
+      },
+      "status": {
+        "connected": "Instagram conectado",
+        "disconnected": "Instagram não conectado"
+      },
+      "empty": {
+        "title": "Nenhuma campanha encontrada",
+        "description": "Comece criando sua primeira campanha no Instagram."
+      },
+      "templates": {
+        "title": "Modelos de Mensagem",
+        "description": "Crie e gerencie seus modelos de mensagem do Instagram para abordagem consistente"
+      },
+      "analytics": {
+        "title": "Analytics do Instagram",
+        "description": "Acompanhe o desempenho da sua campanha no Instagram e métricas de engajamento"
+      },
+      "settings": {
+        "title": "Configurações do Instagram",
+        "description": "Configure sua integração do Instagram e preferências de automação"
+      },
+      "actions": {
+        "view": "Visualizar",
+        "edit": "Editar",
+        "start": "Iniciar"
+      }
+    },
+    "linkedin": {
+      "title": "Automação LinkedIn",
+      "subtitle": "Automatize sua abordagem no LinkedIn com mensagens com IA e alcance 87% de taxa de resposta",
+      "connect": "Conectar LinkedIn",
+      "newCampaign": "Nova Campanha",
+      "metrics": {
+        "connectionsMade": "Conexões Feitas",
+        "responseRate": "Taxa de Resposta",
+        "activeCampaigns": "Campanhas Ativas",
+        "conversions": "Conversões"
+      },
+      "tabs": {
+        "campaigns": "Campanhas",
+        "templates": "Modelos",
+        "analytics": "Analytics",
+        "settings": "Configurações"
+      },
+      "status": {
+        "connected": "LinkedIn conectado",
+        "disconnected": "LinkedIn não conectado"
+      },
+      "empty": {
+        "title": "Nenhuma campanha encontrada",
+        "description": "Comece criando sua primeira campanha no LinkedIn."
+      },
+      "templates": {
+        "title": "Modelos de Mensagem",
+        "description": "Crie e gerencie seus modelos de mensagem do LinkedIn para abordagem consistente"
+      },
+      "analytics": {
+        "title": "Analytics do LinkedIn",
+        "description": "Acompanhe o desempenho da sua campanha no LinkedIn e métricas de engajamento"
+      },
+      "settings": {
+        "title": "Configurações do LinkedIn",
+        "description": "Configure sua integração do LinkedIn e preferências de automação"
+      },
+      "actions": {
+        "view": "Visualizar",
+        "edit": "Editar",
+        "start": "Iniciar"
+      }
+    },
+    "facebook": {
+      "title": "Automação Facebook",
+      "subtitle": "Automatize sua abordagem no Facebook com mensagens com IA e alcance 89% de taxa de resposta",
+      "connect": "Conectar Facebook",
+      "newCampaign": "Nova Campanha",
+      "metrics": {
+        "messagesSent": "Mensagens Enviadas",
+        "responseRate": "Taxa de Resposta",
+        "activeCampaigns": "Campanhas Ativas",
+        "conversions": "Conversões"
+      },
+      "tabs": {
+        "campaigns": "Campanhas",
+        "templates": "Modelos",
+        "analytics": "Analytics",
+        "settings": "Configurações"
+      },
+      "status": {
+        "connected": "Facebook conectado",
+        "disconnected": "Facebook não conectado"
+      },
+      "empty": {
+        "title": "Nenhuma campanha encontrada",
+        "description": "Comece criando sua primeira campanha no Facebook."
+      },
+      "templates": {
+        "title": "Modelos de Mensagem",
+        "description": "Crie e gerencie seus modelos de mensagem do Facebook para abordagem consistente"
+      },
+      "analytics": {
+        "title": "Analytics do Facebook",
+        "description": "Acompanhe o desempenho da sua campanha no Facebook e métricas de engajamento"
+      },
+      "settings": {
+        "title": "Configurações do Facebook",
+        "description": "Configure sua integração do Facebook e preferências de automação"
+      },
+      "actions": {
+        "view": "Visualizar",
+        "edit": "Editar",
+        "start": "Iniciar"
+      }
+    },
+    "x": {
+      "title": "Automação X (Twitter)",
+      "subtitle": "Automatize sua abordagem no X (Twitter) com mensagens com IA e alcance 91% de taxa de resposta",
+      "connect": "Conectar X",
+      "newCampaign": "Nova Campanha",
+      "metrics": {
+        "messagesSent": "Mensagens Enviadas",
+        "responseRate": "Taxa de Resposta",
+        "activeCampaigns": "Campanhas Ativas",
+        "conversions": "Conversões"
+      },
+      "tabs": {
+        "campaigns": "Campanhas",
+        "templates": "Modelos",
+        "analytics": "Analytics",
+        "settings": "Configurações"
+      },
+      "status": {
+        "connected": "X conectado",
+        "disconnected": "X não conectado"
+      },
+      "empty": {
+        "title": "Nenhuma campanha encontrada",
+        "description": "Comece criando sua primeira campanha no X."
+      },
+      "templates": {
+        "title": "Modelos de Mensagem",
+        "description": "Crie e gerencie seus modelos de mensagem do X para abordagem consistente"
+      },
+      "analytics": {
+        "title": "Analytics do X",
+        "description": "Acompanhe o desempenho da sua campanha no X e métricas de engajamento"
+      },
+      "settings": {
+        "title": "Configurações do X",
+        "description": "Configure sua integração do X e preferências de automação"
+      },
+      "actions": {
+        "view": "Visualizar",
+        "edit": "Editar",
+        "start": "Iniciar"
+      }
     }
   },
   "testimonials": {
@@ -333,5 +597,122 @@
     "resendVerification": "Reenviar Email de Verificação",
     "tryAgain": "Tentar Novamente",
     "fillAllFields": "Por favor, preencha todos os campos"
+  },
+  "leads": {
+    "title": "Prospecção de Leads",
+    "subtitle": "Descubra, qualifique e gerencie seus leads com ferramentas de prospecção com IA",
+    "addLead": "Adicionar Lead",
+    "metrics": {
+      "total": "Total de Leads",
+      "hot": "Leads Quentes",
+      "warm": "Leads Mornos",
+      "converted": "Convertidos"
+    },
+    "tabs": {
+      "all": "Todos os Leads",
+      "hot": "Leads Quentes",
+      "warm": "Leads Mornos",
+      "converted": "Convertidos"
+    },
+    "search": {
+      "placeholder": "Pesquisar leads por nome, email ou empresa..."
+    },
+    "filters": {
+      "allStatus": "Todos os Status",
+      "new": "Novo",
+      "warm": "Morno",
+      "hot": "Quente",
+      "cold": "Frio",
+      "converted": "Convertido",
+      "allScores": "Todas as Pontuações",
+      "highScore": "Alta (80+)",
+      "mediumScore": "Média (50-79)",
+      "lowScore": "Baixa (0-49)",
+      "clear": "Limpar Filtros"
+    },
+    "table": {
+      "name": "Nome",
+      "email": "Email",
+      "position": "Cargo",
+      "score": "Pontuação",
+      "status": "Status",
+      "added": "Adicionado",
+      "actions": "Ações"
+    },
+    "empty": {
+      "title": "Nenhum lead encontrado",
+      "description": "Comece adicionando seu primeiro lead ou ajuste seus filtros."
+    },
+    "hot": {
+      "title": "Leads Quentes",
+      "description": "Leads de alta prioridade prontos para acompanhamento imediato"
+    },
+    "warm": {
+      "title": "Leads Mornos",
+      "description": "Leads mostrando interesse e prontos para nutrir"
+    },
+    "converted": {
+      "title": "Leads Convertidos",
+      "description": "Leads e clientes convertidos com sucesso"
+    },
+    "actions": {
+      "edit": "Editar",
+      "delete": "Excluir"
+    }
+  },
+  "companies": {
+    "title": "Prospecção de Empresas",
+    "subtitle": "Descubra e prospecte empresas com ferramentas de segmentação e qualificação com IA",
+    "addCompany": "Adicionar Empresa",
+    "metrics": {
+      "total": "Total de Empresas",
+      "targeted": "Segmentadas",
+      "contacted": "Contactadas",
+      "converted": "Convertidas"
+    },
+    "tabs": {
+      "all": "Todas as Empresas",
+      "targeted": "Segmentadas",
+      "contacted": "Contactadas",
+      "converted": "Convertidas"
+    },
+    "search": {
+      "placeholder": "Pesquisar empresas por nome, setor ou localização..."
+    },
+    "filters": {
+      "allIndustries": "Todos os Setores",
+      "technology": "Tecnologia",
+      "healthcare": "Saúde",
+      "finance": "Finanças",
+      "retail": "Varejo",
+      "manufacturing": "Manufatura",
+      "allSizes": "Todos os Tamanhos",
+      "startup": "Startup (1-50)",
+      "small": "Pequena (51-200)",
+      "medium": "Média (201-1000)",
+      "large": "Grande (1000+)",
+      "clear": "Limpar Filtros"
+    },
+    "empty": {
+      "title": "Nenhuma empresa encontrada",
+      "description": "Comece adicionando sua primeira empresa ou ajuste seus filtros."
+    },
+    "targeted": {
+      "title": "Empresas Segmentadas",
+      "description": "Empresas identificadas como prospects potenciais baseado em seus critérios"
+    },
+    "contacted": {
+      "title": "Empresas Contactadas",
+      "description": "Empresas que foram abordadas para oportunidades de negócio"
+    },
+    "converted": {
+      "title": "Empresas Convertidas",
+      "description": "Empresas que se tornaram clientes ou parceiros"
+    },
+    "actions": {
+      "view": "Visualizar",
+      "edit": "Editar",
+      "contact": "Contactar"
+    }
   }
 }
