@@ -89,6 +89,14 @@
         "calendar": {
             "title": "Appointments Calendar",
             "description": "See all your scheduled appointments in one place. Calendar integration coming soon."
+        },
+        "buttons": {
+            "showHiddenSection": "Show Hidden Section",
+            "hideHiddenSection": "Hide Hidden Section"
+        },
+        "hiddenSection": {
+            "title": "This is a Hidden Section",
+            "paragraph": "This section is initially hidden and is revealed by clicking the button in the header."
         }
     },
     "analytics": {

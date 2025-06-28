@@ -1,4 +1,3 @@
-
 :root {
     --background-primary: #121212;
     --background-secondary: #1E1E1E;
@@ -102,24 +101,66 @@ body, html {
     text-align: left;
 }
 
-.btn-google {
-    width: 100%;
-    padding: 12px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 12px;
-    background-color: var(--background-tertiary);
-    color: var(--text-primary);
-    border: 1px solid var(--border-color);
+.btn, .btn-primary, .btn-outline, .btn-google, .btn-large {
     border-radius: 8px;
+    font-size: 1rem;
     font-weight: 600;
+    padding: 12px 0;
+    border: none;
     cursor: pointer;
-    transition: background-color 0.2s;
+    transition: all 0.3s cubic-bezier(.4,0,.2,1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    will-change: transform, box-shadow;
 }
 
-.btn-google:hover {
-    background-color: #333;
+.btn-primary, .btn-google {
+    background: linear-gradient(45deg, #D50057 0%, #8B5CF6 100%);
+    color: #fff;
+    border: 1px solid #D50057;
+    box-shadow: 0 2px 8px rgba(139, 92, 246, 0.15);
+}
+
+.btn-primary:hover, .btn-primary:focus, .btn-google:hover, .btn-google:focus {
+    background: linear-gradient(45deg, #8B5CF6 0%, #D50057 100%);
+    color: #fff;
+    box-shadow: 0 8px 32px rgba(139, 92, 246, 0.25);
+    outline: 2px solid #fff;
+    outline-offset: 2px;
+    transform: translateY(-2px) scale(1.03);
+}
+
+.btn-outline {
+    border: 1.5px solid #8B5CF6;
+    color: #8B5CF6;
+    background: transparent;
+}
+
+.btn-outline:hover, .btn-outline:focus {
+    background: #8B5CF6;
+    color: #fff;
+    box-shadow: 0 6px 20px rgba(139, 92, 246, 0.25);
+    outline: 2px solid #fff;
+    outline-offset: 2px;
+    transform: translateY(-2px) scale(1.03);
+}
+
+.btn:active, .btn-primary:active, .btn-outline:active, .btn-google:active {
+    transform: scale(0.97);
+    box-shadow: 0 1px 4px rgba(139, 92, 246, 0.10);
+}
+
+@media (max-width: 430px) {
+    .auth-card, .auth-container {
+        padding: 24px 4px;
+    }
+    .btn, .btn-primary, .btn-outline, .btn-google, .btn-large {
+        width: 100%;
+        font-size: 1rem;
+        padding: 14px 0;
+    }
 }
 
 .auth-divider {
@@ -195,28 +236,6 @@ body, html {
 
 .link:hover {
     text-decoration: underline;
-}
-
-.btn-primary {
-    width: 100%;
-    padding: 12px;
-    background-color: var(--accent-primary);
-    color: #000000; /* Black text for high contrast */
-    border: none;
-    border-radius: 8px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.btn-primary:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 4px 15px rgba(187, 134, 252, 0.4);
-}
-
-.btn-primary:disabled {
-    background-color: var(--background-tertiary);
-    cursor: not-allowed;
 }
 
 .message-container {

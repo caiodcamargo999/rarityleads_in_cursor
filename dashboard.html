@@ -76,6 +76,10 @@
                     </div>
                 </div>
             </div>
+            <section id="hidden-section" class="hidden-section" style="display: none;" role="region" aria-label="Hidden content">
+                <h2 data-i18n="dashboard.hiddenSection.title">This is a Hidden Section</h2>
+                <p data-i18n="dashboard.hiddenSection.paragraph">This section is initially hidden and is revealed by clicking the button in the header.</p>
+            </section>
         </main>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -135,6 +139,24 @@
                 tabFunnel.addEventListener('click', () => this.switchTab('funnel', tabFunnel, tabCalendar, funnelView, calendarView));
                 tabCalendar.addEventListener('click', () => this.switchTab('calendar', tabCalendar, tabFunnel, calendarView, funnelView));
                 
+                // Hidden section toggle
+                const showHiddenSectionBtn = document.getElementById('show-hidden-section-btn');
+                const hiddenSection = document.getElementById('hidden-section');
+
+                showHiddenSectionBtn.addEventListener('click', () => {
+                    const isHidden = hiddenSection.style.display === 'none';
+                    hiddenSection.style.display = isHidden ? 'block' : 'none';
+                    
+                    const newTextKey = isHidden ? 'dashboard.buttons.hideHiddenSection' : 'dashboard.buttons.showHiddenSection';
+                    if (window.i18n) {
+                        const newText = window.i18n.t(newTextKey);
+                        showHiddenSectionBtn.textContent = newText;
+                        showHiddenSectionBtn.setAttribute('data-i18n', newTextKey);
+                    } else {
+                        showHiddenSectionBtn.textContent = isHidden ? 'Hide Section' : 'Show Hidden Section';
+                    }
+                });
+
                 // Keyboard navigation
                 document.addEventListener('keydown', (e) => this.handleKeyboard(e));
             },

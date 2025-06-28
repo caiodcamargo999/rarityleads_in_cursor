@@ -1,4 +1,3 @@
-
 :root {
     --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
@@ -46,4 +45,63 @@ body.dark-theme {
 
     background-color: var(--bg-primary);
     color: var(--text-primary);
+}
+
+.btn, .btn-primary, .btn-outline, .btn-large {
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 12px 0;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(.4,0,.2,1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    will-change: transform, box-shadow;
+}
+
+.btn-primary {
+    background: linear-gradient(45deg, #D50057 0%, #8B5CF6 100%);
+    color: #fff;
+    border: 1px solid #D50057;
+    box-shadow: 0 2px 8px rgba(139, 92, 246, 0.15);
+}
+
+.btn-primary:hover, .btn-primary:focus {
+    background: linear-gradient(45deg, #8B5CF6 0%, #D50057 100%);
+    color: #fff;
+    box-shadow: 0 8px 32px rgba(139, 92, 246, 0.25);
+    outline: 2px solid #fff;
+    outline-offset: 2px;
+    transform: translateY(-2px) scale(1.03);
+}
+
+.btn-outline {
+    border: 1.5px solid #8B5CF6;
+    color: #8B5CF6;
+    background: transparent;
+}
+
+.btn-outline:hover, .btn-outline:focus {
+    background: #8B5CF6;
+    color: #fff;
+    box-shadow: 0 6px 20px rgba(139, 92, 246, 0.25);
+    outline: 2px solid #fff;
+    outline-offset: 2px;
+    transform: translateY(-2px) scale(1.03);
+}
+
+.btn:active, .btn-primary:active, .btn-outline:active, .btn-large:active {
+    transform: scale(0.97);
+    box-shadow: 0 1px 4px rgba(139, 92, 246, 0.10);
+}
+
+@media (max-width: 430px) {
+    .btn, .btn-primary, .btn-outline, .btn-large {
+        width: 100%;
+        font-size: 1rem;
+        padding: 14px 0;
+    }
 }

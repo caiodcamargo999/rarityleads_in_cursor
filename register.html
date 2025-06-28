@@ -3,64 +3,76 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title data-i18n="register.title">Sign Up - Rarity Leads</title>
+    <title>Sign Up - Rarity Leads</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="auth-styles.css">
-    <script src="https://unpkg.com/feather-icons"></script>
+    <style>
+        body.auth-body { background: #18181b; color: #fff; font-family: 'Inter', sans-serif; margin: 0; }
+        .auth-main { display: flex; align-items: center; justify-content: center; min-height: 100vh; }
+        .auth-card { background: #23232b; border-radius: 18px; box-shadow: 0 4px 32px rgba(0,0,0,0.10); padding: 48px 32px 32px 32px; max-width: 400px; width: 100%; display: flex; flex-direction: column; align-items: center; }
+        .auth-logo { margin-bottom: 32px; }
+        .auth-logo img { height: 48px; width: auto; object-fit: contain; display: block; margin: 0 auto; }
+        .auth-title { font-size: 2rem; font-weight: 700; margin-bottom: 8px; text-align: center; }
+        .auth-subtitle { color: #a1a1aa; font-size: 1.1rem; font-weight: 400; margin-bottom: 32px; text-align: center; }
+        .btn-google, .btn-primary { width: 100%; border-radius: 8px; font-size: 1rem; font-weight: 600; padding: 12px 0; margin-bottom: 16px; border: none; cursor: pointer; transition: background 0.2s; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .btn-google { background: #fff; color: #23232b; border: 1px solid #e5e7eb; }
+        .btn-google:hover { background: #f3f4f6; }
+        .btn-primary { background: #D50057; color: #fff; }
+        .btn-primary:hover { background: #B91C5B; }
+        .auth-divider { text-align: center; color: #6b7280; margin: 16px 0; position: relative; }
+        .auth-divider:before, .auth-divider:after { content: ""; display: inline-block; width: 40%; height: 1px; background: #333; vertical-align: middle; margin: 0 8px; }
+        .auth-form { width: 100%; display: flex; flex-direction: column; gap: 18px; }
+        .form-group { display: flex; flex-direction: column; gap: 6px; }
+        .form-label { font-size: 1rem; color: #cbd5e1; }
+        .form-input { padding: 12px; border-radius: 8px; border: 1px solid #333; background: #18181b; color: #fff; font-size: 1rem; }
+        .form-input:focus { outline: 2px solid #D50057; border-color: #D50057; }
+        .message { margin-top: 16px; padding: 12px; border-radius: 8px; font-size: 1rem; text-align: center; }
+        .message-success { background: #22c55e22; color: #22c55e; }
+        .message-error { background: #ef444422; color: #ef4444; }
+        .auth-footer { margin-top: 32px; text-align: center; color: #a1a1aa; font-size: 0.98rem; }
+        .auth-footer a { color: #8B5CF6; text-decoration: none; font-weight: 500; }
+        .auth-footer a:hover { text-decoration: underline; }
+        @media (max-width: 500px) { .auth-card { padding: 32px 8px; } }
+    </style>
 </head>
 <body class="auth-body">
-    <nav class="auth-nav">
-        <div class="nav-container">
-            <a href="/index.html" class="logo" data-i18n="common.brand">Rarity Leads</a>
-            <div class="nav-links">
-                <a href="/login.html" data-i18n="register.haveAccountLink">Already have an account? <strong>Sign In</strong></a>
-            </div>
-        </div>
-    </nav>
-
     <main class="auth-main">
-        <div class="auth-container">
-            <div class="auth-header">
-                <h1 class="auth-title" data-i18n="register.createAccount">Create Your Account</h1>
-                <p class="auth-subtitle" data-i18n="register.subtitle">Start your journey with AI-powered lead generation.</p>
+        <div class="auth-card">
+            <div class="auth-logo">
+                <img src="rarity-logo.jpg" alt="Rarity Leads Logo">
             </div>
-
-            <div class="auth-logo" style="text-align:center;margin-bottom:32px;">
-                <img src="rarity-logo.jpg" alt="Rarity Leads Logo" style="height:40px;width:auto;object-fit:contain;">
-            </div>
-
-            <div class="auth-form-container">
-                <button type="button" id="google-signup" class="btn-google">
-                    <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" width="20">
-                    <span data-i18n="register.signupGoogle">Sign up with Google</span>
-                </button>
-
-                <div class="auth-divider" data-i18n="register.or">or</div>
-
-                <form id="email-signup-form" class="auth-form">
-                    <div class="form-group">
-                        <label for="email" class="form-label" data-i18n="register.email">Email address</label>
-                        <input type="email" id="email" name="email" class="form-input" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="password" class="form-label" data-i18n="register.password">Password</label>
-                        <input type="password" id="password" name="password" class="form-input" minlength="6" required>
-                    </div>
-
-                    <button type="submit" id="email-signup-btn" class="btn-primary">
-                        <span data-i18n="register.signupBtn">Create Account</span>
-                    </button>
-                </form>
-            </div>
-
+            <h1 class="auth-title">Create your free account</h1>
+            <p class="auth-subtitle">Start closing more deals with AI-powered lead generation. No credit card required.</p>
+            <button type="button" id="google-signup" class="btn-google">
+                <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" width="20" height="20" style="vertical-align:middle;">
+                Sign up with Google
+            </button>
+            <div class="auth-divider">or sign up with email</div>
+            <form id="email-signup-form" class="auth-form" autocomplete="off">
+                <div class="form-group">
+                    <label for="email" class="form-label">Email address</label>
+                    <input type="email" id="email" name="email" class="form-input" required autocomplete="email">
+                </div>
+                <div class="form-group">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" id="password" name="password" class="form-input" minlength="6" required autocomplete="new-password">
+                </div>
+                <button type="submit" id="email-signup-btn" class="btn-primary">Create Account</button>
+            </form>
             <div id="message-container"></div>
+            <div class="auth-footer" style="margin-top:32px;">
+                Already have an account? <a href="/login.html">Sign in here</a>
+                <div style="margin-top:16px;">
+                    <button type="button" id="google-signin" class="btn-google" style="margin-bottom:0;">
+                        <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" width="20" height="20" style="vertical-align:middle;">
+                        Sign in with Google
+                    </button>
+                </div>
+            </div>
         </div>
     </main>
-
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="app-config.js"></script>
-    <script src="i18n.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const supabase = window.AppUtils.initSupabase();
@@ -68,23 +80,24 @@
                 console.error('Supabase not initialized');
                 return;
             }
-
             const signupForm = document.getElementById('email-signup-form');
             const googleSignUpBtn = document.getElementById('google-signup');
+            const googleSignInBtn = document.getElementById('google-signin');
             const messageContainer = document.getElementById('message-container');
-
             // Google Sign Up
             googleSignUpBtn.addEventListener('click', async () => {
                 await supabase.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: `${window.location.origin}/dashboard.html` } });
             });
-
+            // Google Sign In (for users who already have an account)
+            googleSignInBtn.addEventListener('click', async () => {
+                await supabase.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: `${window.location.origin}/dashboard.html` } });
+            });
             // Email Sign Up
             signupForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
                 const email = signupForm.email.value;
                 const password = signupForm.password.value;
                 const { error } = await supabase.auth.signUp({ email, password, options: { emailRedirectTo: `${window.location.origin}/dashboard.html` } });
-
                 if (error) {
                     showMessage(error.message, 'error');
                 } else {
@@ -92,7 +105,6 @@
                     signupForm.reset();
                 }
             });
-
             function showMessage(message, type) {
                 messageContainer.innerHTML = `<div class="message message-${type}">${message}</div>`;
                 setTimeout(() => messageContainer.innerHTML = '', 5000);
