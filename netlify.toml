@@ -32,11 +32,13 @@
   status = 200
 
 [[redirects]]
-  # Redirect old login/register to /auth.html
+  # Redirect old login to /auth.html
   from = "/login.html"
   to = "/auth.html"
   status = 301
 
+[[redirects]]
+  # Redirect old register to /auth.html
   from = "/register.html"
   to = "/auth.html"
   status = 301
