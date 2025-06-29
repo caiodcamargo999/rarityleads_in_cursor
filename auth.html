@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Auth - Rarity Leads</title>
+    <title data-i18n="auth.meta.title">Auth - Rarity Leads</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="design-system.css">
     <link rel="stylesheet" href="auth-styles.css">
@@ -11,10 +11,11 @@
 <body class="auth-body">
     <main class="auth-main">
         <div class="auth-container">
+            <div class="language-selector" id="language-selector"></div>
             <div class="auth-logo">
                 <img src="rarity-logo.jpg" alt="Rarity Leads Logo" data-i18n-attr="alt:common.brandLogoAlt">
             </div>
-            <div class="auth-tabs">
+            <div class="auth-toggle-buttons">
                 <button id="tab-login" class="auth-tab active" data-i18n="login.signinBtn">Sign In</button>
                 <button id="tab-register" class="auth-tab" data-i18n="register.createAccountBtn">Register</button>
             </div>
@@ -28,11 +29,11 @@
                     <div class="auth-divider" data-i18n="login.or">or</div>
                     <div class="form-group">
                         <label for="login-email" class="form-label" data-i18n="login.email">Email address</label>
-                        <input type="email" id="login-email" name="email" class="form-input" required autocomplete="email">
+                        <input type="email" id="login-email" name="email" class="form-input" required autocomplete="email" data-i18n-placeholder="login.emailPlaceholder">
                     </div>
                     <div class="form-group">
                         <label for="login-password" class="form-label" data-i18n="login.password">Password</label>
-                        <input type="password" id="login-password" name="password" class="form-input" required autocomplete="current-password">
+                        <input type="password" id="login-password" name="password" class="form-input" required autocomplete="current-password" data-i18n-placeholder="login.passwordPlaceholder">
                     </div>
                     <div class="form-options">
                         <label class="checkbox-label">
@@ -60,11 +61,11 @@
                     <div class="auth-divider" data-i18n="register.orSignupWithEmail">or sign up with email</div>
                     <div class="form-group">
                         <label for="register-email" class="form-label" data-i18n="register.email">Email address</label>
-                        <input type="email" id="register-email" name="email" class="form-input" required autocomplete="email">
+                        <input type="email" id="register-email" name="email" class="form-input" required autocomplete="email" data-i18n-placeholder="register.emailPlaceholder">
                     </div>
                     <div class="form-group">
                         <label for="register-password" class="form-label" data-i18n="register.password">Password</label>
-                        <input type="password" id="register-password" name="password" class="form-input" minlength="6" required autocomplete="new-password">
+                        <input type="password" id="register-password" name="password" class="form-input" minlength="6" required autocomplete="new-password" data-i18n-placeholder="register.passwordPlaceholder">
                     </div>
                     <button type="submit" class="btn-primary" data-i18n="register.createAccountBtn">Create Account</button>
                 </form>
@@ -114,6 +115,7 @@
             });
             // Email Login
             loginForm.addEventListener('submit', async (e) => {
+                console.log('Login submit triggered');
                 e.preventDefault();
                 const email = loginForm['login-email'].value;
                 const password = loginForm['login-password'].value;

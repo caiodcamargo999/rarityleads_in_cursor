@@ -1,18 +1,17 @@
 :root {
-    --background-dark: #0A0A23;
-    --background-slate: #232136;
+    --deep-blue: #0A0A23;
+    --slate: #232136;
+    --white: #FFFFFF;
+    --light-gray: #E5E7EB;
+    --accent-purple: #8B5CF6;
+    --glass-morphism: rgba(255,255,255,0.10);
     --text-primary: #FFFFFF;
     --text-secondary: #A1A1AA;
-    --accent-purple: #8B5CF6;
-    --accent-orange: #F59E0B;
-    --accent-pink: #EC4899;
-    --glass-morphism: rgba(255, 255, 255, 0.1);
-    --glass-morphism-light: rgba(255, 255, 255, 0.15);
-    --border-color: rgba(255, 255, 255, 0.1);
-    --gradient-primary: linear-gradient(135deg, #8B5CF6, #EC4899, #F59E0B);
-
+    --border-color: #393552;
+    --gradient-primary: linear-gradient(135deg, #0A0A23 0%, #232136 40%, #8B5CF6 100%);
+    --gradient-glass: linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.12) 100%);
     --font-primary: 'Inter', sans-serif;
-    --font-secondary: 'BentoSans Regular', sans-serif;
+    --font-secondary: 'BentoSans', sans-serif;
 }
 
 body {

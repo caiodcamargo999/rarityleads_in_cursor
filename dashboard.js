@@ -408,17 +408,8 @@ class Dashboard {
     }
 
     updateWelcomeMessage(email = null) {
-        const hour = new Date().getHours();
-        let greeting = 'Good morning';
-        
-        if (hour >= 12 && hour < 17) {
-            greeting = 'Good afternoon';
-        } else if (hour >= 17) {
-            greeting = 'Good evening';
-        }
-        
         if (this.welcomeSubtitle) {
-            this.welcomeSubtitle.textContent = `${greeting} ✨ Ready to convert more leads today?`;
+            this.welcomeSubtitle.textContent = `Ready to convert more leads today?`;
         }
     }
 

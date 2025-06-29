@@ -1,7 +1,7 @@
 @import url('design-system.css');
 
 body, html {
-    background-color: var(--background-dark);
+    background-color: var(--deep-blue);
 }
 
 .auth-body {
@@ -54,14 +54,14 @@ body, html {
 }
 
 .auth-container, .auth-form-container {
-    background: rgba(36, 36, 54, 0.92);
-    border: 1.5px solid #393552;
-    box-shadow: 0 4px 24px rgba(36,36,54,0.18), 0 2px 12px rgba(0,0,0,0.10);
+    background: var(--glass-morphism);
+    border: 1.5px solid var(--border-color);
+    box-shadow: 0 4px 24px var(--glass-morphism), 0 2px 12px var(--glass-morphism);
     border-radius: 24px;
     padding: 40px 32px 32px 32px;
     text-align: left;
     font-family: var(--font-primary), var(--font-secondary);
-    color: #fff;
+    color: var(--text-primary);
 }
 
 .auth-header {
@@ -94,16 +94,16 @@ body, html {
     display: inline-block;
     font-family: var(--font-primary), var(--font-secondary);
     font-weight: 700;
-    border: 2px solid #6D28D9;
+    border: 2px solid var(--accent-purple);
     border-radius: 999px;
     padding: 16px 40px;
     font-size: 1.08rem;
-    background: #181825;
-    color: #fff;
+    background: var(--slate);
+    color: var(--text-primary);
     text-transform: uppercase;
     letter-spacing: 0.04em;
     text-decoration: none;
-    box-shadow: 0 2px 8px rgba(36,36,54,0.18), 0 1.5px 8px rgba(0,0,0,0.10);
+    box-shadow: 0 2px 8px var(--glass-morphism), 0 1.5px 8px var(--glass-morphism);
     cursor: pointer;
     transition: transform 0.16s cubic-bezier(.4,0,.2,1), box-shadow 0.16s cubic-bezier(.4,0,.2,1), background 0.3s, border-color 0.2s;
     outline: none;
@@ -114,19 +114,19 @@ body, html {
 
 .btn-primary:hover, .btn-primary:focus {
     transform: translateY(-2px) scale(1.03);
-    background: #232136;
-    border-color: #8B5CF6;
-    color: #fff;
-    box-shadow: 0 8px 32px rgba(36,36,54,0.22), 0 2px 12px rgba(0,0,0,0.12);
+    background: var(--deep-blue);
+    border-color: var(--accent-purple);
+    color: var(--text-primary);
+    box-shadow: 0 8px 32px var(--glass-morphism), 0 2px 12px var(--glass-morphism);
     text-decoration: none;
 }
 
 .btn-primary:active {
     transform: scale(0.98);
-    background: #232136;
-    border-color: #6D28D9;
-    color: #fff;
-    box-shadow: 0 2px 8px rgba(36,36,54,0.18);
+    background: var(--slate);
+    border-color: var(--accent-purple);
+    color: var(--text-primary);
+    box-shadow: 0 2px 8px var(--glass-morphism);
     text-decoration: none;
 }
 
@@ -168,7 +168,7 @@ body, html {
     padding: 12px;
     border-radius: 8px;
     border: 1.5px solid var(--border-color);
-    background: var(--background-dark);
+    background: var(--deep-blue);
     color: var(--text-primary);
     font-size: 1rem;
     transition: border 0.2s, outline 0.2s;
@@ -226,7 +226,7 @@ body, html {
 }
 
 .verification-warning {
-    background-color: var(--background-slate);
+    background-color: var(--slate);
     padding: 32px;
     border-radius: 12px;
     border: 1px solid var(--border-color);
@@ -253,4 +253,32 @@ body, html {
     margin: 40px auto;
     box-sizing: border-box;
     text-align: center;
+}
+
+.auth-toggle-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.auth-toggle-buttons .auth-tab {
+    background: transparent;
+    color: var(--text-primary);
+    border: 2px solid var(--accent-purple);
+    border-radius: 8px 8px 0 0;
+    padding: 8px 28px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s, border-color 0.2s;
+    outline: none;
+    margin: 0;
+}
+
+.auth-toggle-buttons .auth-tab.active,
+.auth-toggle-buttons .auth-tab:hover {
+    background: var(--accent-purple);
+    color: var(--white);
+    border-bottom: 2px solid var(--slate);
 }

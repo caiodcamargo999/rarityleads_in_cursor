@@ -1,13 +1,13 @@
 @import url('design-system.css');
 
 body, html {
-    background-color: var(--background-dark);
+    background-color: var(--deep-blue);
 }
 
 .main-header {
     padding: 12px 8px;
     border-bottom: 1px solid var(--border-color);
-    background: var(--background-slate);
+    background: var(--slate);
 }
 
 .main-nav {
@@ -58,16 +58,16 @@ body, html {
     display: inline-block;
     font-family: var(--font-primary), var(--font-secondary);
     font-weight: 700;
-    border: 2px solid #6D28D9;
+    border: 2px solid var(--accent-purple);
     border-radius: 999px;
     padding: 16px 40px;
     font-size: 1.08rem;
-    background: #181825;
-    color: #fff;
+    background: var(--slate);
+    color: var(--text-primary);
     text-transform: uppercase;
     letter-spacing: 0.04em;
     text-decoration: none;
-    box-shadow: 0 2px 8px rgba(36,36,54,0.18), 0 1.5px 8px rgba(0,0,0,0.10);
+    box-shadow: 0 2px 8px var(--glass-morphism), 0 1.5px 8px var(--glass-morphism);
     cursor: pointer;
     transition: transform 0.16s cubic-bezier(.4,0,.2,1), box-shadow 0.16s cubic-bezier(.4,0,.2,1), background 0.3s, border-color 0.2s;
     outline: none;
@@ -75,21 +75,27 @@ body, html {
     overflow: hidden;
 }
 
+.btn-gradient {
+    background: var(--gradient-primary);
+    color: var(--text-primary);
+    border: none;
+}
+
 .btn-gradient:hover, .btn-large:hover, .btn:hover {
     transform: translateY(-2px) scale(1.03);
-    background: #232136;
-    border-color: #8B5CF6;
-    color: #fff;
-    box-shadow: 0 8px 32px rgba(36,36,54,0.22), 0 2px 12px rgba(0,0,0,0.12);
+    background: var(--slate);
+    border-color: var(--accent-purple);
+    color: var(--text-primary);
+    box-shadow: 0 8px 32px var(--glass-morphism), 0 2px 12px var(--glass-morphism);
     text-decoration: none;
 }
 
 .btn-gradient:active, .btn-large:active, .btn:active {
     transform: scale(0.98);
-    background: #232136;
-    border-color: #6D28D9;
-    color: #fff;
-    box-shadow: 0 2px 8px rgba(36,36,54,0.18);
+    background: var(--slate);
+    border-color: var(--accent-purple);
+    color: var(--text-primary);
+    box-shadow: 0 2px 8px var(--glass-morphism);
     text-decoration: none;
 }
 
@@ -117,9 +123,9 @@ body, html {
 }
 
 .pricing-card, .feature-card {
-    background: rgba(36, 36, 54, 0.98);
-    border: 1.5px solid #393552;
-    box-shadow: 0 4px 24px rgba(139,92,246,0.10), 0 2px 12px rgba(236,72,153,0.10);
+    background: var(--glass-morphism);
+    border: 1.5px solid var(--border-color);
+    box-shadow: 0 4px 24px var(--glass-morphism), 0 2px 12px var(--glass-morphism);
     border-radius: 24px;
     transition: transform 0.16s cubic-bezier(.4,0,.2,1), box-shadow 0.16s cubic-bezier(.4,0,.2,1);
     position: relative;
@@ -130,8 +136,8 @@ body, html {
 
 .pricing-card:hover, .feature-card:hover {
     transform: translateY(-4px) scale(1.025);
-    box-shadow: 0 12px 32px rgba(139,92,246,0.16), 0 4px 24px rgba(236,72,153,0.14);
-    border-color: #8B5CF6;
+    box-shadow: 0 12px 32px var(--accent-purple), 0 4px 24px var(--glass-morphism);
+    border-color: var(--accent-purple);
     z-index: 2;
 }
 
@@ -143,7 +149,7 @@ body, html {
 .hero {
     text-align: center;
     padding: 80px 8px 48px 8px;
-    background: var(--background-dark);
+    background: var(--deep-blue);
 }
 
 .hero-title {

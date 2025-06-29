@@ -100,14 +100,12 @@ Rarity Leads is a B2B SaaS lead prospecting platform powered by AI, focused on a
 - White: #FFFFFF
 - Light Gray: #E5E7EB
 - Accent Purple: #8B5CF6
-- Accent Orange: #F59E0B
-- Accent Pink: #EC4899
-- Glass Morphism Background: rgba(255,255,255,0.08-0.15)
+- Glass Morphism Background: rgba(255,255,255,0.10)
 - Text: #FFFFFF (primary), #A1A1AA (secondary)
 
 ### Gradients
-- Primary: linear-gradient(135deg, #8B5CF6 0%, #EC4899 50%, #F59E0B 100%)
-- Glass: rgba(255,255,255,0.05-0.12)
+- Primary: linear-gradient(135deg, #0A0A23 0%, #232136 40%, #8B5CF6 100%)
+- Glass: linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.12) 100%)
 
 ### Fonts
 - 'Inter', BentoSans Regular
