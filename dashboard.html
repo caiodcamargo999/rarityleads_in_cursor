@@ -11,75 +11,72 @@
 </head>
 <body>
     <header class="main-header">
-        <div class="header-left">
-            <button class="menu-toggle-btn" id="menu-toggle-btn" aria-label="Open menu">
-                <i data-feather="menu"></i>
-            </button>
-            <img src="rarity-logo.jpg" alt="Rarity Leads Logo" class="header-logo">
-        </div>
-        <div class="header-center">
-            <h1 class="dashboard-title" data-i18n="dashboard.header">Client Acquisition Dashboard</h1>
-        </div>
-        <div class="header-right">
+        <h1 class="dashboard-title" data-i18n="dashboard.header">Client Acquisition Dashboard</h1>
+        <div class="header-actions">
             <div class="language-selector" id="language-selector"></div>
-            <div class="user-email" id="user-email" aria-label="User email">user@email.com</div>
+            <span class="user-email" id="user-email">user@email.com</span>
             <button class="logout-btn" id="logout-btn" data-i18n="auth.logout">Logout</button>
         </div>
     </header>
-    <div class="dashboard-layout">
-        <aside class="sidebar" id="sidebar" role="navigation" aria-label="Main navigation">
-            <nav class="sidebar-nav">
-                <ul>
-                    <li><a href="dashboard.html" class="active"><i class="nav-icon" data-feather="home"></i><span data-i18n="nav.dashboard">Dashboard</span></a></li>
-                    <li><a href="prospecting-leads.html"><i class="nav-icon" data-feather="users"></i><span data-i18n="nav.leads">Leads</span></a></li>
-                    <li><a href="prospecting-companies.html"><i class="nav-icon" data-feather="briefcase"></i><span data-i18n="nav.companies">Companies</span></a></li>
-                    <li><a href="approaching-whatsapp.html"><i class="nav-icon" data-feather="message-circle"></i><span data-i18n="nav.whatsapp">WhatsApp</span></a></li>
-                    <li><a href="approaching-linkedin.html"><i class="nav-icon" data-feather="linkedin"></i><span data-i18n="nav.linkedin">LinkedIn</span></a></li>
-                    <li><a href="approaching-instagram.html"><i class="nav-icon" data-feather="instagram"></i><span data-i18n="nav.instagram">Instagram</span></a></li>
-                    <li><a href="approaching-facebook.html"><i class="nav-icon" data-feather="facebook"></i><span data-i18n="nav.facebook">Facebook</span></a></li>
-                    <li><a href="approaching-x.html"><i class="nav-icon" data-feather="twitter"></i><span data-i18n="nav.x">X</span></a></li>
-                    <li><a href="analytics.html"><i class="nav-icon" data-feather="bar-chart-2"></i><span data-i18n="nav.analytics">Analytics</span></a></li>
-                    <li><a href="support.html"><i class="nav-icon" data-feather="help-circle"></i><span data-i18n="nav.support">Support</span></a></li>
-                </ul>
-            </nav>
-        </aside>
-        <main class="main-content" role="main">
-            <section class="metrics-grid" role="region" aria-label="Dashboard metrics">
-                <div class="metric-card" role="article">
-                    <div class="metric-label" data-i18n="dashboard.metrics.leads">Qualified Leads</div>
-                    <div class="metric-value" id="leads-count" aria-live="polite">1,247</div>
-                    <div class="metric-trend" data-i18n="dashboard.metrics.leads.trend">+23% this month</div>
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+    <aside class="sidebar" id="sidebar" role="navigation" aria-label="Main navigation">
+        <div class="sidebar-header">
+            <button class="menu-toggle-btn" id="menu-toggle-btn" aria-label="Open menu"><i data-feather="menu"></i></button>
+            <img src="rarity-logo.jpg" alt="Rarity Leads Logo" class="sidebar-logo">
+        </div>
+        <nav class="sidebar-nav">
+            <ul>
+                <li><a href="dashboard.html" class="active"><i class="nav-icon" data-feather="home"></i><span data-i18n="nav.dashboard">Dashboard</span></a></li>
+                <li><a href="prospecting-leads.html"><i class="nav-icon" data-feather="users"></i><span data-i18n="nav.leads">Leads</span></a></li>
+                <li><a href="prospecting-companies.html"><i class="nav-icon" data-feather="briefcase"></i><span data-i18n="nav.companies">Companies</span></a></li>
+                <li><a href="approaching-whatsapp.html"><i class="nav-icon" data-feather="message-circle"></i><span data-i18n="nav.whatsapp">WhatsApp</span></a></li>
+                <li><a href="approaching-linkedin.html"><i class="nav-icon" data-feather="linkedin"></i><span data-i18n="nav.linkedin">LinkedIn</span></a></li>
+                <li><a href="approaching-instagram.html"><i class="nav-icon" data-feather="instagram"></i><span data-i18n="nav.instagram">Instagram</span></a></li>
+                <li><a href="approaching-facebook.html"><i class="nav-icon" data-feather="facebook"></i><span data-i18n="nav.facebook">Facebook</span></a></li>
+                <li><a href="approaching-x.html"><i class="nav-icon" data-feather="twitter"></i><span data-i18n="nav.x">X</span></a></li>
+                <li><a href="analytics.html"><i class="nav-icon" data-feather="bar-chart-2"></i><span data-i18n="nav.analytics">Analytics</span></a></li>
+                <li><a href="support.html"><i class="nav-icon" data-feather="help-circle"></i><span data-i18n="nav.support">Support</span></a></li>
+            </ul>
+        </nav>
+    </aside>
+    <main class="main-content" role="main">
+        <section class="metrics-grid">
+            <div class="metric-card">
+                <div class="metric-icon metric-leads"><i data-feather="users"></i></div>
+                <div class="metric-label" data-i18n="dashboard.metrics.leads">Qualified Leads</div>
+                <div class="metric-value" id="leads-count">1,247</div>
+                <div class="metric-trend" data-i18n="dashboard.metrics.leads.trend">+23% this month</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-icon metric-campaigns"><i data-feather="bar-chart-2"></i></div>
+                <div class="metric-label" data-i18n="dashboard.metrics.campaigns">Active Campaigns</div>
+                <div class="metric-value" id="active-campaigns">12</div>
+                <div class="metric-trend" data-i18n="dashboard.metrics.campaigns.trend">No change</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-icon metric-appointments"><i data-feather="calendar"></i></div>
+                <div class="metric-label" data-i18n="dashboard.metrics.appointments">Appointments Scheduled</div>
+                <div class="metric-value" id="appointments">34</div>
+                <div class="metric-trend" data-i18n="dashboard.metrics.appointments.trend">+8.4%</div>
+            </div>
+        </section>
+        <div class="tabs-container">
+            <div class="tabs" role="tablist">
+                <button class="tab active" id="tab-funnel" aria-selected="true" aria-controls="funnel-view" data-i18n="dashboard.tabs.funnel">Funnel View</button>
+                <button class="tab" id="tab-calendar" aria-selected="false" aria-controls="calendar-view" data-i18n="dashboard.tabs.calendar">Calendar View</button>
+            </div>
+            <div class="tab-content" id="tab-content">
+                <div id="funnel-view" role="tabpanel" aria-labelledby="tab-funnel">
+                    <h3 data-i18n="dashboard.funnel.title">Lead Funnel</h3>
+                    <p data-i18n="dashboard.funnel.description">Visualize your lead journey from first touch to closed deal. Coming soon: interactive funnel analytics.</p>
                 </div>
-                <div class="metric-card" role="article">
-                    <div class="metric-label" data-i18n="dashboard.metrics.campaigns">Active Campaigns</div>
-                    <div class="metric-value" id="active-campaigns" aria-live="polite">12</div>
-                    <div class="metric-trend" data-i18n="dashboard.metrics.campaigns.trend">No change</div>
-                </div>
-                <div class="metric-card" role="article">
-                    <div class="metric-label" data-i18n="dashboard.metrics.appointments">Appointments Scheduled</div>
-                    <div class="metric-value" id="appointments" aria-live="polite">34</div>
-                    <div class="metric-trend" data-i18n="dashboard.metrics.appointments.trend">+8.4%</div>
-                </div>
-            </section>
-            <div class="tabs-container">
-                <div class="tabs" role="tablist" aria-label="Dashboard views">
-                    <button class="tab active" id="tab-funnel" role="tab" aria-selected="true" aria-controls="funnel-view" data-i18n="dashboard.tabs.funnel">Funnel View</button>
-                    <button class="tab" id="tab-calendar" role="tab" aria-selected="false" aria-controls="calendar-view" data-i18n="dashboard.tabs.calendar">Calendar View</button>
-                </div>
-                <div class="tab-content" id="tab-content">
-                    <div id="funnel-view" role="tabpanel" aria-labelledby="tab-funnel">
-                        <h3 data-i18n="dashboard.funnel.title">Lead Funnel</h3>
-                        <p data-i18n="dashboard.funnel.description">Visualize your lead journey from first touch to closed deal. Coming soon: interactive funnel analytics.</p>
-                    </div>
-                    <div id="calendar-view" role="tabpanel" aria-labelledby="tab-calendar" style="display:none;">
-                        <h3 data-i18n="dashboard.calendar.title">Appointments Calendar</h3>
-                        <p data-i18n="dashboard.calendar.description">See all your scheduled appointments in one place. Calendar integration coming soon.</p>
-                    </div>
+                <div id="calendar-view" role="tabpanel" aria-labelledby="tab-calendar" style="display:none;">
+                    <h3 data-i18n="dashboard.calendar.title">Appointments Calendar</h3>
+                    <p data-i18n="dashboard.calendar.description">See all your scheduled appointments in one place. Calendar integration coming soon.</p>
                 </div>
             </div>
-        </main>
-    </div>
-    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+        </div>
+    </main>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="app-config.js"></script>
     <script src="i18n.js"></script>
@@ -97,12 +94,32 @@
             sidebar.classList.remove('open');
             overlay.classList.remove('active');
         });
+        // Tabs logic
+        const tabFunnel = document.getElementById('tab-funnel');
+        const tabCalendar = document.getElementById('tab-calendar');
+        const funnelView = document.getElementById('funnel-view');
+        const calendarView = document.getElementById('calendar-view');
+        tabFunnel.addEventListener('click', () => {
+            tabFunnel.classList.add('active');
+            tabFunnel.setAttribute('aria-selected', 'true');
+            tabCalendar.classList.remove('active');
+            tabCalendar.setAttribute('aria-selected', 'false');
+            funnelView.style.display = '';
+            calendarView.style.display = 'none';
+        });
+        tabCalendar.addEventListener('click', () => {
+            tabCalendar.classList.add('active');
+            tabCalendar.setAttribute('aria-selected', 'true');
+            tabFunnel.classList.remove('active');
+            tabFunnel.setAttribute('aria-selected', 'false');
+            calendarView.style.display = '';
+            funnelView.style.display = 'none';
+        });
         // i18n and user info
         document.addEventListener('DOMContentLoaded', async () => {
             if (window.i18n) {
                 await window.i18n.translatePage();
             }
-            // User email
             if (window.AppUtils && window.AppUtils.initSupabase) {
                 const supabase = window.AppUtils.initSupabase();
                 const { data: { session } } = await supabase.auth.getSession();
