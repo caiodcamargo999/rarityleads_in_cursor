@@ -10,7 +10,6 @@
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 1,
       "position": [250, 300]
-      // A propriedade "webhookId" foi removida. O n8n irá gerar uma ao importar/salvar.
     },
     {
       "parameters": {
@@ -33,7 +32,7 @@
       "position": [450, 300],
       "credentials": {
         "supabaseApi": {
-          "id": null, // Definido como null para que o n8n peça para conectar a credencial existente
+          "id": null
           "name": "Supabase Account"
         }
       }
@@ -49,7 +48,7 @@
       "position": [650, 300],
       "credentials": {
         "openAiApi": {
-          "id": null, // Definido como null para que o n8n peça para conectar a credencial existente
+          "id": null
           "name": "OpenAI Account"
         }
       }
@@ -75,7 +74,7 @@
       "position": [850, 300],
        "credentials": {
         "httpBearerAuth": {
-          "id": null, // Definido como null para que o n8n peça para conectar a credencial existente
+          "id": null
           "name": "WhatsApp API"
         }
       }
@@ -93,7 +92,7 @@
       "typeVersion": 1,
       "position": [1050, 300],
       "credentials": {
-        "supabaseApi": { "id": null, "name": "Supabase Account" } // Definido como null para que o n8n peça para conectar a credencial existente
+        "supabaseApi": { "id": null, "name": "Supabase Account" }
       }
     }
   ],
