@@ -5,18 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rarity Leads - Your Automated Sales Team</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="design-system.css">
     <link rel="stylesheet" href="landing-styles.css">
     <script src="https://unpkg.com/feather-icons"></script>
 </head>
 <body>
     <header class="main-header">
         <nav class="main-nav">
-            <div class="logo">Rarity Leads</div>
+            <div class="logo" data-i18n="common.brand">Rarity Leads</div>
             <div class="nav-links">
-                <a href="#features">Features</a>
-                <a href="#pricing">Pricing</a>
-                <a href="/login.html" class="btn btn-outline">Sign In</a>
-                <a href="/register.html" class="btn btn-primary">Get Started Free</a>
+                <a href="#features" data-i18n="landing.features">Features</a>
+                <a href="#pricing" data-i18n="landing.pricing">Pricing</a>
+                <a href="/auth.html" class="btn btn-gradient nav-cta" data-i18n="common.signIn">Sign In</a>
+                <a href="/auth.html" class="btn btn-gradient btn-large nav-cta" data-i18n="common.getStartedFree">Get Started Free</a>
             </div>
         </nav>
     </header>
@@ -24,83 +25,83 @@
     <main>
         <section class="hero">
             <div class="hero-content">
-                <h1 class="hero-title">Your AI Sales Team, Ready in Seconds.</h1>
-                <p class="hero-subtitle">Rarity Leads automates the entire top-of-funnel, from finding and qualifying leads to booking meetings. Scale your revenue, not your headcount.</p>
+                <h1 class="hero-title" data-i18n="landing.hero.title">Your AI Sales Team, Ready in Seconds.</h1>
+                <p class="hero-subtitle" data-i18n="landing.hero.subtitle">Rarity Leads automates the entire top-of-funnel, from finding and qualifying leads to booking meetings. Scale your revenue, not your headcount.</p>
                 <div class="hero-cta">
-                    <a href="/register.html" class="btn btn-primary btn-large">Claim Your Free Trial</a>
+                    <a href="/auth.html" class="btn btn-gradient btn-large motion-pop" data-i18n="landing.hero.cta">Claim Your Free Trial</a>
                 </div>
             </div>
         </section>
 
         <section class="features-section" id="features">
-            <h2 class="section-title">The End of Manual Prospecting</h2>
+            <h2 class="section-title" data-i18n="landing.features.title">The End of Manual Prospecting</h2>
             <div class="features-grid">
                 <div class="feature-card">
                     <i data-feather="cpu"></i>
-                    <h3>Your 24/7 AI Sales Rep</h3>
-                    <p>Deploy an AI agent that identifies ideal customers, engages them in human-like conversations, and qualifies their interest—so your team only talks to meeting-ready leads.</p>
+                    <h3 data-i18n="landing.features.aiSalesRepTitle">Your 24/7 AI Sales Rep</h3>
+                    <p data-i18n="landing.features.aiSalesRepSubtitle">Deploy an AI agent that identifies ideal customers, engages them in human-like conversations, and qualifies their interest—so your team only talks to meeting-ready leads.</p>
                 </div>
                 <div class="feature-card">
                     <i data-feather="send"></i>
-                    <h3>Automated Outreach That Converts</h3>
-                    <p>Connect with prospects across any channel—WhatsApp, LinkedIn, & Email. Our AI crafts and sends personalized follow-ups at the perfect time, ensuring no opportunity is missed.</p>
+                    <h3 data-i18n="landing.features.automatedOutreachTitle">Automated Outreach That Converts</h3>
+                    <p data-i18n="landing.features.automatedOutreachSubtitle">Connect with prospects across any channel—WhatsApp, LinkedIn, & Email. Our AI crafts and sends personalized follow-ups at the perfect time, ensuring no opportunity is missed.</p>
                 </div>
                 <div class="feature-card">
                     <i data-feather="bar-chart-2"></i>
-                    <h3>Intelligence That Drives ROI</h3>
-                    <p>Move beyond vanity metrics. Rarity analyzes your entire sales funnel, providing actionable insights to optimize campaigns, lower acquisition costs, and maximize your return.</p>
+                    <h3 data-i18n="landing.features.intelligenceTitle">Intelligence That Drives ROI</h3>
+                    <p data-i18n="landing.features.intelligenceSubtitle">Move beyond vanity metrics. Rarity analyzes your entire sales funnel, providing actionable insights to optimize campaigns, lower acquisition costs, and maximize your return.</p>
                 </div>
             </div>
         </section>
 
         <section class="pricing-section" id="pricing">
-            <h2 class="section-title">Simple, Transparent Pricing. No Surprises.</h2>
+            <h2 class="section-title" data-i18n="landing.pricing.title">Simple, Transparent Pricing. No Surprises.</h2>
             <div class="pricing-cards">
-                <div class="pricing-card">
-                    <h3>Growth</h3>
-                    <p class="price">$97<span>/mo</span></p>
+                <div class="pricing-card motion-fadein">
+                    <h3 data-i18n="landing.pricing.growthPlan.title">Growth</h3>
+                    <p class="price" data-i18n="landing.pricing.growthPlan.price">$47</p>
                     <ul>
-                        <li><i data-feather="check"></i>Up to 500 Qualified Leads</li>
-                        <li><i data-feather="check"></i>AI-Powered SDR</li>
-                        <li><i data-feather="check"></i>Multi-Channel Outreach</li>
-                        <li><i data-feather="check"></i>Email & Chat Support</li>
+                        <li><i data-feather="check"></i><span data-i18n="landing.pricing.growthPlan.feature1">Qualified Leads</span></li>
+                        <li><i data-feather="check"></i><span data-i18n="landing.pricing.growthPlan.feature2">AI-Powered SDR</span></li>
+                        <li><i data-feather="check"></i><span data-i18n="landing.pricing.growthPlan.feature3">Multi-Channel Outreach</span></li>
+                        <li><i data-feather="check"></i><span data-i18n="landing.pricing.growthPlan.feature4">Email & Chat Support</span></li>
                     </ul>
-                    <a href="/register.html" class="btn btn-outline">Choose Plan</a>
+                    <a href="/auth.html" class="btn btn-gradient btn-large" data-i18n="landing.pricing.choosePlan">Choose Plan</a>
                 </div>
-                <div class="pricing-card popular">
-                    <h3>Scale</h3>
-                    <p class="price">$297<span>/mo</span></p>
+                <div class="pricing-card popular motion-pop">
+                    <h3 data-i18n="landing.pricing.scalePlan.title">Scale</h3>
+                    <p class="price" data-i18n="landing.pricing.scalePlan.price">$97</p>
                     <ul>
-                        <li><i data-feather="check"></i>Up to 2,500 Qualified Leads</li>
-                        <li><i data-feather="check"></i>Everything in Growth</li>
-                        <li><i data-feather="check"></i>Campaign Intelligence</li>
-                        <li><i data-feather="check"></i>Priority Support</li>
+                        <li><i data-feather="check"></i><span data-i18n="landing.pricing.scalePlan.feature1">More Qualified Leads</span></li>
+                        <li><i data-feather="check"></i><span data-i18n="landing.pricing.scalePlan.feature2">Everything in Growth</span></li>
+                        <li><i data-feather="check"></i><span data-i18n="landing.pricing.scalePlan.feature3">Campaign Intelligence</span></li>
+                        <li><i data-feather="check"></i><span data-i18n="landing.pricing.scalePlan.feature4">Priority Support</span></li>
                     </ul>
-                    <a href="/register.html" class="btn btn-primary">Choose Plan</a>
+                    <a href="/auth.html" class="btn btn-gradient btn-large" data-i18n="landing.pricing.choosePlan">Choose Plan</a>
                 </div>
-                <div class="pricing-card">
-                    <h3>Enterprise</h3>
-                    <p class="price">Custom</p>
+                <div class="pricing-card motion-fadein">
+                    <h3 data-i18n="landing.pricing.enterprisePlan.title">Enterprise</h3>
+                    <p class="price" data-i18n="landing.pricing.enterprisePlan.price">$197</p>
                     <ul>
-                        <li><i data-feather="check"></i>Unlimited Leads</li>
-                        <li><i data-feather="check"></i>Everything in Scale</li>
-                        <li><i data-feather="check"></i>Dedicated Success Manager</li>
-                        <li><i data-feather="check"></i>Custom Integrations</li>
+                        <li><i data-feather="check"></i><span data-i18n="landing.pricing.enterprisePlan.feature1">Unlimited Leads</span></li>
+                        <li><i data-feather="check"></i><span data-i18n="landing.pricing.enterprisePlan.feature2">Everything in Scale</span></li>
+                        <li><i data-feather="check"></i><span data-i18n="landing.pricing.enterprisePlan.feature3">Dedicated Success Manager</span></li>
+                        <li><i data-feather="check"></i><span data-i18n="landing.pricing.enterprisePlan.feature4">Custom Integrations</span></li>
                     </ul>
-                    <a href="/register.html" class="btn btn-outline">Contact Sales</a>
+                    <a href="/auth.html" class="btn btn-gradient btn-large" data-i18n="landing.pricing.contactSales">Contact Sales</a>
                 </div>
             </div>
         </section>
 
         <section class="final-cta">
-            <h2>Ready to Build Your Unfair Advantage?</h2>
-            <p>Join hundreds of high-growth companies that trust Rarity Leads to build their sales pipeline on autopilot.</p>
-            <a href="/register.html" class="btn btn-primary btn-large">Get Started for Free</a>
+            <h2 data-i18n="landing.cta.title">Ready to Build Your Unfair Advantage?</h2>
+            <p data-i18n="landing.cta.subtitle">Join high-growth companies that trust Rarity Leads to build their sales pipeline on autopilot.</p>
+            <a href="/auth.html" class="btn btn-gradient btn-large motion-pop" data-i18n="landing.cta.button">Get Started for Free</a>
         </section>
     </main>
 
     <footer class="main-footer">
-        <p>&copy; 2024 Rarity Leads. All rights reserved.</p>
+        <p data-i18n="common.copyright">&copy; 2024 Rarity Leads. All rights reserved.</p>
     </footer>
 
     <script>

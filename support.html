@@ -8,74 +8,10 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="rarity-design.css">
+    <link rel="stylesheet" href="design-system.css">
     <link rel="stylesheet" href="dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <style>
-        body { margin: 0; background: #18181b; color: #fff; font-family: 'Inter', sans-serif; }
-        .dashboard-layout { display: flex; min-height: 100vh; }
-        .sidebar { width: 240px; background: #1e1e23; padding: 32px 0 0 0; display: flex; flex-direction: column; }
-        .sidebar-logo { font-size: 1.5rem; font-weight: 700; color: #fff; text-align: center; margin-bottom: 32px; letter-spacing: -0.5px; }
-        .sidebar-nav { flex: 1; }
-        .sidebar-nav ul { list-style: none; padding: 0; margin: 0; }
-        .sidebar-nav li { margin-bottom: 8px; }
-        .sidebar-nav a { display: block; padding: 12px 32px; color: #cbd5e1; text-decoration: none; border-left: 4px solid transparent; font-weight: 500; transition: background 0.2s, color 0.2s, border-color 0.2s; }
-        .sidebar-nav a.active, .sidebar-nav a:hover { background: #23232b; color: #fff; border-left: 4px solid #D50057; }
-        .sidebar-footer { padding: 24px 32px; border-top: 1px solid #23232b; text-align: center; }
-        .logout-btn { background: none; border: none; color: #8B5CF6; font-weight: 600; cursor: pointer; font-size: 1rem; }
-        .main-content { flex: 1; padding: 48px 40px 32px 40px; display: flex; flex-direction: column; }
-        .support-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 32px; }
-        .support-title { font-size: 2rem; font-weight: 700; }
-        .support-subtitle { color: #a1a1aa; font-size: 1rem; font-weight: 500; margin-top: 8px; }
-        .metrics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 24px; margin-bottom: 32px; }
-        .metric-card { background: rgba(255,255,255,0.03); border-radius: 12px; padding: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
-        .metric-icon { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; }
-        .metric-icon.response { background: rgba(16, 185, 129, 0.2); color: #10B981; }
-        .metric-icon.articles { background: rgba(59, 130, 246, 0.2); color: #3B82F6; }
-        .metric-icon.tutorials { background: rgba(139, 92, 246, 0.2); color: #8B5CF6; }
-        .metric-icon.satisfaction { background: rgba(245, 158, 11, 0.2); color: #F59E0B; }
-        .metric-value { font-size: 1.75rem; font-weight: 700; color: #fff; margin-bottom: 4px; }
-        .metric-label { color: #cbd5e1; font-size: 0.9rem; }
-        .metric-description { color: #9CA3AF; font-size: 0.8rem; margin-top: 8px; }
-        .tabs { display: flex; gap: 24px; margin-bottom: 32px; }
-        .tab { padding: 10px 24px; border-radius: 8px 8px 0 0; background: #23232b; color: #cbd5e1; font-weight: 500; cursor: pointer; border: none; outline: none; transition: background 0.2s, color 0.2s; }
-        .tab.active, .tab:hover { background: #fff; color: #18181b; }
-        .tab-content { background: rgba(255,255,255,0.03); border-radius: 0 0 12px 12px; padding: 32px; min-height: 400px; }
-        .contact-btn { padding: 12px 24px; background: #10B981; color: #fff; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: background 0.2s; }
-        .contact-btn:hover { background: #059669; }
-        .demo-btn { padding: 12px 24px; background: #D50057; color: #fff; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: background 0.2s; }
-        .demo-btn:hover { background: #B91C5B; }
-        .search-box { position: relative; margin-bottom: 24px; }
-        .search-input { width: 100%; padding: 12px 16px 12px 48px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: #fff; font-size: 1rem; }
-        .search-input::placeholder { color: #9CA3AF; }
-        .search-icon { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: #9CA3AF; }
-        .faq-category { margin-bottom: 32px; }
-        .faq-category-title { font-size: 1.2rem; font-weight: 600; margin-bottom: 16px; color: #fff; display: flex; align-items: center; gap: 8px; }
-        .faq-item { margin-bottom: 16px; border: 1px solid rgba(255,255,255,0.05); border-radius: 8px; overflow: hidden; }
-        .faq-question { padding: 16px; background: rgba(255,255,255,0.02); cursor: pointer; display: flex; align-items: center; justify-content: space-between; transition: background 0.2s; }
-        .faq-question:hover { background: rgba(255,255,255,0.05); }
-        .faq-question h5 { margin: 0; font-size: 1rem; font-weight: 500; color: #fff; }
-        .faq-arrow { transition: transform 0.2s; color: #9CA3AF; }
-        .faq-item.open .faq-arrow { transform: rotate(180deg); }
-        .faq-answer { padding: 0 16px; max-height: 0; overflow: hidden; transition: all 0.3s; }
-        .faq-item.open .faq-answer { padding: 16px; max-height: 500px; }
-        .faq-answer p { margin: 0 0 12px 0; color: #cbd5e1; line-height: 1.6; }
-        .faq-answer ul, .faq-answer ol { margin: 12px 0; padding-left: 20px; color: #cbd5e1; }
-        .faq-answer li { margin-bottom: 8px; }
-        .contact-methods { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 24px; }
-        .contact-method { background: rgba(255,255,255,0.03); border-radius: 12px; padding: 24px; text-align: center; border: 1px solid rgba(255,255,255,0.05); }
-        .contact-icon { width: 64px; height: 64px; border-radius: 16px; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; font-size: 1.5rem; }
-        .contact-icon.email { background: rgba(59, 130, 246, 0.2); color: #3B82F6; }
-        .contact-icon.chat { background: rgba(16, 185, 129, 0.2); color: #10B981; }
-        .contact-icon.phone { background: rgba(139, 92, 246, 0.2); color: #8B5CF6; }
-        .contact-method h3 { margin: 0 0 8px 0; font-size: 1.1rem; font-weight: 600; }
-        .contact-method p { margin: 0 0 16px 0; color: #9CA3AF; font-size: 0.9rem; }
-        .contact-btn-small { padding: 8px 16px; background: #D50057; color: #fff; border: none; border-radius: 6px; font-size: 0.9rem; cursor: pointer; transition: background 0.2s; }
-        .contact-btn-small:hover { background: #B91C5B; }
-        @media (max-width: 900px) { .main-content { padding: 32px 8px; } .sidebar { width: 64px; padding: 16px 0 0 0; } .sidebar-logo { font-size: 1rem; margin-bottom: 16px; } .sidebar-nav a { padding: 12px 8px; font-size: 0.95rem; } .contact-methods { grid-template-columns: 1fr; } }
-        @media (max-width: 600px) { .dashboard-layout { flex-direction: column; } .sidebar { width: 100vw; flex-direction: row; padding: 0; } .sidebar-nav ul { display: flex; flex-direction: row; } .sidebar-nav li { margin: 0 4px; } .main-content { padding: 16px 4px; } .metrics-grid { grid-template-columns: 1fr; } }
-    </style>
 </head>
 <body>
     <div class="dashboard-layout">
@@ -108,11 +44,11 @@
                 <div style="display: flex; gap: 12px;">
                     <button class="contact-btn" id="contact-btn" data-i18n="support.contact">
                         <i class="fas fa-envelope"></i>
-                        Contact Support
+                        <span data-i18n="support.contact">Contact Support</span>
                     </button>
                     <button class="demo-btn" id="demo-btn" data-i18n="support.demo">
                         <i class="fas fa-video"></i>
-                        Schedule Demo
+                        <span data-i18n="support.demo">Schedule Demo</span>
                     </button>
                 </div>
             </div>
@@ -121,7 +57,7 @@
                     <div class="metric-icon response">
                         <i class="fas fa-clock"></i>
                     </div>
-                    <div class="metric-value" data-i18n="support.metrics.responseTime">2 min</div>
+                    <div class="metric-value" data-i18n="support.metrics.responseTime">0 min</div>
                     <div class="metric-label" data-i18n="support.metrics.responseTimeLabel">Average Response Time</div>
                     <div class="metric-description" data-i18n="support.metrics.responseTimeDesc">24/7 Support Available</div>
                 </div>
@@ -129,7 +65,7 @@
                     <div class="metric-icon articles">
                         <i class="fas fa-book"></i>
                     </div>
-                    <div class="metric-value" data-i18n="support.metrics.articles">50+</div>
+                    <div class="metric-value" data-i18n="support.metrics.articles">0</div>
                     <div class="metric-label" data-i18n="support.metrics.articlesLabel">Help Articles</div>
                     <div class="metric-description" data-i18n="support.metrics.articlesDesc">Searchable Knowledge Base</div>
                 </div>
@@ -137,7 +73,7 @@
                     <div class="metric-icon tutorials">
                         <i class="fas fa-video"></i>
                     </div>
-                    <div class="metric-value" data-i18n="support.metrics.tutorials">20+</div>
+                    <div class="metric-value" data-i18n="support.metrics.tutorials">0</div>
                     <div class="metric-label" data-i18n="support.metrics.tutorialsLabel">Video Tutorials</div>
                     <div class="metric-description" data-i18n="support.metrics.tutorialsDesc">Step-by-step Guides</div>
                 </div>
@@ -145,7 +81,7 @@
                     <div class="metric-icon satisfaction">
                         <i class="fas fa-star"></i>
                     </div>
-                    <div class="metric-value" data-i18n="support.metrics.satisfaction">98%</div>
+                    <div class="metric-value" data-i18n="support.metrics.satisfaction">0%</div>
                     <div class="metric-label" data-i18n="support.metrics.satisfactionLabel">Satisfaction Rate</div>
                     <div class="metric-description" data-i18n="support.metrics.satisfactionDesc">5-star Support Team</div>
                 </div>

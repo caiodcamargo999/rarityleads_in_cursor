@@ -530,7 +530,8 @@
     "export": "Exporter",
     "import": "Importer",
     "refresh": "Actualiser",
-    "brand": "Rarity Leads"
+    "brand": "Rarity Leads",
+    "brandLogoAlt": "Logo Rarity Leads"
   },
   "accessibility": {
     "skipToContent": "Aller au contenu principal",
@@ -695,6 +696,11 @@
       "view": "Voir",
       "edit": "Modifier",
       "contact": "Contacter"
+    },
+    "status": {
+      "targeted": "Ciblée",
+      "contacted": "Contactée",
+      "converted": "Convertie"
     }
   }
 }

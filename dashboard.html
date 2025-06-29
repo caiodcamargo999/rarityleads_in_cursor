@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rarity Leads - Dashboard</title>
-    <link rel="stylesheet" href="rarity-design.css">
+    <link rel="stylesheet" href="design-system.css">
     <link rel="stylesheet" href="dashboard.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/feather-icons"></script>
@@ -14,26 +14,25 @@
     <!-- Header -->
     <header class="main-header">
         <div class="header-left">
-            <button class="menu-toggle-btn" id="menu-toggle-btn" aria-label="Open menu">
+            <button class="menu-toggle-btn" id="menu-toggle-btn" aria-label="Open menu" data-i18n-attr="aria-label:common.openMenu">
                 <i data-feather="menu"></i>
             </button>
             <div class="welcome-section">
-                <h1 class="dashboard-title">Client Acquisition Dashboard</h1>
-                <p class="welcome-subtitle" id="welcome-subtitle">Ready to convert more leads today? ✨</p>
+                <h1 class="dashboard-title" data-i18n="dashboard.title">Client Acquisition Dashboard</h1>
+                <p class="welcome-subtitle" id="welcome-subtitle" data-i18n="dashboard.subtitle">Ready to convert more leads today?</p>
             </div>
         </div>
         <div class="header-actions">
             <div class="notification-bell">
                 <i data-feather="bell"></i>
-                <span class="notification-badge">3</span>
             </div>
             <div class="language-selector" id="language-selector"></div>
             <div class="user-profile">
                 <div class="user-avatar">
                     <i data-feather="user"></i>
                 </div>
-                <span class="user-email" id="user-email">user@email.com</span>
-                <button class="logout-btn" id="logout-btn">Logout</button>
+            <span class="user-email" id="user-email"></span>
+                <button class="logout-btn" id="logout-btn" data-i18n="common.logout">Logout</button>
             </div>
         </div>
     </header>
@@ -53,52 +52,51 @@
             <ul>
                 <li><a href="dashboard.html" class="active">
                     <i class="nav-icon" data-feather="home"></i>
-                    <span>Dashboard</span>
+                    <span data-i18n="nav.dashboard">Dashboard</span>
                 </a></li>
                 <li><a href="prospecting-leads.html">
                     <i class="nav-icon" data-feather="users"></i>
-                    <span>Leads</span>
-                    <span class="nav-badge">1,247</span>
+                    <span data-i18n="nav.leads">Leads</span>
                 </a></li>
                 <li><a href="prospecting-companies.html">
                     <i class="nav-icon" data-feather="briefcase"></i>
-                    <span>Companies</span>
+                    <span data-i18n="nav.companies">Companies</span>
                 </a></li>
                 <li class="nav-section">
-                    <span class="nav-section-title">Outreach</span>
+                    <span class="nav-section-title" data-i18n="nav.outreach">Outreach</span>
                 </li>
                 <li><a href="approaching-whatsapp.html">
                     <i class="nav-icon nav-icon-whatsapp" data-feather="message-circle"></i>
-                    <span>WhatsApp</span>
+                    <span data-i18n="nav.whatsapp">WhatsApp</span>
                     <span class="status-dot connected"></span>
                 </a></li>
                 <li><a href="approaching-linkedin.html">
                     <i class="nav-icon nav-icon-linkedin" data-feather="linkedin"></i>
-                    <span>LinkedIn</span>
+                    <span data-i18n="nav.linkedin">LinkedIn</span>
                     <span class="status-dot connected"></span>
                 </a></li>
                 <li><a href="approaching-instagram.html">
                     <i class="nav-icon nav-icon-instagram" data-feather="instagram"></i>
-                    <span>Instagram</span>
+                    <span data-i18n="nav.instagram">Instagram</span>
                 </a></li>
                 <li><a href="approaching-facebook.html">
                     <i class="nav-icon nav-icon-facebook" data-feather="facebook"></i>
-                    <span>Facebook</span>
+                    <span data-i18n="nav.facebook">Facebook</span>
                 </a></li>
                 <li><a href="approaching-x.html">
                     <i class="nav-icon nav-icon-twitter" data-feather="twitter"></i>
-                    <span>X</span>
+                    <span data-i18n="nav.x">X</span>
                 </a></li>
                 <li class="nav-section">
-                    <span class="nav-section-title">Analytics & Support</span>
+                    <span class="nav-section-title" data-i18n="nav.analyticsSupport">Analytics & Support</span>
                 </li>
                 <li><a href="analytics.html">
                     <i class="nav-icon" data-feather="bar-chart-2"></i>
-                    <span>Analytics</span>
+                    <span data-i18n="nav.analytics">Analytics</span>
                 </a></li>
                 <li><a href="support.html">
                     <i class="nav-icon" data-feather="help-circle"></i>
-                    <span>Support</span>
+                    <span data-i18n="nav.support">Support</span>
                 </a></li>
             </ul>
         </nav>
@@ -110,11 +108,11 @@
         <section class="quick-actions">
             <div class="action-card primary-action">
                 <div class="action-content">
-                    <h3>Create New Campaign</h3>
-                    <p>Start converting leads with targeted outreach</p>
+                    <h3><span data-i18n="dashboard.quickActions.campaignTitle">Create New Campaign</span></h3>
+                    <p data-i18n="dashboard.quickActions.campaignSubtitle">Start converting leads with targeted outreach</p>
                     <button class="btn btn-primary action-btn">
                         <i data-feather="plus"></i>
-                        Start Campaign
+                        <span data-i18n="dashboard.quickActions.campaignButton">Start Campaign</span>
                     </button>
                 </div>
                 <div class="action-icon">
@@ -123,11 +121,11 @@
             </div>
             <div class="action-card secondary-action">
                 <div class="action-content">
-                    <h3>Connect LinkedIn</h3>
-                    <p>Expand your reach with professional networking</p>
+                    <h3><span data-i18n="dashboard.quickActions.linkedinTitle">Connect LinkedIn</span></h3>
+                    <p data-i18n="dashboard.quickActions.linkedinSubtitle">Expand your reach with professional networking</p>
                     <button class="btn btn-outline action-btn">
                         <i data-feather="link"></i>
-                        Connect Now
+                        <span data-i18n="dashboard.quickActions.linkedinButton">Connect Now</span>
                     </button>
                 </div>
                 <div class="action-icon">
@@ -149,13 +147,13 @@
                     </div>
                 </div>
                 <div class="metric-content">
-                    <div class="metric-value" id="leads-count">1,247</div>
-                    <div class="metric-label">Active Leads</div>
+                <div class="metric-value" id="leads-count">0</div>
+                    <div class="metric-label" data-i18n="dashboard.metrics.activeLeads">Active Leads</div>
                     <div class="metric-progress">
                         <div class="progress-bar">
-                            <div class="progress-fill" style="width: 78%"></div>
+                            <div class="progress-fill" style="width: 0%"></div>
                         </div>
-                        <span class="progress-text">78% of monthly goal</span>
+                        <span class="progress-text" data-i18n="dashboard.metrics.monthlyGoal">0% of monthly goal</span>
                     </div>
                 </div>
             </div>
@@ -171,13 +169,13 @@
                     </div>
                 </div>
                 <div class="metric-content">
-                    <div class="metric-value">31.2%</div>
-                    <div class="metric-label">Conversion Rate</div>
+                    <div class="metric-value">0%</div>
+                    <div class="metric-label" data-i18n="dashboard.metrics.conversionRate">Conversion Rate</div>
                     <div class="metric-progress">
                         <div class="progress-bar">
-                            <div class="progress-fill" style="width: 62%"></div>
+                            <div class="progress-fill" style="width: 0%"></div>
                         </div>
-                        <span class="progress-text">62% of target</span>
+                        <span class="progress-text" data-i18n="dashboard.metrics.target">0% of target</span>
                     </div>
                 </div>
             </div>
@@ -193,13 +191,13 @@
                     </div>
                 </div>
                 <div class="metric-content">
-                    <div class="metric-value">8</div>
-                    <div class="metric-label">Active Campaigns</div>
+                    <div class="metric-value">0</div>
+                    <div class="metric-label" data-i18n="dashboard.metrics.activeCampaigns">Active Campaigns</div>
                     <div class="metric-progress">
                         <div class="progress-bar">
-                            <div class="progress-fill" style="width: 80%"></div>
+                            <div class="progress-fill" style="width: 0%"></div>
                         </div>
-                        <span class="progress-text">80% capacity</span>
+                        <span class="progress-text" data-i18n="dashboard.metrics.capacity">0% capacity</span>
                     </div>
                 </div>
             </div>
@@ -215,13 +213,13 @@
                     </div>
                 </div>
                 <div class="metric-content">
-                    <div class="metric-value">$24.6k</div>
-                    <div class="metric-label">Monthly Revenue</div>
+                    <div class="metric-value">$0</div>
+                    <div class="metric-label" data-i18n="dashboard.metrics.monthlyRevenue">Monthly Revenue</div>
                     <div class="metric-progress">
                         <div class="progress-bar">
-                            <div class="progress-fill" style="width: 85%"></div>
+                            <div class="progress-fill" style="width: 0%"></div>
                         </div>
-                        <span class="progress-text">85% of target</span>
+                        <span class="progress-text" data-i18n="dashboard.metrics.target">0% of target</span>
                     </div>
                 </div>
             </div>
@@ -230,56 +228,56 @@
         <!-- Analytics Section -->
         <section class="analytics-section">
             <div class="analytics-header">
-                <h2>Performance Overview</h2>
+                <h2><span data-i18n="dashboard.performanceOverview.title">Performance Overview</span></h2>
                 <div class="time-filters">
-                    <button class="time-filter active" data-period="7d">7D</button>
-                    <button class="time-filter" data-period="30d">30D</button>
-                    <button class="time-filter" data-period="90d">90D</button>
+                    <button class="time-filter active" data-period="7d" data-i18n="dashboard.performanceOverview.7d">7D</button>
+                    <button class="time-filter" data-period="30d" data-i18n="dashboard.performanceOverview.30d">30D</button>
+                    <button class="time-filter" data-period="90d" data-i18n="dashboard.performanceOverview.90d">90D</button>
                 </div>
             </div>
             
             <div class="analytics-grid">
                 <div class="chart-card">
-                    <h3>Lead Generation Trend</h3>
+                    <h3><span data-i18n="dashboard.leadGenerationTrend.title">Lead Generation Trend</span></h3>
                     <div class="chart-container">
                         <canvas id="leadsChart"></canvas>
                     </div>
                 </div>
                 
                 <div class="funnel-card">
-                    <h3>Conversion Funnel</h3>
+                    <h3><span data-i18n="dashboard.conversionFunnel.title">Conversion Funnel</span></h3>
                     <div class="funnel-steps">
                         <div class="funnel-step">
-                            <div class="step-label">Visitors</div>
-                            <div class="step-value">2,847</div>
+                            <div class="step-label" data-i18n="dashboard.conversionFunnel.visitors">Visitors</div>
+                            <div class="step-value">0</div>
                             <div class="step-bar">
                                 <div class="step-fill" style="width: 100%"></div>
                             </div>
                             <div class="step-percentage">100%</div>
                         </div>
                         <div class="funnel-step">
-                            <div class="step-label">Leads</div>
-                            <div class="step-value">1,247</div>
+                            <div class="step-label" data-i18n="dashboard.conversionFunnel.leads">Leads</div>
+                            <div class="step-value">0</div>
                             <div class="step-bar">
-                                <div class="step-fill" style="width: 65%"></div>
+                                <div class="step-fill" style="width: 0%"></div>
                             </div>
-                            <div class="step-percentage">65%</div>
+                            <div class="step-percentage">0%</div>
                         </div>
                         <div class="funnel-step">
-                            <div class="step-label">Qualified</div>
-                            <div class="step-value">436</div>
+                            <div class="step-label" data-i18n="dashboard.conversionFunnel.qualified">Qualified</div>
+                            <div class="step-value">0</div>
                             <div class="step-bar">
-                                <div class="step-fill" style="width: 35%"></div>
+                                <div class="step-fill" style="width: 0%"></div>
                             </div>
-                            <div class="step-percentage">35%</div>
+                            <div class="step-percentage">0%</div>
                         </div>
                         <div class="funnel-step">
-                            <div class="step-label">Customers</div>
-                            <div class="step-value">187</div>
+                            <div class="step-label" data-i18n="dashboard.conversionFunnel.customers">Customers</div>
+                            <div class="step-value">0</div>
                             <div class="step-bar">
-                                <div class="step-fill" style="width: 15%"></div>
+                                <div class="step-fill" style="width: 0%"></div>
                             </div>
-                            <div class="step-percentage">15%</div>
+                            <div class="step-percentage">0%</div>
                         </div>
                     </div>
                 </div>
@@ -293,59 +291,7 @@
                     <h3>Latest Activity</h3>
                     <button class="view-all-btn">View all →</button>
                 </div>
-                <div class="activity-list">
-                    <div class="activity-item new">
-                        <div class="activity-avatar">
-                            <i data-feather="user"></i>
-                        </div>
-                        <div class="activity-content">
-                            <div class="activity-title">Sarah Johnson joined from LinkedIn</div>
-                            <div class="activity-subtitle">TechCorp CEO • 2m ago</div>
-                        </div>
-                        <div class="activity-status">
-                            <span class="status-dot new"></span>
-                        </div>
-                    </div>
-                    
-                    <div class="activity-item completed">
-                        <div class="activity-avatar">
-                            <i data-feather="mail"></i>
-                        </div>
-                        <div class="activity-content">
-                            <div class="activity-title">Email sequence completed</div>
-                            <div class="activity-subtitle">Campaign "SaaS Outreach" • 15m ago</div>
-                        </div>
-                        <div class="activity-status">
-                            <span class="status-dot completed"></span>
-                        </div>
-                    </div>
-                    
-                    <div class="activity-item scheduled">
-                        <div class="activity-avatar">
-                            <i data-feather="calendar"></i>
-                        </div>
-                        <div class="activity-content">
-                            <div class="activity-title">Meeting scheduled with John Smith</div>
-                            <div class="activity-subtitle">StartupXYZ Founder • 1h ago</div>
-                        </div>
-                        <div class="activity-status">
-                            <span class="status-dot scheduled"></span>
-                        </div>
-                    </div>
-                    
-                    <div class="activity-item qualified">
-                        <div class="activity-avatar">
-                            <i data-feather="user-check"></i>
-                        </div>
-                        <div class="activity-content">
-                            <div class="activity-title">Maria Garcia became qualified lead</div>
-                            <div class="activity-subtitle">Enterprise Inc CMO • 2h ago</div>
-                        </div>
-                        <div class="activity-status">
-                            <span class="status-dot qualified"></span>
-                        </div>
-                    </div>
-                </div>
+                <div class="activity-list"></div>
             </div>
 
             <div class="recent-leads">
@@ -360,82 +306,7 @@
                         </button>
                     </div>
                 </div>
-                <div class="leads-list">
-                    <div class="lead-item">
-                        <div class="lead-avatar">
-                            <i data-feather="user"></i>
-                        </div>
-                        <div class="lead-info">
-                            <div class="lead-name">Sarah Johnson</div>
-                            <div class="lead-company">TechCorp • CEO</div>
-                            <div class="lead-email">sarah@techcorp.com</div>
-                        </div>
-                        <div class="lead-score">
-                            <span class="score-badge high">95</span>
-                        </div>
-                        <div class="lead-status">
-                            <span class="status-badge new">New</span>
-                        </div>
-                        <div class="lead-actions">
-                            <button class="action-icon" title="Send Email">
-                                <i data-feather="mail"></i>
-                            </button>
-                            <button class="action-icon" title="Call">
-                                <i data-feather="phone"></i>
-                            </button>
-                        </div>
-                    </div>
-                    
-                    <div class="lead-item">
-                        <div class="lead-avatar">
-                            <i data-feather="user"></i>
-                        </div>
-                        <div class="lead-info">
-                            <div class="lead-name">John Smith</div>
-                            <div class="lead-company">StartupXYZ • CTO</div>
-                            <div class="lead-email">john@startupxyz.com</div>
-                        </div>
-                        <div class="lead-score">
-                            <span class="score-badge medium">78</span>
-                        </div>
-                        <div class="lead-status">
-                            <span class="status-badge contacted">Contacted</span>
-                        </div>
-                        <div class="lead-actions">
-                            <button class="action-icon" title="Send Email">
-                                <i data-feather="mail"></i>
-                            </button>
-                            <button class="action-icon" title="Call">
-                                <i data-feather="phone"></i>
-                            </button>
-                        </div>
-                    </div>
-                    
-                    <div class="lead-item">
-                        <div class="lead-avatar">
-                            <i data-feather="user"></i>
-                        </div>
-                        <div class="lead-info">
-                            <div class="lead-name">Maria Garcia</div>
-                            <div class="lead-company">Enterprise Inc • VP Marketing</div>
-                            <div class="lead-email">maria@enterprise.com</div>
-                        </div>
-                        <div class="lead-score">
-                            <span class="score-badge high">92</span>
-                        </div>
-                        <div class="lead-status">
-                            <span class="status-badge qualified">Qualified</span>
-                        </div>
-                        <div class="lead-actions">
-                            <button class="action-icon" title="Send Email">
-                                <i data-feather="mail"></i>
-                            </button>
-                            <button class="action-icon" title="Call">
-                                <i data-feather="phone"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
+                <div class="leads-list"></div>
             </div>
         </section>
 
@@ -445,91 +316,8 @@
                 <h3>Active Campaigns</h3>
                 <button class="view-all-btn">View All</button>
             </div>
-            <div class="campaigns-grid">
-                <div class="campaign-card active">
-                    <div class="campaign-header">
-                        <div class="campaign-icon">
-                            <i data-feather="linkedin"></i>
-                        </div>
-                        <div class="campaign-status">
-                            <span class="status-badge active">Active</span>
-                        </div>
-                    </div>
-                    <div class="campaign-content">
-                        <h4>LinkedIn Outreach Q1</h4>
-                        <div class="campaign-metrics">
-                            <div class="metric">
-                                <span class="metric-value">247</span>
-                                <span class="metric-label">Leads</span>
-                            </div>
-                            <div class="metric">
-                                <span class="metric-value">31.2%</span>
-                                <span class="metric-label">Conv. Rate</span>
-                            </div>
-                            <div class="metric">
-                                <span class="metric-value">$12.50</span>
-                                <span class="metric-label">Cost/Lead</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="campaign-card active">
-                    <div class="campaign-header">
-                        <div class="campaign-icon">
-                            <i data-feather="facebook"></i>
-                        </div>
-                        <div class="campaign-status">
-                            <span class="status-badge active">Active</span>
-                        </div>
-                    </div>
-                    <div class="campaign-content">
-                        <h4>Facebook Lead Gen</h4>
-                        <div class="campaign-metrics">
-                            <div class="metric">
-                                <span class="metric-value">189</span>
-                                <span class="metric-label">Leads</span>
-                            </div>
-                            <div class="metric">
-                                <span class="metric-value">28.7%</span>
-                                <span class="metric-label">Conv. Rate</span>
-                            </div>
-                            <div class="metric">
-                                <span class="metric-value">$15.80</span>
-                                <span class="metric-label">Cost/Lead</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="campaign-card paused">
-                    <div class="campaign-header">
-                        <div class="campaign-icon">
-                            <i data-feather="search"></i>
-                        </div>
-                        <div class="campaign-status">
-                            <span class="status-badge paused">Paused</span>
-                        </div>
-                    </div>
-                    <div class="campaign-content">
-                        <h4>Google Ads Campaign</h4>
-                        <div class="campaign-metrics">
-                            <div class="metric">
-                                <span class="metric-value">156</span>
-                                <span class="metric-label">Leads</span>
-                            </div>
-                            <div class="metric">
-                                <span class="metric-value">24.1%</span>
-                                <span class="metric-label">Conv. Rate</span>
-                            </div>
-                            <div class="metric">
-                                <span class="metric-value">$18.90</span>
-                                <span class="metric-label">Cost/Lead</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <div class="campaigns-grid"></div>
+        </div>
         </section>
     </main>
 

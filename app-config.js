@@ -12,9 +12,8 @@ window.AppConfig = {
 
   // Application Routes
   routes: {
-    home: '/home.html',
-    register: '/register.html',
-    login: '/login.html',
+    home: '/index.html',
+    auth: '/auth.html',
     dashboard: '/dashboard.html',
     analytics: '/analytics.html',
     prospecting: {
@@ -131,7 +130,7 @@ window.AppConfig = {
   // Authentication Configuration
   auth: {
     redirectAfterLogin: '/dashboard.html',
-    redirectAfterLogout: '/home.html',
+    redirectAfterLogout: '/index.html',
     protectedRoutes: [
       '/dashboard.html',
       '/analytics.html',
@@ -143,6 +142,10 @@ window.AppConfig = {
       '/approaching-x.html',
       '/approaching-linkedin.html',
       '/support.html'
+    ],
+    publicRoutes: [
+      '/index.html',
+      '/auth.html'
     ]
   },
 

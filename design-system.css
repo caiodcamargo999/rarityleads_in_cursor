@@ -1,0 +1,50 @@
+
+:root {
+    --background-dark: #0A0A23;
+    --background-slate: #232136;
+    --text-primary: #FFFFFF;
+    --text-secondary: #A1A1AA;
+    --accent-purple: #8B5CF6;
+    --accent-orange: #F59E0B;
+    --accent-pink: #EC4899;
+    --glass-morphism: rgba(255, 255, 255, 0.1);
+    --glass-morphism-light: rgba(255, 255, 255, 0.15);
+    --border-color: rgba(255, 255, 255, 0.1);
+    --gradient-primary: linear-gradient(135deg, #8B5CF6, #EC4899, #F59E0B);
+
+    --font-primary: 'Inter', sans-serif;
+    --font-secondary: 'BentoSans Regular', sans-serif;
+}
+
+body {
+    background-color: var(--background-dark);
+    color: var(--text-primary);
+    font-family: var(--font-primary);
+    margin: 0;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.glass-card {
+    background: var(--glass-morphism);
+    backdrop-filter: blur(10px);
+    border-radius: 16px;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.btn-gradient {
+    background: var(--gradient-primary);
+    color: var(--text-primary);
+    border: none;
+    border-radius: 8px;
+    padding: 12px 24px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.btn-gradient:hover {
+    box-shadow: 0 0 20px var(--accent-purple);
+    transform: translateY(-2px);
+}

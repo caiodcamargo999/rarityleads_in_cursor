@@ -20,14 +20,11 @@ class I18nManager {
   }
 
   async init() {
-    // Get saved language or detect from browser
-    this.currentLanguage = this.getSavedLanguage() || this.detectBrowserLanguage();
+    // Get saved language or default
+    this.currentLanguage = this.getSavedLanguage() || this.fallbackLanguage;
     
     // Load initial translations
     await this.loadTranslations(this.currentLanguage);
-    
-    // Apply translations to current page
-    this.applyTranslations();
     
     // Setup language switcher
     this.setupLanguageSwitcher();
@@ -38,25 +35,6 @@ class I18nManager {
 
   getSavedLanguage() {
     return localStorage.getItem('rarity-leads-language');
-  }
-
-  detectBrowserLanguage() {
-    const browserLang = navigator.language || navigator.userLanguage;
-    
-    // Check for exact match
-    if (this.supportedLanguages[browserLang]) {
-      return browserLang;
-    }
-    
-    // Check for language code match (e.g., 'pt' for 'pt-BR')
-    const langCode = browserLang.split('-')[0];
-    for (const [key, value] of Object.entries(this.supportedLanguages)) {
-      if (key.startsWith(langCode)) {
-        return key;
-      }
-    }
-    
-    return this.fallbackLanguage;
   }
 
   async loadTranslations(language) {

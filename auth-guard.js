@@ -136,11 +136,11 @@ class AuthGuard {
     handleSignOut() {
         console.log('👋 AuthGuard: User signed out');
         
-        // Redirect to home if on protected page
-        if (this.isProtectedPage()) {
-            console.log('🔄 AuthGuard: Redirecting to home after sign out');
-            this.redirectTo('/home.html');
-        }
+        // Redirect to login if on protected page
+            if (this.isProtectedPage()) {
+                console.log('🔄 AuthGuard: Redirecting to login after sign out');
+                this.redirectTo('/login.html');
+            }
     }
 
     protectRoute() {

@@ -4,24 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Supabase Configuration Check - Rarity Leads</title>
-    
+    <link rel="stylesheet" href="design-system.css">
+    <link rel="stylesheet" href="dashboard.css">
 </head>
 <body>
     <div class="container">
-        <h1>🔧 Supabase Configuration Check</h1>
+        <h1>Supabase Configuration Check</h1>
         
         <div id="checks-container">
             <div class="check-item">
                 <div class="check-title">
-                    <span class="icon">⏳</span>
                     Checking configuration...
                 </div>
             </div>
         </div>
         
         <div style="text-align: center; margin-top: 30px;">
-            <button class="btn" onclick="runChecks()">🔄 Run Checks Again</button>
-            <button class="btn test" onclick="testEmailVerification()">📧 Test Email Verification</button>
+            <button class="btn" onclick="runChecks()">Run Checks Again</button>
+            <button class="btn test" onclick="testEmailVerification()">Test Email Verification</button>
         </div>
         
         <div id="test-results" style="margin-top: 20px;"></div>
@@ -141,10 +141,8 @@
             checkDiv.className = 'check-item';
             checkDiv.innerHTML = `
                 <div class="check-title">
-                    <span class="icon">⏳</span>
-                    ${title}
+                    Checking configuration...
                 </div>
-                <div class="check-details">Running check...</div>
             `;
             container.appendChild(checkDiv);
             
@@ -157,17 +155,9 @@
         }
         
         function updateCheck(checkDiv, title, result) {
-            const icons = {
-                success: '✅',
-                error: '❌',
-                warning: '⚠️',
-                info: 'ℹ️'
-            };
-            
             checkDiv.className = `check-item ${result.status}`;
             checkDiv.innerHTML = `
                 <div class="check-title">
-                    <span class="icon">${icons[result.status]}</span>
                     ${title}
                 </div>
                 <div style="margin-top: 10px; font-weight: 500;">${result.message}</div>
@@ -177,7 +167,7 @@
         
         async function testEmailVerification() {
             const resultsDiv = document.getElementById('test-results');
-            resultsDiv.innerHTML = '<div class="check-item"><div class="check-title">📧 Testing email verification...</div></div>';
+            resultsDiv.innerHTML = '<div class="check-item"><div class="check-title">Testing email verification...</div></div>';
             
             const testEmail = prompt('Enter a test email address:');
             if (!testEmail) return;
@@ -195,7 +185,7 @@
                 
                 resultsDiv.innerHTML = `
                     <div class="check-item success">
-                        <div class="check-title">✅ Email verification test successful</div>
+                        <div class="check-title">Email verification test successful</div>
                         <div class="check-details">
                             Test email sent to: ${testEmail}<br>
                             User ID: ${data.user?.id}<br>
@@ -206,7 +196,7 @@
             } catch (error) {
                 resultsDiv.innerHTML = `
                     <div class="check-item error">
-                        <div class="check-title">❌ Email verification test failed</div>
+                        <div class="check-title">Email verification test failed</div>
                         <div class="check-details">Error: ${error.message}</div>
                     </div>
                 `;

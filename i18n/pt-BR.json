@@ -4,7 +4,8 @@
     "description": "Rarity Leads é sua plataforma nativa de IA para atrair, qualificar e fechar clientes — sem o trabalho manual."
   },
   "common": {
-    "brand": "Rarity Leads"
+    "brand": "Rarity Leads",
+    "brandLogoAlt": "Logotipo Rarity Leads"
   },
   "nav": {
     "dashboard": "Dashboard",
@@ -713,6 +714,11 @@
       "view": "Visualizar",
       "edit": "Editar",
       "contact": "Contactar"
+    },
+    "status": {
+      "targeted": "Segmentada",
+      "contacted": "Contactada",
+      "converted": "Convertida"
     }
   }
 }

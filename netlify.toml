@@ -26,9 +26,19 @@
   status = 200
 
 [[redirects]]
-  # Redirect auth to login page
+  # Redirect /auth to unified auth page
   from = "/auth"
-  to = "/login.html"
+  to = "/auth.html"
+  status = 200
+
+[[redirects]]
+  # Redirect old login/register to /auth.html
+  from = "/login.html"
+  to = "/auth.html"
+  status = 301
+
+  from = "/register.html"
+  to = "/auth.html"
   status = 301
 
 [[redirects]]
