@@ -1,0 +1,105 @@
+{
+  "name": "Rarity Leads - AI Follow-Up Message",
+  "nodes": [
+    {
+      "parameters": {
+        "path": "webhook/send-message",
+        "options": {}
+      },
+      "name": "Webhook Trigger",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "operation": "select",
+        "schema": "public",
+        "table": "leads",
+        "filters": {
+          "filters": [
+            {
+              "field": "id",
+              "operator": "eq",
+              "value": "={{ $json.body.lead_id }}"
+            }
+          ]
+        }
+      },
+      "name": "Fetch Lead Data",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [450, 300],
+      "credentials": {
+        "supabaseApi": {
+          "id": null,
+          "name": "Supabase Account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": "gpt-4",
+        "prompt": "Você é um SDR de alta performance. Escreva uma mensagem curta e personalizada para iniciar uma conversa com {{$json.lead_name}}, que é {{$json.role}} na {{$json.company_name}}. Mencione que você atua no setor de {{$json.industry}}. O objetivo é apenas iniciar uma conversa, não vender nada ainda."
+      },
+      "name": "Generate Message with OpenAI",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1,
+      "position": [650, 300],
+      "credentials": {
+        "openAiApi": {
+          "id": null,
+          "name": "OpenAI Account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "https://graph.facebook.com/v18.0/SEU_ID_DO_NUMERO_DE_TELEFONE_AQUI/messages",
+        "authentication": "bearer",
+        "options": {
+          "body": {
+            "messaging_product": "whatsapp",
+            "to": "={{ $json.phone }}",
+            "type": "text",
+            "text": {
+                "body": "{{ $last.json.choices[0].message.content }}"
+            }
+          }
+        }
+      },
+      "name": "Send WhatsApp Message",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [850, 300],
+       "credentials": {
+        "httpBearerAuth": {
+          "id": null,
+          "name": "WhatsApp API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "schema": "public",
+        "table": "leads",
+        "filters": { "filters": [{"field": "id", "operator": "eq", "value": "={{ $json.body.lead_id }}" }]},
+        "columns": { "columns": [{"name": "lead_status", "value": "engaged"}]}
+      },
+      "name": "Update Lead Status",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [1050, 300],
+      "credentials": {
+        "supabaseApi": { "id": null, "name": "Supabase Account" }
+      }
+    }
+  ],
+  "connections": {
+    "Webhook Trigger": { "main": [[{ "node": "Fetch Lead Data", "type": "main", "index": 0 }]]},
+    "Fetch Lead Data": { "main": [[{ "node": "Generate Message with OpenAI", "type": "main", "index": 0 }]]},
+    "Generate Message with OpenAI": { "main": [[{ "node": "Send WhatsApp Message", "type": "main", "index": 0 }]]},
+    "Send WhatsApp Message": { "main": [[{ "node": "Update Lead Status", "type": "main", "index": 0 }]]}
+  }
+}

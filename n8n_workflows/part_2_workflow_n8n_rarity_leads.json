@@ -1,0 +1,115 @@
+{
+  "name": "Rarity Leads - Phone Number Validation",
+  "nodes": [
+    {
+      "parameters": {
+        "path": "webhook/validate-phone",
+        "options": {}
+      },
+      "name": "Webhook Trigger",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [250, 300],
+      "webhookId": "YOUR_WEBHOOK_ID"
+    },
+    {
+      "parameters": {
+        "url": "https://lookups.twilio.com/v2/PhoneNumbers/={{$json.body.phone}}?Fields=line_type_intelligence",
+        "authentication": "predefinedCredential",
+        "credentialType": "twilioApi",
+        "options": {}
+      },
+      "name": "Validate with Twilio",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [450, 300],
+      "credentials": {
+        "twilioApi": {
+          "id": "YOUR_TWILIO_CREDENTIALS_ID",
+          "name": "Twilio Account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{$json.valid}}",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "name": "Is Valid?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [650, 300]
+    },
+    {
+      "parameters": {
+        "url": "https://<YOUR_SUPABASE_URL>.supabase.co/rest/v1/phone_numbers?phone_number=eq.{{$json.body.phone}}&user_id=eq.{{$json.body.user_id}}",
+        "options": {
+          "body": {
+            "is_verified": true,
+            "is_whatsapp_enabled": true
+          }
+        },
+        "method": "PATCH",
+        "headerParameters": {
+          "parameters": [
+             {
+              "name": "apikey",
+              "value": "<YOUR_SUPABASE_ANON_KEY>"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer <YOUR_SUPABASE_SERVICE_ROLE_KEY>"
+            }
+          ]
+        }
+      },
+      "name": "Update as WhatsApp Enabled",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [850, 200]
+    },
+    {
+      "parameters": {
+        "url": "https://<YOUR_SUPABASE_URL>.supabase.co/rest/v1/phone_numbers?phone_number=eq.{{$json.body.phone}}&user_id=eq.{{$json.body.user_id}}",
+        "options": {
+          "body": {
+            "is_verified": false
+          }
+        },
+        "method": "PATCH",
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "<YOUR_SUPABASE_ANON_KEY>"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer <YOUR_SUPABASE_SERVICE_ROLE_KEY>"
+            }
+          ]
+        }
+      },
+      "name": "Update as Invalid",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [850, 400]
+    }
+  ],
+  "connections": {
+    "Webhook Trigger": {"main": [[{"node": "Validate with Twilio","type": "main","index": 0}]]},
+    "Validate with Twilio": {"main": [[{"node": "Is Valid?","type": "main","index": 0}]]},
+    "Is Valid?": {
+      "main": [
+        [{"node": "Update as WhatsApp Enabled","type": "main","index": 0}],
+        [{"node": "Update as Invalid","type": "main","index": 0}]
+      ]
+    }
+  }
+}
