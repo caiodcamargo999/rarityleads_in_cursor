@@ -530,12 +530,7 @@ class Dashboard {
 
 // Initialize dashboard when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
-    // Initialize i18n if available
-    if (window.i18n && typeof window.i18n.translatePage === 'function') {
-        window.i18n.translatePage();
-    }
-    
-    // Initialize dashboard
+    // Initialize dashboard only
     window.dashboard = new Dashboard();
 });
 
