@@ -9,8 +9,8 @@
       "name": "Webhook Trigger",
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 1,
-      "position": [250, 300],
-      "webhookId": "YOUR_OTHER_WEBHOOK_ID"
+      "position": [250, 300]
+      // A propriedade "webhookId" foi removida. O n8n irá gerar uma ao importar/salvar.
     },
     {
       "parameters": {
@@ -33,7 +33,7 @@
       "position": [450, 300],
       "credentials": {
         "supabaseApi": {
-          "id": "YOUR_SUPABASE_CREDENTIALS_ID",
+          "id": null, // Definido como null para que o n8n peça para conectar a credencial existente
           "name": "Supabase Account"
         }
       }
@@ -49,14 +49,14 @@
       "position": [650, 300],
       "credentials": {
         "openAiApi": {
-          "id": "YOUR_OPENAI_CREDENTIALS_ID",
+          "id": null, // Definido como null para que o n8n peça para conectar a credencial existente
           "name": "OpenAI Account"
         }
       }
     },
     {
       "parameters": {
-        "url": "https://graph.facebook.com/v18.0/<YOUR_PHONE_NUMBER_ID>/messages",
+        "url": "https://graph.facebook.com/v18.0/SEU_ID_DO_NUMERO_DE_TELEFONE_AQUI/messages", // Placeholder claro para o usuário substituir
         "authentication": "bearer",
         "options": {
           "body": {
@@ -75,7 +75,7 @@
       "position": [850, 300],
        "credentials": {
         "httpBearerAuth": {
-          "id": "YOUR_WHATSAPP_CREDENTIALS_ID",
+          "id": null, // Definido como null para que o n8n peça para conectar a credencial existente
           "name": "WhatsApp API"
         }
       }
@@ -93,7 +93,7 @@
       "typeVersion": 1,
       "position": [1050, 300],
       "credentials": {
-        "supabaseApi": { "id": "YOUR_SUPABASE_CREDENTIALS_ID", "name": "Supabase Account" }
+        "supabaseApi": { "id": null, "name": "Supabase Account" } // Definido como null para que o n8n peça para conectar a credencial existente
       }
     }
   ],
