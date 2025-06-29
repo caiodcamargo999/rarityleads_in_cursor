@@ -1,27 +1,27 @@
 /* Brand Colors & Base Styles */
 :root {
-    --background-primary: #0a0a0f;
-    --background-secondary: #1a1a2e;
-    --background-tertiary: #16213e;
-    --background-card: #1e1e2e;
-    --text-primary: #ffffff;
-    --text-secondary: #a1a1aa;
-    --text-muted: #71717a;
-    --accent-primary: #D50057;
-    --accent-secondary: #9B00C8;
-    --accent-tertiary: #5DB5FF;
-    --accent-success: #10B981;
-    --accent-warning: #F59E0B;
-    --accent-danger: #EF4444;
-    --border-color: #2d2d3a;
-    --border-light: #3f3f4a;
-    --shadow-color: rgba(0,0,0,0.3);
-    --shadow-light: rgba(0,0,0,0.1);
+    --background-primary: #181825;
+    --background-secondary: #232136;
+    --background-tertiary: #2a273f;
+    --background-card: #393552;
+    --text-primary: #fff;
+    --text-secondary: #b8b8d1;
+    --text-muted: #a1a1b5;
+    --accent-primary: #a277ff;
+    --accent-secondary: #61ffca;
+    --accent-tertiary: #f694ff;
+    --accent-success: #43d9ad;
+    --accent-warning: #ffca85;
+    --accent-danger: #ff6767;
+    --border-color: #393552;
+    --border-light: #44415a;
+    --shadow-color: rgba(162, 119, 255, 0.15);
+    --shadow-light: rgba(97, 255, 202, 0.10);
     --font-family: 'Inter', 'BentoSans', sans-serif;
-    --gradient-primary: linear-gradient(135deg, #D50057 0%, #9B00C8 100%);
-    --gradient-secondary: linear-gradient(135deg, #5DB5FF 0%, #9B00C8 100%);
-    --gradient-success: linear-gradient(135deg, #10B981 0%, #059669 100%);
-    --gradient-warning: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+    --gradient-primary: linear-gradient(135deg, #a277ff 0%, #61ffca 100%);
+    --gradient-secondary: linear-gradient(135deg, #f694ff 0%, #a277ff 100%);
+    --gradient-success: linear-gradient(135deg, #43d9ad 0%, #61ffca 100%);
+    --gradient-warning: linear-gradient(135deg, #ffca85 0%, #f694ff 100%);
 }
 
 * {
@@ -301,7 +301,6 @@ body {
     margin-top: 72px;
     min-height: calc(100vh - 72px);
     transition: margin-left 0.3s;
-    border: 2px solid red !important;
 }
 
 /* Quick Actions */
@@ -323,7 +322,6 @@ body {
     transition: all 0.3s cubic-bezier(.4,0,.2,1);
     position: relative;
     overflow: hidden;
-    border: 2px solid red !important;
 }
 
 .action-card::before {
@@ -404,7 +402,6 @@ body {
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 1.5rem;
     margin-bottom: 2rem;
-    border: 2px solid red !important;
 }
 
 .metric-card {
@@ -415,7 +412,6 @@ body {
     transition: all 0.3s cubic-bezier(.4,0,.2,1);
     position: relative;
     overflow: hidden;
-    border: 2px solid red !important;
 }
 
 .metric-card::before {
@@ -540,7 +536,6 @@ body {
 /* Analytics Section */
 .analytics-section {
     margin-bottom: 2rem;
-    border: 2px solid red !important;
 }
 
 .analytics-header {
@@ -589,7 +584,6 @@ body {
     display: grid;
     grid-template-columns: 2fr 1fr;
     gap: 1.5rem;
-    border: 2px solid red !important;
 }
 
 .chart-card, .funnel-card {
@@ -597,7 +591,6 @@ body {
     border: 1px solid var(--border-color);
     border-radius: 16px;
     padding: 1.5rem;
-    border: 2px solid red !important;
 }
 
 .chart-card h3, .funnel-card h3 {
@@ -668,7 +661,6 @@ body {
     grid-template-columns: 1fr 1fr;
     gap: 1.5rem;
     margin-bottom: 2rem;
-    border: 2px solid red !important;
 }
 
 .activity-feed, .recent-leads {
@@ -676,7 +668,6 @@ body {
     border: 1px solid var(--border-color);
     border-radius: 16px;
     padding: 1.5rem;
-    border: 2px solid red !important;
 }
 
 .section-header {
@@ -919,14 +910,12 @@ body {
 /* Campaigns Section */
 .campaigns-section {
     margin-bottom: 2rem;
-    border: 2px solid red !important;
 }
 
 .campaigns-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 1.5rem;
-    border: 2px solid red !important;
 }
 
 .campaign-card {
@@ -935,7 +924,6 @@ body {
     border-radius: 16px;
     padding: 1.5rem;
     transition: all 0.3s cubic-bezier(.4,0,.2,1);
-    border: 2px solid red !important;
 }
 
 .campaign-card:hover {
@@ -1196,9 +1184,9 @@ body {
     100% { transform: rotate(360deg); }
 }
 
-/* DEBUG BORDERS FOR VISUAL DEBUGGING */
+/* Remover todas as bordas de debug */
 .main-content, .metrics-grid, .metric-card, .analytics-section, .analytics-grid, .chart-card, .funnel-card, .activity-leads-section, .activity-feed, .recent-leads, .campaigns-section, .campaigns-grid, .campaign-card {
-    border: 2px solid red !important;
+    border: none;
 }
 
 /* END DEBUG BORDERS */

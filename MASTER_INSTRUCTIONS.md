@@ -144,7 +144,8 @@ Rarity Leads is an AI-powered SaaS platform by Rarity Agency, designed to revolu
 
 ## Frontend Development Guidelines
 - **Design System:**
-  - Colors: #D50057, #9B00C8, #B044FF, #5DB5FF, #0046FF, #001A70
+  - Colors: #a277ff (Roxo Primário), #232136 (Azul Escuro), #393552 (Cinza Escuro), #61ffca (Verde Água), #f694ff (Rosa Claro), #fff (Branco), #b8b8d1 (Cinza Claro)
+  - Gradients: linear-gradient(135deg, #a277ff 0%, #61ffca 100%), linear-gradient(135deg, #f694ff 0%, #a277ff 100%)
   - Font: BentoSans Regular (Google Fonts)
   - Accessibility: Mobile-first, SEO, WCAG 2.1
 - **Technical Constraints:**

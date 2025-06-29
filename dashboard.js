@@ -67,6 +67,23 @@ class Dashboard {
 
         // Keyboard shortcuts
         document.addEventListener('keydown', (e) => this.handleKeyboardShortcuts(e));
+
+        // Logout button in header
+        const logoutBtn = document.getElementById('logout-btn');
+        if (logoutBtn) {
+            logoutBtn.addEventListener('click', async () => {
+                if (window.AuthGuard && window.AuthGuard.supabase) {
+                    await window.AuthGuard.supabase.auth.signOut();
+                    window.location.href = '/login.html';
+                } else if (window.AppUtils && window.AppUtils.initSupabase) {
+                    const supabase = window.AppUtils.initSupabase();
+                    await supabase.auth.signOut();
+                    window.location.href = '/login.html';
+                } else {
+                    window.location.href = '/login.html';
+                }
+            });
+        }
     }
 
     toggleSidebar() {
