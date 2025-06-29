@@ -113,6 +113,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="app-config.js"></script>
     <script src="i18n.js"></script>
+    <script src="auth-guard.js"></script>
     <script>
         // Analytics Module
         const Analytics = {
@@ -432,7 +433,10 @@
         };
         
         // Initialize analytics when DOM is ready
-        document.addEventListener('DOMContentLoaded', () => Analytics.init());
+        document.addEventListener('DOMContentLoaded', () => {
+            window.AuthGuard = new AuthGuard();
+            Analytics.init();
+        });
     </script>
 </body>
 </html>

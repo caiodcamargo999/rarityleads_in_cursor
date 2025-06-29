@@ -325,6 +325,11 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="app-config.js"></script>
     <script src="auth-guard.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        window.AuthGuard = new AuthGuard();
+      });
+    </script>
     <script src="dashboard.js"></script>
 </body>
 </html>

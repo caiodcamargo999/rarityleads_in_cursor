@@ -129,6 +129,7 @@
     </div>
     <script src="app-config.js"></script>
     <script src="i18n.js"></script>
+    <script src="auth-guard.js"></script>
     <script>
         // LinkedIn Module
         const LinkedIn = {
@@ -359,7 +360,10 @@
         };
         
         // Initialize LinkedIn when DOM is ready
-        document.addEventListener('DOMContentLoaded', () => LinkedIn.init());
+        document.addEventListener('DOMContentLoaded', () => {
+            window.AuthGuard = new AuthGuard();
+            LinkedIn.init();
+        });
     </script>
 </body>
 </html>

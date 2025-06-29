@@ -129,6 +129,7 @@
     </div>
     <script src="app-config.js"></script>
     <script src="i18n.js"></script>
+    <script src="auth-guard.js"></script>
     <script>
         // Instagram Module
         const Instagram = {
@@ -359,7 +360,10 @@
         };
         
         // Initialize Instagram when DOM is ready
-        document.addEventListener('DOMContentLoaded', () => Instagram.init());
+        document.addEventListener('DOMContentLoaded', () => {
+            window.AuthGuard = new AuthGuard();
+            Instagram.init();
+        });
     </script>
 </body>
 </html>

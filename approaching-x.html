@@ -129,6 +129,7 @@
     </div>
     <script src="app-config.js"></script>
     <script src="i18n.js"></script>
+    <script src="auth-guard.js"></script>
     <script>
         // X Module
         const X = {
@@ -359,7 +360,10 @@
         };
         
         // Initialize X when DOM is ready
-        document.addEventListener('DOMContentLoaded', () => X.init());
+        document.addEventListener('DOMContentLoaded', () => {
+            window.AuthGuard = new AuthGuard();
+            X.init();
+        });
     </script>
 </body>
 </html>

@@ -129,6 +129,7 @@
     </div>
     <script src="app-config.js"></script>
     <script src="i18n.js"></script>
+    <script src="auth-guard.js"></script>
     <script>
         // WhatsApp Module
         const WhatsApp = {
@@ -359,7 +360,10 @@
         };
         
         // Initialize WhatsApp when DOM is ready
-        document.addEventListener('DOMContentLoaded', () => WhatsApp.init());
+        document.addEventListener('DOMContentLoaded', () => {
+            window.AuthGuard = new AuthGuard();
+            WhatsApp.init();
+        });
     </script>
 </body>
 </html>

@@ -129,6 +129,7 @@
     </div>
     <script src="app-config.js"></script>
     <script src="i18n.js"></script>
+    <script src="auth-guard.js"></script>
     <script>
         // Facebook Module
         const Facebook = {
@@ -359,7 +360,10 @@
         };
         
         // Initialize Facebook when DOM is ready
-        document.addEventListener('DOMContentLoaded', () => Facebook.init());
+        document.addEventListener('DOMContentLoaded', () => {
+            window.AuthGuard = new AuthGuard();
+            Facebook.init();
+        });
     </script>
 </body>
 </html>

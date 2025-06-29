@@ -152,6 +152,7 @@
     </div>
     <script src="app-config.js"></script>
     <script src="i18n.js"></script>
+    <script src="auth-guard.js"></script>
     <script>
         // Leads Module
         const Leads = {
@@ -393,7 +394,10 @@
         };
         
         // Initialize leads when DOM is ready
-        document.addEventListener('DOMContentLoaded', () => Leads.init());
+        document.addEventListener('DOMContentLoaded', () => {
+            window.AuthGuard = new AuthGuard();
+            Leads.init();
+        });
     </script>
 </body>
 </html>

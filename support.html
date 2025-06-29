@@ -141,6 +141,7 @@
     </div>
     <script src="app-config.js"></script>
     <script src="i18n.js"></script>
+    <script src="auth-guard.js"></script>
     <script>
         // Support Module
         const Support = {
@@ -356,7 +357,10 @@
         };
         
         // Initialize Support when DOM is ready
-        document.addEventListener('DOMContentLoaded', () => Support.init());
+        document.addEventListener('DOMContentLoaded', () => {
+            window.AuthGuard = new AuthGuard();
+            Support.init();
+        });
     </script>
 </body>
 </html>

@@ -138,6 +138,7 @@
     </div>
     <script src="app-config.js"></script>
     <script src="i18n.js"></script>
+    <script src="auth-guard.js"></script>
     <script>
         // Companies Module
         const Companies = {
@@ -383,7 +384,10 @@
         };
         
         // Initialize companies when DOM is ready
-        document.addEventListener('DOMContentLoaded', () => Companies.init());
+        document.addEventListener('DOMContentLoaded', () => {
+            window.AuthGuard = new AuthGuard();
+            Companies.init();
+        });
     </script>
 </body>
 </html>

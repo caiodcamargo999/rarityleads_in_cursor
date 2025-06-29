@@ -12,7 +12,7 @@ CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 -- =====================================================
 
 -- User profiles (extends Supabase auth.users)
-CREATE TABLE public.user_profiles (
+CREATE TABLE IF NOT EXISTS public.user_profiles (
     id UUID REFERENCES auth.users(id) PRIMARY KEY,
     email VARCHAR(255) NOT NULL UNIQUE,
     full_name VARCHAR(255),
@@ -27,7 +27,7 @@ CREATE TABLE public.user_profiles (
 );
 
 -- User settings and preferences
-CREATE TABLE public.user_settings (
+CREATE TABLE IF NOT EXISTS public.user_settings (
     id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
     user_id UUID REFERENCES public.user_profiles(id) ON DELETE CASCADE,
     language VARCHAR(10) DEFAULT 'en',
@@ -45,7 +45,7 @@ CREATE TABLE public.user_settings (
 -- =====================================================
 
 -- Phone numbers for multi-account management
-CREATE TABLE public.phone_numbers (
+CREATE TABLE IF NOT EXISTS public.phone_numbers (
     id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
     user_id UUID REFERENCES public.user_profiles(id) ON DELETE CASCADE,
     phone_number VARCHAR(20) NOT NULL,
@@ -63,7 +63,7 @@ CREATE TABLE public.phone_numbers (
 );
 
 -- WhatsApp account configurations
-CREATE TABLE public.whatsapp_accounts (
+CREATE TABLE IF NOT EXISTS public.whatsapp_accounts (
     id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
     phone_number_id UUID REFERENCES public.phone_numbers(id) ON DELETE CASCADE,
     user_id UUID REFERENCES public.user_profiles(id) ON DELETE CASCADE,
@@ -84,7 +84,7 @@ CREATE TABLE public.whatsapp_accounts (
 -- =====================================================
 
 -- Companies/Organizations
-CREATE TABLE public.companies (
+CREATE TABLE IF NOT EXISTS public.companies (
     id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
     user_id UUID REFERENCES public.user_profiles(id) ON DELETE CASCADE,
     name VARCHAR(255) NOT NULL,
@@ -106,7 +106,7 @@ CREATE TABLE public.companies (
 );
 
 -- Leads/Contacts
-CREATE TABLE public.leads (
+CREATE TABLE IF NOT EXISTS public.leads (
     id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
     user_id UUID REFERENCES public.user_profiles(id) ON DELETE CASCADE,
     company_id UUID REFERENCES public.companies(id) ON DELETE SET NULL,
@@ -131,7 +131,7 @@ CREATE TABLE public.leads (
 );
 
 -- Lead scoring factors and history
-CREATE TABLE public.lead_scoring_history (
+CREATE TABLE IF NOT EXISTS public.lead_scoring_history (
     id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
     lead_id UUID REFERENCES public.leads(id) ON DELETE CASCADE,
     previous_score INTEGER,
@@ -145,7 +145,7 @@ CREATE TABLE public.lead_scoring_history (
 -- =====================================================
 
 -- Marketing campaigns
-CREATE TABLE public.campaigns (
+CREATE TABLE IF NOT EXISTS public.campaigns (
     id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
     user_id UUID REFERENCES public.user_profiles(id) ON DELETE CASCADE,
     name VARCHAR(255) NOT NULL,
@@ -168,7 +168,7 @@ CREATE TABLE public.campaigns (
 );
 
 -- Message sequences/templates
-CREATE TABLE public.message_sequences (
+CREATE TABLE IF NOT EXISTS public.message_sequences (
     id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
     campaign_id UUID REFERENCES public.campaigns(id) ON DELETE CASCADE,
     user_id UUID REFERENCES public.user_profiles(id) ON DELETE CASCADE,
@@ -190,7 +190,7 @@ CREATE TABLE public.message_sequences (
 -- =====================================================
 
 -- Message history
-CREATE TABLE public.messages (
+CREATE TABLE IF NOT EXISTS public.messages (
     id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
     user_id UUID REFERENCES public.user_profiles(id) ON DELETE CASCADE,
     lead_id UUID REFERENCES public.leads(id) ON DELETE CASCADE,
@@ -218,7 +218,7 @@ CREATE TABLE public.messages (
 -- =====================================================
 
 -- Campaign performance metrics
-CREATE TABLE public.campaign_analytics (
+CREATE TABLE IF NOT EXISTS public.campaign_analytics (
     id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
     campaign_id UUID REFERENCES public.campaigns(id) ON DELETE CASCADE,
     date DATE NOT NULL,
@@ -236,7 +236,7 @@ CREATE TABLE public.campaign_analytics (
 );
 
 -- User activity tracking
-CREATE TABLE public.user_activities (
+CREATE TABLE IF NOT EXISTS public.user_activities (
     id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
     user_id UUID REFERENCES public.user_profiles(id) ON DELETE CASCADE,
     activity_type VARCHAR(100) NOT NULL,
@@ -254,7 +254,7 @@ CREATE TABLE public.user_activities (
 -- =====================================================
 
 -- External integrations (CRM, etc.)
-CREATE TABLE public.integrations (
+CREATE TABLE IF NOT EXISTS public.integrations (
     id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
     user_id UUID REFERENCES public.user_profiles(id) ON DELETE CASCADE,
     integration_type VARCHAR(50) CHECK (integration_type IN ('hubspot', 'salesforce', 'pipedrive', 'linkedin', 'zapier')),
@@ -274,7 +274,7 @@ CREATE TABLE public.integrations (
 -- =====================================================
 
 -- API usage tracking
-CREATE TABLE public.api_usage (
+CREATE TABLE IF NOT EXISTS public.api_usage (
     id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
     user_id UUID REFERENCES public.user_profiles(id) ON DELETE CASCADE,
     endpoint VARCHAR(255) NOT NULL,
@@ -286,7 +286,7 @@ CREATE TABLE public.api_usage (
 );
 
 -- System notifications
-CREATE TABLE public.notifications (
+CREATE TABLE IF NOT EXISTS public.notifications (
     id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
     user_id UUID REFERENCES public.user_profiles(id) ON DELETE CASCADE,
     title VARCHAR(255) NOT NULL,
@@ -304,42 +304,42 @@ CREATE TABLE public.notifications (
 -- =====================================================
 
 -- User profiles indexes
-CREATE INDEX idx_user_profiles_email ON public.user_profiles(email);
-CREATE INDEX idx_user_profiles_subscription ON public.user_profiles(subscription_plan, subscription_status);
+CREATE INDEX IF NOT EXISTS idx_user_profiles_email ON public.user_profiles(email);
+CREATE INDEX IF NOT EXISTS idx_user_profiles_subscription ON public.user_profiles(subscription_plan, subscription_status);
 
 -- Phone numbers indexes
-CREATE INDEX idx_phone_numbers_user_id ON public.phone_numbers(user_id);
-CREATE INDEX idx_phone_numbers_whatsapp ON public.phone_numbers(is_whatsapp_enabled, is_active);
+CREATE INDEX IF NOT EXISTS idx_phone_numbers_user_id ON public.phone_numbers(user_id);
+CREATE INDEX IF NOT EXISTS idx_phone_numbers_whatsapp ON public.phone_numbers(is_whatsapp_enabled, is_active);
 
 -- Leads indexes
-CREATE INDEX idx_leads_user_id ON public.leads(user_id);
-CREATE INDEX idx_leads_company_id ON public.leads(company_id);
-CREATE INDEX idx_leads_status ON public.leads(status);
-CREATE INDEX idx_leads_score ON public.leads(lead_score DESC);
-CREATE INDEX idx_leads_created_at ON public.leads(created_at DESC);
-CREATE INDEX idx_leads_email ON public.leads(email);
+CREATE INDEX IF NOT EXISTS idx_leads_user_id ON public.leads(user_id);
+CREATE INDEX IF NOT EXISTS idx_leads_company_id ON public.leads(company_id);
+CREATE INDEX IF NOT EXISTS idx_leads_status ON public.leads(status);
+CREATE INDEX IF NOT EXISTS idx_leads_score ON public.leads(lead_score DESC);
+CREATE INDEX IF NOT EXISTS idx_leads_created_at ON public.leads(created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_leads_email ON public.leads(email);
 
 -- Companies indexes
-CREATE INDEX idx_companies_user_id ON public.companies(user_id);
-CREATE INDEX idx_companies_domain ON public.companies(domain);
-CREATE INDEX idx_companies_industry ON public.companies(industry);
+CREATE INDEX IF NOT EXISTS idx_companies_user_id ON public.companies(user_id);
+CREATE INDEX IF NOT EXISTS idx_companies_domain ON public.companies(domain);
+CREATE INDEX IF NOT EXISTS idx_companies_industry ON public.companies(industry);
 
 -- Campaigns indexes
-CREATE INDEX idx_campaigns_user_id ON public.campaigns(user_id);
-CREATE INDEX idx_campaigns_status ON public.campaigns(status);
-CREATE INDEX idx_campaigns_type ON public.campaigns(campaign_type);
+CREATE INDEX IF NOT EXISTS idx_campaigns_user_id ON public.campaigns(user_id);
+CREATE INDEX IF NOT EXISTS idx_campaigns_status ON public.campaigns(status);
+CREATE INDEX IF NOT EXISTS idx_campaigns_type ON public.campaigns(campaign_type);
 
 -- Messages indexes
-CREATE INDEX idx_messages_user_id ON public.messages(user_id);
-CREATE INDEX idx_messages_lead_id ON public.messages(lead_id);
-CREATE INDEX idx_messages_campaign_id ON public.messages(campaign_id);
-CREATE INDEX idx_messages_type_status ON public.messages(message_type, status);
-CREATE INDEX idx_messages_created_at ON public.messages(created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_messages_user_id ON public.messages(user_id);
+CREATE INDEX IF NOT EXISTS idx_messages_lead_id ON public.messages(lead_id);
+CREATE INDEX IF NOT EXISTS idx_messages_campaign_id ON public.messages(campaign_id);
+CREATE INDEX IF NOT EXISTS idx_messages_type_status ON public.messages(message_type, status);
+CREATE INDEX IF NOT EXISTS idx_messages_created_at ON public.messages(created_at DESC);
 
 -- Analytics indexes
-CREATE INDEX idx_campaign_analytics_campaign_date ON public.campaign_analytics(campaign_id, date DESC);
-CREATE INDEX idx_user_activities_user_type ON public.user_activities(user_id, activity_type);
-CREATE INDEX idx_user_activities_created_at ON public.user_activities(created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_campaign_analytics_campaign_date ON public.campaign_analytics(campaign_id, date DESC);
+CREATE INDEX IF NOT EXISTS idx_user_activities_user_type ON public.user_activities(user_id, activity_type);
+CREATE INDEX IF NOT EXISTS idx_user_activities_created_at ON public.user_activities(created_at DESC);
 
 -- =====================================================
 -- ROW LEVEL SECURITY (RLS)
