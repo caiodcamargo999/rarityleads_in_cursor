@@ -96,3 +96,50 @@ body {
     box-shadow: 0 12px 40px var(--accent-purple);
     border-color: var(--accent-purple);
 }
+
+.btn, .btn-primary, .btn-gradient, .btn-large {
+    display: inline-block;
+    font-family: var(--font-primary), var(--font-secondary);
+    font-weight: 700;
+    border: 2px solid #6D28D9;
+    border-radius: 999px;
+    padding: 16px 40px;
+    font-size: 1.08rem;
+    background: #181825;
+    color: #fff;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    text-decoration: none;
+    box-shadow: 0 2px 8px rgba(36,36,54,0.18), 0 1.5px 8px rgba(0,0,0,0.10);
+    cursor: pointer;
+    transition: transform 0.16s cubic-bezier(.4,0,.2,1), box-shadow 0.16s cubic-bezier(.4,0,.2,1), background 0.3s, border-color 0.2s;
+    outline: none;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn:hover, .btn-primary:hover, .btn-gradient:hover, .btn-large:hover {
+    transform: translateY(-2px) scale(1.03);
+    background: #232136;
+    border-color: #8B5CF6;
+    color: #fff;
+    box-shadow: 0 8px 32px rgba(36,36,54,0.22), 0 2px 12px rgba(0,0,0,0.12);
+    text-decoration: none;
+}
+
+.btn:active, .btn-primary:active, .btn-gradient:active, .btn-large:active {
+    transform: scale(0.98);
+    background: #232136;
+    border-color: #6D28D9;
+    color: #fff;
+    box-shadow: 0 2px 8px rgba(36,36,54,0.18);
+    text-decoration: none;
+}
+
+.sidebar, .main-header, .action-card, .metric-card, .chart-card, .funnel-card, .activity-feed, .recent-leads, .campaign-card {
+    background: rgba(36, 36, 54, 0.92);
+    border: 1.5px solid #393552;
+    box-shadow: 0 4px 24px rgba(36,36,54,0.18), 0 2px 12px rgba(0,0,0,0.10);
+    border-radius: 24px;
+    color: #fff;
+}
