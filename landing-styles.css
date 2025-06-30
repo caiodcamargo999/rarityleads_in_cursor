@@ -5,9 +5,13 @@ body, html {
 }
 
 .main-header {
-    padding: 12px 8px;
+    padding: 0 32px;
     border-bottom: 1px solid var(--border-color);
     background: var(--slate);
+    height: 72px;
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
 }
 
 .main-nav {
@@ -16,7 +20,8 @@ body, html {
     align-items: center;
     max-width: 1200px;
     margin: 0 auto;
-    gap: 12px;
+    width: 100%;
+    gap: 0;
 }
 
 .logo {
@@ -25,12 +30,31 @@ body, html {
     color: var(--accent-purple);
     letter-spacing: -1px;
     font-family: var(--font-primary), var(--font-secondary);
+    display: flex;
+    align-items: center;
+    height: 72px;
 }
 
 .nav-links {
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: 24px;
+    height: 72px;
+}
+
+.nav-links a, .nav-links .btn, .nav-links .btn-primary, .nav-links .btn-large {
+    display: flex;
+    align-items: center;
+    height: 44px;
+    padding-top: 0;
+    padding-bottom: 0;
+    box-sizing: border-box;
+}
+
+.language-selector {
+    display: flex;
+    align-items: center;
+    height: 44px;
 }
 
 .nav-links a {
@@ -263,4 +287,36 @@ body, html {
     font-size: 0.95rem;
     background: var(--background-slate);
     border-top: 1px solid var(--border-color);
+}
+
+@media (max-width: 900px) {
+    .main-header {
+        padding: 0 16px;
+        height: 64px;
+    }
+    .main-nav {
+        max-width: 100%;
+    }
+    .logo, .nav-links {
+        height: 64px;
+    }
+    .nav-links {
+        gap: 16px;
+    }
+}
+@media (max-width: 600px) {
+    .main-header {
+        padding: 0 8px;
+        height: 56px;
+    }
+    .logo, .nav-links {
+        height: 56px;
+    }
+    .nav-links {
+        gap: 10px;
+    }
+    .main-nav {
+        flex-direction: column;
+        align-items: flex-start;
+    }
 }

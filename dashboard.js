@@ -371,7 +371,7 @@ class Dashboard {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('fade-in-up');
-                }
+                } 
             });
         }, {
             threshold: 0.1,

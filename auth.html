@@ -8,21 +8,28 @@
     <link rel="stylesheet" href="design-system.css">
     <link rel="stylesheet" href="auth-styles.css">
 </head>
-<body class="auth-body">
+<body class="auth-body dark-bg">
+    <header class="main-header motion-fade-in">
+        <nav class="main-nav">
+            <div class="logo motion-pop" data-i18n="common.brand">Rarity Leads</div>
+            <div class="nav-links">
+                <div class="language-selector" id="language-selector"></div>
+            </div>
+        </nav>
+    </header>
     <main class="auth-main">
         <div class="auth-container">
-            <div class="language-selector" id="language-selector"></div>
             <div class="auth-logo">
                 <img src="rarity-logo.jpg" alt="Rarity Leads Logo" data-i18n-attr="alt:common.brandLogoAlt">
             </div>
             <div class="auth-toggle-buttons">
-                <button id="tab-login" class="auth-tab active" data-i18n="login.signinBtn">Sign In</button>
-                <button id="tab-register" class="auth-tab" data-i18n="register.createAccountBtn">Register</button>
+                <button id="tab-login" class="auth-tab active motion-pop" data-i18n="login.signinBtn">Sign In</button>
+                <button id="tab-register" class="auth-tab motion-pop" data-i18n="register.createAccountBtn">Register</button>
             </div>
             <div id="auth-forms">
                 <!-- Login Form -->
                 <form id="login-form" class="auth-form" autocomplete="on">
-                    <button type="button" id="google-login" class="btn-google">
+                    <button type="button" id="google-login" class="btn-google motion-pop">
                         <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" width="20">
                         <span data-i18n="login.signinGoogle">Sign in with Google</span>
                     </button>
@@ -40,9 +47,9 @@
                             <input type="checkbox" id="remember-me">
                             <span data-i18n="login.rememberMe">Remember me</span>
                         </label>
-                        <a href="#" class="link" data-i18n="login.forgot">Forgot password?</a>
+                        <a href="#" class="link" id="forgot-password-link" data-i18n="login.forgot">Forgot password?</a>
                     </div>
-                    <button type="submit" class="btn-primary">
+                    <button type="submit" class="btn-primary motion-pop">
                         <span data-i18n="login.signinBtn">Sign In</span>
                     </button>
                 </form>
@@ -50,11 +57,26 @@
                 <div id="verification-warning-login" class="verification-warning" style="display: none;">
                     <h3 data-i18n="login.verifyTitle">Please verify your email</h3>
                     <p data-i18n-html="login.verifyMessage">We've sent a verification link to <strong id="unverified-email-login"></strong>.</p>
-                    <button id="resend-verification-login" class="btn-primary" data-i18n="login.resendVerification">Resend Verification Email</button>
+                    <button id="resend-verification-login" class="btn-primary motion-pop" data-i18n="login.resendVerification">Resend Verification Email</button>
+                </div>
+
+                <!-- Forgot Password Modal -->
+                <div id="forgot-password-modal" class="auth-modal" style="display: none;">
+                    <div class="auth-modal-content">
+                        <h3 data-i18n="forgotPassword.title">Reset Password</h3>
+                        <p data-i18n="forgotPassword.description">Enter your email address to receive a password reset link.</p>
+                        <div class="form-group">
+                            <label for="reset-email" class="form-label" data-i18n="forgotPassword.email">Email address</label>
+                            <input type="email" id="reset-email" name="email" class="form-input" required autocomplete="email" data-i18n-placeholder="forgotPassword.emailPlaceholder">
+                        </div>
+                        <button type="button" id="reset-password-btn" class="btn-primary motion-pop" data-i18n="forgotPassword.resetButton">Send Reset Link</button>
+                        <button type="button" id="cancel-reset-btn" class="btn-secondary motion-pop" data-i18n="forgotPassword.cancelButton">Cancel</button>
+                        <div id="reset-message-container"></div>
+                    </div>
                 </div>
                 <!-- Register Form -->
                 <form id="register-form" class="auth-form" style="display:none;" autocomplete="off">
-                    <button type="button" id="google-register" class="btn-google">
+                    <button type="button" id="google-register" class="btn-google motion-pop">
                         <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" width="20">
                         <span data-i18n="register.signupGoogle">Sign up with Google</span>
                     </button>
@@ -67,13 +89,13 @@
                         <label for="register-password" class="form-label" data-i18n="register.password">Password</label>
                         <input type="password" id="register-password" name="password" class="form-input" minlength="6" required autocomplete="new-password" data-i18n-placeholder="register.passwordPlaceholder">
                     </div>
-                    <button type="submit" class="btn-primary" data-i18n="register.createAccountBtn">Create Account</button>
+                    <button type="submit" class="btn-primary motion-pop" data-i18n="register.createAccountBtn">Create Account</button>
                 </form>
                 <div id="register-message-container"></div>
                 <div id="verification-warning-register" class="verification-warning" style="display: none;">
                     <h3 data-i18n="register.verifyTitle">Please verify your email</h3>
                     <p data-i18n-html="register.verifyMessage">We've sent a verification link to <strong id="unverified-email-register"></strong>.</p>
-                    <button id="resend-verification-register" class="btn-primary" data-i18n="register.resendVerification">Resend Verification Email</button>
+                    <button id="resend-verification-register" class="btn-primary motion-pop" data-i18n="register.resendVerification">Resend Verification Email</button>
                 </div>
             </div>
         </div>
@@ -84,9 +106,9 @@
     <script src="i18n.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const supabase = window.AppUtils.initSupabase();
+            const supabase = window.AppUtils && window.AppUtils.initSupabase ? window.AppUtils.initSupabase() : null;
             if (!supabase) {
-                console.error('Supabase not initialized');
+                document.getElementById('login-message-container').innerHTML = '<div class="message message-error">Supabase not initialized. Please check your configuration.</div>';
                 return;
             }
             // Tab switching
@@ -94,18 +116,20 @@
             const tabRegister = document.getElementById('tab-register');
             const loginForm = document.getElementById('login-form');
             const registerForm = document.getElementById('register-form');
-            tabLogin.addEventListener('click', () => {
-                tabLogin.classList.add('active');
-                tabRegister.classList.remove('active');
-                loginForm.style.display = '';
-                registerForm.style.display = 'none';
-            });
-            tabRegister.addEventListener('click', () => {
-                tabRegister.classList.add('active');
-                tabLogin.classList.remove('active');
-                registerForm.style.display = '';
-                loginForm.style.display = 'none';
-            });
+            if (tabLogin && tabRegister && loginForm && registerForm) {
+                tabLogin.addEventListener('click', () => {
+                    tabLogin.classList.add('active');
+                    tabRegister.classList.remove('active');
+                    loginForm.style.display = '';
+                    registerForm.style.display = 'none';
+                });
+                tabRegister.addEventListener('click', () => {
+                    tabRegister.classList.add('active');
+                    tabLogin.classList.remove('active');
+                    registerForm.style.display = '';
+                    loginForm.style.display = 'none';
+                });
+            }
             // Google Auth
             document.getElementById('google-login').addEventListener('click', async () => {
                 await supabase.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: `${window.location.origin}/dashboard.html` } });
@@ -160,7 +184,45 @@
                 container.innerHTML = `<div class="message message-${type}">${message}</div>`;
                 setTimeout(() => container.innerHTML = '', 5000);
             }
+
+            // Forgot Password functionality
+            const forgotPasswordLink = document.getElementById('forgot-password-link');
+            const forgotPasswordModal = document.getElementById('forgot-password-modal');
+            const resetEmailInput = document.getElementById('reset-email');
+            const resetPasswordBtn = document.getElementById('reset-password-btn');
+            const cancelResetBtn = document.getElementById('cancel-reset-btn');
+            const resetMessageContainer = document.getElementById('reset-message-container');
+
+            forgotPasswordLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                forgotPasswordModal.style.display = 'flex';
+                loginForm.style.display = 'none'; // Hide login form when modal is open
+            });
+
+            cancelResetBtn.addEventListener('click', () => {
+                forgotPasswordModal.style.display = 'none';
+                loginForm.style.display = ''; // Show login form when modal is closed
+                resetMessageContainer.innerHTML = ''; // Clear any messages
+            });
+
+            resetPasswordBtn.addEventListener('click', async () => {
+                const email = resetEmailInput.value;
+                if (!email) {
+                    resetMessageContainer.innerHTML = '<div class="message message-error">Please enter your email address.</div>';
+                    return;
+                }
+
+                const { error } = await supabase.auth.resetPasswordForEmail(email, {
+                    redirectTo: `${window.location.origin}/update-password.html` // You might need a new page for password update
+                });
+
+                if (error) {
+                    resetMessageContainer.innerHTML = `<div class="message message-error">${error.message}</div>`;
+                } else {
+                    resetMessageContainer.innerHTML = '<div class="message message-success">Password reset link sent to your email!</div>';
+                }
+            });
         });
     </script>
 </body>
-</html> 
+</html>

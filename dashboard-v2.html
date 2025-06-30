@@ -1,0 +1,100 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="dashboard.meta.title">Rarity Leads - Dashboard</title>
+    <link rel="stylesheet" href="dashboard-v2.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/feather-icons"></script>
+</head>
+<body>
+    <div class="dashboard-container">
+        <aside class="sidebar" id="sidebar" role="navigation" aria-label="Main navigation">
+            <div class="sidebar-header">
+                <img src="rarity-logo.jpg" alt="Rarity Leads Logo" class="sidebar-logo" data-i18n-attr="alt:common.brandLogoAlt">
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="dashboard.html" class="active" data-i18n="nav.dashboard"><i class="nav-icon" data-feather="home"></i><span data-i18n="nav.dashboard">Dashboard</span></a></li>
+                    <li><a href="prospecting-leads.html" data-i18n="nav.leads"><i class="nav-icon" data-feather="users"></i><span data-i18n="nav.leads">Leads</span></a></li>
+                    <li><a href="prospecting-companies.html" data-i18n="nav.companies"><i class="nav-icon" data-feather="briefcase"></i><span data-i18n="nav.companies">Companies</span></a></li>
+                    <li><a href="analytics.html" data-i18n="nav.analytics"><i class="nav-icon" data-feather="bar-chart-2"></i><span data-i18n="nav.analytics">Analytics</span></a></li>
+                    <li><a href="support.html" data-i18n="nav.support"><i class="nav-icon" data-feather="help-circle"></i><span data-i18n="nav.support">Support</span></a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="main-content" role="main">
+            <header class="main-header">
+                <div class="header-left">
+                    <h1 class="dashboard-title" data-i18n="dashboard.title">Dashboard</h1>
+                </div>
+                <div class="header-actions">
+                    <div class="user-profile">
+                        <span class="user-email" id="user-email"></span>
+                        <button class="logout-btn" id="logout-btn" data-i18n="common.logout">Logout</button>
+                    </div>
+                </div>
+            </header>
+
+            <section class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <div class="metric-icon"><i data-feather="users"></i></div>
+                    </div>
+                    <div class="metric-content">
+                        <div class="metric-value" id="leads-count">0</div>
+                        <div class="metric-label" data-i18n="dashboard.metrics.activeLeads">Active Leads</div>
+                    </div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <div class="metric-icon"><i data-feather="target"></i></div>
+                    </div>
+                    <div class="metric-content">
+                        <div class="metric-value">0%</div>
+                        <div class="metric-label" data-i18n="dashboard.metrics.conversionRate">Conversion Rate</div>
+                    </div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <div class="metric-icon"><i data-feather="bar-chart-2"></i></div>
+                    </div>
+                    <div class="metric-content">
+                        <div class="metric-value">0</div>
+                        <div class="metric-label" data-i18n="dashboard.metrics.activeCampaigns">Active Campaigns</div>
+                    </div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <div class="metric-icon"><i data-feather="dollar-sign"></i></div>
+                    </div>
+                    <div class="metric-content">
+                        <div class="metric-value">$0</div>
+                        <div class="metric-label" data-i18n="dashboard.metrics.monthlyRevenue">Monthly Revenue</div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="main-chart">
+                <div class="chart-card">
+                    <h3 data-i18n="dashboard.leadGenerationTrend.title">Lead Generation Trend</h3>
+                    <div class="chart-container"><canvas id="leadsChart"></canvas></div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="app-config.js"></script>
+    <script src="auth-guard.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        window.AuthGuard = new AuthGuard();
+      });
+    </script>
+    <script src="dashboard.js"></script>
+</body>
+</html>

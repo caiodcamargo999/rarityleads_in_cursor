@@ -3,37 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title data-i18n="support.title">Rarity Leads - Support Center</title>
+    <title data-i18n="support.title">Rarity Leads - Support</title>
     <meta name="description" data-i18n="support.subtitle" content="Get help and support for your Rarity Leads account with 24/7 assistance">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="design-system.css">
-    <link rel="stylesheet" href="dashboard.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="dark-theme.css">
+    <link rel="stylesheet" href="motion-design.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
 </head>
-<body>
+<body class="dark-bg">
     <div class="dashboard-layout">
-        <aside class="sidebar" role="navigation" aria-label="Main navigation">
-            <div class="sidebar-logo"><img src="rarity-logo.jpg" alt="Rarity Leads Logo" data-i18n-attr="alt:common.brandLogoAlt" style="height:40px;width:auto;object-fit:contain;display:block;margin:0 auto;"></div>
+        <aside class="sidebar" id="sidebar" role="navigation" aria-label="Main navigation">
+            <div class="sidebar-header">
+                <img src="rarity-logo.jpg" alt="Rarity Leads Logo" class="sidebar-logo" data-i18n-attr="alt:common.brandLogoAlt">
+            </div>
             <nav class="sidebar-nav">
                 <ul>
-                    <li><a href="dashboard.html" data-i18n="nav.dashboard">Dashboard</a></li>
-                    <li><a href="prospecting-leads.html" data-i18n="nav.leads">Leads</a></li>
-                    <li><a href="prospecting-companies.html" data-i18n="nav.companies">Companies</a></li>
-                    <li><a href="approaching-whatsapp.html" data-i18n="nav.whatsapp">WhatsApp</a></li>
-                    <li><a href="approaching-linkedin.html" data-i18n="nav.linkedin">LinkedIn</a></li>
-                    <li><a href="approaching-instagram.html" data-i18n="nav.instagram">Instagram</a></li>
-                    <li><a href="approaching-facebook.html" data-i18n="nav.facebook">Facebook</a></li>
-                    <li><a href="approaching-x.html" data-i18n="nav.x">X</a></li>
-                    <li><a href="analytics.html" data-i18n="nav.analytics">Analytics</a></li>
-                    <li><a href="support.html" class="active" data-i18n="nav.support">Support</a></li>
+                    <li><a href="dashboard.html" data-i18n="nav.dashboard"><i class="nav-icon" data-feather="home"></i><span data-i18n="nav.dashboard">Dashboard</span></a></li>
+                    <li><a href="prospecting-leads.html" data-i18n="nav.leads"><i class="nav-icon" data-feather="users"></i><span data-i18n="nav.leads">Leads</span></a></li>
+                    <li><a href="prospecting-companies.html" data-i18n="nav.companies"><i class="nav-icon" data-feather="briefcase"></i><span data-i18n="nav.companies">Companies</span></a></li>
+                    <li class="nav-section"><span class="nav-section-title" data-i18n="nav.outreach">Outreach</span></li>
+                    <li><a href="approaching-whatsapp.html" data-i18n="nav.whatsapp"><i class="nav-icon nav-icon-whatsapp" data-feather="message-circle"></i><span data-i18n="nav.whatsapp">WhatsApp</span><span class="status-dot connected"></span></a></li>
+                    <li><a href="approaching-linkedin.html" data-i18n="nav.linkedin"><i class="nav-icon nav-icon-linkedin" data-feather="linkedin"></i><span data-i18n="nav.linkedin">LinkedIn</span><span class="status-dot connected"></span></a></li>
+                    <li><a href="approaching-instagram.html" data-i18n="nav.instagram"><i class="nav-icon nav-icon-instagram" data-feather="instagram"></i><span data-i18n="nav.instagram">Instagram</span></a></li>
+                    <li><a href="approaching-facebook.html" data-i18n="nav.facebook"><i class="nav-icon nav-icon-facebook" data-feather="facebook"></i><span data-i18n="nav.facebook">Facebook</span></a></li>
+                    <li><a href="approaching-x.html" data-i18n="nav.x"><i class="nav-icon nav-icon-twitter" data-feather="twitter"></i><span data-i18n="nav.x">X</span></a></li>
+                    <li class="nav-section"><span class="nav-section-title" data-i18n="nav.analyticsSupport">Analytics & Support</span></li>
+                    <li><a href="analytics.html" data-i18n="nav.analytics"><i class="nav-icon" data-feather="bar-chart-2"></i><span data-i18n="nav.analytics">Analytics</span></a></li>
+                    <li><a href="support.html" class="active" data-i18n="nav.support"><i class="nav-icon" data-feather="help-circle"></i><span data-i18n="nav.support">Support</span></a></li>
                 </ul>
             </nav>
-            <div class="sidebar-footer">
-                <button class="logout-btn" id="logout-btn" data-i18n="auth.logout">Logout</button>
-            </div>
         </aside>
         <main class="main-content" role="main">
             <div class="support-header">

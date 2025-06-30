@@ -1,5 +1,11 @@
 # 🧠 Rarity Leads - Ultimate Guide
 
+> **IMPORTANT: The sales page is finalized and approved. Do not modify, redesign, or change any aspect of the sales page. It is good as it is and should not be touched in any way.**
+
+> **DESIGN RULE:** The entire project must use a minimalist, dark, non-colorful design. White, light, or colorful backgrounds are strictly forbidden. No example numbers (e.g., 12, 0, 7, etc.) should appear anywhere in the UI—only real data or zero. All UI/UX must be modern, tech-inspired, and include motion effects for a premium SaaS feel. The sidebar menu must always include every prospecting channel as in the dashboard. All buttons must be visually consistent, functional, and never broken. The Sign In button must always work and be visually correct.
+
+> **MAJOR DESIGN REFERENCE:** The primary web and motion design reference for the entire project is [sounext.xyz](https://www.sounext.xyz/). All pages (Sales, Auth, Dashboard, Leads, etc.) must follow the minimalist, dark, tech-inspired, and motion-rich style of this reference. All buttons and interactive elements must always work and have a premium, animated feel.
+
 This is the single source of truth for the Rarity Leads project. It covers vision, features, design, database, deployment, copywriting, and all technical and business steps for building, launching, and maintaining the platform.
 
 ---
@@ -96,10 +102,9 @@ Rarity Leads is a B2B SaaS lead prospecting platform powered by AI, focused on a
 ## 🎨 Design System & Guidelines
 ### Color Palette (Inspired by tempo.new)
 - Deep Blue: #0A0A23
-- Slate: #232136
-- White: #FFFFFF
+- Slate Gray: #232136
 - Light Gray: #E5E7EB
-- Accent Purple: #8B5CF6
+- Darker Purple: #6D28D9
 - Glass Morphism Background: rgba(255,255,255,0.10)
 - Text: #FFFFFF (primary), #A1A1AA (secondary)
 
@@ -270,8 +275,6 @@ Rarity Leads is a B2B SaaS lead prospecting platform powered by AI, focused on a
 - Text Primary: #FFFFFF
 - Text Secondary: #A1A1AA
 - Accent Purple: #8B5CF6
-- Accent Orange: #F59E0B
-- Accent Pink: #EC4899
 - Border: #393552
 
 ### Performance & Accessibility
@@ -306,10 +309,9 @@ Rarity Leads is an AI-powered B2B lead generation platform with bulletproof auth
 ## 4. Design System & Copywriting
 ### Color Palette (Inspired by tempo.new)
 - Deep Blue: #0A0A23
-- Slate: #232136
-- White: #FFFFFF
+- Slate Gray: #232136
 - Light Gray: #E5E7EB
-- Accent Purple: #8B5CF6
+- Darker Purple: #6D28D9
 - Accent Orange: #F59E0B
 - Accent Pink: #EC4899
 - Glass Morphism: rgba(255,255,255,0.08-0.15)
@@ -372,7 +374,7 @@ Rarity Leads is an AI-powered B2B lead generation platform with bulletproof auth
 ### GitHub Repository
 1. Clone or create your repository:
    ```bash
-   git clone https://github.com/yourusername/rarity-leads.git
+   git clone https://github.com/caiodcamargo999/rarityleads_in_cursor_2.git
    cd rarity-leads
    ```
 2. Add remote, commit, and push changes as needed.

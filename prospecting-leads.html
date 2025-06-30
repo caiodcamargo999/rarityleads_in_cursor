@@ -4,115 +4,134 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title data-i18n="leads.title">Rarity Leads - Lead Prospecting</title>
-    <meta name="description" data-i18n="leads.subtitle" content="Discover, qualify, and manage your leads with AI-powered prospecting tools">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="design-system.css">
-    <link rel="stylesheet" href="dashboard.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link rel="stylesheet" href="dark-theme.css">
+    <link rel="stylesheet" href="motion-design.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/feather-icons"></script>
 </head>
-<body>
-    <div class="dashboard-layout">
-        <aside class="sidebar" role="navigation" aria-label="Main navigation">
-            <div class="sidebar-logo"><img src="rarity-logo.jpg" alt="Rarity Leads Logo" style="height:40px;width:auto;object-fit:contain;display:block;margin:0 auto;"></div>
+<body class="dark-bg">
+    <div class="dashboard-container">
+        <aside class="sidebar" id="sidebar" role="navigation" aria-label="Main navigation">
+            <div class="sidebar-header">
+                <img src="rarity-logo.jpg" alt="Rarity Leads Logo" class="sidebar-logo" data-i18n-attr="alt:common.brandLogoAlt">
+            </div>
             <nav class="sidebar-nav">
                 <ul>
-                    <li><a href="dashboard.html" data-i18n="nav.dashboard">Dashboard</a></li>
-                    <li><a href="prospecting-leads.html" class="active" data-i18n="nav.leads">Leads</a></li>
-                    <li><a href="prospecting-companies.html" data-i18n="nav.companies">Companies</a></li>
-                    <li><a href="approaching-whatsapp.html" data-i18n="nav.whatsapp">WhatsApp</a></li>
-                    <li><a href="approaching-linkedin.html" data-i18n="nav.linkedin">LinkedIn</a></li>
-                    <li><a href="approaching-instagram.html" data-i18n="nav.instagram">Instagram</a></li>
-                    <li><a href="approaching-facebook.html" data-i18n="nav.facebook">Facebook</a></li>
-                    <li><a href="approaching-x.html" data-i18n="nav.x">X</a></li>
-                    <li><a href="analytics.html" data-i18n="nav.analytics">Analytics</a></li>
-                    <li><a href="support.html" data-i18n="nav.support">Support</a></li>
+                    <li><a href="dashboard.html" data-i18n="nav.dashboard"><i class="nav-icon" data-feather="home"></i><span data-i18n="nav.dashboard">Dashboard</span></a></li>
+                    <li><a href="prospecting-leads.html" class="active" data-i18n="nav.leads"><i class="nav-icon" data-feather="users"></i><span data-i18n="nav.leads">Leads</span></a></li>
+                    <li><a href="prospecting-companies.html" data-i18n="nav.companies"><i class="nav-icon" data-feather="briefcase"></i><span data-i18n="nav.companies">Companies</span></a></li>
+                    <li class="nav-section"><span class="nav-section-title" data-i18n="nav.outreach">Outreach</span></li>
+                    <li><a href="approaching-whatsapp.html" data-i18n="nav.whatsapp"><i class="nav-icon nav-icon-whatsapp" data-feather="message-circle"></i><span data-i18n="nav.whatsapp">WhatsApp</span><span class="status-dot connected"></span></a></li>
+                    <li><a href="approaching-linkedin.html" data-i18n="nav.linkedin"><i class="nav-icon nav-icon-linkedin" data-feather="linkedin"></i><span data-i18n="nav.linkedin">LinkedIn</span><span class="status-dot connected"></span></a></li>
+                    <li><a href="approaching-instagram.html" data-i18n="nav.instagram"><i class="nav-icon nav-icon-instagram" data-feather="instagram"></i><span data-i18n="nav.instagram">Instagram</span></a></li>
+                    <li><a href="approaching-facebook.html" data-i18n="nav.facebook"><i class="nav-icon nav-icon-facebook" data-feather="facebook"></i><span data-i18n="nav.facebook">Facebook</span></a></li>
+                    <li><a href="approaching-x.html" data-i18n="nav.x"><i class="nav-icon nav-icon-twitter" data-feather="twitter"></i><span data-i18n="nav.x">X</span></a></li>
+                    <li class="nav-section"><span class="nav-section-title" data-i18n="nav.analyticsSupport">Analytics & Support</span></li>
+                    <li><a href="analytics.html" data-i18n="nav.analytics"><i class="nav-icon" data-feather="bar-chart-2"></i><span data-i18n="nav.analytics">Analytics</span></a></li>
+                    <li><a href="support.html" data-i18n="nav.support"><i class="nav-icon" data-feather="help-circle"></i><span data-i18n="nav.support">Support</span></a></li>
                 </ul>
             </nav>
-            <div class="sidebar-footer">
-                <button class="logout-btn" id="logout-btn" data-i18n="auth.logout">Logout</button>
+            <div class="sidebar-logout">
+                <button class="btn btn-primary tech-btn sidebar-logout-btn" id="logout-btn" data-i18n="common.logout">Logout</button>
             </div>
         </aside>
         <main class="main-content" role="main">
-            <div class="leads-header">
-                <div>
-                    <div class="leads-title" data-i18n="leads.title">Lead Prospecting</div>
-                    <div class="leads-subtitle" data-i18n="leads.subtitle">Discover, qualify, and manage your leads with AI-powered prospecting tools</div>
+            <header class="main-header">
+                <div class="header-left">
+                    <h1 class="dashboard-title" data-i18n="leads.title">Lead Prospecting</h1>
                 </div>
-                <button class="add-lead-btn" id="add-lead-btn" data-i18n="leads.addLead">
-                    <i class="fas fa-plus"></i>
-                    <span data-i18n="leads.addLead">Add Lead</span>
-                </button>
-            </div>
-            <div class="metrics-grid" role="region" aria-label="Lead metrics">
-                <div class="metric-card" role="article">
-                    <div class="metric-icon new">
-                        <i class="fas fa-user-plus"></i>
+            </header>
+
+            <section class="metrics-grid">
+                <div class="metric-card motion-fade-in align-center">
+                    <div class="metric-header align-center">
+                        <div class="metric-icon"><i data-feather="users"></i></div>
                     </div>
-                    <div class="metric-value" id="total-leads" aria-live="polite">0</div>
-                    <div class="metric-label" data-i18n="leads.metrics.total"></div>
+                    <div class="metric-content align-center">
+                        <div class="metric-value metric-number" id="total-leads">0</div>
+                        <div class="metric-label" data-i18n="leads.metrics.total">Total Leads</div>
+                    </div>
                 </div>
-                <div class="metric-card" role="article">
-                    <div class="metric-icon hot">
-                        <i class="fas fa-fire"></i>
+                <div class="metric-card motion-fade-in align-center">
+                    <div class="metric-header align-center">
+                        <div class="metric-icon"><i data-feather="fire"></i></div>
                     </div>
-                    <div class="metric-value" id="hot-leads" aria-live="polite">0</div>
-                    <div class="metric-label" data-i18n="leads.metrics.hot"></div>
+                    <div class="metric-content align-center">
+                        <div class="metric-value metric-number" id="hot-leads">0</div>
+                        <div class="metric-label" data-i18n="leads.metrics.hot">Hot Leads</div>
+                    </div>
                 </div>
-                <div class="metric-card" role="article">
-                    <div class="metric-icon warm">
-                        <i class="fas fa-thermometer-half"></i>
+                <div class="metric-card motion-fade-in align-center">
+                    <div class="metric-header align-center">
+                        <div class="metric-icon"><i data-feather="thermometer"></i></div>
                     </div>
-                    <div class="metric-value" id="warm-leads" aria-live="polite">0</div>
-                    <div class="metric-label" data-i18n="leads.metrics.warm"></div>
+                    <div class="metric-content align-center">
+                        <div class="metric-value metric-number" id="warm-leads">0</div>
+                        <div class="metric-label" data-i18n="leads.metrics.warm">Warm Leads</div>
+                    </div>
                 </div>
-                <div class="metric-card" role="article">
-                    <div class="metric-icon converted">
-                        <i class="fas fa-check-circle"></i>
+                <div class="metric-card motion-fade-in align-center">
+                    <div class="metric-header align-center">
+                        <div class="metric-icon"><i data-feather="check-circle"></i></div>
                     </div>
-                    <div class="metric-value" id="converted-leads" aria-live="polite">0</div>
-                    <div class="metric-label" data-i18n="leads.metrics.converted"></div>
+                    <div class="metric-content align-center">
+                        <div class="metric-value metric-number" id="converted-leads">0</div>
+                        <div class="metric-label" data-i18n="leads.metrics.converted">Converted</div>
+                    </div>
                 </div>
-            </div>
-            <div class="tabs" role="tablist" aria-label="Lead views">
-                <button class="tab active" id="tab-all" role="tab" aria-selected="true" aria-controls="all-leads-view" data-i18n="leads.tabs.all">All Leads</button>
-                <button class="tab" id="tab-hot" role="tab" aria-selected="false" aria-controls="hot-leads-view" data-i18n="leads.tabs.hot">Hot Leads</button>
-                <button class="tab" id="tab-warm" role="tab" aria-selected="false" aria-controls="warm-leads-view" data-i18n="leads.tabs.warm">Warm Leads</button>
-                <button class="tab" id="tab-converted" role="tab" aria-selected="false" aria-controls="converted-leads-view" data-i18n="leads.tabs.converted">Converted</button>
-            </div>
-            <div class="tab-content" id="tab-content">
-                <div id="all-leads-view" role="tabpanel" aria-labelledby="tab-all">
-                    <div class="search-filters">
-                        <input type="text" class="search-input" id="leads-search" data-i18n-placeholder="leads.search.placeholder">
-                        <select class="filter-select" id="status-filter">
-                            <option value="" data-i18n="leads.filters.allStatus"></option>
-                            <option value="new" data-i18n="leads.filters.new"></option>
-                            <option value="warm" data-i18n="leads.filters.warm"></option>
-                            <option value="hot" data-i18n="leads.filters.hot"></option>
-                            <option value="cold" data-i18n="leads.filters.cold"></option>
-                            <option value="converted" data-i18n="leads.filters.converted"></option>
-                        </select>
-                        <select class="filter-select" id="score-filter">
-                            <option value="" data-i18n="leads.filters.allScores"></option>
-                            <option value="high" data-i18n="leads.filters.highScore"></option>
-                            <option value="medium" data-i18n="leads.filters.mediumScore"></option>
-                            <option value="low" data-i18n="leads.filters.lowScore"></option>
-                        </select>
-                        <button class="clear-filters-btn" id="clear-filters" data-i18n="leads.filters.clear"></button>
-                    </div>
+            </section>
+
+            <section class="lead-generation-form">
+                <div class="chart-card motion-pop">
+                    <h3>Generate Warm Leads</h3>
+                    <form id="lead-criteria-form" class="lead-form-tech">
+                        <div class="form-row">
+                            <div class="form-group tech-select-group">
+                                <label for="customer-type">Customer Type:</label>
+                                <div class="tech-select-wrapper">
+                                    <select id="customer-type" name="customer-type" class="tech-select">
+                                        <option value="b2b">B2B</option>
+                                        <option value="b2c">B2C</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group tech-input-group">
+                                <label for="annual-income">Annual Income (Persona):</label>
+                                <input type="number" id="annual-income" name="annual-income" class="tech-input" placeholder="e.g., 50000">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group tech-select-group">
+                                <label for="target-entity">Looking for:</label>
+                                <div class="tech-select-wrapper">
+                                    <select id="target-entity" name="target-entity" class="tech-select">
+                                        <option value="person">Person (Lead)</option>
+                                        <option value="company">Company (Decisor)</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group tech-input-group">
+                                <label for="service-type">Service to Provide:</label>
+                                <input type="text" id="service-type" name="service-type" class="tech-input" placeholder="e.g., Digital Marketing">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary motion-pop tech-btn">Generate Leads</button>
+                    </form>
+                </div>
+            </section>
+
+            <section class="main-chart" id="leads-list-section" style="display:none;">
+                <div class="chart-card motion-fade-in">
+                    <h3>Warm Leads & Major Contacts</h3>
                     <div class="leads-table-container">
                         <table class="leads-table" id="leads-table" role="table" aria-label="Leads table">
                             <thead>
                                 <tr>
-                                    <th scope="col" data-i18n="leads.table.name">Name</th>
-                                    <th scope="col" data-i18n="leads.table.email">Email</th>
-                                    <th scope="col" data-i18n="leads.table.position">Position</th>
-                                    <th scope="col" data-i18n="leads.table.score">Score</th>
-                                    <th scope="col" data-i18n="leads.table.status">Status</th>
-                                    <th scope="col" data-i18n="leads.table.added">Added</th>
-                                    <th scope="col" data-i18n="leads.table.actions">Actions</th>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Position</th>
+                                    <th>Company</th>
+                                    <th>Contact</th>
                                 </tr>
                             </thead>
                             <tbody id="leads-table-body">
@@ -121,282 +140,54 @@
                         </table>
                         <div id="leads-empty" class="empty-state" style="display:none;">
                             <div class="empty-icon">
-                                <i class="fas fa-users"></i>
+                                <i data-feather="users"></i>
                             </div>
-                            <h3 class="empty-title" data-i18n="leads.empty.title">No leads found</h3>
-                            <p class="empty-description" data-i18n="leads.empty.description">Start by adding your first lead or adjust your filters.</p>
-                            <button class="add-lead-btn" id="add-first-lead" data-i18n="leads.addLead">
-                                <i class="fas fa-plus"></i>
-                                Add Your First Lead
-                            </button>
+                            <h3 class="empty-title">No leads found</h3>
+                            <p class="empty-description">Try different criteria to generate leads.</p>
                         </div>
                     </div>
                 </div>
-                <div id="hot-leads-view" role="tabpanel" aria-labelledby="tab-hot" style="display:none;">
-                    <h3 data-i18n="leads.hot.title">Hot Leads</h3>
-                    <p data-i18n="leads.hot.description">High-priority leads ready for immediate follow-up</p>
-                    <!-- Hot leads content -->
-                </div>
-                <div id="warm-leads-view" role="tabpanel" aria-labelledby="tab-warm" style="display:none;">
-                    <h3 data-i18n="leads.warm.title">Warm Leads</h3>
-                    <p data-i18n="leads.warm.description">Leads showing interest and ready for nurturing</p>
-                    <!-- Warm leads content -->
-                </div>
-                <div id="converted-leads-view" role="tabpanel" aria-labelledby="tab-converted" style="display:none;">
-                    <h3 data-i18n="leads.converted.title">Converted Leads</h3>
-                    <p data-i18n="leads.converted.description">Successfully converted leads and customers</p>
-                    <!-- Converted leads content -->
-                </div>
-            </div>
+            </section>
         </main>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="app-config.js"></script>
-    <script src="i18n.js"></script>
     <script src="auth-guard.js"></script>
     <script>
-        // Leads Module
-        const Leads = {
-            supabase: null,
-            currentLanguage: 'en',
-            leadsData: [],
-            filteredLeads: [],
-            currentTab: 'all',
-            
-            async init() {
-                this.supabase = window.AppUtils ? window.AppUtils.initSupabase() : null;
-                await this.checkAuth();
-                await this.initI18n();
-                this.bindEvents();
-                this.loadLeads();
-            },
-            
-            async checkAuth() {
-                if (!this.supabase) return;
-                const { data: { session } } = await this.supabase.auth.getSession();
-                if (!session || !session.user || !session.user.email_confirmed_at) {
-                    window.location.href = '/register.html';
-                    return;
-                }
-            },
-            
-            async initI18n() {
-                if (window.i18n) {
-                    this.currentLanguage = await window.i18n.detectLanguage();
-                    await window.i18n.translatePage();
-                }
-            },
-            
-            bindEvents() {
-                // Logout
-                document.getElementById('logout-btn').addEventListener('click', () => this.logout());
-                
-                // Tabs
-                const tabs = document.querySelectorAll('.tab');
-                tabs.forEach(tab => {
-                    tab.addEventListener('click', () => this.switchTab(tab));
-                });
-                
-                // Search and filters
-                document.getElementById('leads-search').addEventListener('input', (e) => this.filterLeads());
-                document.getElementById('status-filter').addEventListener('change', () => this.filterLeads());
-                document.getElementById('score-filter').addEventListener('change', () => this.filterLeads());
-                document.getElementById('clear-filters').addEventListener('click', () => this.clearFilters());
-                
-                // Add lead buttons
-                document.getElementById('add-lead-btn').addEventListener('click', () => this.openAddLeadModal());
-                document.getElementById('add-first-lead').addEventListener('click', () => this.openAddLeadModal());
-                
-                // Keyboard navigation
-                document.addEventListener('keydown', (e) => this.handleKeyboard(e));
-            },
-            
-            switchTab(activeTab) {
-                // Update tab states
-                document.querySelectorAll('.tab').forEach(tab => {
-                    tab.classList.remove('active');
-                    tab.setAttribute('aria-selected', 'false');
-                });
-                activeTab.classList.add('active');
-                activeTab.setAttribute('aria-selected', 'true');
-                
-                // Show corresponding content
-                const targetId = activeTab.getAttribute('aria-controls');
-                document.querySelectorAll('[role="tabpanel"]').forEach(panel => {
-                    panel.style.display = 'none';
-                });
-                document.getElementById(targetId).style.display = '';
-                
-                this.currentTab = activeTab.id.replace('tab-', '');
-                this.filterLeads();
-            },
-            
-            handleKeyboard(e) {
-                // Tab navigation with arrow keys
-                if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
-                    const tabs = document.querySelectorAll('.tab');
-                    const activeTab = document.querySelector('.tab.active');
-                    const currentIndex = Array.from(tabs).indexOf(activeTab);
-                    
-                    if (e.key === 'ArrowLeft' && currentIndex > 0) {
-                        tabs[currentIndex - 1].click();
-                    } else if (e.key === 'ArrowRight' && currentIndex < tabs.length - 1) {
-                        tabs[currentIndex + 1].click();
-                    }
-                }
-            },
-            
-            async logout() {
-                if (this.supabase) await this.supabase.auth.signOut();
-                window.location.href = '/register.html';
-            },
-            
-            async loadLeads() {
-                try {
-                    if (!this.supabase) return;
-                    
-                    const { data, error } = await this.supabase
-                        .from('leads')
-                        .select('*')
-                        .order('created_at', { ascending: false });
-                    
-                    if (error) throw error;
-                    
-                    this.leadsData = data || [];
-                    this.filteredLeads = [...this.leadsData];
-                    this.renderLeadsTable();
-                    this.updateMetrics();
-                    
-                } catch (error) {
-                    console.error('Failed to load leads:', error);
-                    this.showError('Failed to load leads');
-                }
-            },
-            
-            filterLeads() {
-                const searchTerm = document.getElementById('leads-search').value.toLowerCase();
-                const statusFilter = document.getElementById('status-filter').value;
-                const scoreFilter = document.getElementById('score-filter').value;
-                
-                this.filteredLeads = this.leadsData.filter(lead => {
-                    const matchesSearch = !searchTerm || 
-                        lead.lead_name?.toLowerCase().includes(searchTerm) ||
-                        lead.email?.toLowerCase().includes(searchTerm) ||
-                        lead.position?.toLowerCase().includes(searchTerm);
-                    
-                    const matchesStatus = !statusFilter || lead.status === statusFilter;
-                    
-                    const matchesScore = !scoreFilter || this.getScoreClass(lead.lead_score) === scoreFilter;
-                    
-                    return matchesSearch && matchesStatus && matchesScore;
-                });
-                
-                this.renderLeadsTable();
-            },
-            
-            clearFilters() {
-                document.getElementById('leads-search').value = '';
-                document.getElementById('status-filter').value = '';
-                document.getElementById('score-filter').value = '';
-                this.filterLeads();
-            },
-            
-            renderLeadsTable() {
-                const tbody = document.getElementById('leads-table-body');
-                const emptyState = document.getElementById('leads-empty');
-                
-                if (this.filteredLeads.length === 0) {
-                    tbody.innerHTML = '';
-                    emptyState.style.display = 'block';
-                    return;
-                }
-                
-                emptyState.style.display = 'none';
-                
-                tbody.innerHTML = this.filteredLeads.map(lead => `
-                    <tr>
-                        <td>${lead.lead_name || 'N/A'}</td>
-                        <td>${lead.email || 'N/A'}</td>
-                        <td>${lead.position || 'N/A'}</td>
-                        <td><span class="score-badge score-${this.getScoreClass(lead.lead_score)}">${lead.lead_score || 0}</span></td>
-                        <td><span class="status-badge status-${lead.status || 'new'}">${this.formatStatus(lead.status)}</span></td>
-                        <td>${this.formatDate(lead.created_at)}</td>
-                        <td>
-                            <button class="action-btn" onclick="Leads.editLead('${lead.id}')" data-i18n="leads.actions.edit">Edit</button>
-                            <button class="action-btn" onclick="Leads.deleteLead('${lead.id}')" data-i18n="leads.actions.delete">Delete</button>
-                        </td>
-                    </tr>
-                `).join('');
-            },
-            
-            updateMetrics() {
-                const total = this.leadsData.length;
-                const hot = this.leadsData.filter(lead => lead.status === 'hot').length;
-                const warm = this.leadsData.filter(lead => lead.status === 'warm').length;
-                const converted = this.leadsData.filter(lead => lead.status === 'converted').length;
-                
-                document.getElementById('total-leads').textContent = total;
-                document.getElementById('hot-leads').textContent = hot;
-                document.getElementById('warm-leads').textContent = warm;
-                document.getElementById('converted-leads').textContent = converted;
-            },
-            
-            getScoreClass(score) {
-                if (score >= 80) return 'high';
-                if (score >= 50) return 'medium';
-                return 'low';
-            },
-            
-            formatStatus(status) {
-                const statusMap = {
-                    'new': 'New',
-                    'warm': 'Warm',
-                    'hot': 'Hot',
-                    'cold': 'Cold',
-                    'converted': 'Converted'
-                };
-                return statusMap[status] || 'New';
-            },
-            
-            formatDate(dateString) {
-                if (!dateString) return 'N/A';
-                const date = new Date(dateString);
-                return date.toLocaleDateString('en-US', {
-                    month: 'short',
-                    day: 'numeric',
-                    year: 'numeric'
-                });
-            },
-            
-            openAddLeadModal() {
-                // Placeholder for add lead modal
-                console.log('Opening add lead modal...');
-                alert('Add lead functionality coming soon');
-            },
-            
-            editLead(leadId) {
-                // Placeholder for edit lead functionality
-                console.log('Editing lead:', leadId);
-                alert('Edit lead functionality coming soon');
-            },
-            
-            deleteLead(leadId) {
-                // Placeholder for delete lead functionality
-                if (confirm('Are you sure you want to delete this lead?')) {
-                    console.log('Deleting lead:', leadId);
-                    alert('Delete lead functionality coming soon');
-                }
-            },
-            
-            showError(message) {
-                console.error(message);
-                // Placeholder for error display
-            }
-        };
-        
-        // Initialize leads when DOM is ready
         document.addEventListener('DOMContentLoaded', () => {
+            if (typeof feather !== 'undefined') feather.replace();
             window.AuthGuard = new AuthGuard();
-            Leads.init();
+
+            // Metrics update (real data or zero only)
+            document.getElementById('total-leads').textContent = 0;
+            document.getElementById('hot-leads').textContent = 0;
+            document.getElementById('warm-leads').textContent = 0;
+            document.getElementById('converted-leads').textContent = 0;
+
+            // Sidebar logout button logic
+            const logoutBtn = document.getElementById('logout-btn');
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', async () => {
+                    if (window.AuthGuard && window.AuthGuard.supabase) {
+                        await window.AuthGuard.supabase.auth.signOut();
+                    }
+                    window.location.href = '/index.html';
+                });
+            }
+
+            // Lead generation form logic
+            const form = document.getElementById('lead-criteria-form');
+            const leadsSection = document.getElementById('leads-list-section');
+            const leadsTableBody = document.getElementById('leads-table-body');
+            const leadsEmpty = document.getElementById('leads-empty');
+
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                // For demo, show an empty list (no example numbers)
+                leadsTableBody.innerHTML = '';
+                leadsSection.style.display = '';
+                leadsEmpty.style.display = 'block';
+            });
         });
     </script>
 </body>
