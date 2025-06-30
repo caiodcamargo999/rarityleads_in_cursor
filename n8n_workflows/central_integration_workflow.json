@@ -1,0 +1,659 @@
+{
+  "name": "Rarity Leads - Central Integration Workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "path": "webhook/lead-action",
+        "httpMethod": "POST",
+        "responseMode": "lastNode"
+      },
+      "name": "Webhook Trigger (from Frontend)",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [250, 450],
+      "id": "webhook-trigger"
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "action_type",
+              "value": "={{ $json.body.action || 'unknown' }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "Determine Action Type",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [450, 450],
+      "id": "determine-action"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{ $json.action_type }}",
+              "value2": "new_lead"
+            }
+          ]
+        }
+      },
+      "name": "If New Lead",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [650, 300],
+      "id": "if-new-lead"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{ $json.action_type }}",
+              "value2": "send_outreach"
+            }
+          ]
+        }
+      },
+      "name": "If Send Outreach",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [650, 450],
+      "id": "if-send-outreach"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{ $json.action_type }}",
+              "value2": "sync_crm"
+            }
+          ]
+        }
+      },
+      "name": "If Sync CRM",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [650, 600],
+      "id": "if-sync-crm"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{ $json.action_type }}",
+              "value2": "update_analytics"
+            }
+          ]
+        }
+      },
+      "name": "If Update Analytics",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [650, 750],
+      "id": "if-update-analytics"
+    },
+    {
+      "parameters": {
+        "url": "https://person.clearbit.com/v2/combined/find?email={{ $json.body.email }}",
+        "authentication": "headerAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer YOUR_CLEARBIT_API_KEY"
+            }
+          ]
+        }
+      },
+      "name": "Enrich Lead Data",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [900, 200],
+      "id": "enrich-lead"
+    },
+    {
+      "parameters": {
+        "resource": "row",
+        "operation": "create",
+        "projectId": "YOUR_SUPABASE_PROJECT_ID",
+        "table": "leads",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "email",
+              "fieldValue": "={{ $json.body.email }}"
+            },
+            {
+              "fieldId": "name",
+              "fieldValue": "={{ $json.body.name }}"
+            },
+            {
+              "fieldId": "company_name",
+              "fieldValue": "={{ $json.body.company_name }}"
+            },
+            {
+              "fieldId": "lead_status",
+              "fieldValue": "new"
+            }
+          ]
+        }
+      },
+      "name": "Insert Lead into Database",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [1150, 200],
+      "id": "insert-lead",
+      "credentials": {
+        "supabaseApi": {
+          "id": "YOUR_SUPABASE_CREDENTIAL_ID",
+          "name": "Supabase Account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "lead_score",
+              "value": "high"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "Score Lead",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [1400, 200],
+      "id": "score-lead"
+    },
+    {
+      "parameters": {
+        "resource": "row",
+        "operation": "get",
+        "projectId": "YOUR_SUPABASE_PROJECT_ID",
+        "table": "leads",
+        "id": "={{ $json.body.lead_id }}"
+      },
+      "name": "Fetch Lead Data",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [900, 450],
+      "id": "fetch-lead",
+      "credentials": {
+        "supabaseApi": {
+          "id": "YOUR_SUPABASE_CREDENTIAL_ID",
+          "name": "Supabase Account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "text",
+        "operation": "message",
+        "model": "gpt-4",
+        "prompt": "=Você é um SDR de alta performance da Rarity Agency. Escreva uma mensagem curta e personalizada para {{ $json.name }}, que trabalha na {{ $json.company_name }}. O objetivo é apenas iniciar uma conversa profissional, não vender nada ainda. A mensagem deve ser enviada via {{ $json.body.channel }}. Seja natural e humano."
+      },
+      "name": "Generate Personalized Message",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1,
+      "position": [1150, 450],
+      "id": "generate-message",
+      "credentials": {
+        "openAiApi": {
+          "id": "YOUR_OPENAI_CREDENTIAL_ID",
+          "name": "OpenAI Account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{ $json.body.channel }}",
+              "value2": "whatsapp"
+            }
+          ]
+        }
+      },
+      "name": "If WhatsApp Channel",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [1400, 350],
+      "id": "if-whatsapp"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{ $json.body.channel }}",
+              "value2": "linkedin"
+            }
+          ]
+        }
+      },
+      "name": "If LinkedIn Channel",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [1400, 450],
+      "id": "if-linkedin"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{ $json.body.channel }}",
+              "value2": "email"
+            }
+          ]
+        }
+      },
+      "name": "If Email Channel",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [1400, 550],
+      "id": "if-email"
+    },
+    {
+      "parameters": {
+        "url": "https://graph.facebook.com/v18.0/YOUR_PHONE_NUMBER_ID/messages",
+        "authentication": "headerAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer YOUR_WHATSAPP_ACCESS_TOKEN"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "messaging_product",
+              "value": "whatsapp"
+            },
+            {
+              "name": "to",
+              "value": "={{ $json.body.phone_number }}"
+            },
+            {
+              "name": "type",
+              "value": "text"
+            }
+          ]
+        },
+        "jsonParameters": true,
+        "body": "={\n  \"messaging_product\": \"whatsapp\",\n  \"to\": \"{{ $json.body.phone_number }}\",\n  \"type\": \"text\",\n  \"text\": {\n    \"body\": \"{{ $node['Generate Personalized Message'].json.choices[0].message.content }}\"\n  }\n}"
+      },
+      "name": "Send WhatsApp Message",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [1650, 350],
+      "id": "send-whatsapp"
+    },
+    {
+      "parameters": {
+        "fromEmail": "caio@rarityagency.io",
+        "toEmail": "={{ $json.body.email }}",
+        "subject": "Oportunidade de crescimento digital",
+        "text": "={{ $node['Generate Personalized Message'].json.choices[0].message.content }}"
+      },
+      "name": "Send Email",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2,
+      "position": [1650, 550],
+      "id": "send-email",
+      "credentials": {
+        "smtp": {
+          "id": "YOUR_SMTP_CREDENTIAL_ID",
+          "name": "SMTP Account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "https://your-linkedin-api-endpoint.com/send-message",
+        "sendBody": true,
+        "jsonParameters": true,
+        "body": "={\n  \"recipient_id\": \"{{ $json.body.linkedin_id }}\",\n  \"message\": \"{{ $node['Generate Personalized Message'].json.choices[0].message.content }}\"\n}"
+      },
+      "name": "Send LinkedIn Message",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [1650, 450],
+      "id": "send-linkedin"
+    },
+    {
+      "parameters": {
+        "resource": "row",
+        "operation": "update",
+        "projectId": "YOUR_SUPABASE_PROJECT_ID",
+        "table": "leads",
+        "id": "={{ $json.body.lead_id }}",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "lead_status",
+              "fieldValue": "outreached"
+            },
+            {
+              "fieldId": "last_outreach_channel",
+              "fieldValue": "={{ $json.body.channel }}"
+            }
+          ]
+        }
+      },
+      "name": "Update Lead Status",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [1900, 450],
+      "id": "update-lead-status",
+      "credentials": {
+        "supabaseApi": {
+          "id": "YOUR_SUPABASE_CREDENTIAL_ID",
+          "name": "Supabase Account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "https://api.hubapi.com/crm/v3/objects/contacts",
+        "authentication": "headerAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer YOUR_HUBSPOT_ACCESS_TOKEN"
+            }
+          ]
+        },
+        "sendBody": true,
+        "jsonParameters": true,
+        "body": "={\n  \"properties\": {\n    \"email\": \"{{ $json.body.email }}\",\n    \"firstname\": \"{{ $json.body.name }}\",\n    \"company\": \"{{ $json.body.company_name }}\"\n  }\n}"
+      },
+      "name": "Sync to HubSpot",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [900, 600],
+      "id": "sync-hubspot"
+    },
+    {
+      "parameters": {
+        "url": "https://googleads.googleapis.com/v14/customers/YOUR_CUSTOMER_ID/campaigns",
+        "authentication": "headerAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer YOUR_GOOGLE_ADS_TOKEN"
+            }
+          ]
+        }
+      },
+      "name": "Update Google Ads Analytics",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [900, 750],
+      "id": "update-google-ads"
+    },
+    {
+      "parameters": {
+        "url": "https://graph.facebook.com/v18.0/act_YOUR_AD_ACCOUNT_ID/insights",
+        "authentication": "headerAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer YOUR_FACEBOOK_ACCESS_TOKEN"
+            }
+          ]
+        }
+      },
+      "name": "Update Facebook Ads Analytics",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [1150, 750],
+      "id": "update-facebook-ads"
+    }
+  ],
+  "connections": {
+    "Webhook Trigger (from Frontend)": {
+      "main": [
+        [
+          {
+            "node": "Determine Action Type",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Determine Action Type": {
+      "main": [
+        [
+          {
+            "node": "If New Lead",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "If Send Outreach",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "If Sync CRM",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "If Update Analytics",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If New Lead": {
+      "main": [
+        [
+          {
+            "node": "Enrich Lead Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If Send Outreach": {
+      "main": [
+        [
+          {
+            "node": "Fetch Lead Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If Sync CRM": {
+      "main": [
+        [
+          {
+            "node": "Sync to HubSpot",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If Update Analytics": {
+      "main": [
+        [
+          {
+            "node": "Update Google Ads Analytics",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Enrich Lead Data": {
+      "main": [
+        [
+          {
+            "node": "Insert Lead into Database",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Insert Lead into Database": {
+      "main": [
+        [
+          {
+            "node": "Score Lead",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Lead Data": {
+      "main": [
+        [
+          {
+            "node": "Generate Personalized Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Personalized Message": {
+      "main": [
+        [
+          {
+            "node": "If WhatsApp Channel",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "If LinkedIn Channel",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "If Email Channel",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If WhatsApp Channel": {
+      "main": [
+        [
+          {
+            "node": "Send WhatsApp Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If LinkedIn Channel": {
+      "main": [
+        [
+          {
+            "node": "Send LinkedIn Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If Email Channel": {
+      "main": [
+        [
+          {
+            "node": "Send Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send WhatsApp Message": {
+      "main": [
+        [
+          {
+            "node": "Update Lead Status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send LinkedIn Message": {
+      "main": [
+        [
+          {
+            "node": "Update Lead Status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Email": {
+      "main": [
+        [
+          {
+            "node": "Update Lead Status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Google Ads Analytics": {
+      "main": [
+        [
+          {
+            "node": "Update Facebook Ads Analytics",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 1,
+  "updatedAt": "2025-01-01T00:00:00.000Z",
+  "versionId": "1"
+}

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rarity Leads - Dashboard</title>
+    <title data-i18n="dashboard.meta.title">Rarity Leads - Dashboard</title>
     <link rel="stylesheet" href="design-system.css">
     <link rel="stylesheet" href="dashboard.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -43,61 +43,25 @@
     <!-- Sidebar -->
     <aside class="sidebar" id="sidebar" role="navigation" aria-label="Main navigation">
         <div class="sidebar-header">
-            <img src="rarity-logo.jpg" alt="Rarity Leads Logo" class="sidebar-logo">
+            <img src="rarity-logo.jpg" alt="Rarity Leads Logo" class="sidebar-logo" data-i18n-attr="alt:common.brandLogoAlt">
             <button class="sidebar-close" id="sidebar-close" aria-label="Close menu">
                 <i data-feather="x"></i>
             </button>
         </div>
         <nav class="sidebar-nav">
             <ul>
-                <li><a href="dashboard.html" class="active">
-                    <i class="nav-icon" data-feather="home"></i>
-                    <span data-i18n="nav.dashboard">Dashboard</span>
-                </a></li>
-                <li><a href="prospecting-leads.html">
-                    <i class="nav-icon" data-feather="users"></i>
-                    <span data-i18n="nav.leads">Leads</span>
-                </a></li>
-                <li><a href="prospecting-companies.html">
-                    <i class="nav-icon" data-feather="briefcase"></i>
-                    <span data-i18n="nav.companies">Companies</span>
-                </a></li>
-                <li class="nav-section">
-                    <span class="nav-section-title" data-i18n="nav.outreach">Outreach</span>
-                </li>
-                <li><a href="approaching-whatsapp.html">
-                    <i class="nav-icon nav-icon-whatsapp" data-feather="message-circle"></i>
-                    <span data-i18n="nav.whatsapp">WhatsApp</span>
-                    <span class="status-dot connected"></span>
-                </a></li>
-                <li><a href="approaching-linkedin.html">
-                    <i class="nav-icon nav-icon-linkedin" data-feather="linkedin"></i>
-                    <span data-i18n="nav.linkedin">LinkedIn</span>
-                    <span class="status-dot connected"></span>
-                </a></li>
-                <li><a href="approaching-instagram.html">
-                    <i class="nav-icon nav-icon-instagram" data-feather="instagram"></i>
-                    <span data-i18n="nav.instagram">Instagram</span>
-                </a></li>
-                <li><a href="approaching-facebook.html">
-                    <i class="nav-icon nav-icon-facebook" data-feather="facebook"></i>
-                    <span data-i18n="nav.facebook">Facebook</span>
-                </a></li>
-                <li><a href="approaching-x.html">
-                    <i class="nav-icon nav-icon-twitter" data-feather="twitter"></i>
-                    <span data-i18n="nav.x">X</span>
-                </a></li>
-                <li class="nav-section">
-                    <span class="nav-section-title" data-i18n="nav.analyticsSupport">Analytics & Support</span>
-                </li>
-                <li><a href="analytics.html">
-                    <i class="nav-icon" data-feather="bar-chart-2"></i>
-                    <span data-i18n="nav.analytics">Analytics</span>
-                </a></li>
-                <li><a href="support.html">
-                    <i class="nav-icon" data-feather="help-circle"></i>
-                    <span data-i18n="nav.support">Support</span>
-                </a></li>
+                <li><a href="dashboard.html" class="active" data-i18n="nav.dashboard"><i class="nav-icon" data-feather="home"></i><span data-i18n="nav.dashboard">Dashboard</span></a></li>
+                <li><a href="prospecting-leads.html" data-i18n="nav.leads"><i class="nav-icon" data-feather="users"></i><span data-i18n="nav.leads">Leads</span></a></li>
+                <li><a href="prospecting-companies.html" data-i18n="nav.companies"><i class="nav-icon" data-feather="briefcase"></i><span data-i18n="nav.companies">Companies</span></a></li>
+                <li class="nav-section"><span class="nav-section-title" data-i18n="nav.outreach">Outreach</span></li>
+                <li><a href="approaching-whatsapp.html" data-i18n="nav.whatsapp"><i class="nav-icon nav-icon-whatsapp" data-feather="message-circle"></i><span data-i18n="nav.whatsapp">WhatsApp</span><span class="status-dot connected"></span></a></li>
+                <li><a href="approaching-linkedin.html" data-i18n="nav.linkedin"><i class="nav-icon nav-icon-linkedin" data-feather="linkedin"></i><span data-i18n="nav.linkedin">LinkedIn</span><span class="status-dot connected"></span></a></li>
+                <li><a href="approaching-instagram.html" data-i18n="nav.instagram"><i class="nav-icon nav-icon-instagram" data-feather="instagram"></i><span data-i18n="nav.instagram">Instagram</span></a></li>
+                <li><a href="approaching-facebook.html" data-i18n="nav.facebook"><i class="nav-icon nav-icon-facebook" data-feather="facebook"></i><span data-i18n="nav.facebook">Facebook</span></a></li>
+                <li><a href="approaching-x.html" data-i18n="nav.x"><i class="nav-icon nav-icon-twitter" data-feather="twitter"></i><span data-i18n="nav.x">X</span></a></li>
+                <li class="nav-section"><span class="nav-section-title" data-i18n="nav.analyticsSupport">Analytics & Support</span></li>
+                <li><a href="analytics.html" data-i18n="nav.analytics"><i class="nav-icon" data-feather="bar-chart-2"></i><span data-i18n="nav.analytics">Analytics</span></a></li>
+                <li><a href="support.html" data-i18n="nav.support"><i class="nav-icon" data-feather="help-circle"></i><span data-i18n="nav.support">Support</span></a></li>
             </ul>
         </nav>
     </aside>
@@ -110,27 +74,17 @@
                 <div class="action-content">
                     <h3><span data-i18n="dashboard.quickActions.campaignTitle">Create New Campaign</span></h3>
                     <p data-i18n="dashboard.quickActions.campaignSubtitle">Start converting leads with targeted outreach</p>
-                    <button class="btn btn-primary action-btn">
-                        <i data-feather="plus"></i>
-                        <span data-i18n="dashboard.quickActions.campaignButton">Start Campaign</span>
-                    </button>
+                    <button class="btn btn-primary action-btn"><i data-feather="plus"></i><span data-i18n="dashboard.quickActions.campaignButton">Start Campaign</span></button>
                 </div>
-                <div class="action-icon">
-                    <i data-feather="target"></i>
-                </div>
+                <div class="action-icon"><i data-feather="target"></i></div>
             </div>
             <div class="action-card secondary-action">
                 <div class="action-content">
                     <h3><span data-i18n="dashboard.quickActions.linkedinTitle">Connect LinkedIn</span></h3>
                     <p data-i18n="dashboard.quickActions.linkedinSubtitle">Expand your reach with professional networking</p>
-                    <button class="btn btn-outline action-btn">
-                        <i data-feather="link"></i>
-                        <span data-i18n="dashboard.quickActions.linkedinButton">Connect Now</span>
-                    </button>
+                    <button class="btn btn-gradient action-btn"><i data-feather="link"></i><span data-i18n="dashboard.quickActions.linkedinButton">Connect Now</span></button>
                 </div>
-                <div class="action-icon">
-                    <i data-feather="linkedin"></i>
-                </div>
+                <div class="action-icon"><i data-feather="linkedin"></i></div>
             </div>
         </section>
 
@@ -138,21 +92,14 @@
         <section class="metrics-grid">
             <div class="metric-card leads-card">
                 <div class="metric-header">
-                    <div class="metric-icon">
-                        <i data-feather="users"></i>
-                    </div>
-                    <div class="metric-trend positive">
-                        <i data-feather="trending-up"></i>
-                        <span>+12%</span>
-                    </div>
+                    <div class="metric-icon"><i data-feather="users"></i></div>
+                    <div class="metric-trend positive"><i data-feather="trending-up"></i><span>+12%</span></div>
                 </div>
                 <div class="metric-content">
                 <div class="metric-value" id="leads-count">0</div>
                     <div class="metric-label" data-i18n="dashboard.metrics.activeLeads">Active Leads</div>
                     <div class="metric-progress">
-                        <div class="progress-bar">
-                            <div class="progress-fill" style="width: 0%"></div>
-                        </div>
+                        <div class="progress-bar"><div class="progress-fill" style="width: 0%"></div></div>
                         <span class="progress-text" data-i18n="dashboard.metrics.monthlyGoal">0% of monthly goal</span>
                     </div>
                 </div>
@@ -160,21 +107,14 @@
 
             <div class="metric-card conversion-card">
                 <div class="metric-header">
-                    <div class="metric-icon">
-                        <i data-feather="target"></i>
-                    </div>
-                    <div class="metric-trend positive">
-                        <i data-feather="trending-up"></i>
-                        <span>+5.2%</span>
-                    </div>
+                    <div class="metric-icon"><i data-feather="target"></i></div>
+                    <div class="metric-trend positive"><i data-feather="trending-up"></i><span>+5.2%</span></div>
                 </div>
                 <div class="metric-content">
                     <div class="metric-value">0%</div>
                     <div class="metric-label" data-i18n="dashboard.metrics.conversionRate">Conversion Rate</div>
                     <div class="metric-progress">
-                        <div class="progress-bar">
-                            <div class="progress-fill" style="width: 0%"></div>
-                        </div>
+                        <div class="progress-bar"><div class="progress-fill" style="width: 0%"></div></div>
                         <span class="progress-text" data-i18n="dashboard.metrics.target">0% of target</span>
                     </div>
                 </div>
@@ -182,21 +122,14 @@
 
             <div class="metric-card campaigns-card">
                 <div class="metric-header">
-                    <div class="metric-icon">
-                        <i data-feather="bar-chart-2"></i>
-                    </div>
-                    <div class="metric-trend neutral">
-                        <i data-feather="minus"></i>
-                        <span>0%</span>
-                    </div>
+                    <div class="metric-icon"><i data-feather="bar-chart-2"></i></div>
+                    <div class="metric-trend neutral"><i data-feather="minus"></i><span>0%</span></div>
                 </div>
                 <div class="metric-content">
                     <div class="metric-value">0</div>
                     <div class="metric-label" data-i18n="dashboard.metrics.activeCampaigns">Active Campaigns</div>
                     <div class="metric-progress">
-                        <div class="progress-bar">
-                            <div class="progress-fill" style="width: 0%"></div>
-                        </div>
+                        <div class="progress-bar"><div class="progress-fill" style="width: 0%"></div></div>
                         <span class="progress-text" data-i18n="dashboard.metrics.capacity">0% capacity</span>
                     </div>
                 </div>
@@ -204,21 +137,14 @@
 
             <div class="metric-card revenue-card">
                 <div class="metric-header">
-                    <div class="metric-icon">
-                        <i data-feather="dollar-sign"></i>
-                    </div>
-                    <div class="metric-trend positive">
-                        <i data-feather="trending-up"></i>
-                        <span>+18%</span>
-                    </div>
+                    <div class="metric-icon"><i data-feather="dollar-sign"></i></div>
+                    <div class="metric-trend positive"><i data-feather="trending-up"></i><span>+18%</span></div>
                 </div>
                 <div class="metric-content">
                     <div class="metric-value">$0</div>
                     <div class="metric-label" data-i18n="dashboard.metrics.monthlyRevenue">Monthly Revenue</div>
                     <div class="metric-progress">
-                        <div class="progress-bar">
-                            <div class="progress-fill" style="width: 0%"></div>
-                        </div>
+                        <div class="progress-bar"><div class="progress-fill" style="width: 0%"></div></div>
                         <span class="progress-text" data-i18n="dashboard.metrics.target">0% of target</span>
                     </div>
                 </div>
@@ -239,85 +165,53 @@
             <div class="analytics-grid">
                 <div class="chart-card">
                     <h3><span data-i18n="dashboard.leadGenerationTrend.title">Lead Generation Trend</span></h3>
-                    <div class="chart-container">
-                        <canvas id="leadsChart"></canvas>
-                    </div>
+                    <div class="chart-container"><canvas id="leadsChart"></canvas></div>
                 </div>
                 
                 <div class="funnel-card">
                     <h3><span data-i18n="dashboard.conversionFunnel.title">Conversion Funnel</span></h3>
                     <div class="funnel-steps">
-                        <div class="funnel-step">
-                            <div class="step-label" data-i18n="dashboard.conversionFunnel.visitors">Visitors</div>
-                            <div class="step-value">0</div>
-                            <div class="step-bar">
-                                <div class="step-fill" style="width: 100%"></div>
-                            </div>
-                            <div class="step-percentage">100%</div>
-                        </div>
-                        <div class="funnel-step">
-                            <div class="step-label" data-i18n="dashboard.conversionFunnel.leads">Leads</div>
-                            <div class="step-value">0</div>
-                            <div class="step-bar">
-                                <div class="step-fill" style="width: 0%"></div>
-                            </div>
-                            <div class="step-percentage">0%</div>
-                        </div>
-                        <div class="funnel-step">
-                            <div class="step-label" data-i18n="dashboard.conversionFunnel.qualified">Qualified</div>
-                            <div class="step-value">0</div>
-                            <div class="step-bar">
-                                <div class="step-fill" style="width: 0%"></div>
-                            </div>
-                            <div class="step-percentage">0%</div>
-                        </div>
-                        <div class="funnel-step">
-                            <div class="step-label" data-i18n="dashboard.conversionFunnel.customers">Customers</div>
-                            <div class="step-value">0</div>
-                            <div class="step-bar">
-                                <div class="step-fill" style="width: 0%"></div>
-                            </div>
-                            <div class="step-percentage">0%</div>
-                        </div>
+                        <div class="funnel-step"><span data-i18n="dashboard.funnel.visitors">Visitors</span><span class="funnel-value">0</span></div>
+                        <div class="funnel-step"><span data-i18n="dashboard.funnel.leads">Leads</span><span class="funnel-value">0</span></div>
+                        <div class="funnel-step"><span data-i18n="dashboard.funnel.qualified">Qualified</span><span class="funnel-value">0</span></div>
+                        <div class="funnel-step"><span data-i18n="dashboard.funnel.customers">Customers</span><span class="funnel-value">0</span></div>
                     </div>
                 </div>
             </div>
         </section>
 
         <!-- Activity & Leads Section -->
-        <section class="activity-leads-section">
-            <div class="activity-feed">
-                <div class="section-header">
-                    <h3>Latest Activity</h3>
-                    <button class="view-all-btn">View all →</button>
-                </div>
-                <div class="activity-list"></div>
+        <section class="activity-section">
+            <div class="activity-feed-card action-card">
+                <h3 data-i18n="dashboard.latestActivity">Latest Activity</h3>
+                <button class="btn btn-gradient view-all-btn" data-i18n="dashboard.viewAll">View all →</button>
+                <!-- Activity feed content here -->
             </div>
-
-            <div class="recent-leads">
-                <div class="section-header">
-                    <h3>Recent Leads</h3>
-                    <div class="header-actions">
-                        <button class="icon-btn" title="Search">
-                            <i data-feather="search"></i>
-                        </button>
-                        <button class="icon-btn" title="Export">
-                            <i data-feather="download"></i>
-                        </button>
-                    </div>
-                </div>
-                <div class="leads-list"></div>
+            <div class="recent-leads-card action-card">
+                <h3 data-i18n="dashboard.recentLeads">Recent Leads</h3>
+                <button class="btn btn-gradient icon-btn" title="Search" data-i18n-title="dashboard.search"><i data-feather="search"></i></button>
+                <button class="btn btn-gradient icon-btn" title="Export" data-i18n-title="dashboard.export"><i data-feather="download"></i></button>
+                <!-- Recent leads content here -->
             </div>
         </section>
 
         <!-- Active Campaigns -->
         <section class="campaigns-section">
-            <div class="section-header">
-                <h3>Active Campaigns</h3>
-                <button class="view-all-btn">View All</button>
-            </div>
-            <div class="campaigns-grid"></div>
-        </div>
+            <h3 data-i18n="dashboard.activeCampaigns">Active Campaigns</h3>
+            <table class="campaigns-table">
+                <thead>
+                    <tr>
+                        <th data-i18n="dashboard.table.campaign">Campaign</th>
+                        <th data-i18n="dashboard.table.status">Status</th>
+                        <th data-i18n="dashboard.table.leads">Leads</th>
+                        <th data-i18n="dashboard.table.conversion">Conversion</th>
+                        <th data-i18n="dashboard.table.actions">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Table rows dynamically generated -->
+                </tbody>
+            </table>
         </section>
     </main>
 
