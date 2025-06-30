@@ -4,10 +4,8 @@
     {
       "parameters": {
         "path": "webhook/lead-action",
-        "options": {
-          "httpMethod": "POST",
-          "responseMode": "lastNode"
-        }
+        "httpMethod": "POST",
+        "responseMode": "lastNode"
       },
       "name": "Webhook Trigger (from Frontend)",
       "type": "n8n-nodes-base.webhook",
