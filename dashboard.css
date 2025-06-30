@@ -190,11 +190,11 @@ body {
     border: none;
     border-radius: 999px;
     padding: 10px 22px;
-    font-size: 0.98rem;
-    background: rgba(10,10,35,0.92);
+    font-size: 0.96rem;
+    background: #181825;
     color: var(--text-primary);
     font-family: 'Inter', 'BentoSans', 'Menlo', 'Monaco', 'Consolas', 'Liberation Mono', monospace;
-    font-weight: 500;
+    font-weight: 400;
     text-transform: uppercase;
     letter-spacing: 0.03em;
     text-decoration: none;
@@ -212,7 +212,7 @@ body {
 }
 
 .btn:hover, .btn-primary:hover, .btn-gradient:hover, .btn-large:hover {
-    background: rgba(24,24,37,0.98);
+    background: #232136;
     color: var(--white);
     box-shadow: 0 2px 8px var(--glass-morphism);
     filter: brightness(1.01);
@@ -220,7 +220,7 @@ body {
 }
 
 .btn:active, .btn-primary:active, .btn-gradient:active, .btn-large:active {
-    background: rgba(10,10,35,0.92);
+    background: #181825;
     color: var(--text-primary);
     box-shadow: 0 1px 4px var(--glass-morphism);
     transform: scale(0.98);
