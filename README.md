@@ -164,4 +164,6 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 - Design inspired by modern SaaS platforms
 - Built for no-code compatibility
-- Optimized for performance and accessibility 
+- Optimized for performance and accessibility
+
+- ![CodeRabbit Pull Request Reviews](https://img.shields.io/coderabbit/prs/github/caiodcamargo999/rarityleads_in_cursor_2?utm_source=oss&utm_medium=github&utm_campaign=caiodcamargo999%2Frarityleads_in_cursor_2&labelColor=171717&color=FF570A&link=https%3A%2F%2Fcoderabbit.ai&label=CodeRabbit+Reviews)
