@@ -32,7 +32,6 @@
       "parameters": {
         "url": "https://api.clearbit.com/v2/companies/find?domain={{ $json.body.company_domain }}",
         "authentication": "headerAuth",
-        "options": {},
         "headerAuth": {
           "headerName": "Authorization",
           "headerValue": "Bearer SUA_CHAVE_DE_API_CLEARBIT_APOLLO"
@@ -181,8 +180,7 @@
               "value1": "={{ $json.body.channel }}",
               "value2": "whatsapp"
             }
-          ],
-          "options": {}
+          ]
         }
       },
       "name": "If WhatsApp",
@@ -224,8 +222,7 @@
               "value1": "={{ $json.body.channel }}",
               "value2": "linkedin"
             }
-          ],
-          "options": {}
+          ]
         }
       },
       "name": "If LinkedIn",
@@ -273,8 +270,7 @@
               "value1": "={{ $json.body.channel }}",
               "value2": "instagram"
             }
-          ],
-          "options": {}
+          ]
         }
       },
       "name": "If Instagram",
@@ -316,8 +312,7 @@
               "value1": "={{ $json.body.channel }}",
               "value2": "x"
             }
-          ],
-          "options": {}
+          ]
         }
       },
       "name": "If X (Twitter)",
@@ -432,8 +427,7 @@
     {
       "parameters": {
         "url": "https://ads.google.com/api/v1/customers/{{$json.body.ad_account_id}}/campaigns",
-        "authentication": "bearer",
-        "options": {}
+        "authentication": "bearer"
       },
       "name": "Update Ads API (Google Ads Stub)",
       "type": "n8n-nodes-base.httpRequest",
@@ -450,8 +444,7 @@
     {
       "parameters": {
         "url": "https://graph.facebook.com/v18.0/{{$json.body.ad_account_id}}/insights",
-        "authentication": "bearer",
-        "options": {}
+        "authentication": "bearer"
       },
       "name": "Update Ads API (Facebook Ads Stub)",
       "type": "n8n-nodes-base.httpRequest",
@@ -566,3 +559,4 @@
     }
   }
 }
+
