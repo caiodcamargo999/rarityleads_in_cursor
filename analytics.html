@@ -19,95 +19,105 @@
     <script src="https://unpkg.com/feather-icons"></script>
 </head>
 <body class="dark-bg">
-    <div class="dashboard-layout">
-        <aside class="sidebar" role="navigation" aria-label="Main navigation">
-            <div class="sidebar-logo"><img src="rarity-logo.jpg" alt="Rarity Leads Logo" style="height:40px;width:auto;object-fit:contain;display:block;margin:0 auto;"></div>
+    <div class="dashboard-container">
+        <aside class="sidebar" id="sidebar" role="navigation" aria-label="Main navigation">
+            <div class="sidebar-header">
+                <img src="rarity-logo.jpg" alt="Rarity Leads Logo" class="sidebar-logo" data-i18n-attr="alt:common.brandLogoAlt">
+            </div>
             <nav class="sidebar-nav">
                 <ul>
-                    <li><a href="dashboard.html" data-i18n="nav.dashboard">Dashboard</a></li>
-                    <li><a href="prospecting-leads.html" data-i18n="nav.leads">Leads</a></li>
-                    <li><a href="prospecting-companies.html" data-i18n="nav.companies">Companies</a></li>
-                    <li><a href="approaching-whatsapp.html" data-i18n="nav.whatsapp">WhatsApp</a></li>
-                    <li><a href="approaching-linkedin.html" data-i18n="nav.linkedin">LinkedIn</a></li>
-                    <li><a href="approaching-instagram.html" data-i18n="nav.instagram">Instagram</a></li>
-                    <li><a href="approaching-facebook.html" data-i18n="nav.facebook">Facebook</a></li>
-                    <li><a href="approaching-x.html" data-i18n="nav.x">X</a></li>
-                    <li><a href="analytics.html" class="active" data-i18n="nav.analytics">Analytics</a></li>
-                    <li><a href="support.html" data-i18n="nav.support">Support</a></li>
+                    <li><a href="dashboard.html" data-i18n="nav.dashboard"><i class="nav-icon" data-feather="home"></i><span data-i18n="nav.dashboard">Dashboard</span></a></li>
+                    <li><a href="prospecting-leads.html" data-i18n="nav.leads"><i class="nav-icon" data-feather="users"></i><span data-i18n="nav.leads">Leads</span></a></li>
+                    <li><a href="prospecting-companies.html" data-i18n="nav.companies"><i class="nav-icon" data-feather="briefcase"></i><span data-i18n="nav.companies">Companies</span></a></li>
+                    <li class="nav-section"><span class="nav-section-title" data-i18n="nav.outreach">Outreach</span></li>
+                    <li><a href="approaching-whatsapp.html" data-i18n="nav.whatsapp"><i class="nav-icon nav-icon-whatsapp" data-feather="message-circle"></i><span data-i18n="nav.whatsapp">WhatsApp</span></a></li>
+                    <li><a href="approaching-linkedin.html" data-i18n="nav.linkedin"><i class="nav-icon nav-icon-linkedin" data-feather="linkedin"></i><span data-i18n="nav.linkedin">LinkedIn</span></a></li>
+                    <li><a href="approaching-instagram.html" data-i18n="nav.instagram"><i class="nav-icon nav-icon-instagram" data-feather="instagram"></i><span data-i18n="nav.instagram">Instagram</span></a></li>
+                    <li><a href="approaching-facebook.html" data-i18n="nav.facebook"><i class="nav-icon nav-icon-facebook" data-feather="facebook"></i><span data-i18n="nav.facebook">Facebook</span></a></li>
+                    <li><a href="approaching-x.html" data-i18n="nav.x"><i class="nav-icon nav-icon-twitter" data-feather="twitter"></i><span data-i18n="nav.x">X</span></a></li>
+                    <li class="nav-section"><span class="nav-section-title" data-i18n="nav.analyticsSupport">Analytics & Support</span></li>
+                    <li><a href="analytics.html" class="active" data-i18n="nav.analytics"><i class="nav-icon" data-feather="bar-chart-2"></i><span data-i18n="nav.analytics">Analytics</span></a></li>
+                    <li><a href="support.html" data-i18n="nav.support"><i class="nav-icon" data-feather="help-circle"></i><span data-i18n="nav.support">Support</span></a></li>
                 </ul>
             </nav>
-            <div class="sidebar-footer">
-                <button class="logout-btn" id="logout-btn" data-i18n="auth.logout">Logout</button>
+            <div class="sidebar-logout">
+                <button class="btn btn-primary tech-btn sidebar-logout-btn" id="logout-btn" data-i18n="common.logout">Logout</button>
             </div>
         </aside>
         <main class="main-content" role="main">
-            <div class="analytics-header">
-                <div>
-                    <h1 class="analytics-title" data-i18n="analytics.title">Analytics Dashboard</h1>
-                    <p class="analytics-subtitle" data-i18n="analytics.subtitle">Monitor your lead generation performance and campaign effectiveness with comprehensive insights</p>
+            <header class="main-header motion-fade-in">
+                <div class="header-left">
+                    <h1 class="dashboard-title" data-i18n="analytics.title">Analytics</h1>
                 </div>
-                <button class="export-btn" id="export-btn" data-i18n="analytics.exportData">
+                <button class="sidebar-toggle-btn btn btn-gradient motion-pop" id="sidebar-toggle" aria-label="Open menu" style="display:none;"><i data-feather="menu"></i></button>
+            </header>
+            <div class="analytics-header motion-fade-in">
+                <div>
+                    <h2 class="analytics-title" data-i18n="analytics.title">Analytics Dashboard</h2>
+                    <p class="analytics-subtitle" data-i18n="analytics.subtitle">Performance & campaign insights</p>
+                </div>
+                <button class="export-btn btn btn-gradient motion-pop" id="export-btn" data-i18n="analytics.exportData">
                     <i class="fas fa-download"></i>
-                    <span data-i18n="analytics.exportData">Export Data</span>
+                    <span data-i18n="analytics.exportData">Export</span>
                 </button>
             </div>
             <div class="metrics-grid" role="region" aria-label="Analytics metrics">
-                <div class="metric-card" role="article">
+                <div class="metric-card motion-fade-in" role="article">
                     <div class="metric-label" data-i18n="analytics.metrics.leadsGenerated">Leads Generated</div>
-                    <div class="metric-value" id="leads-count" aria-live="polite">0</div>
+                    <div class="metric-value metric-number" id="leads-count" aria-live="polite">0</div>
                     <div class="metric-trend" data-i18n="analytics.metrics.leadsGenerated.trend">+0% from last month</div>
                 </div>
-                <div class="metric-card" role="article">
+                <div class="metric-card motion-fade-in" role="article">
                     <div class="metric-label" data-i18n="analytics.metrics.conversionRate">Conversion Rate</div>
-                    <div class="metric-value" id="conversion-rate" aria-live="polite">0%</div>
+                    <div class="metric-value metric-number" id="conversion-rate" aria-live="polite">0%</div>
                     <div class="metric-trend" data-i18n="analytics.metrics.conversionRate.trend">+0% from last month</div>
                 </div>
-                <div class="metric-card" role="article">
+                <div class="metric-card motion-fade-in" role="article">
                     <div class="metric-label" data-i18n="analytics.metrics.activeCampaigns">Active Campaigns</div>
-                    <div class="metric-value" id="active-campaigns" aria-live="polite">0</div>
+                    <div class="metric-value metric-number" id="active-campaigns" aria-live="polite">0</div>
                     <div class="metric-trend neutral" data-i18n="analytics.metrics.activeCampaigns.trend">No variation</div>
                 </div>
-                <div class="metric-card" role="article">
+                <div class="metric-card motion-fade-in" role="article">
                     <div class="metric-label" data-i18n="analytics.metrics.revenue">Revenue</div>
-                    <div class="metric-value" id="revenue-amount" aria-live="polite">$0</div>
+                    <div class="metric-value metric-number" id="revenue-amount" aria-live="polite">$0</div>
                     <div class="metric-trend" data-i18n="analytics.metrics.revenue.trend">+0% from last month</div>
                 </div>
             </div>
-            <div class="tabs" role="tablist" aria-label="Analytics views">
-                <button class="tab active" id="tab-overview" role="tab" aria-selected="true" aria-controls="overview-view" data-i18n="analytics.tabs.overview">Overview</button>
-                <button class="tab" id="tab-funnel" role="tab" aria-selected="false" aria-controls="funnel-view" data-i18n="analytics.tabs.funnel">Funnel</button>
-                <button class="tab" id="tab-sources" role="tab" aria-selected="false" aria-controls="sources-view" data-i18n="analytics.tabs.sources">Sources</button>
-                <button class="tab" id="tab-revenue" role="tab" aria-selected="false" aria-controls="revenue-view" data-i18n="analytics.tabs.revenue">Revenue</button>
+            <div class="tabs motion-fade-in" role="tablist" aria-label="Analytics views">
+                <button class="tab active motion-pop" id="tab-overview" role="tab" aria-selected="true" aria-controls="overview-view" data-i18n="analytics.tabs.overview">Overview</button>
+                <button class="tab motion-pop" id="tab-funnel" role="tab" aria-selected="false" aria-controls="funnel-view" data-i18n="analytics.tabs.funnel">Funnel</button>
+                <button class="tab motion-pop" id="tab-sources" role="tab" aria-selected="false" aria-controls="sources-view" data-i18n="analytics.tabs.sources">Sources</button>
+                <button class="tab motion-pop" id="tab-revenue" role="tab" aria-selected="false" aria-controls="revenue-view" data-i18n="analytics.tabs.revenue">Revenue</button>
             </div>
             <div class="tab-content" id="tab-content">
                 <div id="overview-view" role="tabpanel" aria-labelledby="tab-overview">
-                    <div class="period-selector">
-                        <button class="period-btn" data-period="7" data-i18n="analytics.period.last7days">Last 7 days</button>
-                        <button class="period-btn active" data-period="30" data-i18n="analytics.period.last30days">Last 30 days</button>
-                        <button class="period-btn" data-period="90" data-i18n="analytics.period.last90days">Last 90 days</button>
+                    <div class="period-selector motion-fade-in">
+                        <button class="period-btn btn btn-gradient motion-pop" data-period="7" data-i18n="analytics.period.last7days">7d</button>
+                        <button class="period-btn btn btn-gradient motion-pop active" data-period="30" data-i18n="analytics.period.last30days">30d</button>
+                        <button class="period-btn btn btn-gradient motion-pop" data-period="90" data-i18n="analytics.period.last90days">90d</button>
                     </div>
-                    <div class="chart-container">
+                    <div class="chart-container chart-card motion-fade-in">
                         <canvas id="overview-chart" aria-label="Overview chart"></canvas>
                     </div>
                 </div>
                 <div id="funnel-view" role="tabpanel" aria-labelledby="tab-funnel" style="display:none;">
                     <h3 data-i18n="analytics.funnel.title">Acquisition Funnel</h3>
                     <p data-i18n="analytics.funnel.description">Track your lead journey from first touch to conversion</p>
-                    <div class="chart-container">
+                    <div class="chart-container chart-card motion-fade-in">
                         <canvas id="funnel-chart" aria-label="Funnel chart"></canvas>
                     </div>
                 </div>
                 <div id="sources-view" role="tabpanel" aria-labelledby="tab-sources" style="display:none;">
                     <h3 data-i18n="analytics.sources.title">Lead Sources</h3>
                     <p data-i18n="analytics.sources.description">Identify your most effective lead generation channels</p>
-                    <div class="chart-container">
+                    <div class="chart-container chart-card motion-fade-in">
                         <canvas id="sources-chart" aria-label="Sources chart"></canvas>
                     </div>
                 </div>
                 <div id="revenue-view" role="tabpanel" aria-labelledby="tab-revenue" style="display:none;">
                     <h3 data-i18n="analytics.revenue.title">Revenue Trends</h3>
                     <p data-i18n="analytics.revenue.description">Monitor your revenue growth and patterns</p>
-                    <div class="chart-container">
+                    <div class="chart-container chart-card motion-fade-in">
                         <canvas id="revenue-chart" aria-label="Revenue chart"></canvas>
                     </div>
                 </div>
@@ -441,6 +451,17 @@
             window.AuthGuard = new AuthGuard();
             Analytics.init();
         });
+
+        // Sidebar mobile toggle
+        const sidebar = document.getElementById('sidebar');
+        const sidebarToggle = document.getElementById('sidebar-toggle');
+        function handleSidebarToggle() {
+            sidebar.classList.toggle('open');
+        }
+        if (sidebarToggle) {
+            sidebarToggle.style.display = 'inline-flex';
+            sidebarToggle.addEventListener('click', handleSidebarToggle);
+        }
     </script>
 </body>
 </html>

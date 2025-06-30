@@ -94,40 +94,37 @@ body, html {
 
 /* Sounext.xyz-inspired button and motion styles */
 .btn-primary, .btn-google {
-    display: inline-block;
-    font-family: var(--font-primary), var(--font-secondary);
-    font-weight: 700;
-    border: 2px solid #8B5CF6;
-    border-radius: 999px;
-    padding: 16px 40px;
-    font-size: 1.08rem;
-    background: linear-gradient(135deg, #181825 0%, #232136 100%);
+    background: rgba(10,10,35,0.92);
     color: #fff;
+    font-family: 'Inter', 'BentoSans', 'Menlo', 'Monaco', 'Consolas', 'Liberation Mono', monospace;
+    font-weight: 500;
+    border: 2px solid #232136;
+    border-radius: 999px;
+    padding: 12px 22px;
+    font-size: 0.98rem;
     text-transform: uppercase;
-    letter-spacing: 0.04em;
-    text-decoration: none;
-    box-shadow: 0 2px 8px rgba(139,92,246,0.10);
+    letter-spacing: 0.03em;
+    box-shadow: 0 1px 4px rgba(36,36,54,0.10);
     cursor: pointer;
-    transition: background 0.3s cubic-bezier(.4,0,.2,1), box-shadow 0.3s cubic-bezier(.4,0,.2,1), border-color 0.2s, color 0.2s, transform 0.18s cubic-bezier(.4,0,.2,1);
+    transition: background 0.2s, color 0.2s, box-shadow 0.2s, transform 0.18s cubic-bezier(.4,0,.2,1);
     outline: none;
-    position: relative;
-    overflow: hidden;
-    margin-bottom: 16px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5em;
 }
 
-.btn-primary:hover, .btn-primary:focus, .btn-google:hover, .btn-google:focus {
-    background: linear-gradient(135deg, #232136 0%, #6D28D9 100%);
-    border-color: #8B5CF6;
+.btn-primary:hover, .btn-google:hover {
+    background: rgba(24,24,37,0.98);
     color: #fff;
-    box-shadow: 0 0 16px #8B5CF6, 0 2px 8px rgba(139,92,246,0.10);
-    transform: translateY(-2px) scale(1.04);
+    box-shadow: 0 2px 8px rgba(36,36,54,0.12);
+    filter: brightness(1.01);
+    transform: scale(1.025);
 }
 
 .btn-primary:active, .btn-google:active {
-    background: #181825;
-    border-color: #6D28D9;
+    background: rgba(10,10,35,0.92);
     color: #fff;
-    box-shadow: 0 2px 8px rgba(139,92,246,0.10);
+    box-shadow: 0 1px 4px rgba(36,36,54,0.10);
     transform: scale(0.98);
 }
 
@@ -319,4 +316,114 @@ body, html {
     color: #fff;
     border-color: #8B5CF6;
     box-shadow: 0 0 12px #8B5CF6;
+}
+
+.main-header {
+    padding: 0 32px;
+    border-bottom: 1px solid var(--border-color);
+    background: var(--slate);
+    height: 72px;
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+    z-index: 10;
+}
+
+.main-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+    gap: 0;
+}
+
+.logo {
+    font-size: 1.7rem;
+    font-weight: 800;
+    color: var(--accent-purple);
+    letter-spacing: -1px;
+    font-family: var(--font-primary), var(--font-secondary);
+    display: flex;
+    align-items: center;
+    height: 72px;
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    height: 72px;
+}
+
+.nav-links a, .nav-links .btn, .nav-links .btn-primary, .nav-links .btn-large {
+    display: flex;
+    align-items: center;
+    height: 44px;
+    padding-top: 0;
+    padding-bottom: 0;
+    box-sizing: border-box;
+}
+
+.language-selector {
+    display: flex;
+    align-items: center;
+    height: 44px;
+}
+
+.auth-main {
+    flex-grow: 1;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 32px;
+    margin-top: 32px;
+}
+
+.auth-container {
+    margin-top: 32px;
+}
+
+body, .main-header, .auth-container, .auth-main, .auth-tab, .btn-primary, .btn-google {
+    font-family: 'Inter', 'BentoSans', 'Menlo', 'Monaco', 'Consolas', 'Liberation Mono', monospace !important;
+}
+
+@media (max-width: 900px) {
+    .main-header {
+        padding: 0 16px;
+        height: 64px;
+    }
+    .main-nav {
+        max-width: 100%;
+    }
+    .logo, .nav-links {
+        height: 64px;
+    }
+    .nav-links {
+        gap: 16px;
+    }
+}
+@media (max-width: 600px) {
+    .main-header {
+        padding: 0 8px;
+        height: 56px;
+    }
+    .logo, .nav-links {
+        height: 56px;
+    }
+    .nav-links {
+        gap: 10px;
+    }
+    .main-nav {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .auth-main {
+        padding: 16px;
+        margin-top: 16px;
+    }
+    .auth-container {
+        margin-top: 16px;
+    }
 }

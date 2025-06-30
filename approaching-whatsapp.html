@@ -35,62 +35,62 @@
                     <li><a href="support.html" data-i18n="nav.support">Support</a></li>
                 </ul>
             </nav>
-            <div class="sidebar-footer">
-                <button class="logout-btn" id="logout-btn" data-i18n="auth.logout">Logout</button>
+            <div class="sidebar-logout">
+                <button class="btn btn-primary tech-btn sidebar-logout-btn" id="logout-btn" data-i18n="auth.logout">Logout</button>
             </div>
         </aside>
         <main class="main-content" role="main">
-            <div class="whatsapp-header">
+            <div class="whatsapp-header motion-fade-in">
                 <div>
                     <div class="whatsapp-title" data-i18n="whatsapp.title">WhatsApp Automation</div>
-                    <div class="whatsapp-subtitle" data-i18n="whatsapp.subtitle">Automate your WhatsApp outreach with AI-powered messaging and achieve high response rates</div>
+                    <div class="whatsapp-subtitle" data-i18n="whatsapp.subtitle">AI-powered WhatsApp outreach. High response, zero manual work.</div>
                 </div>
                 <div style="display: flex; gap: 12px;">
-                    <button class="qr-btn" id="qr-btn" data-i18n="whatsapp.connectQR">
+                    <button class="btn btn-gradient motion-pop" id="qr-btn" data-i18n="whatsapp.connectQR">
                         <i class="fas fa-qrcode"></i>
                         <span data-i18n="whatsapp.connectQR">Connect QR</span>
                     </button>
-                    <button class="new-campaign-btn" id="new-campaign-btn" data-i18n="whatsapp.newCampaign">
+                    <button class="btn btn-gradient motion-pop" id="new-campaign-btn" data-i18n="whatsapp.newCampaign">
                         <i class="fas fa-plus"></i>
                         <span data-i18n="whatsapp.newCampaign">New Campaign</span>
                     </button>
                 </div>
             </div>
             <div class="metrics-grid" role="region" aria-label="WhatsApp metrics">
-                <div class="metric-card" role="article">
+                <div class="metric-card motion-fade-in" role="article">
                     <div class="metric-icon messages">
                         <i class="fab fa-whatsapp"></i>
                     </div>
-                    <div class="metric-value" id="messages-sent" aria-live="polite">0</div>
+                    <div class="metric-value metric-number" id="messages-sent" aria-live="polite">0</div>
                     <div class="metric-label" data-i18n="whatsapp.metrics.messagesSent">Messages Sent</div>
                 </div>
-                <div class="metric-card" role="article">
+                <div class="metric-card motion-fade-in" role="article">
                     <div class="metric-icon response">
                         <i class="fas fa-reply"></i>
                     </div>
-                    <div class="metric-value" id="response-rate" aria-live="polite">94%</div>
+                    <div class="metric-value metric-number" id="response-rate" aria-live="polite">94%</div>
                     <div class="metric-label" data-i18n="whatsapp.metrics.responseRate">Response Rate</div>
                 </div>
-                <div class="metric-card" role="article">
+                <div class="metric-card motion-fade-in" role="article">
                     <div class="metric-icon campaigns">
                         <i class="fas fa-bullhorn"></i>
                     </div>
-                    <div class="metric-value" id="active-campaigns" aria-live="polite">0</div>
+                    <div class="metric-value metric-number" id="active-campaigns" aria-live="polite">0</div>
                     <div class="metric-label" data-i18n="whatsapp.metrics.activeCampaigns">Active Campaigns</div>
                 </div>
-                <div class="metric-card" role="article">
+                <div class="metric-card motion-fade-in" role="article">
                     <div class="metric-icon conversions">
                         <i class="fas fa-handshake"></i>
                     </div>
-                    <div class="metric-value" id="conversions" aria-live="polite">0</div>
+                    <div class="metric-value metric-number" id="conversions" aria-live="polite">0</div>
                     <div class="metric-label" data-i18n="whatsapp.metrics.conversions">Conversions</div>
                 </div>
             </div>
-            <div class="tabs" role="tablist" aria-label="WhatsApp views">
-                <button class="tab active" id="tab-campaigns" role="tab" aria-selected="true" aria-controls="campaigns-view" data-i18n="whatsapp.tabs.campaigns">Campaigns</button>
-                <button class="tab" id="tab-templates" role="tab" aria-selected="false" aria-controls="templates-view" data-i18n="whatsapp.tabs.templates">Templates</button>
-                <button class="tab" id="tab-analytics" role="tab" aria-selected="false" aria-controls="analytics-view" data-i18n="whatsapp.tabs.analytics">Analytics</button>
-                <button class="tab" id="tab-settings" role="tab" aria-selected="false" aria-controls="settings-view" data-i18n="whatsapp.tabs.settings">Settings</button>
+            <div class="tabs motion-fade-in" role="tablist" aria-label="WhatsApp views">
+                <button class="tab active motion-pop" id="tab-campaigns" role="tab" aria-selected="true" aria-controls="campaigns-view" data-i18n="whatsapp.tabs.campaigns">Campaigns</button>
+                <button class="tab motion-pop" id="tab-templates" role="tab" aria-selected="false" aria-controls="templates-view" data-i18n="whatsapp.tabs.templates">Templates</button>
+                <button class="tab motion-pop" id="tab-analytics" role="tab" aria-selected="false" aria-controls="analytics-view" data-i18n="whatsapp.tabs.analytics">Analytics</button>
+                <button class="tab motion-pop" id="tab-settings" role="tab" aria-selected="false" aria-controls="settings-view" data-i18n="whatsapp.tabs.settings">Settings</button>
             </div>
             <div class="tab-content" id="tab-content">
                 <div id="campaigns-view" role="tabpanel" aria-labelledby="tab-campaigns">

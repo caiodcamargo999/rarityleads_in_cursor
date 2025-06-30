@@ -11,7 +11,7 @@
 body {
     background-color: var(--background-color);
     color: var(--text-color);
-    font-family: 'Inter', sans-serif;
+    font-family: 'Inter', 'BentoSans', 'Menlo', 'Monaco', 'Consolas', 'Liberation Mono', monospace !important;
     margin: 0;
 }
 
@@ -388,4 +388,61 @@ body {
 @keyframes fadeInUp {
   from { opacity: 0; transform: translateY(24px); }
   to { opacity: 1; transform: translateY(0); }
+}
+
+body, .btn, .btn-primary, .btn-gradient, .tab, .sidebar-nav a, .main-header, .dashboard-title, .metric-label, .metric-value, .metric-number {
+    font-family: 'Inter', 'BentoSans', 'Menlo', 'Monaco', 'Consolas', 'Liberation Mono', monospace !important;
+}
+
+.btn, .btn-primary, .btn-gradient, .btn-google {
+    background: rgba(10,10,35,0.92);
+    color: #fff;
+    font-weight: 500;
+    border-radius: 999px;
+    padding: 10px 22px;
+    font-size: 0.98rem;
+    letter-spacing: 0.03em;
+    box-shadow: 0 1px 4px rgba(36,36,54,0.10);
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s, box-shadow 0.2s, transform 0.18s cubic-bezier(.4,0,.2,1);
+    outline: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5em;
+}
+
+.btn:hover, .btn-primary:hover, .btn-gradient:hover, .btn-google:hover {
+    background: rgba(24,24,37,0.98);
+    color: #fff;
+    box-shadow: 0 2px 8px rgba(36,36,54,0.12);
+    filter: brightness(1.01);
+    transform: scale(1.025);
+}
+
+.btn:active, .btn-primary:active, .btn-gradient:active, .btn-google:active {
+    background: rgba(10,10,35,0.92);
+    color: #fff;
+    box-shadow: 0 1px 4px rgba(36,36,54,0.10);
+    transform: scale(0.98);
+}
+
+.tab {
+    background: rgba(10,10,35,0.92);
+    color: #A1A1AA;
+    font-family: 'Inter', 'BentoSans', 'Menlo', 'Monaco', 'Consolas', 'Liberation Mono', monospace !important;
+    font-weight: 500;
+    border-radius: 999px;
+    padding: 10px 22px;
+    font-size: 0.98rem;
+    letter-spacing: 0.03em;
+    border: 2px solid #8B5CF6;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s, border-color 0.2s;
+    outline: none;
+}
+
+.tab.active, .tab:focus {
+    background: rgba(24,24,37,0.98);
+    color: #fff;
+    border-color: #8B5CF6;
 }

@@ -10,8 +10,8 @@
     --border-color: #393552;
     --gradient-primary: linear-gradient(135deg, #0A0A23 0%, #232136 40%, #8B5CF6 100%);
     --gradient-glass: linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.12) 100%);
-    --font-primary: 'Inter', sans-serif;
-    --font-secondary: 'BentoSans', sans-serif;
+    --font-primary: 'Inter', 'BentoSans', 'Menlo', 'Monaco', 'Consolas', 'Liberation Mono', monospace;
+    --font-secondary: 'BentoSans', 'Menlo', 'Monaco', 'Consolas', 'Liberation Mono', monospace;
 }
 
 body {
@@ -23,6 +23,10 @@ body {
     -moz-osx-font-smoothing: grayscale;
 }
 
+body, .btn, .btn-gradient, .tab, .btn-google {
+    font-family: var(--font-primary) !important;
+}
+
 .glass-card {
     background: var(--glass-morphism);
     backdrop-filter: blur(10px);
@@ -31,38 +35,55 @@ body {
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
 }
 
-.btn-gradient {
-    background: var(--gradient-primary);
+.btn, .btn-gradient, .btn-google {
+    background: rgba(10,10,35,0.92);
     color: var(--text-primary);
-    border: none;
-    border-radius: 8px;
-    padding: 12px 24px;
-    font-weight: 600;
+    font-weight: 500;
+    border-radius: 999px;
+    padding: 10px 22px;
+    font-size: 0.98rem;
+    letter-spacing: 0.03em;
+    box-shadow: 0 1px 4px var(--glass-morphism);
     cursor: pointer;
-    transition: transform 0.2s, box-shadow 0.2s;
+    transition: background 0.2s, color 0.2s, box-shadow 0.2s, transform 0.18s cubic-bezier(.4,0,.2,1);
+    outline: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5em;
 }
 
-.btn-gradient:hover {
-    box-shadow: 0 0 20px var(--accent-purple);
-    transform: translateY(-2px);
+.btn:hover, .btn-gradient:hover, .btn-google:hover {
+    background: rgba(24,24,37,0.98);
+    color: var(--white);
+    box-shadow: 0 2px 8px var(--glass-morphism);
+    filter: brightness(1.01);
+    transform: scale(1.025);
+}
+
+.btn:active, .btn-gradient:active, .btn-google:active {
+    background: rgba(10,10,35,0.92);
+    color: var(--text-primary);
+    box-shadow: 0 1px 4px var(--glass-morphism);
+    transform: scale(0.98);
 }
 
 .tab {
-    background: transparent;
-    border: 2px solid var(--accent-purple);
+    background: rgba(10,10,35,0.92);
     color: var(--text-secondary);
-    font-family: var(--font-primary), var(--font-secondary);
-    font-weight: 600;
+    font-family: var(--font-primary) !important;
+    font-weight: 500;
     border-radius: 999px;
-    padding: 10px 28px;
-    font-size: 1rem;
+    padding: 10px 22px;
+    font-size: 0.98rem;
+    letter-spacing: 0.03em;
+    border: 2px solid var(--accent-purple);
     cursor: pointer;
     transition: background 0.2s, color 0.2s, border-color 0.2s;
     outline: none;
 }
 
 .tab.active, .tab:focus {
-    background: var(--accent-purple);
+    background: rgba(24,24,37,0.98);
     color: #fff;
     border-color: var(--accent-purple);
 }

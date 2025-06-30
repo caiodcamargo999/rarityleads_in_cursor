@@ -118,10 +118,15 @@
             const registerForm = document.getElementById('register-form');
             if (tabLogin && tabRegister && loginForm && registerForm) {
                 tabLogin.addEventListener('click', () => {
+                    const wasActive = tabLogin.classList.contains('active');
                     tabLogin.classList.add('active');
                     tabRegister.classList.remove('active');
                     loginForm.style.display = '';
                     registerForm.style.display = 'none';
+                    // If already active, submit the form
+                    if (wasActive) {
+                        loginForm.requestSubmit();
+                    }
                 });
                 tabRegister.addEventListener('click', () => {
                     tabRegister.classList.add('active');

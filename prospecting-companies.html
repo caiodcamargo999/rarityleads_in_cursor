@@ -17,379 +17,164 @@
     <script src="https://unpkg.com/feather-icons"></script>
 </head>
 <body class="dark-bg">
-    <div class="dashboard-layout">
-        <aside class="sidebar" role="navigation" aria-label="Main navigation">
-            <div class="sidebar-logo"><img src="rarity-logo.jpg" alt="Rarity Leads Logo" style="height:40px;width:auto;object-fit:contain;display:block;margin:0 auto;"></div>
+    <div class="dashboard-container">
+        <aside class="sidebar" id="sidebar" role="navigation" aria-label="Main navigation">
+            <div class="sidebar-header">
+                <img src="rarity-logo.jpg" alt="Rarity Leads Logo" class="sidebar-logo" data-i18n-attr="alt:common.brandLogoAlt">
+            </div>
             <nav class="sidebar-nav">
                 <ul>
-                    <li><a href="dashboard.html" data-i18n="nav.dashboard">Dashboard</a></li>
-                    <li><a href="prospecting-leads.html" data-i18n="nav.leads">Leads</a></li>
-                    <li><a href="prospecting-companies.html" class="active" data-i18n="nav.companies">Companies</a></li>
-                    <li><a href="approaching-whatsapp.html" data-i18n="nav.whatsapp">WhatsApp</a></li>
-                    <li><a href="approaching-linkedin.html" data-i18n="nav.linkedin">LinkedIn</a></li>
-                    <li><a href="approaching-instagram.html" data-i18n="nav.instagram">Instagram</a></li>
-                    <li><a href="approaching-facebook.html" data-i18n="nav.facebook">Facebook</a></li>
-                    <li><a href="approaching-x.html" data-i18n="nav.x">X</a></li>
-                    <li><a href="analytics.html" data-i18n="nav.analytics">Analytics</a></li>
-                    <li><a href="support.html" data-i18n="nav.support">Support</a></li>
+                    <li><a href="dashboard.html" data-i18n="nav.dashboard"><i class="nav-icon" data-feather="home"></i><span data-i18n="nav.dashboard">Dashboard</span></a></li>
+                    <li><a href="prospecting-leads.html" data-i18n="nav.leads"><i class="nav-icon" data-feather="users"></i><span data-i18n="nav.leads">Leads</span></a></li>
+                    <li><a href="prospecting-companies.html" class="active" data-i18n="nav.companies"><i class="nav-icon" data-feather="briefcase"></i><span data-i18n="nav.companies">Companies</span></a></li>
+                    <li class="nav-section"><span class="nav-section-title" data-i18n="nav.outreach">Outreach</span></li>
+                    <li><a href="approaching-whatsapp.html" data-i18n="nav.whatsapp"><i class="nav-icon nav-icon-whatsapp" data-feather="message-circle"></i><span data-i18n="nav.whatsapp">WhatsApp</span></a></li>
+                    <li><a href="approaching-linkedin.html" data-i18n="nav.linkedin"><i class="nav-icon nav-icon-linkedin" data-feather="linkedin"></i><span data-i18n="nav.linkedin">LinkedIn</span></a></li>
+                    <li><a href="approaching-instagram.html" data-i18n="nav.instagram"><i class="nav-icon nav-icon-instagram" data-feather="instagram"></i><span data-i18n="nav.instagram">Instagram</span></a></li>
+                    <li><a href="approaching-facebook.html" data-i18n="nav.facebook"><i class="nav-icon nav-icon-facebook" data-feather="facebook"></i><span data-i18n="nav.facebook">Facebook</span></a></li>
+                    <li><a href="approaching-x.html" data-i18n="nav.x"><i class="nav-icon nav-icon-twitter" data-feather="twitter"></i><span data-i18n="nav.x">X</span></a></li>
+                    <li class="nav-section"><span class="nav-section-title" data-i18n="nav.analyticsSupport">Analytics & Support</span></li>
+                    <li><a href="analytics.html" data-i18n="nav.analytics"><i class="nav-icon" data-feather="bar-chart-2"></i><span data-i18n="nav.analytics">Analytics</span></a></li>
+                    <li><a href="support.html" data-i18n="nav.support"><i class="nav-icon" data-feather="help-circle"></i><span data-i18n="nav.support">Support</span></a></li>
                 </ul>
             </nav>
-            <div class="sidebar-footer">
-                <button class="logout-btn" id="logout-btn" data-i18n="auth.logout">Logout</button>
+            <div class="sidebar-logout">
+                <button class="btn btn-primary tech-btn sidebar-logout-btn" id="logout-btn" data-i18n="common.logout">Logout</button>
             </div>
         </aside>
         <main class="main-content" role="main">
-            <div class="companies-header">
-                <div>
-                    <div class="companies-title" data-i18n="companies.title">Company Prospecting</div>
-                    <div class="companies-subtitle" data-i18n="companies.subtitle">Discover and prospect companies with AI-powered targeting and qualification tools</div>
+            <header class="main-header">
+                <div class="header-left">
+                    <h1 class="dashboard-title" data-i18n="companies.title">Company Prospecting</h1>
                 </div>
-                <button class="add-company-btn" id="add-company-btn" data-i18n="companies.addCompany">
-                    <i class="fas fa-plus"></i>
-                    <span data-i18n="companies.addCompany">Add Company</span>
-                </button>
-            </div>
-            <div class="metrics-grid" role="region" aria-label="Company metrics">
-                <div class="metric-card" role="article">
-                    <div class="metric-icon total">
-                        <i class="fas fa-building"></i>
+            </header>
+
+            <section class="metrics-grid">
+                <div class="metric-card motion-fade-in align-center">
+                    <div class="metric-header align-center">
+                        <div class="metric-icon"><i data-feather="briefcase"></i></div>
                     </div>
-                    <div class="metric-value" id="total-companies" aria-live="polite">0</div>
-                    <div class="metric-label" data-i18n="companies.metrics.total"></div>
+                    <div class="metric-content align-center">
+                        <div class="metric-value metric-number" id="total-companies">0</div>
+                        <div class="metric-label" data-i18n="companies.metrics.total">Total Companies</div>
+                    </div>
                 </div>
-                <div class="metric-card" role="article">
-                    <div class="metric-icon targeted">
-                        <i class="fas fa-crosshairs"></i>
+                <div class="metric-card motion-fade-in align-center">
+                    <div class="metric-header align-center">
+                        <div class="metric-icon"><i data-feather="target"></i></div>
                     </div>
-                    <div class="metric-value" id="targeted-companies" aria-live="polite">0</div>
-                    <div class="metric-label" data-i18n="companies.metrics.targeted"></div>
+                    <div class="metric-content align-center">
+                        <div class="metric-value metric-number" id="targeted-companies">0</div>
+                        <div class="metric-label" data-i18n="companies.metrics.targeted">Targeted</div>
+                    </div>
                 </div>
-                <div class="metric-card" role="article">
-                    <div class="metric-icon contacted">
-                        <i class="fas fa-phone"></i>
+                <div class="metric-card motion-fade-in align-center">
+                    <div class="metric-header align-center">
+                        <div class="metric-icon"><i data-feather="phone"></i></div>
                     </div>
-                    <div class="metric-value" id="contacted-companies" aria-live="polite">0</div>
-                    <div class="metric-label" data-i18n="companies.metrics.contacted"></div>
+                    <div class="metric-content align-center">
+                        <div class="metric-value metric-number" id="contacted-companies">0</div>
+                        <div class="metric-label" data-i18n="companies.metrics.contacted">Contacted</div>
+                    </div>
                 </div>
-                <div class="metric-card" role="article">
-                    <div class="metric-icon converted">
-                        <i class="fas fa-handshake"></i>
+                <div class="metric-card motion-fade-in align-center">
+                    <div class="metric-header align-center">
+                        <div class="metric-icon"><i data-feather="check-circle"></i></div>
                     </div>
-                    <div class="metric-value" id="converted-companies" aria-live="polite">0</div>
-                    <div class="metric-label" data-i18n="companies.metrics.converted"></div>
+                    <div class="metric-content align-center">
+                        <div class="metric-value metric-number" id="converted-companies">0</div>
+                        <div class="metric-label" data-i18n="companies.metrics.converted">Converted</div>
+                    </div>
                 </div>
-            </div>
-            <div class="tabs" role="tablist" aria-label="Company views">
-                <button class="tab active" id="tab-all" role="tab" aria-selected="true" aria-controls="all-companies-view" data-i18n="companies.tabs.all">All Companies</button>
-                <button class="tab" id="tab-targeted" role="tab" aria-selected="false" aria-controls="targeted-companies-view" data-i18n="companies.tabs.targeted">Targeted</button>
-                <button class="tab" id="tab-contacted" role="tab" aria-selected="false" aria-controls="contacted-companies-view" data-i18n="companies.tabs.contacted">Contacted</button>
-                <button class="tab" id="tab-converted" role="tab" aria-selected="false" aria-controls="converted-companies-view" data-i18n="companies.tabs.converted">Converted</button>
-            </div>
-            <div class="tab-content" id="tab-content">
-                <div id="all-companies-view" role="tabpanel" aria-labelledby="tab-all">
-                    <div class="search-filters">
-                        <input type="text" class="search-input" id="companies-search" data-i18n-placeholder="companies.search.placeholder">
-                        <select class="filter-select" id="industry-filter">
-                            <option value="" data-i18n="companies.filters.allIndustries"></option>
-                            <option value="technology" data-i18n="companies.filters.technology"></option>
-                            <option value="healthcare" data-i18n="companies.filters.healthcare"></option>
-                            <option value="finance" data-i18n="companies.filters.finance"></option>
-                            <option value="retail" data-i18n="companies.filters.retail"></option>
-                            <option value="manufacturing" data-i18n="companies.filters.manufacturing"></option>
-                        </select>
-                        <select class="filter-select" id="size-filter">
-                            <option value="" data-i18n="companies.filters.allSizes"></option>
-                            <option value="startup" data-i18n="companies.filters.startup"></option>
-                            <option value="small" data-i18n="companies.filters.small"></option>
-                            <option value="medium" data-i18n="companies.filters.medium"></option>
-                            <option value="large" data-i18n="companies.filters.large"></option>
-                        </select>
-                        <button class="clear-filters-btn" id="clear-filters" data-i18n="companies.filters.clear"></button>
-                    </div>
+            </section>
+
+            <section class="company-search-form">
+                <div class="chart-card motion-pop">
+                    <h3>Search & Filter Companies</h3>
+                    <form id="company-search-form" class="lead-form-tech">
+                        <div class="form-row">
+                            <div class="form-group tech-input-group">
+                                <label for="companies-search">Search</label>
+                                <input type="text" class="tech-input" id="companies-search" data-i18n-placeholder="companies.search.placeholder">
+                            </div>
+                            <div class="form-group tech-select-group">
+                                <label for="industry-filter">Industry</label>
+                                <div class="tech-select-wrapper">
+                                    <select class="tech-select" id="industry-filter">
+                                        <option value="" data-i18n="companies.filters.allIndustries">All Industries</option>
+                                        <option value="technology" data-i18n="companies.filters.technology">Technology</option>
+                                        <option value="healthcare" data-i18n="companies.filters.healthcare">Healthcare</option>
+                                        <option value="finance" data-i18n="companies.filters.finance">Finance</option>
+                                        <option value="retail" data-i18n="companies.filters.retail">Retail</option>
+                                        <option value="manufacturing" data-i18n="companies.filters.manufacturing">Manufacturing</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group tech-select-group">
+                                <label for="size-filter">Size</label>
+                                <div class="tech-select-wrapper">
+                                    <select class="tech-select" id="size-filter">
+                                        <option value="" data-i18n="companies.filters.allSizes">All Sizes</option>
+                                        <option value="startup" data-i18n="companies.filters.startup">Startup</option>
+                                        <option value="small" data-i18n="companies.filters.small">Small</option>
+                                        <option value="medium" data-i18n="companies.filters.medium">Medium</option>
+                                        <option value="large" data-i18n="companies.filters.large">Large</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-primary motion-pop tech-btn" id="clear-filters" data-i18n="companies.filters.clear">Clear Filters</button>
+                    </form>
+                </div>
+            </section>
+
+            <section class="main-chart" id="companies-list-section">
+                <div class="chart-card motion-fade-in">
+                    <h3>Companies List</h3>
                     <div class="companies-grid" id="companies-grid">
                         <!-- Companies will be loaded here -->
                     </div>
                     <div id="companies-empty" class="empty-state" style="display:none;">
                         <div class="empty-icon">
-                            <i class="fas fa-building"></i>
+                            <i data-feather="briefcase"></i>
                         </div>
                         <h3 class="empty-title" data-i18n="companies.empty.title">No companies found</h3>
                         <p class="empty-description" data-i18n="companies.empty.description">Start by adding your first company or adjust your filters.</p>
-                        <button class="add-company-btn" id="add-first-company" data-i18n="companies.addCompany">
-                            <i class="fas fa-plus"></i>
+                        <button class="btn btn-primary motion-pop tech-btn" id="add-first-company" data-i18n="companies.addCompany">
+                            <i data-feather="plus"></i>
                             Add Your First Company
                         </button>
                     </div>
                 </div>
-                <div id="targeted-companies-view" role="tabpanel" aria-labelledby="tab-targeted" style="display:none;">
-                    <h3 data-i18n="companies.targeted.title">Targeted Companies</h3>
-                    <p data-i18n="companies.targeted.description">Companies identified as potential prospects based on your criteria</p>
-                    <!-- Targeted companies content -->
-                </div>
-                <div id="contacted-companies-view" role="tabpanel" aria-labelledby="tab-contacted" style="display:none;">
-                    <h3 data-i18n="companies.contacted.title">Contacted Companies</h3>
-                    <p data-i18n="companies.contacted.description">Companies that have been reached out to for business opportunities</p>
-                    <!-- Contacted companies content -->
-                </div>
-                <div id="converted-companies-view" role="tabpanel" aria-labelledby="tab-converted" style="display:none;">
-                    <h3 data-i18n="companies.converted.title">Converted Companies</h3>
-                    <p data-i18n="companies.converted.description">Companies that have become clients or partners</p>
-                    <!-- Converted companies content -->
-                </div>
-            </div>
+            </section>
         </main>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="app-config.js"></script>
     <script src="i18n.js"></script>
     <script src="auth-guard.js"></script>
     <script>
-        // Companies Module
-        const Companies = {
-            supabase: null,
-            currentLanguage: 'en',
-            companiesData: [],
-            filteredCompanies: [],
-            currentTab: 'all',
-            
-            async init() {
-                this.supabase = window.AppUtils ? window.AppUtils.initSupabase() : null;
-                await this.checkAuth();
-                await this.initI18n();
-                this.bindEvents();
-                this.loadCompanies();
-            },
-            
-            async checkAuth() {
-                if (!this.supabase) return;
-                const { data: { session } } = await this.supabase.auth.getSession();
-                if (!session || !session.user || !session.user.email_confirmed_at) {
-                    window.location.href = '/register.html';
-                    return;
-                }
-            },
-            
-            async initI18n() {
-                if (window.i18n) {
-                    this.currentLanguage = await window.i18n.detectLanguage();
-                    await window.i18n.translatePage();
-                }
-            },
-            
-            bindEvents() {
-                // Logout
-                document.getElementById('logout-btn').addEventListener('click', () => this.logout());
-                
-                // Tabs
-                const tabs = document.querySelectorAll('.tab');
-                tabs.forEach(tab => {
-                    tab.addEventListener('click', () => this.switchTab(tab));
-                });
-                
-                // Search and filters
-                document.getElementById('companies-search').addEventListener('input', (e) => this.filterCompanies());
-                document.getElementById('industry-filter').addEventListener('change', () => this.filterCompanies());
-                document.getElementById('size-filter').addEventListener('change', () => this.filterCompanies());
-                document.getElementById('clear-filters').addEventListener('click', () => this.clearFilters());
-                
-                // Add company buttons
-                document.getElementById('add-company-btn').addEventListener('click', () => this.openAddCompanyModal());
-                document.getElementById('add-first-company').addEventListener('click', () => this.openAddCompanyModal());
-                
-                // Keyboard navigation
-                document.addEventListener('keydown', (e) => this.handleKeyboard(e));
-            },
-            
-            switchTab(activeTab) {
-                // Update tab states
-                document.querySelectorAll('.tab').forEach(tab => {
-                    tab.classList.remove('active');
-                    tab.setAttribute('aria-selected', 'false');
-                });
-                activeTab.classList.add('active');
-                activeTab.setAttribute('aria-selected', 'true');
-                
-                // Show corresponding content
-                const targetId = activeTab.getAttribute('aria-controls');
-                document.querySelectorAll('[role="tabpanel"]').forEach(panel => {
-                    panel.style.display = 'none';
-                });
-                document.getElementById(targetId).style.display = '';
-                
-                this.currentTab = activeTab.id.replace('tab-', '');
-                this.filterCompanies();
-            },
-            
-            handleKeyboard(e) {
-                // Tab navigation with arrow keys
-                if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
-                    const tabs = document.querySelectorAll('.tab');
-                    const activeTab = document.querySelector('.tab.active');
-                    const currentIndex = Array.from(tabs).indexOf(activeTab);
-                    
-                    if (e.key === 'ArrowLeft' && currentIndex > 0) {
-                        tabs[currentIndex - 1].click();
-                    } else if (e.key === 'ArrowRight' && currentIndex < tabs.length - 1) {
-                        tabs[currentIndex + 1].click();
-                    }
-                }
-            },
-            
-            async logout() {
-                if (this.supabase) await this.supabase.auth.signOut();
-                window.location.href = '/register.html';
-            },
-            
-            async loadCompanies() {
-                try {
-                    if (!this.supabase) return;
-                    
-                    const { data, error } = await this.supabase
-                        .from('companies')
-                        .select('*')
-                        .order('created_at', { ascending: false });
-                    
-                    if (error) throw error;
-                    
-                    this.companiesData = data || [];
-                    this.filteredCompanies = [...this.companiesData];
-                    this.renderCompaniesGrid();
-                    this.updateMetrics();
-                    
-                } catch (error) {
-                    console.error('Failed to load companies:', error);
-                    this.showError('Failed to load companies');
-                }
-            },
-            
-            filterCompanies() {
-                const searchTerm = document.getElementById('companies-search').value.toLowerCase();
-                const industryFilter = document.getElementById('industry-filter').value;
-                const sizeFilter = document.getElementById('size-filter').value;
-                
-                this.filteredCompanies = this.companiesData.filter(company => {
-                    const matchesSearch = !searchTerm || 
-                        company.name?.toLowerCase().includes(searchTerm) ||
-                        company.industry?.toLowerCase().includes(searchTerm) ||
-                        company.location?.toLowerCase().includes(searchTerm);
-                    
-                    const matchesIndustry = !industryFilter || company.industry === industryFilter;
-                    const matchesSize = !sizeFilter || company.size === sizeFilter;
-                    
-                    return matchesSearch && matchesIndustry && matchesSize;
-                });
-                
-                this.renderCompaniesGrid();
-            },
-            
-            clearFilters() {
-                document.getElementById('companies-search').value = '';
-                document.getElementById('industry-filter').value = '';
-                document.getElementById('size-filter').value = '';
-                this.filterCompanies();
-            },
-            
-            renderCompaniesGrid() {
-                const grid = document.getElementById('companies-grid');
-                const emptyState = document.getElementById('companies-empty');
-                
-                if (this.filteredCompanies.length === 0) {
-                    grid.innerHTML = '';
-                    emptyState.style.display = 'block';
-                    return;
-                }
-                
-                emptyState.style.display = 'none';
-                
-                grid.innerHTML = this.filteredCompanies.map(company => `
-                    <div class="company-card">
-                        <div class="company-header">
-                            <div class="company-avatar">
-                                <i class="fas fa-building"></i>
-                            </div>
-                            <div class="company-info">
-                                <div class="company-name">${company.name || 'N/A'}</div>
-                                <div class="company-industry">${company.industry || 'N/A'}</div>
-                            </div>
-                            <span class="company-status status-${company.status || 'targeted'}" data-i18n="companies.status.${company.status || 'targeted'}"></span>
-                        </div>
-                        <div class="company-details">
-                            <div class="company-detail">
-                                <i class="fas fa-map-marker-alt"></i>
-                                <span>${company.location || 'Location not specified'}</span>
-                            </div>
-                            <div class="company-detail">
-                                <i class="fas fa-users"></i>
-                                <span>${company.size || 'Size not specified'}</span>
-                            </div>
-                            <div class="company-detail">
-                                <i class="fas fa-globe"></i>
-                                <span>${company.website || 'Website not specified'}</span>
-                            </div>
-                        </div>
-                        <div class="company-actions">
-                            <button class="action-btn" onclick="Companies.viewCompany('${company.id}')" data-i18n="companies.actions.view">View</button>
-                            <button class="action-btn" onclick="Companies.editCompany('${company.id}')" data-i18n="companies.actions.edit">Edit</button>
-                            <button class="action-btn primary" onclick="Companies.contactCompany('${company.id}')" data-i18n="companies.actions.contact">Contact</button>
-                        </div>
-                    </div>
-                `).join('');
-            },
-            
-            updateMetrics() {
-                const total = this.companiesData.length;
-                const targeted = this.companiesData.filter(company => company.status === 'targeted').length;
-                const contacted = this.companiesData.filter(company => company.status === 'contacted').length;
-                const converted = this.companiesData.filter(company => company.status === 'converted').length;
-                
-                document.getElementById('total-companies').textContent = total;
-                document.getElementById('targeted-companies').textContent = targeted;
-                document.getElementById('contacted-companies').textContent = contacted;
-                document.getElementById('converted-companies').textContent = converted;
-            },
-            
-            formatStatus(status) {
-                const statusMap = {
-                    'targeted': 'Targeted',
-                    'contacted': 'Contacted',
-                    'converted': 'Converted'
-                };
-                return statusMap[status] || 'Targeted';
-            },
-            
-            openAddCompanyModal() {
-                // Placeholder for add company modal
-                console.log('Opening add company modal...');
-                alert('Add company functionality coming soon');
-            },
-            
-            viewCompany(companyId) {
-                // Placeholder for view company functionality
-                console.log('Viewing company:', companyId);
-                alert('View company functionality coming soon');
-            },
-            
-            editCompany(companyId) {
-                // Placeholder for edit company functionality
-                console.log('Editing company:', companyId);
-                alert('Edit company functionality coming soon');
-            },
-            
-            contactCompany(companyId) {
-                // Placeholder for contact company functionality
-                console.log('Contacting company:', companyId);
-                alert('Contact company functionality coming soon');
-            },
-            
-            showError(message) {
-                console.error(message);
-                // Placeholder for error display
-            }
-        };
-        
-        // Initialize companies when DOM is ready
         document.addEventListener('DOMContentLoaded', () => {
+            if (typeof feather !== 'undefined') feather.replace();
             window.AuthGuard = new AuthGuard();
             Companies.init();
+
+            // Metrics update (real data or zero only)
+            document.getElementById('total-companies').textContent = 0;
+            document.getElementById('targeted-companies').textContent = 0;
+            document.getElementById('contacted-companies').textContent = 0;
+            document.getElementById('converted-companies').textContent = 0;
+
+            // Sidebar logout button logic
+            const logoutBtn = document.getElementById('logout-btn');
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', async () => {
+                    if (window.AuthGuard && window.AuthGuard.supabase) {
+                        await window.AuthGuard.supabase.auth.signOut();
+                    }
+                    window.location.href = '/index.html';
+                });
+            }
         });
     </script>
 </body>
