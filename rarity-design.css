@@ -1,11 +1,272 @@
-.sidebar-nav .nav-item {
-    display: flex;
-    align-items: center;
-    gap: 0.75em;
+/* Rarity Leads - Dark Minimalist Design System (Codecademy-inspired, tech, flat) */
+
+:root {
+  --sidebar-bg: #101014;
+  --main-bg: #18181c;
+  --card-bg: #18181c;
+  --sidebar-text: #e0e0e0;
+  --sidebar-text-secondary: #b0b0b0;
+  --primary-text: #e0e0e0;
+  --secondary-text: #b0b0b0;
+  --button-bg: #232336;
+  --button-hover-bg: #232136;
+  --button-text: #fff;
+  --border: #232336;
+  --sidebar-width: 220px;
+  --sidebar-link-active: #232336;
+  --sidebar-link-hover: #232336;
+  --logout-separator: #232336;
 }
 
-.sidebar-nav .nav-item-title {
-    display: flex;
+body, html {
+  background: var(--main-bg);
+  color: var(--primary-text);
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: var(--primary-text);
+  font-weight: 500;
+  margin-top: 0;
+}
+
+/* Sidebar */
+.sidebar {
+  background: var(--sidebar-bg);
+  color: var(--sidebar-text);
+  width: var(--sidebar-width);
+  min-width: var(--sidebar-width);
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  left: 0;
+  top: 0;
+  border-right: 1px solid var(--border);
+  z-index: 100;
+}
+.sidebar-header {
+  padding: 2rem 0 1.5rem 0;
+  text-align: center;
+}
+.sidebar-logo {
+  width: 64px;
+  height: 64px;
+  border-radius: 12px;
+  margin: 0 auto;
+  display: block;
+  background: none;
+}
+.sidebar-nav {
+  flex: 1 1 auto;
+}
+.sidebar-nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.sidebar-nav li {
+  margin: 0;
+}
+.sidebar-nav a {
+  display: flex;
+  align-items: center;
+  gap: 0.75em;
+  color: var(--sidebar-text);
+  text-decoration: none;
+  font-weight: 400;
+  padding: 0.85em 2em;
+  transition: background 0.2s, color 0.2s;
+  border-left: 3px solid transparent;
+}
+.sidebar-nav a.active, .sidebar-nav a:hover {
+  background: var(--sidebar-link-hover);
+  color: var(--primary-text);
+  border-left: 3px solid var(--primary-text);
+}
+.sidebar-nav .nav-icon {
+  color: var(--sidebar-text-secondary);
+  font-size: 1.2em;
+}
+.nav-section-title {
+  color: var(--sidebar-text-secondary);
+  font-size: 0.95em;
+  padding: 1.2em 2em 0.5em 2em;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 400;
+}
+
+/* Sidebar logout at bottom */
+.sidebar-logout {
+  margin-top: auto;
+  padding: 1.5em 2em 2em 2em;
+  border-top: 1px solid var(--logout-separator);
+  background: var(--sidebar-bg);
+  text-align: center;
+}
+.sidebar-logout-btn {
+  width: 100%;
+  background: var(--button-bg);
+  color: var(--button-text);
+  border: none;
+  border-radius: 6px;
+  padding: 0.85em 0;
+  font-size: 1em;
+  font-weight: 500;
+  cursor: pointer;
+  margin-top: 0.5em;
+  transition: background 0.2s, color 0.2s, border 0.2s;
+}
+.sidebar-logout-btn:hover {
+  background: var(--button-hover-bg);
+  color: #fff;
+  text-decoration: underline;
+}
+
+/* Main content */
+.dashboard-container {
+  display: flex;
+  min-height: 100vh;
+}
+.main-content {
+  flex: 1 1 auto;
+  margin-left: var(--sidebar-width);
+  padding: 2.5rem 2.5rem 2.5rem 2.5rem;
+  background: var(--main-bg);
+  min-height: 100vh;
+}
+
+/* Cards, metrics, etc. */
+.metric-card, .chart-card, .company-card, .lead-card, .pricing-card, .feature-card {
+  background: var(--card-bg);
+  color: var(--primary-text);
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  box-shadow: none;
+  padding: 2em 1.5em;
+  margin-bottom: 2em;
+}
+
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 2em;
+}
+
+/* Buttons */
+.btn, .btn-primary, .btn-large, .logout-btn {
+  background: var(--button-bg);
+  color: var(--button-text);
+  border: none;
+  border-radius: 6px;
+  padding: 0.85em 2em;
+  font-size: 1em;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.25s cubic-bezier(0.4,0,0.2,1), color 0.2s;
+  box-shadow: none;
+  outline: none;
+  text-decoration: none;
+  display: inline-block;
+}
+.btn:hover, .btn-primary:hover, .btn-large:hover, .logout-btn:hover {
+  background: #2d215a;
+  color: #fff;
+  /* No underline */
+}
+
+/* Hero, section, footer */
+.hero, .features-section, .pricing-section, .final-cta, .main-footer {
+  background: var(--main-bg);
+  color: var(--primary-text);
+  box-shadow: none;
+  border: none;
+}
+
+.section-title {
+  font-size: 2em;
+  font-weight: 500;
+  margin-bottom: 1.5em;
+  color: var(--primary-text);
+}
+
+/* Footer */
+.main-footer {
+  padding: 2em 0;
+  text-align: center;
+  color: var(--secondary-text);
+  border-top: 1px solid var(--border);
+  background: var(--main-bg);
+}
+
+/* Remove all glass, gradients, and bolding */
+.motion-pop, .motion-fade-in {
+  box-shadow: none !important;
+  background: none !important;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .main-content {
+    padding: 1.5rem 1rem 1.5rem 1rem;
+  }
+  .sidebar {
+    width: 60px;
+    min-width: 60px;
+  }
+  .sidebar-nav a, .nav-section-title {
+    padding-left: 1em;
+    padding-right: 1em;
+    font-size: 0.95em;
+  }
+  .main-content {
+    margin-left: 60px;
+  }
+}
+
+@media (max-width: 600px) {
+  .dashboard-container {
+    flex-direction: column;
+  }
+  .sidebar {
+    position: relative;
+    width: 100vw;
+    min-width: 0;
+    height: auto;
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+    flex-direction: row;
     align-items: center;
+    justify-content: space-between;
+    padding: 0.5em 0;
+  }
+  .sidebar-header, .sidebar-logo {
+    display: none;
+  }
+  .sidebar-nav ul {
+    display: flex;
+    flex-direction: row;
     gap: 0.5em;
+  }
+  .sidebar-nav a {
+    padding: 0.5em 0.7em;
+    font-size: 0.95em;
+    border-left: none;
+    border-bottom: 3px solid transparent;
+  }
+  .sidebar-nav a.active, .sidebar-nav a:hover {
+    border-bottom: 3px solid var(--primary-text);
+    background: none;
+  }
+  .sidebar-logout {
+    border-top: none;
+    border-left: 1px solid var(--logout-separator);
+    padding: 0.5em 1em;
+    margin-top: 0;
+  }
 }

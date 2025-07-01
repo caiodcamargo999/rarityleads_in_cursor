@@ -4,8 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title data-i18n="auth.meta.title">Auth - Rarity Leads</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="rarity-design.css">
+    <link rel="stylesheet" href="auth-styles.css">
 </head>
 <body class="auth-body dark-bg">
     <header class="main-header motion-fade-in">
@@ -28,7 +29,7 @@
             <div id="auth-forms">
                 <!-- Login Form -->
                 <form id="login-form" class="auth-form" autocomplete="on">
-                    <button type="button" id="google-login" class="btn-google motion-pop">
+                    <button type="button" id="google-login" class="btn btn-large">
                         <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" width="20">
                         <span data-i18n="login.signinGoogle">Sign in with Google</span>
                     </button>
@@ -48,7 +49,7 @@
                         </label>
                         <a href="#" class="link" id="forgot-password-link" data-i18n="login.forgot">Forgot password?</a>
                     </div>
-                    <button type="submit" class="btn-primary motion-pop">
+                    <button type="submit" class="btn btn-primary btn-large">
                         <span data-i18n="login.signinBtn">Sign In</span>
                     </button>
                 </form>
@@ -56,7 +57,7 @@
                 <div id="verification-warning-login" class="verification-warning" style="display: none;">
                     <h3 data-i18n="login.verifyTitle">Please verify your email</h3>
                     <p data-i18n-html="login.verifyMessage">We've sent a verification link to <strong id="unverified-email-login"></strong>.</p>
-                    <button id="resend-verification-login" class="btn-primary motion-pop" data-i18n="login.resendVerification">Resend Verification Email</button>
+                    <button id="resend-verification-login" class="btn btn-primary btn-large" data-i18n="login.resendVerification">Resend Verification Email</button>
                 </div>
 
                 <!-- Forgot Password Modal -->
@@ -68,14 +69,14 @@
                             <label for="reset-email" class="form-label" data-i18n="forgotPassword.email">Email address</label>
                             <input type="email" id="reset-email" name="email" class="form-input" required autocomplete="email" data-i18n-placeholder="forgotPassword.emailPlaceholder">
                         </div>
-                        <button type="button" id="reset-password-btn" class="btn-primary motion-pop" data-i18n="forgotPassword.resetButton">Send Reset Link</button>
-                        <button type="button" id="cancel-reset-btn" class="btn-secondary motion-pop" data-i18n="forgotPassword.cancelButton">Cancel</button>
+                        <button type="button" id="reset-password-btn" class="btn btn-primary btn-large" data-i18n="forgotPassword.resetButton">Send Reset Link</button>
+                        <button type="button" id="cancel-reset-btn" class="btn btn-secondary btn-large" data-i18n="forgotPassword.cancelButton">Cancel</button>
                         <div id="reset-message-container"></div>
                     </div>
                 </div>
                 <!-- Register Form -->
                 <form id="register-form" class="auth-form" style="display:none;" autocomplete="off">
-                    <button type="button" id="google-register" class="btn-google motion-pop">
+                    <button type="button" id="google-register" class="btn btn-large">
                         <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" width="20">
                         <span data-i18n="register.signupGoogle">Sign up with Google</span>
                     </button>
@@ -88,13 +89,13 @@
                         <label for="register-password" class="form-label" data-i18n="register.password">Password</label>
                         <input type="password" id="register-password" name="password" class="form-input" minlength="6" required autocomplete="new-password" data-i18n-placeholder="register.passwordPlaceholder">
                     </div>
-                    <button type="submit" class="btn-primary motion-pop" data-i18n="register.createAccountBtn">Create Account</button>
+                    <button type="submit" class="btn btn-primary btn-large" data-i18n="register.createAccountBtn">Create Account</button>
                 </form>
                 <div id="register-message-container"></div>
                 <div id="verification-warning-register" class="verification-warning" style="display: none;">
                     <h3 data-i18n="register.verifyTitle">Please verify your email</h3>
                     <p data-i18n-html="register.verifyMessage">We've sent a verification link to <strong id="unverified-email-register"></strong>.</p>
-                    <button id="resend-verification-register" class="btn-primary motion-pop" data-i18n="register.resendVerification">Resend Verification Email</button>
+                    <button id="resend-verification-register" class="btn btn-primary btn-large" data-i18n="register.resendVerification">Resend Verification Email</button>
                 </div>
             </div>
         </div>

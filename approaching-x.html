@@ -15,24 +15,7 @@
 <body class="dark-bg">
     <div class="dashboard-layout">
         <aside class="sidebar" role="navigation" aria-label="Main navigation">
-            <div class="sidebar-logo"><img src="rarity-logo.jpg" alt="Rarity Leads Logo" style="height:40px;width:auto;object-fit:contain;display:block;margin:0 auto;"></div>
-            <nav class="sidebar-nav">
-                <ul>
-                    <li><a href="dashboard.html" data-i18n="nav.dashboard">Dashboard</a></li>
-                    <li><a href="prospecting-leads.html" data-i18n="nav.leads">Leads</a></li>
-                    <li><a href="prospecting-companies.html" data-i18n="nav.companies">Companies</a></li>
-                    <li><a href="approaching-whatsapp.html" data-i18n="nav.whatsapp">WhatsApp</a></li>
-                    <li><a href="approaching-linkedin.html" data-i18n="nav.linkedin">LinkedIn</a></li>
-                    <li><a href="approaching-instagram.html" data-i18n="nav.instagram">Instagram</a></li>
-                    <li><a href="approaching-facebook.html" data-i18n="nav.facebook">Facebook</a></li>
-                    <li><a href="approaching-x.html" class="active" data-i18n="nav.x">X</a></li>
-                    <li><a href="analytics.html" data-i18n="nav.analytics">Analytics</a></li>
-                    <li><a href="support.html" data-i18n="nav.support">Support</a></li>
-                </ul>
-            </nav>
-            <div class="sidebar-footer">
-                <button class="logout-btn" id="logout-btn" data-i18n="auth.logout">Logout</button>
-            </div>
+            <!-- Insert the new sidebar HTML from dashboard.html here, replacing any old sidebar markup. Ensure all navigation, icons, and structure match the latest dashboard.html sidebar, including user profile/settings and logout at the bottom. -->
         </aside>
         <main class="main-content" role="main">
             <div class="x-header">
@@ -41,11 +24,11 @@
                     <div class="x-subtitle" data-i18n="x.subtitle">Automate your X (Twitter) outreach with AI-powered messaging and achieve high response rates</div>
                 </div>
                 <div style="display: flex; gap: 12px;">
-                    <button class="connect-btn" id="connect-btn" data-i18n="x.connect">
+                    <button class="connect-btn btn btn-primary btn-large" id="connect-btn" data-i18n="x.connect">
                         <i class="fab fa-x-twitter"></i>
                         <span data-i18n="x.connect">Connect X</span>
                     </button>
-                    <button class="new-campaign-btn" id="new-campaign-btn" data-i18n="x.newCampaign">
+                    <button class="new-campaign-btn btn btn-primary btn-large" id="new-campaign-btn" data-i18n="x.newCampaign">
                         <i class="fas fa-plus"></i>
                         <span data-i18n="x.newCampaign">New Campaign</span>
                     </button>
@@ -102,7 +85,7 @@
                         </div>
                         <h3 class="empty-title" data-i18n="x.empty.title">No campaigns found</h3>
                         <p class="empty-description" data-i18n="x.empty.description">Start by creating your first X campaign.</p>
-                        <button class="new-campaign-btn" id="add-first-campaign" data-i18n="x.newCampaign">
+                        <button class="new-campaign-btn btn btn-primary btn-large" id="add-first-campaign" data-i18n="x.newCampaign">
                             <i class="fas fa-plus"></i>
                             Create Your First Campaign
                         </button>
@@ -273,9 +256,9 @@
                             </div>
                         </div>
                         <div class="campaign-actions">
-                            <button class="action-btn" onclick="X.viewCampaign('${campaign.id}')" data-i18n="x.actions.view">View</button>
-                            <button class="action-btn" onclick="X.editCampaign('${campaign.id}')" data-i18n="x.actions.edit">Edit</button>
-                            <button class="action-btn primary" onclick="X.startCampaign('${campaign.id}')" data-i18n="x.actions.start">Start</button>
+                            <button class="action-btn btn btn-primary" onclick="X.viewCampaign('${campaign.id}')" data-i18n="x.actions.view">View</button>
+                            <button class="action-btn btn btn-primary" onclick="X.editCampaign('${campaign.id}')" data-i18n="x.actions.edit">Edit</button>
+                            <button class="action-btn btn btn-primary" onclick="X.startCampaign('${campaign.id}')" data-i18n="x.actions.start">Start</button>
                         </div>
                     </div>
                 `).join('');

@@ -5,101 +5,99 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title data-i18n="dashboard.meta.title">Rarity Leads - Dashboard</title>
     <link rel="stylesheet" href="rarity-design.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/feather-icons"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body class="dark-bg">
     <div class="dashboard-container">
-        <aside class="sidebar" id="sidebar" role="navigation" aria-label="Main navigation">
-            <div class="sidebar-header motion-fade-in">
-                <img src="rarity-logo.jpg" alt="Rarity Leads Logo" class="sidebar-logo" data-i18n-attr="alt:common.brandLogoAlt">
+        <aside class="sidebar" id="sidebar" role="navigation" aria-label="Main navigation" style="background: #101014; width: 200px; min-width: 200px; display: flex; flex-direction: column;">
+            <div class="sidebar-header" style="padding: 2em 0 1.5em 0; text-align: center;">
+                <img src="rarity-logo.jpg" alt="Rarity Leads Logo" class="sidebar-logo" style="width: 56px; height: 56px; border-radius: 12px; margin: 0 auto; display: block; background: none;">
             </div>
-            <nav class="sidebar-nav">
-                <ul>
-                    <li><a href="dashboard.html" class="active motion-pop" data-i18n="nav.dashboard"><div class="nav-item"><i class="nav-icon" data-feather="home"></i><div class="nav-item-title"><span data-i18n="nav.dashboard">Dashboard</span></div></div></a></li>
-                    <li><a href="prospecting-leads.html" class="motion-pop" data-i18n="nav.leads"><div class="nav-item"><i class="nav-icon" data-feather="users"></i><div class="nav-item-title"><span data-i18n="nav.leads">Leads</span></div></div></a></li>
-                    <li><a href="prospecting-companies.html" class="motion-pop" data-i18n="nav.companies"><div class="nav-item"><i class="nav-icon" data-feather="briefcase"></i><div class="nav-item-title"><span data-i18n="nav.companies">Companies</span></div></div></a></li>
-                    <li class="nav-section"><span class="nav-section-title" data-i18n="nav.outreach">Outreach</span></li>
-                    <li><a href="approaching-whatsapp.html" class="motion-pop" data-i18n="nav.whatsapp"><div class="nav-item"><i class="nav-icon nav-icon-whatsapp" data-feather="message-circle"></i><div class="nav-item-title"><span data-i18n="nav.whatsapp">WhatsApp</span><span class="status-dot connected"></span></div></div></a></li>
-                    <li><a href="approaching-linkedin.html" class="motion-pop" data-i18n="nav.linkedin"><div class="nav-item"><i class="nav-icon nav-icon-linkedin" data-feather="linkedin"></i><div class="nav-item-title"><span data-i18n="nav.linkedin">LinkedIn</span><span class="status-dot connected"></span></div></div></a></li>
-                    <li><a href="approaching-instagram.html" class="motion-pop" data-i18n="nav.instagram"><div class="nav-item"><i class="nav-icon nav-icon-instagram" data-feather="instagram"></i><div class="nav-item-title"><span data-i18n="nav.instagram">Instagram</span></div></div></a></li>
-                    <li><a href="approaching-facebook.html" class_="motion-pop" data-i18n="nav.facebook"><div class="nav-item"><i class="nav-icon nav-icon-facebook" data-feather="facebook"></i><div class="nav-item-title"><span data-i18n="nav.facebook">Facebook</span></div></div></a></li>
-                    <li><a href="approaching-x.html" class="motion-pop" data-i18n="nav.x"><div class="nav-item"><i class="nav-icon nav-icon-twitter" data-feather="twitter"></i><div class="nav-item-title"><span data-i18n="nav.x">X</span></div></div></a></li>
-                    <li class="nav-section"><span class="nav-section-title" data-i18n="nav.analyticsSupport">Analytics & Support</span></li>
-                    <li><a href="analytics.html" class="motion-pop" data-i18n="nav.analytics"><div class="nav-item"><i class="nav-icon" data-feather="bar-chart-2"></i><div class="nav-item-title"><span data-i18n="nav.analytics">Analytics</span></div></div></a></li>
-                    <li><a href="support.html" class="motion-pop" data-i18n="nav.support"><div class="nav-item"><i class="nav-icon" data-feather="help-circle"></i><div class="nav-item-title"><span data-i18n="nav.support">Support</span></div></div></a></li>
+            <nav class="sidebar-nav" style="flex: 1 1 auto;">
+                <ul style="list-style: none; padding: 0; margin: 0;">
+                    <li><a href="dashboard.html" class="active" data-i18n="nav.dashboard" style="display: flex; align-items: center; gap: 0.75em; color: #fff; text-decoration: none; font-weight: 400; padding: 0.85em 2em; border-left: 3px solid #fff; background: #18181c;"><i class="nav-icon" data-feather="home" style="color: #fff;"></i><span data-i18n="nav.dashboard">Dashboard</span></a></li>
+                    <li><a href="prospecting-leads.html" data-i18n="nav.leads" style="display: flex; align-items: center; gap: 0.75em; color: #e0e0e0; text-decoration: none; font-weight: 400; padding: 0.85em 2em;"><i class="nav-icon" data-feather="users" style="color: #e0e0e0;"></i><span data-i18n="nav.leads">Leads</span></a></li>
+                    <li><a href="prospecting-companies.html" data-i18n="nav.companies" style="display: flex; align-items: center; gap: 0.75em; color: #e0e0e0; text-decoration: none; font-weight: 400; padding: 0.85em 2em;"><i class="nav-icon" data-feather="briefcase" style="color: #e0e0e0;"></i><span data-i18n="nav.companies">Companies</span></a></li>
+                    <li class="nav-section"><span class="nav-section-title" data-i18n="nav.outreach" style="color: #b0b0b0; font-size: 0.95em; padding: 1.2em 2em 0.5em 2em; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 400;">Outreach</span></li>
+                    <li><a href="approaching-whatsapp.html" data-i18n="nav.whatsapp" style="display: flex; align-items: center; gap: 0.75em; color: #e0e0e0; text-decoration: none; font-weight: 400; padding: 0.85em 2em;"><i class="nav-icon" data-feather="message-circle" style="color: #e0e0e0;"></i><span data-i18n="nav.whatsapp">WhatsApp</span></a></li>
+                    <li><a href="approaching-linkedin.html" data-i18n="nav.linkedin" style="display: flex; align-items: center; gap: 0.75em; color: #e0e0e0; text-decoration: none; font-weight: 400; padding: 0.85em 2em;"><i class="nav-icon" data-feather="linkedin" style="color: #e0e0e0;"></i><span data-i18n="nav.linkedin">LinkedIn</span></a></li>
+                    <li><a href="approaching-instagram.html" data-i18n="nav.instagram" style="display: flex; align-items: center; gap: 0.75em; color: #e0e0e0; text-decoration: none; font-weight: 400; padding: 0.85em 2em;"><i class="nav-icon" data-feather="instagram" style="color: #e0e0e0;"></i><span data-i18n="nav.instagram">Instagram</span></a></li>
+                    <li class="nav-section" style="margin: 2em 0 0.5em 0; border-top: 1px solid #232336;">
+                        <span class="nav-section-title" data-i18n="nav.analyticsSupport" style="color: #b0b0b0; font-size: 0.95em; padding: 1.2em 2em 0.5em 2em; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 400; display: block;">Analytics & Support</span>
+                    </li>
+                    <li><a href="analytics.html" data-i18n="nav.analytics" style="display: flex; align-items: center; gap: 0.75em; color: #e0e0e0; text-decoration: none; font-weight: 400; padding: 0.85em 2em 0.5em 2em;"><i class="nav-icon" data-feather="bar-chart-2" style="color: #e0e0e0;"></i><span data-i18n="nav.analytics">Analytics</span></a></li>
+                    <li><a href="support.html" data-i18n="nav.support" style="display: flex; align-items: center; gap: 0.75em; color: #e0e0e0; text-decoration: none; font-weight: 400; padding: 0.85em 2em 0.5em 2em;"><i class="nav-icon" data-feather="help-circle" style="color: #e0e0e0;"></i><span data-i18n="nav.support">Support</span></a></li>
                 </ul>
             </nav>
+            <div class="sidebar-bottom" style="margin-top: auto; padding: 1.5em 2em 1em 2em; border-top: 1px solid #232336; background: #101014;">
+                <div class="sidebar-user-profile" style="display: flex; align-items: center; gap: 0.75em; margin-bottom: 1em;">
+                    <i data-feather="user" style="color: #b0b0b0; width: 1.5em; height: 1.5em;"></i>
+                    <span style="color: #e0e0e0; font-weight: 500; font-size: 1em;">User Name</span>
+                    <a href="#" title="Settings" style="margin-left: auto; color: #b0b0b0;"><i data-feather="settings" style="width: 1.2em; height: 1.2em;"></i></a>
+                </div>
+                <button class="btn sidebar-logout-btn" id="logout-btn" data-i18n="common.logout" style="width: 100%; background: #232336; color: #fff; border: none; border-radius: 6px; padding: 0.85em 0; font-size: 1em; font-weight: 500; cursor: pointer; margin-top: 0.5em; transition: background 0.2s, color 0.2s;">Logout</button>
+            </div>
         </aside>
-
-        <main class="main-content" role="main">
-            <header class="main-header motion-fade-in">
-                <div class="header-left">
-                    <h1 class="dashboard-title" data-i18n="dashboard.title">Dashboard</h1>
-                </div>
-                <div class="header-actions">
-                    <div class="user-profile">
-                        <span class="user-email" id="user-email"></span>
-                        <button class="btn btn-primary motion-pop" id="logout-btn" data-i18n="common.logout">Logout</button>
-                    </div>
-                </div>
+        <main class="main-content" role="main" style="max-width: 1100px; margin: 0 auto; padding: 2.5em 1.5em;">
+            <header class="main-header" style="margin-bottom: 2.5em;">
+                <h1 class="dashboard-title" data-i18n="dashboard.title" style="font-size: 2.2em; font-weight: 500; margin-bottom: 0.2em; letter-spacing: 0.01em;">Dashboard</h1>
             </header>
-
-            <section class="metrics-grid">
-                <div class="metric-card motion-fade-in align-center">
+            <section class="metrics-grid" style="margin-bottom: 2.5em;">
+                <div class="metric-card align-center" style="background: #18181c; border: 1px solid #232336; border-radius: 10px; padding: 2em 1.5em; margin-bottom: 2em;">
                     <div class="metric-header align-center">
-                        <div class="metric-icon"><i data-feather="users"></i></div>
+                        <div class="metric-icon"><i data-feather="users" style="color: #fff;"></i></div>
                     </div>
                     <div class="metric-content align-center">
-                        <div class="metric-value metric-number" id="leads-count">0</div>
-                        <div class="metric-label" data-i18n="dashboard.metrics.activeLeads">Active Leads</div>
+                        <div class="metric-value metric-number" id="leads-count" style="font-size: 2em; font-weight: 500;">0</div>
+                        <div class="metric-label" data-i18n="dashboard.metrics.activeLeads" style="color: #b0b0b0;">Active Leads</div>
                     </div>
                 </div>
-                <div class="metric-card motion-fade-in align-center">
+                <div class="metric-card align-center" style="background: #18181c; border: 1px solid #232336; border-radius: 10px; padding: 2em 1.5em; margin-bottom: 2em;">
                     <div class="metric-header align-center">
-                        <div class="metric-icon"><i data-feather="target"></i></div>
+                        <div class="metric-icon"><i data-feather="target" style="color: #fff;"></i></div>
                     </div>
                     <div class="metric-content align-center">
-                        <div class="metric-value metric-number">0%</div>
-                        <div class="metric-label" data-i18n="dashboard.metrics.conversionRate">Conversion Rate</div>
+                        <div class="metric-value metric-number" style="font-size: 2em; font-weight: 500;">0%</div>
+                        <div class="metric-label" data-i18n="dashboard.metrics.conversionRate" style="color: #b0b0b0;">Conversion Rate</div>
                     </div>
                 </div>
-                <div class="metric-card motion-fade-in align-center">
+                <div class="metric-card align-center" style="background: #18181c; border: 1px solid #232336; border-radius: 10px; padding: 2em 1.5em; margin-bottom: 2em;">
                     <div class="metric-header align-center">
-                        <div class="metric-icon"><i data-feather="bar-chart-2"></i></div>
+                        <div class="metric-icon"><i data-feather="bar-chart-2" style="color: #fff;"></i></div>
                     </div>
                     <div class="metric-content align-center">
-                        <div class="metric-value metric-number">0</div>
-                        <div class="metric-label" data-i18n="dashboard.metrics.activeCampaigns">Active Campaigns</div>
+                        <div class="metric-value metric-number" style="font-size: 2em; font-weight: 500;">0</div>
+                        <div class="metric-label" data-i18n="dashboard.metrics.activeCampaigns" style="color: #b0b0b0;">Active Campaigns</div>
                     </div>
                 </div>
-                <div class="metric-card motion-fade-in align-center">
+                <div class="metric-card align-center" style="background: #18181c; border: 1px solid #232336; border-radius: 10px; padding: 2em 1.5em; margin-bottom: 2em;">
                     <div class="metric-header align-center">
-                        <div class="metric-icon"><i data-feather="dollar-sign"></i></div>
+                        <div class="metric-icon"><i data-feather="dollar-sign" style="color: #fff;"></i></div>
                     </div>
                     <div class="metric-content align-center">
-                        <div class="metric-value metric-number">$0</div>
-                        <div class="metric-label" data-i18n="dashboard.metrics.monthlyRevenue">Monthly Revenue</div>
+                        <div class="metric-value metric-number" style="font-size: 2em; font-weight: 500;">$0</div>
+                        <div class="metric-label" data-i18n="dashboard.metrics.monthlyRevenue" style="color: #b0b0b0;">Monthly Revenue</div>
                     </div>
                 </div>
             </section>
-
-            <section class="main-chart">
-                <div class="chart-card motion-fade-in">
-                    <h3 data-i18n="dashboard.leadGenerationTrend.title">Lead Generation Trend</h3>
+            <section class="main-chart" style="margin-bottom: 2.5em;">
+                <div class="chart-card" style="background: #18181c; border: 1px solid #232336; border-radius: 10px; padding: 2em 1.5em;">
+                    <h3 data-i18n="dashboard.leadGenerationTrend.title" style="font-size: 1.25em; font-weight: 500; margin-bottom: 1em; color: #fff;">Lead Generation Trend</h3>
                     <div class="chart-container"><canvas id="leadsChart"></canvas></div>
                 </div>
             </section>
+            <!-- Add any quick actions or CTA buttons here, using .btn, .btn-primary, .btn-large -->
         </main>
     </div>
-
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="app-config.js"></script>
     <script src="auth-guard.js"></script>
     <script>
       document.addEventListener('DOMContentLoaded', () => {
         window.AuthGuard = new AuthGuard();
+        feather.replace();
       });
     </script>
     <script src="dashboard.js"></script>

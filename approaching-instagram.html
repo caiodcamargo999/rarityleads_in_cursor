@@ -41,11 +41,11 @@
                     <div class="instagram-subtitle" data-i18n="instagram.subtitle">Automate your Instagram outreach with AI-powered messaging and achieve high response rates</div>
                 </div>
                 <div style="display: flex; gap: 12px;">
-                    <button class="connect-btn" id="connect-btn" data-i18n="instagram.connect">
+                    <button class="connect-btn btn btn-primary btn-large" id="connect-btn" data-i18n="instagram.connect">
                         <i class="fab fa-instagram"></i>
                         <span data-i18n="instagram.connect">Connect Instagram</span>
                     </button>
-                    <button class="new-campaign-btn" id="new-campaign-btn" data-i18n="instagram.newCampaign">
+                    <button class="new-campaign-btn btn btn-primary btn-large" id="new-campaign-btn" data-i18n="instagram.newCampaign">
                         <i class="fas fa-plus"></i>
                         <span data-i18n="instagram.newCampaign">New Campaign</span>
                     </button>
@@ -102,7 +102,7 @@
                         </div>
                         <h3 class="empty-title" data-i18n="instagram.empty.title">No campaigns found</h3>
                         <p class="empty-description" data-i18n="instagram.empty.description">Start by creating your first Instagram campaign.</p>
-                        <button class="new-campaign-btn" id="add-first-campaign" data-i18n="instagram.newCampaign">
+                        <button class="new-campaign-btn btn btn-primary btn-large" id="add-first-campaign" data-i18n="instagram.newCampaign">
                             <i class="fas fa-plus"></i>
                             Create Your First Campaign
                         </button>
@@ -273,9 +273,9 @@
                             </div>
                         </div>
                         <div class="campaign-actions">
-                            <button class="action-btn" onclick="Instagram.viewCampaign('${campaign.id}')" data-i18n="instagram.actions.view">View</button>
-                            <button class="action-btn" onclick="Instagram.editCampaign('${campaign.id}')" data-i18n="instagram.actions.edit">Edit</button>
-                            <button class="action-btn primary" onclick="Instagram.startCampaign('${campaign.id}')" data-i18n="instagram.actions.start">Start</button>
+                            <button class="action-btn btn btn-primary" onclick="Instagram.viewCampaign('${campaign.id}')" data-i18n="instagram.actions.view">View</button>
+                            <button class="action-btn btn btn-primary" onclick="Instagram.editCampaign('${campaign.id}')" data-i18n="instagram.actions.edit">Edit</button>
+                            <button class="action-btn btn btn-primary" onclick="Instagram.startCampaign('${campaign.id}')" data-i18n="instagram.actions.start">Start</button>
                         </div>
                     </div>
                 `).join('');

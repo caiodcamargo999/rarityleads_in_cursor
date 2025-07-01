@@ -279,6 +279,17 @@ class AuthGuard {
             throw error;
         }
     }
+
+    showMessage(message, type) {
+        const messageElement = document.createElement('div');
+        messageElement.className = `message message-${type}`;
+        messageElement.textContent = message;
+        document.body.appendChild(messageElement);
+
+        setTimeout(() => {
+            messageElement.remove();
+        }, 3000);
+    }
 }
 
 // Initialize AuthGuard globally

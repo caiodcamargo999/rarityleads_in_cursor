@@ -520,3 +520,21 @@ All visual and UI/UX decisions are inspired by the modern, premium aesthetic of 
 ---
 
 **This guide is a living document. Always consult it for the latest on building, deploying, and maintaining Rarity Leads.** 
+
+# UI/UX Redesign Rules (2024)
+
+> **IMPORTANT:** As of 2024, the following design system is the only allowed style for Rarity Leads. All previous design systems, gradients, glassmorphism, and excessive bolding are deprecated and forbidden.
+
+**Design System Rules:**
+- Inspired by Codecademy: tech, dark, minimalist, and professional.
+- No gradients, glassmorphism, or unnecessary shadows.
+- No excessive bolding. Only two font weights allowed: 400 (regular), 500 (medium).
+- Sidebar: flat, modern, background #101014, always on the left, with navigation links and the logout button always at the bottom, visually separated.
+- Main background: #18181c. All cards and sections use this or a similar dark tone.
+- Text: #e0e0e0 (primary), #b0b0b0 (secondary).
+- Buttons: #232336 background, white text, subtle border or underline on hover, flat style.
+- All navigation and icons: simple, monochrome, tech-inspired.
+- All pages (public and app) must use this system. No exceptions.
+- All previous design systems, gradients, glass, and bolding are deprecated.
+
+--- 
