@@ -537,4 +537,36 @@ All visual and UI/UX decisions are inspired by the modern, premium aesthetic of 
 - All pages (public and app) must use this system. No exceptions.
 - All previous design systems, gradients, glass, and bolding are deprecated.
 
+---
+
+## Supabase Schema & Migration Files
+
+All Supabase schema, migration, and seed files for Rarity Leads are organized for clarity and version control. Use these files to set up, migrate, and manage your database schema in a modular way.
+
+### Folder Structure
+
+```
+/supabase/
+  README.md                # Setup and migration instructions
+  /schema/
+    001_create_tables.sql  # Create all main tables
+    002_enable_rls.sql     # Enable Row Level Security (RLS)
+    003_create_policies.sql# Create RLS policies
+  /seed/
+    seed_data.sql          # Example seed data for local/staging
+```
+
+### How to Use
+- Run each file in order using the Supabase SQL Editor or CLI, as described in /supabase/README.md.
+- The modular files replace the older monolithic files (e.g., supabase_schema.sql, supabase_whatsapp_schema.sql, etc.), which are now archived for reference.
+- Always use the modular files for new migrations and updates.
+
+### Purpose
+- **001_create_tables.sql**: Creates all main tables with UUID PKs, foreign keys, and JSONB fields.
+- **002_enable_rls.sql**: Enables RLS on all user-specific tables.
+- **003_create_policies.sql**: Adds RLS policies for user and admin access.
+- **seed_data.sql**: Provides example data for local/staging testing.
+
+See /supabase/README.md for full instructions and best practices.
+
 --- 
