@@ -200,11 +200,11 @@ class UniversalNavigation {
             if (user) {
                 this.updateUserDisplay(user);
                 
-                // Load profile data from profiles table
+                // Load profile data from user_profiles table
                 const { data: profile } = await this.supabase
-                    .from('profiles')
+                    .from('user_profiles')
                     .select('*')
-                    .eq('id', user.id)
+                    .eq('user_id', user.id)
                     .single();
 
                 if (profile) {

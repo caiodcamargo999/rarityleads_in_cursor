@@ -9,6 +9,8 @@
     <script src="https://unpkg.com/feather-icons"></script>
 </head>
 <body>
+    <!-- Top right language/theme panel -->
+    <div id="topright-lang-theme-panel"></div>
     <!-- Removed animated-cursor-arrow elements for strict design compliance -->
     <header class="main-header">
         <nav class="main-nav" style="display: flex; align-items: center; justify-content: space-between; max-width: 1200px; margin: 0 auto; padding: 1.5em 2em;">
@@ -18,7 +20,6 @@
                 <a href="#pricing" data-i18n="landing.pricing" style="color: var(--primary-text); text-decoration: none; font-weight: 400;">Pricing</a>
                 <a href="/auth.html" class="btn" data-i18n="common.signIn">Sign In</a>
                 <a href="/auth.html" class="btn btn-primary btn-large" data-i18n="common.getStartedFree">Get Started Free</a>
-                <div class="language-selector" id="language-selector"></div>
             </div>
         </nav>
     </header>
@@ -105,8 +106,21 @@
         <p data-i18n="common.copyright">&copy; 2024 Rarity Leads. All rights reserved.</p>
     </footer>
 
+    <script src="i18n.js"></script>
+    <script src="language-theme-toggle.js"></script>
     <script>
         feather.replace();
+        document.addEventListener('DOMContentLoaded', function() {
+            if (window.LanguageThemePanel) {
+                window.LanguageThemePanel.initTopRightPanel('topright-lang-theme-panel');
+            }
+            if (window.i18n) {
+                window.i18n.applyTranslations();
+                window.addEventListener('languageChanged', function() {
+                    window.i18n.applyTranslations();
+                });
+            }
+        });
     </script>
 </body>
 </html>

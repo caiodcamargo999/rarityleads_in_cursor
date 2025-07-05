@@ -1097,3 +1097,105 @@ input:checked + .slider:before {
         max-width: 200px;
     }
 }
+
+/* Language & Theme Toggle */
+.lang-toggle-box {
+  display: flex;
+  gap: 0.5em;
+  flex-wrap: wrap;
+  margin-bottom: 1em;
+}
+.lang-btn {
+  background: transparent;
+  color: var(--primary-text);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.4em 0.9em;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+.lang-btn.active, .lang-btn:hover {
+  background: var(--button-bg);
+  color: #fff;
+}
+.theme-toggle-btn {
+  background: none;
+  border: none;
+  color: var(--primary-text);
+  font-size: 1.2em;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  margin-bottom: 0.5em;
+  transition: color 0.2s;
+}
+.theme-toggle-btn:hover {
+  color: var(--accent-purple, #8B5CF6);
+}
+
+/* Light Theme */
+body.light-theme {
+  --main-bg: #f7f7fa;
+  --sidebar-bg: #f0f0f5;
+  --card-bg: #fff;
+  --button-bg: #e0e0e0;
+  --button-hover-bg: #d1d1e0;
+  --primary-text: #232136;
+  --secondary-text: #393552;
+  --border: #d1d1e0;
+}
+body.light-theme .sidebar {
+  background: var(--sidebar-bg);
+  color: var(--primary-text);
+}
+body.light-theme .main-content {
+  background: var(--main-bg);
+  color: var(--primary-text);
+}
+body.light-theme .metric-card, body.light-theme .chart-card {
+  background: var(--card-bg);
+  color: var(--primary-text);
+  border: 1px solid var(--border);
+}
+body.light-theme .btn, body.light-theme .btn-primary, body.light-theme .btn-large {
+  background: var(--button-bg);
+  color: var(--primary-text);
+  border: 1px solid var(--border);
+}
+body.light-theme .btn:hover, body.light-theme .btn-primary:hover, body.light-theme .btn-large:hover {
+  background: var(--button-hover-bg);
+  color: var(--primary-text);
+}
+
+/* Sidebar Profile/Logout Compact */
+.sidebar-bottom {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+  padding: 1em 2em 1.5em 2em;
+  border-top: 1px solid var(--logout-separator);
+  background: var(--sidebar-bg);
+}
+.sidebar-profile-btn, .sidebar-logout-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.7em;
+  background: var(--button-bg);
+  color: var(--button-text);
+  border: none;
+  border-radius: 6px;
+  padding: 0.7em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+  box-shadow: none;
+  margin: 0;
+}
+.sidebar-profile-btn:hover, .sidebar-logout-btn:hover {
+  background: var(--button-hover-bg);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+}

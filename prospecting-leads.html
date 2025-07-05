@@ -49,6 +49,10 @@
     </style>
 </head>
 <body class="dark-bg">
+    <!-- Place this at the very top right, outside main content -->
+    <div style="position: absolute; top: 1.5em; right: 2em; z-index: 100;">
+      <div id="appbar-lang-theme-toggle"></div>
+    </div>
     <div class="dashboard-container">
         <aside class="sidebar" id="sidebar" role="navigation" aria-label="Main navigation"></aside>
         <main class="main-content" role="main">
@@ -161,5 +165,13 @@
     <script src="app-config.js"></script>
     <script src="auth-guard.js"></script>
     <script src="universal-navigation.js"></script>
+    <script src="language-theme-toggle.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      if (window.LanguageThemeToggle) {
+        window.LanguageThemeToggle.init('appbar-lang-theme-toggle');
+      }
+    });
+    </script>
 </body>
 </html>

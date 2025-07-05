@@ -441,4 +441,19 @@ color: var(--primary-text);
 
 ---
 
+## 🟦 Profile, Theme, and Language Panel (Anthropic-Style, Bottom Left)
+
+- After login, the theme switcher, language switcher, profile/settings, and logout controls must be grouped in a single, beautiful, minimalist floating panel in the **bottom left corner** of the app (inspired by https://console.anthropic.com/dashboard).
+- This panel must be visually distinct (card style, subtle shadow, rounded corners), compact, and always accessible on all post-login pages (Dashboard, Leads, Companies, Outreach, Analytics, Support, Profile, etc).
+- The panel must include:
+  - User avatar or initials (circle)
+  - User name and email (if available)
+  - Profile/Settings link
+  - Theme toggle (dark/light)
+  - Language switcher (dropdown)
+  - Logout button
+- The panel must be visually harmonious, minimalist, and strictly follow the Rarity Leads design system (no gradients, no glass, no excessive bolding, only allowed colors and font weights).
+- The top-right language/theme switcher must be removed from all post-login pages.
+- The panel must be responsive and accessible.
+
 **This document is the single source of truth for Rarity Leads design. All developers must follow these rules without exception.** 

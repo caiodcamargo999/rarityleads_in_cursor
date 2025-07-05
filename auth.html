@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="rarity-design.css">
 </head>
 <body>
+    <!-- Top right language/theme panel -->
+    <div id="topright-lang-theme-panel"></div>
     <header class="main-header motion-fade-in">
         <nav class="main-nav">
             <div class="logo motion-pop" data-i18n="common.brand">Rarity Leads</div>
@@ -103,6 +105,7 @@
     <script src="app-config.js"></script>
     <script src="auth-guard.js"></script>
     <script src="i18n.js"></script>
+    <script src="language-theme-toggle.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const supabase = window.AppUtils && window.AppUtils.initSupabase ? window.AppUtils.initSupabase() : null;
@@ -226,6 +229,16 @@
                     resetMessageContainer.innerHTML = '<div class="message message-success">Password reset link sent to your email!</div>';
                 }
             });
+
+            if (window.LanguageThemePanel) {
+                window.LanguageThemePanel.initTopRightPanel('topright-lang-theme-panel');
+            }
+            if (window.i18n) {
+                window.i18n.applyTranslations();
+                window.addEventListener('languageChanged', function() {
+                    window.i18n.applyTranslations();
+                });
+            }
         });
     </script>
 </body>

@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profile Settings - Rarity Leads</title>
+  <link rel="stylesheet" href="rarity-design.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/feather-icons"></script>
+</head>
+<body>
+  <!-- Place this at the very top right, outside main content -->
+  <div style="position: absolute; top: 1.5em; right: 2em; z-index: 100;">
+    <div id="appbar-lang-theme-toggle"></div>
+  </div>
+  <div class="dashboard-container">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar" role="navigation" aria-label="Main navigation">
+      <div class="sidebar-header">
+        <img src="rarity-logo.jpg" alt="Rarity Leads Logo" class="sidebar-logo" style="width: 44px; height: 44px; border-radius: 12px; margin: 1.5em auto 1em auto; display: block;" />
+      </div>
+      <nav class="sidebar-nav" style="flex:1; overflow-y:auto;">
+        <ul>
+          <li><a href="dashboard.html" data-page="dashboard"><i class="nav-icon" data-feather="home"></i><span>Dashboard</span></a></li>
+          <li><a href="prospecting-leads.html" data-page="leads"><i class="nav-icon" data-feather="users"></i><span>Leads</span></a></li>
+          <li><a href="prospecting-companies.html" data-page="companies"><i class="nav-icon" data-feather="briefcase"></i><span>Companies</span></a></li>
+          <li class="nav-section"><span class="nav-section-title">OUTREACH</span></li>
+          <li><a href="approaching-whatsapp.html" data-page="whatsapp"><span class="nav-icon">📱</span><span>WhatsApp</span></a></li>
+          <li><a href="approaching-linkedin.html" data-page="linkedin"><span class="nav-icon">💼</span><span>LinkedIn</span></a></li>
+          <li><a href="approaching-instagram.html" data-page="instagram"><span class="nav-icon">📸</span><span>Instagram</span></a></li>
+          <li><a href="approaching-facebook.html" data-page="facebook"><span class="nav-icon">📘</span><span>Facebook</span></a></li>
+          <li><a href="approaching-x.html" data-page="x"><span class="nav-icon">𝕏</span><span>X (Twitter)</span></a></li>
+          <li class="nav-section"><span class="nav-section-title">ANALYTICS & SUPPORT</span></li>
+          <li><a href="analytics.html" data-page="analytics"><i class="nav-icon" data-feather="bar-chart-2"></i><span>Analytics</span></a></li>
+          <li><a href="support.html" data-page="support"><i class="nav-icon" data-feather="help-circle"></i><span>Support</span></a></li>
+        </ul>
+      </nav>
+      <div class="sidebar-bottom">
+        <button class="sidebar-profile-btn" id="profile-btn" aria-current="page">
+          <i data-feather="user"></i>
+          <span>Profile & Settings</span>
+        </button>
+        <button class="sidebar-logout-btn" id="logout-btn">
+          <i data-feather="log-out"></i>
+          <span>Logout</span>
+        </button>
+      </div>
+    </aside>
+    <!-- Main Content -->
+    <main class="main-content" role="main">
+      <section style="max-width: 520px; margin: 0 auto; padding: 2.5em 0 2em 0;">
+        <h1 style="font-size: 2em; font-weight: 500; margin-bottom: 1.2em; color: var(--primary-text);">Profile Settings</h1>
+        <!-- Legal Info -->
+        <div class="profile-section" style="margin-bottom:2.2em;">
+          <h2 style="font-size: 1.1em; font-weight: 500; margin-bottom: 0.7em; color: var(--primary-text);">Legal Information</h2>
+          <form id="profile-legal-form" autocomplete="off" style="display: flex; flex-direction: column; gap: 1.2em;">
+            <div style="display: flex; gap: 1em;">
+              <div style="flex:1;">
+                <label for="full_name" style="color: var(--secondary-text); font-size: 0.98em;">Full Name</label>
+                <input type="text" id="full_name" name="full_name" class="form-input" style="width:100%;" placeholder="Your full name" autocomplete="name" />
+              </div>
+              <div style="flex:1;">
+                <label for="company" style="color: var(--secondary-text); font-size: 0.98em;">Company</label>
+                <input type="text" id="company" name="company" class="form-input" style="width:100%;" placeholder="Company name" />
+              </div>
+            </div>
+            <div style="display: flex; gap: 1em;">
+              <div style="flex:1;">
+                <label for="email" style="color: var(--secondary-text); font-size: 0.98em;">Email</label>
+                <input type="email" id="email" name="email" class="form-input" style="width:100%;" placeholder="Email address" autocomplete="email" disabled />
+              </div>
+              <div style="flex:1;">
+                <label for="plan" style="color: var(--secondary-text); font-size: 0.98em;">Plan</label>
+                <input type="text" id="plan" name="plan" class="form-input" style="width:100%;" placeholder="Subscription plan" disabled />
+              </div>
+            </div>
+            <button type="submit" class="btn btn-primary" style="margin-top:0.5em; align-self: flex-end;">Save Changes</button>
+          </form>
+        </div>
+        <!-- Change Password -->
+        <div class="profile-section" style="margin-bottom:2.2em;">
+          <h2 style="font-size: 1.1em; font-weight: 500; margin-bottom: 0.7em; color: var(--primary-text);">Change Password</h2>
+          <form id="profile-password-form" autocomplete="off" style="display: flex; flex-direction: column; gap: 1.2em; max-width: 340px;">
+            <div>
+              <label for="current_password" style="color: var(--secondary-text); font-size: 0.98em;">Current Password</label>
+              <input type="password" id="current_password" name="current_password" class="form-input" style="width:100%;" placeholder="Current password" autocomplete="current-password" />
+            </div>
+            <div>
+              <label for="new_password" style="color: var(--secondary-text); font-size: 0.98em;">New Password</label>
+              <input type="password" id="new_password" name="new_password" class="form-input" style="width:100%;" placeholder="New password" autocomplete="new-password" />
+            </div>
+            <button type="submit" class="btn btn-primary" style="align-self: flex-end;">Change Password</button>
+          </form>
+        </div>
+        <!-- Authentication Methods -->
+        <div class="profile-section" style="margin-bottom:2.2em;">
+          <h2 style="font-size: 1.1em; font-weight: 500; margin-bottom: 0.7em; color: var(--primary-text);">Authentication Methods</h2>
+          <div style="display: flex; gap: 1.2em; align-items: center;">
+            <button class="btn" style="min-width: 120px;"><i data-feather="mail"></i> Email</button>
+            <button class="btn" style="min-width: 120px;"><i data-feather="user"></i> Google</button>
+          </div>
+          <div style="margin-top: 0.7em; color: var(--secondary-text); font-size: 0.97em;">Add or manage your authentication methods. (Coming soon)</div>
+        </div>
+        <!-- Delete Account -->
+        <div class="profile-section" style="margin-bottom:2.2em;">
+          <h2 style="font-size: 1.1em; font-weight: 500; margin-bottom: 0.7em; color: var(--primary-text);">Delete Account</h2>
+          <button class="btn btn-secondary" style="background: #232336; color: #fff; border: 1px solid #393552;" disabled>Delete My Account</button>
+          <div style="margin-top: 0.7em; color: var(--secondary-text); font-size: 0.97em;">Account deletion is permanent and cannot be undone. (Coming soon)</div>
+        </div>
+      </section>
+    </main>
+  </div>
+  <script src="app-config.js"></script>
+  <script src="i18n.js"></script>
+  <script src="auth-guard.js"></script>
+  <script src="universal-navigation.js"></script>
+  <script src="language-theme-toggle.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async function() {
+      if (window.LanguageThemeToggle) {
+        window.LanguageThemeToggle.init('appbar-lang-theme-toggle');
+      }
+      if (typeof feather !== 'undefined') {
+        feather.replace();
+      }
+
+      // Supabase init
+      const supabase = window.AppUtils && window.AppUtils.initSupabase ? window.AppUtils.initSupabase() : null;
+      if (!supabase) return;
+
+      // Elements
+      const legalForm = document.getElementById('profile-legal-form');
+      const fullNameInput = document.getElementById('full_name');
+      const companyInput = document.getElementById('company');
+      const emailInput = document.getElementById('email');
+      const planInput = document.getElementById('plan');
+      const passwordForm = document.getElementById('profile-password-form');
+      const logoutBtn = document.getElementById('logout-btn');
+
+      // Notification helper
+      function showNotification(msg, type = 'info') {
+        const n = document.createElement('div');
+        n.textContent = msg;
+        n.style.position = 'fixed';
+        n.style.bottom = '2em';
+        n.style.right = '2em';
+        n.style.background = 'var(--card-bg)';
+        n.style.color = 'var(--primary-text)';
+        n.style.padding = '1em 1.5em';
+        n.style.borderRadius = '8px';
+        n.style.boxShadow = '0 2px 8px rgba(0,0,0,0.08)';
+        n.style.fontWeight = '500';
+        n.style.zIndex = 9999;
+        document.body.appendChild(n);
+        setTimeout(() => n.remove(), 3500);
+      }
+
+      // Fetch user and profile
+      let user = null;
+      let profile = null;
+      try {
+        const { data: { user: u } } = await supabase.auth.getUser();
+        user = u;
+        if (user) {
+          emailInput.value = user.email || '';
+          // Fetch profile
+          const { data: p } = await supabase
+            .from('user_profiles')
+            .select('*')
+            .eq('user_id', user.id)
+            .single();
+          profile = p;
+          if (profile) {
+            fullNameInput.value = profile.full_name || '';
+            companyInput.value = profile.company || '';
+            planInput.value = profile.plan || '';
+          }
+        }
+      } catch (e) {
+        showNotification('Failed to load profile', 'error');
+      }
+
+      // Save legal info
+      legalForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        if (!user) return;
+        const updates = {
+          full_name: fullNameInput.value,
+          company: companyInput.value,
+          updated_at: new Date().toISOString()
+        };
+        const { error } = await supabase
+          .from('user_profiles')
+          .update(updates)
+          .eq('user_id', user.id);
+        if (error) {
+          showNotification('Failed to update profile', 'error');
+        } else {
+          showNotification('Profile updated', 'success');
+        }
+      });
+
+      // Change password
+      passwordForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const newPassword = document.getElementById('new_password').value;
+        if (!newPassword) return showNotification('Enter a new password', 'error');
+        const { error } = await supabase.auth.updateUser({ password: newPassword });
+        if (error) {
+          showNotification('Failed to change password', 'error');
+        } else {
+          showNotification('Password changed', 'success');
+          passwordForm.reset();
+        }
+      });
+
+      // Logout
+      logoutBtn.addEventListener('click', async function() {
+        await supabase.auth.signOut();
+        window.location.href = '/auth.html';
+      });
+    });
+  </script>
+</body>
+</html> 

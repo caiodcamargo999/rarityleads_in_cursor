@@ -26,9 +26,6 @@ class I18nManager {
     // Load initial translations
     await this.loadTranslations(this.currentLanguage);
     
-    // Setup language switcher
-    this.setupLanguageSwitcher();
-    
     // Setup mutation observer for dynamic content
     this.setupMutationObserver();
   }
@@ -109,9 +106,6 @@ class I18nManager {
       // Apply translations
       this.applyTranslations();
       
-      // Update language switcher
-      this.updateLanguageSwitcher();
-      
       // Trigger custom event
       window.dispatchEvent(new CustomEvent('languageChanged', {
         detail: { language, translations: this.translations[language] }
@@ -170,114 +164,6 @@ class I18nManager {
     if (metaDescription && currentTranslations.meta.description) {
       metaDescription.setAttribute('content', currentTranslations.meta.description);
     }
-  }
-
-  setupLanguageSwitcher() {
-    // Find existing language switcher
-    const languageSwitcher = document.querySelector('.language-selector');
-
-    if (languageSwitcher) {
-      this.updateLanguageSwitcher();
-      this.attachLanguageSwitcherEvents();
-    } else {
-      // Create language switcher if it doesn't exist
-      const createdSwitcher = this.createLanguageSwitcher();
-      if (createdSwitcher) {
-        this.updateLanguageSwitcher();
-        this.attachLanguageSwitcherEvents();
-      }
-    }
-  }
-
-  createLanguageSwitcher() {
-    const nav = document.querySelector('.nav-links') || document.querySelector('nav');
-    if (!nav) return null;
-
-    const languageSelector = document.createElement('div');
-    languageSelector.className = 'language-selector';
-    languageSelector.innerHTML = `
-      <button class="current-lang" aria-label="Select language">
-        <span class="lang-flag"></span>
-        <span class="lang-code"></span>
-        <i class="fas fa-chevron-down"></i>
-      </button>
-      <div class="lang-dropdown">
-        ${Object.entries(this.supportedLanguages).map(([code, lang]) => `
-          <a href="#" data-lang="${code}" class="lang-option">
-            <span class="lang-flag">${lang.flag}</span>
-            <span class="lang-name">${lang.name}</span>
-          </a>
-        `).join('')}
-      </div>
-    `;
-
-    nav.appendChild(languageSelector);
-    return languageSelector;
-  }
-
-  updateLanguageSwitcher() {
-    const currentLang = document.querySelector('.current-lang');
-    const langOptions = document.querySelectorAll('.lang-option');
-    
-    if (currentLang) {
-      const currentLangData = this.supportedLanguages[this.currentLanguage];
-      currentLang.querySelector('.lang-flag').textContent = currentLangData.flag;
-      currentLang.querySelector('.lang-code').textContent = currentLangData.code.toUpperCase();
-    }
-
-    // Update active state
-    langOptions.forEach(option => {
-      const isActive = option.getAttribute('data-lang') === this.currentLanguage;
-      option.classList.toggle('active', isActive);
-    });
-  }
-
-  attachLanguageSwitcherEvents() {
-    // Remove existing event listeners to prevent duplicates
-    if (this.languageEventListeners) {
-      this.languageEventListeners.forEach(({ element, event, handler }) => {
-        element.removeEventListener(event, handler);
-      });
-    }
-    this.languageEventListeners = [];
-
-    // Toggle dropdown
-    const toggleHandler = (e) => {
-      const currentLang = e.target.closest('.current-lang');
-      const languageSelector = e.target.closest('.language-selector');
-
-      if (currentLang) {
-        e.preventDefault();
-        languageSelector.classList.toggle('open');
-      } else if (!languageSelector) {
-        // Close dropdown when clicking outside
-        document.querySelectorAll('.language-selector').forEach(selector => {
-          selector.classList.remove('open');
-        });
-      }
-    };
-
-    // Language selection
-    const selectionHandler = (e) => {
-      const langOption = e.target.closest('.lang-option');
-      if (langOption) {
-        e.preventDefault();
-        const selectedLang = langOption.getAttribute('data-lang');
-        this.switchLanguage(selectedLang);
-
-        // Close dropdown
-        langOption.closest('.language-selector').classList.remove('open');
-      }
-    };
-
-    document.addEventListener('click', toggleHandler);
-    document.addEventListener('click', selectionHandler);
-
-    // Store event listeners for cleanup
-    this.languageEventListeners.push(
-      { element: document, event: 'click', handler: toggleHandler },
-      { element: document, event: 'click', handler: selectionHandler }
-    );
   }
 
   setupMutationObserver() {

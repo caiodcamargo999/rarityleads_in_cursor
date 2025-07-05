@@ -433,9 +433,9 @@ class Dashboard {
 
             // Load user profile from Supabase
             const { data: profile, error } = await this.supabase
-                .from('profiles')
+                .from('user_profiles')
                 .select('*')
-                .eq('id', this.currentUser.id)
+                .eq('user_id', this.currentUser.id)
                 .single();
 
             if (error) {
