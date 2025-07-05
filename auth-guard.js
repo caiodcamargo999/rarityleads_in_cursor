@@ -128,7 +128,7 @@ class AuthGuard {
             // If on protected page, redirect to login with verification message
             if (this.isProtectedPage()) {
                 console.log('🔄 AuthGuard: Redirecting to login for verification');
-                this.redirectTo('/login.html');
+                this.redirectTo('/auth.html');
             }
         }
     }
@@ -139,7 +139,7 @@ class AuthGuard {
         // Redirect to login if on protected page
             if (this.isProtectedPage()) {
                 console.log('🔄 AuthGuard: Redirecting to login after sign out');
-                this.redirectTo('/login.html');
+                this.redirectTo('/auth.html');
             }
     }
 
@@ -182,14 +182,14 @@ class AuthGuard {
         if (this.redirectAttempted) return;
         
         console.log('🔄 AuthGuard: Redirecting unauthenticated user to login');
-        this.redirectTo('/login.html');
+        this.redirectTo('/auth.html');
     }
 
     handleUnverified() {
         if (this.redirectAttempted) return;
         
         console.log('🔄 AuthGuard: Redirecting unverified user to login');
-        this.redirectTo('/login.html');
+        this.redirectTo('/auth.html');
     }
 
     redirectTo(path) {
