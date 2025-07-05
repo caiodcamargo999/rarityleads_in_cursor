@@ -18,59 +18,45 @@
     "linkedin": "LinkedIn",
     "instagram": "Instagram",
     "facebook": "Facebook",
-    "x": "X",
+    "x": "X (Twitter)",
     "analyticsSupport": "Analytics & Support",
     "analytics": "Analytics",
     "support": "Support"
   },
   "dashboard": {
-    "title": "Client Acquisition Dashboard",
-    "subtitle": "Ready to convert more leads today?",
-    "quickActions": {
-      "campaignTitle": "Create New Campaign",
-      "campaignSubtitle": "Start converting leads with targeted outreach",
-      "campaignButton": "Start Campaign",
-      "linkedinTitle": "Connect LinkedIn",
-      "linkedinSubtitle": "Expand your reach with professional networking",
-      "linkedinButton": "Connect Now"
+    "meta": {
+      "title": "Dashboard - Rarity Leads"
     },
-    "metrics": {
-      "activeLeads": "Active Leads",
-      "monthlyGoal": "{percentage}% of monthly goal",
-      "conversionRate": "Conversion Rate",
-      "target": "{percentage}% of target",
-      "activeCampaigns": "Active Campaigns",
-      "capacity": "{percentage}% capacity",
-      "monthlyRevenue": "Monthly Revenue"
-    },
-    "performanceOverview": {
-      "title": "Performance Overview",
+    "title": "Dashboard",
+    "welcome": "Welcome back! Here's your overview.",
+    "filters": {
       "7d": "7D",
       "30d": "30D",
       "90d": "90D"
     },
+    "metrics": {
+      "activeLeads": "Active Leads",
+      "conversionRate": "Conversion Rate",
+      "activeCampaigns": "Active Campaigns",
+      "monthlyRevenue": "Monthly Revenue"
+    },
     "leadGenerationTrend": {
       "title": "Lead Generation Trend"
     },
-    "conversionFunnel": {
-      "title": "Conversion Funnel",
-      "visitors": "Visitors",
-      "leads": "Leads",
-      "qualified": "Qualified",
-      "customers": "Customers"
+    "channelPerformance": {
+      "title": "Channel Performance"
     },
-    "latestActivity": {
-      "title": "Latest Activity",
-      "viewAll": "View all →"
-    },
-    "recentLeads": {
-      "title": "Recent Leads",
-      "search": "Search",
-      "export": "Export"
-    },
-    "activeCampaigns": {
-      "title": "Active Campaigns",
+    "charts": {
       "viewAll": "View All"
+    },
+    "quickActions": {
+      "title": "Quick Actions"
+    },
+    "actions": {
+      "newLead": "Add New Lead",
+      "newCampaign": "Create Campaign",
+      "exportData": "Export Data",
+      "scheduleMeeting": "Schedule Meeting"
     }
   },
   "landing": {

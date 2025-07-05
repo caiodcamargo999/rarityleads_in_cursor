@@ -1,17 +1,42 @@
-// Dashboard JavaScript - Enhanced Functionality
+// Dashboard JavaScript - Phase 2 Enhanced Functionality
 class Dashboard {
     constructor() {
+        this.supabase = null;
+        this.currentUser = null;
+        this.charts = {};
+        this.metrics = {};
+        this.realTimeSubscription = null;
         this.init();
     }
 
-    init() {
-        this.initializeElements();
-        this.setupEventListeners();
-        this.initializeCharts();
-        this.setupAnimations();
-        this.loadUserData();
-        this.updateWelcomeMessage();
-        this.startRealTimeUpdates();
+    async init() {
+        try {
+            console.log('🚀 Dashboard: Initializing Phase 2...');
+            
+            // Initialize Supabase
+            this.supabase = window.AppUtils?.initSupabase();
+            if (!this.supabase) {
+                throw new Error('Supabase not available');
+            }
+
+            // Get current user
+            const { data: { user } } = await this.supabase.auth.getUser();
+            this.currentUser = user;
+
+            this.initializeElements();
+            this.setupEventListeners();
+            this.initializeCharts();
+            this.setupAnimations();
+            this.loadUserData();
+            this.updateWelcomeMessage();
+            this.loadMetrics();
+            this.startRealTimeUpdates();
+            
+            console.log('✅ Dashboard: Phase 2 initialization complete');
+        } catch (error) {
+            console.error('❌ Dashboard: Initialization failed:', error);
+            this.showNotification('Failed to initialize dashboard', 'error');
+        }
     }
 
     initializeElements() {
@@ -26,10 +51,32 @@ class Dashboard {
         
         // Charts
         this.leadsChart = document.getElementById('leadsChart');
+        this.channelsChart = document.getElementById('channelsChart');
+        
+        // Mini charts
+        this.miniCharts = {
+            leads: document.getElementById('leads-mini-chart'),
+            conversion: document.getElementById('conversion-mini-chart'),
+            campaigns: document.getElementById('campaigns-mini-chart'),
+            revenue: document.getElementById('revenue-mini-chart')
+        };
         
         // User elements
+        this.userName = document.getElementById('user-name');
         this.userEmail = document.getElementById('user-email');
         this.welcomeSubtitle = document.getElementById('welcome-subtitle');
+        
+        // Metrics
+        this.metricElements = {
+            leadsCount: document.getElementById('leads-count'),
+            conversionRate: document.getElementById('conversion-rate'),
+            activeCampaigns: document.getElementById('active-campaigns'),
+            monthlyRevenue: document.getElementById('monthly-revenue')
+        };
+        
+        // Action buttons
+        this.actionButtons = document.querySelectorAll('.action-btn');
+        this.chartActionButtons = document.querySelectorAll('.chart-action-btn');
         
         // Initialize Feather icons
         if (typeof feather !== 'undefined') {
@@ -57,44 +104,46 @@ class Dashboard {
         });
 
         // Action buttons
-        this.setupActionButtons();
+        this.actionButtons.forEach(btn => {
+            btn.addEventListener('click', (e) => this.handleActionButton(e));
+        });
         
-        // Lead actions
-        this.setupLeadActions();
-        
-        // Campaign actions
-        this.setupCampaignActions();
+        // Chart action buttons
+        this.chartActionButtons.forEach(btn => {
+            btn.addEventListener('click', (e) => this.handleChartAction(e));
+        });
 
         // Keyboard shortcuts
         document.addEventListener('keydown', (e) => this.handleKeyboardShortcuts(e));
 
-        // Logout button in header
+        // Logout button
         const logoutBtn = document.getElementById('logout-btn');
         if (logoutBtn) {
             logoutBtn.addEventListener('click', async () => {
-                if (window.AuthGuard && window.AuthGuard.supabase) {
-                    await window.AuthGuard.supabase.auth.signOut();
-                    window.location.href = '/login.html';
-                } else if (window.AppUtils && window.AppUtils.initSupabase) {
-                    const supabase = window.AppUtils.initSupabase();
-                    await supabase.auth.signOut();
-                    window.location.href = '/login.html';
-                } else {
-                    window.location.href = '/login.html';
-                }
+                await this.handleLogout();
             });
+        }
+
+        // User settings button
+        const settingsBtn = document.querySelector('.user-settings-btn');
+        if (settingsBtn) {
+            settingsBtn.addEventListener('click', () => this.handleSettings());
         }
     }
 
     toggleSidebar() {
         this.sidebar.classList.toggle('open');
-        this.overlay.classList.toggle('active');
+        if (this.overlay) {
+            this.overlay.classList.toggle('active');
+        }
         document.body.style.overflow = this.sidebar.classList.contains('open') ? 'hidden' : '';
     }
 
     closeSidebar() {
         this.sidebar.classList.remove('open');
-        this.overlay.classList.remove('active');
+        if (this.overlay) {
+            this.overlay.classList.remove('active');
+        }
         document.body.style.overflow = '';
     }
 
@@ -112,39 +161,115 @@ class Dashboard {
         this.updateChartData(period);
     }
 
-    updateChartData(period) {
-        // Simulate loading state
-        const chartContainer = document.querySelector('.chart-container');
-        chartContainer.classList.add('loading');
+    async updateChartData(period) {
+        try {
+            // Show loading state
+            const chartContainers = document.querySelectorAll('.chart-container');
+            chartContainers.forEach(container => container.classList.add('loading'));
+            
+            // Fetch new data based on period
+            const data = await this.fetchChartData(period);
+            
+            // Update charts
+            this.updateLeadsChart(data.leads);
+            this.updateChannelsChart(data.channels);
+            this.updateMiniCharts(data.miniCharts);
+            
+            // Remove loading state
+            setTimeout(() => {
+                chartContainers.forEach(container => container.classList.remove('loading'));
+            }, 500);
+            
+        } catch (error) {
+            console.error('❌ Dashboard: Failed to update chart data:', error);
+            this.showNotification('Failed to update charts', 'error');
+        }
+    }
+
+    async fetchChartData(period) {
+        // Simulate API call - replace with actual Supabase queries
+        const mockData = {
+            leads: {
+                labels: this.getLabelsForPeriod(period),
+                data: this.generateMockData(period, 50, 100)
+            },
+            channels: {
+                labels: ['WhatsApp', 'LinkedIn', 'Instagram', 'Facebook', 'X'],
+                data: [35, 25, 20, 15, 5]
+            },
+            miniCharts: {
+                leads: this.generateMockData(period, 10, 30),
+                conversion: this.generateMockData(period, 5, 15),
+                campaigns: this.generateMockData(period, 2, 8),
+                revenue: this.generateMockData(period, 1000, 5000)
+            }
+        };
         
-        setTimeout(() => {
-            // Update chart with new data
-            this.updateLeadsChart(period);
-            chartContainer.classList.remove('loading');
-        }, 500);
+        return mockData;
+    }
+
+    getLabelsForPeriod(period) {
+        const now = new Date();
+        const labels = [];
+        
+        switch (period) {
+            case '7d':
+                for (let i = 6; i >= 0; i--) {
+                    const date = new Date(now);
+                    date.setDate(date.getDate() - i);
+                    labels.push(date.toLocaleDateString('en-US', { weekday: 'short' }));
+                }
+                break;
+            case '30d':
+                for (let i = 29; i >= 0; i--) {
+                    const date = new Date(now);
+                    date.setDate(date.getDate() - i);
+                    labels.push(date.getDate().toString());
+                }
+                break;
+            case '90d':
+                for (let i = 11; i >= 0; i--) {
+                    const date = new Date(now);
+                    date.setDate(date.getDate() - (i * 7));
+                    labels.push(date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }));
+                }
+                break;
+        }
+        
+        return labels;
+    }
+
+    generateMockData(period, min, max) {
+        const length = period === '7d' ? 7 : period === '30d' ? 30 : 12;
+        return Array.from({ length }, () => Math.floor(Math.random() * (max - min + 1)) + min);
     }
 
     initializeCharts() {
         if (this.leadsChart) {
             this.createLeadsChart();
         }
+        
+        if (this.channelsChart) {
+            this.createChannelsChart();
+        }
+        
+        this.createMiniCharts();
     }
 
     createLeadsChart() {
         const ctx = this.leadsChart.getContext('2d');
         
-        // Sample data for 7 days
         const data = {
             labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
             datasets: [{
                 label: 'Leads Generated',
                 data: [45, 52, 38, 67, 89, 34, 56],
-                borderColor: '#D50057',
-                backgroundColor: 'rgba(213, 0, 87, 0.1)',
+                borderColor: '#8B5CF6',
+                backgroundColor: 'rgba(139, 92, 246, 0.1)',
                 borderWidth: 3,
                 fill: true,
                 tension: 0.4,
-                pointBackgroundColor: '#D50057',
+                pointBackgroundColor: '#8B5CF6',
                 pointBorderColor: '#ffffff',
                 pointBorderWidth: 2,
                 pointRadius: 6,
@@ -163,10 +288,10 @@ class Dashboard {
                         display: false
                     },
                     tooltip: {
-                        backgroundColor: 'rgba(26, 26, 46, 0.95)',
+                        backgroundColor: 'rgba(10, 10, 35, 0.95)',
                         titleColor: '#ffffff',
                         bodyColor: '#a1a1aa',
-                        borderColor: '#2d2d3a',
+                        borderColor: '#8B5CF6',
                         borderWidth: 1,
                         cornerRadius: 8,
                         displayColors: false,
@@ -183,7 +308,7 @@ class Dashboard {
                 scales: {
                     x: {
                         grid: {
-                            color: 'rgba(45, 45, 58, 0.3)',
+                            color: 'rgba(255, 255, 255, 0.1)',
                             drawBorder: false
                         },
                         ticks: {
@@ -195,244 +320,262 @@ class Dashboard {
                     },
                     y: {
                         grid: {
-                            color: 'rgba(45, 45, 58, 0.3)',
+                            color: 'rgba(255, 255, 255, 0.1)',
                             drawBorder: false
                         },
                         ticks: {
                             color: '#a1a1aa',
                             font: {
                                 size: 12
-                            },
-                            callback: function(value) {
-                                return value + ' leads';
                             }
                         }
                     }
-                },
-                interaction: {
-                    intersect: false,
-                    mode: 'index'
                 }
             }
         };
 
-        this.chart = new Chart(ctx, config);
+        this.charts.leads = new Chart(ctx, config);
     }
 
-    updateLeadsChart(period) {
-        if (!this.chart) return;
+    createChannelsChart() {
+        const ctx = this.channelsChart.getContext('2d');
+        
+        const data = {
+            labels: ['WhatsApp', 'LinkedIn', 'Instagram', 'Facebook', 'X'],
+            datasets: [{
+                data: [35, 25, 20, 15, 5],
+                backgroundColor: [
+                    '#25D366',
+                    '#0077B5',
+                    '#E4405F',
+                    '#1877F2',
+                    '#000000'
+                ],
+                borderWidth: 0,
+                hoverOffset: 4
+            }]
+        };
 
-        // Sample data for different periods
-        const dataSets = {
-            '7d': {
-                labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-                data: [45, 52, 38, 67, 89, 34, 56]
-            },
-            '30d': {
-                labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
-                data: [234, 289, 312, 267]
-            },
-            '90d': {
-                labels: ['Jan', 'Feb', 'Mar'],
-                data: [892, 1023, 1156]
+        const config = {
+            type: 'doughnut',
+            data: data,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            color: '#a1a1aa',
+                            padding: 20,
+                            usePointStyle: true
+                        }
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(10, 10, 35, 0.95)',
+                        titleColor: '#ffffff',
+                        bodyColor: '#a1a1aa',
+                        borderColor: '#8B5CF6',
+                        borderWidth: 1,
+                        cornerRadius: 8,
+                        callbacks: {
+                            label: function(context) {
+                                return `${context.label}: ${context.parsed}%`;
+                            }
+                        }
+                    }
+                }
             }
         };
 
-        const newData = dataSets[period] || dataSets['7d'];
-        
-        this.chart.data.labels = newData.labels;
-        this.chart.data.datasets[0].data = newData.data;
-        this.chart.update('active');
+        this.charts.channels = new Chart(ctx, config);
     }
 
-    setupActionButtons() {
-        // Quick action buttons
-        const actionButtons = document.querySelectorAll('.action-btn');
-        actionButtons.forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                e.preventDefault();
-                this.handleActionButton(btn);
-            });
-        });
-
-        // View all buttons
-        const viewAllButtons = document.querySelectorAll('.view-all-btn');
-        viewAllButtons.forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                e.preventDefault();
-                this.handleViewAll(btn);
-            });
-        });
-    }
-
-    handleActionButton(btn) {
-        const action = btn.textContent.trim();
-        
-        // Add click animation
-        btn.style.transform = 'scale(0.95)';
-        setTimeout(() => {
-            btn.style.transform = '';
-        }, 150);
-
-        // Handle different actions
-        if (action.includes('Campaign')) {
-            this.showNotification('Creating new campaign...', 'info');
-            // Navigate to campaign creation page
-            setTimeout(() => {
-                window.location.href = 'prospecting-leads.html';
-            }, 1000);
-        } else if (action.includes('Connect')) {
-            this.showNotification('Connecting to LinkedIn...', 'info');
-            // Simulate connection process
-            setTimeout(() => {
-                this.showNotification('LinkedIn connected successfully!', 'success');
-            }, 2000);
-        }
-    }
-
-    handleViewAll(btn) {
-        const section = btn.closest('section');
-        const sectionType = section.classList.contains('activity-feed') ? 'activity' : 
-                           section.classList.contains('recent-leads') ? 'leads' : 'campaigns';
-        
-        // Navigate to respective pages
-        const pages = {
-            'activity': 'analytics.html',
-            'leads': 'prospecting-leads.html',
-            'campaigns': 'analytics.html'
-        };
-        
-        if (pages[sectionType]) {
-            window.location.href = pages[sectionType];
-        }
-    }
-
-    setupLeadActions() {
-        const leadActions = document.querySelectorAll('.lead-actions .action-icon');
-        leadActions.forEach(action => {
-            action.addEventListener('click', (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                this.handleLeadAction(action);
-            });
+    createMiniCharts() {
+        Object.keys(this.miniCharts).forEach(key => {
+            const canvas = this.miniCharts[key];
+            if (canvas) {
+                const ctx = canvas.getContext('2d');
+                const data = this.generateMockData('7d', 5, 25);
+                
+                new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: Array(7).fill(''),
+                        datasets: [{
+                            data: data,
+                            borderColor: '#8B5CF6',
+                            backgroundColor: 'rgba(139, 92, 246, 0.1)',
+                            borderWidth: 2,
+                            fill: true,
+                            tension: 0.4,
+                            pointRadius: 0
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: { enabled: false }
+                        },
+                        scales: {
+                            x: { display: false },
+                            y: { display: false }
+                        }
+                    }
+                });
+            }
         });
     }
 
-    handleLeadAction(action) {
-        const actionType = action.getAttribute('title');
-        const leadItem = action.closest('.lead-item');
-        const leadName = leadItem.querySelector('.lead-name').textContent;
-        
-        if (actionType.includes('Email')) {
-            this.showNotification(`Opening email composer for ${leadName}...`, 'info');
-        } else if (actionType.includes('Call')) {
-            this.showNotification(`Initiating call to ${leadName}...`, 'info');
+    updateLeadsChart(data) {
+        if (this.charts.leads) {
+            this.charts.leads.data.labels = data.labels;
+            this.charts.leads.data.datasets[0].data = data.data;
+            this.charts.leads.update('active');
         }
     }
 
-    setupCampaignActions() {
-        const campaignCards = document.querySelectorAll('.campaign-card');
-        campaignCards.forEach(card => {
-            card.addEventListener('click', (e) => {
-                if (!e.target.closest('.campaign-status')) {
-                    this.handleCampaignClick(card);
-                }
-            });
+    updateChannelsChart(data) {
+        if (this.charts.channels) {
+            this.charts.channels.data.labels = data.labels;
+            this.charts.channels.data.datasets[0].data = data.data;
+            this.charts.channels.update('active');
+        }
+    }
+
+    updateMiniCharts(data) {
+        Object.keys(data).forEach(key => {
+            // Update mini chart data if needed
         });
-    }
-
-    handleCampaignClick(card) {
-        const campaignName = card.querySelector('h4').textContent;
-        this.showNotification(`Opening campaign: ${campaignName}`, 'info');
-        // Navigate to campaign details
-        setTimeout(() => {
-            window.location.href = 'analytics.html';
-        }, 500);
-    }
-
-    handleKeyboardShortcuts(e) {
-        // Ctrl/Cmd + K to toggle sidebar
-        if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
-            e.preventDefault();
-            this.toggleSidebar();
-        }
-        
-        // Escape to close sidebar
-        if (e.key === 'Escape') {
-            this.closeSidebar();
-        }
     }
 
     setupAnimations() {
-        // Add fade-in animation to cards
-        const cards = document.querySelectorAll('.metric-card, .action-card, .chart-card, .funnel-card, .activity-feed, .recent-leads, .campaign-card');
-        
+        // Add entrance animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    entry.target.classList.add('fade-in-up');
-                } 
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
             });
-        }, {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        });
+        }, observerOptions);
 
-        cards.forEach(card => {
+        // Observe metric cards
+        document.querySelectorAll('.metric-card').forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+            card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
             observer.observe(card);
         });
 
-        // Add pulse animation to notification badge
-        const notificationBadge = document.querySelector('.notification-badge');
-        if (notificationBadge) {
-            notificationBadge.classList.add('pulse');
-        }
+        // Observe chart cards
+        document.querySelectorAll('.chart-card').forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+            card.style.transition = 'opacity 0.6s ease 0.2s, transform 0.6s ease 0.2s';
+            observer.observe(card);
+        });
     }
 
     async loadUserData() {
         try {
-            if (window.AppUtils && window.AppUtils.initSupabase) {
-                const supabase = window.AppUtils.initSupabase();
-                const { data: { session } } = await supabase.auth.getSession();
-                
-                if (session && session.user) {
-                    this.userEmail.textContent = session.user.email;
-                    this.updateWelcomeMessage(session.user.email);
-                }
+            if (!this.currentUser) return;
+
+            // Load user profile from Supabase
+            const { data: profile, error } = await this.supabase
+                .from('profiles')
+                .select('*')
+                .eq('id', this.currentUser.id)
+                .single();
+
+            if (error) {
+                console.warn('⚠️ Dashboard: No profile found, using default data');
+                this.updateUserDisplay(this.currentUser.email, this.currentUser.email);
+            } else {
+                this.updateUserDisplay(profile.full_name || 'User', this.currentUser.email);
             }
+
         } catch (error) {
-            console.error('Error loading user data:', error);
-            // Fallback to default user
-            this.userEmail.textContent = 'user@rarityleads.com';
+            console.error('❌ Dashboard: Failed to load user data:', error);
+            this.updateUserDisplay('User', this.currentUser?.email || 'user@example.com');
+        }
+    }
+
+    updateUserDisplay(name, email) {
+        if (this.userName) {
+            this.userName.textContent = name;
+        }
+        if (this.userEmail) {
+            this.userEmail.textContent = email;
         }
     }
 
     updateWelcomeMessage(email = null) {
-        if (this.welcomeSubtitle) {
-            this.welcomeSubtitle.textContent = `Ready to convert more leads today?`;
+        if (!this.welcomeSubtitle) return;
+
+        const userEmail = email || this.currentUser?.email || 'there';
+        const hour = new Date().getHours();
+        let greeting = 'Good morning';
+
+        if (hour >= 12 && hour < 17) {
+            greeting = 'Good afternoon';
+        } else if (hour >= 17) {
+            greeting = 'Good evening';
+        }
+
+        this.welcomeSubtitle.textContent = `${greeting}! Welcome back to your dashboard.`;
+    }
+
+    async loadMetrics() {
+        try {
+            // Load metrics from Supabase
+            const metrics = await this.fetchMetrics();
+            this.updateMetricsDisplay(metrics);
+        } catch (error) {
+            console.error('❌ Dashboard: Failed to load metrics:', error);
+            // Use mock data as fallback
+            this.updateMetricsDisplay({
+                leadsCount: 156,
+                conversionRate: 12.5,
+                activeCampaigns: 8,
+                monthlyRevenue: 15420
+            });
         }
     }
 
-    startRealTimeUpdates() {
-        // Simulate real-time updates every 30 seconds
-        setInterval(() => {
-            this.updateMetrics();
-        }, 30000);
-    }
-
-    updateMetrics() {
-        // Update metric values with subtle animations
-        const metricValues = document.querySelectorAll('.metric-value');
-        metricValues.forEach(metric => {
-            const currentValue = parseInt(metric.textContent.replace(/[^0-9]/g, ''));
-            const newValue = currentValue + Math.floor(Math.random() * 5);
-            
-            // Animate the number change
-            this.animateNumber(metric, currentValue, newValue);
+    async fetchMetrics() {
+        // Simulate API call - replace with actual Supabase queries
+        return new Promise((resolve) => {
+            setTimeout(() => {
+                resolve({
+                    leadsCount: 156,
+                    conversionRate: 12.5,
+                    activeCampaigns: 8,
+                    monthlyRevenue: 15420
+                });
+            }, 1000);
         });
     }
 
-    animateNumber(element, start, end) {
+    updateMetricsDisplay(metrics) {
+        // Animate metric values
+        Object.keys(metrics).forEach(key => {
+            const element = this.metricElements[key];
+            if (element) {
+                const value = metrics[key];
+                this.animateNumber(element, 0, value, key === 'monthlyRevenue' ? '$' : '', key === 'conversionRate' ? '%' : '');
+            }
+        });
+    }
+
+    animateNumber(element, start, end, prefix = '', suffix = '') {
         const duration = 1000;
         const startTime = performance.now();
         
@@ -440,8 +583,8 @@ class Dashboard {
             const elapsed = currentTime - startTime;
             const progress = Math.min(elapsed / duration, 1);
             
-            const current = Math.floor(start + (end - start) * progress);
-            element.textContent = this.formatNumber(current);
+            const current = Math.floor(start + (end - start) * this.easeOutQuart(progress));
+            element.textContent = `${prefix}${this.formatNumber(current)}${suffix}`;
             
             if (progress < 1) {
                 requestAnimationFrame(animate);
@@ -451,60 +594,151 @@ class Dashboard {
         requestAnimationFrame(animate);
     }
 
+    easeOutQuart(t) {
+        return 1 - Math.pow(1 - t, 4);
+    }
+
     formatNumber(num) {
         if (num >= 1000000) {
             return (num / 1000000).toFixed(1) + 'M';
         } else if (num >= 1000) {
-            return (num / 1000).toFixed(1) + 'k';
+            return (num / 1000).toFixed(1) + 'K';
         }
         return num.toString();
     }
 
+    startRealTimeUpdates() {
+        // Set up real-time subscriptions for metrics updates
+        if (this.supabase) {
+            this.realTimeSubscription = this.supabase
+                .channel('dashboard-metrics')
+                .on('postgres_changes', {
+                    event: '*',
+                    schema: 'public',
+                    table: 'leads'
+                }, (payload) => {
+                    console.log('🔄 Dashboard: Real-time update received:', payload);
+                    this.handleRealTimeUpdate(payload);
+                })
+                .subscribe();
+        }
+    }
+
+    handleRealTimeUpdate(payload) {
+        // Handle real-time updates
+        this.showNotification('New lead added!', 'success');
+        this.loadMetrics(); // Refresh metrics
+    }
+
+    handleActionButton(e) {
+        const action = e.currentTarget.dataset.action;
+        
+        switch (action) {
+            case 'new-lead':
+                window.location.href = '/prospecting-leads.html?action=new';
+                break;
+            case 'new-campaign':
+                window.location.href = '/approaching-whatsapp.html?action=new-campaign';
+                break;
+            case 'export-data':
+                this.exportData();
+                break;
+            case 'schedule-meeting':
+                this.scheduleMeeting();
+                break;
+            default:
+                console.log('Unknown action:', action);
+        }
+    }
+
+    handleChartAction(e) {
+        const chart = e.currentTarget.dataset.chart;
+        
+        switch (chart) {
+            case 'leads':
+                window.location.href = '/analytics.html?tab=leads';
+                break;
+            case 'channels':
+                window.location.href = '/analytics.html?tab=channels';
+                break;
+            default:
+                console.log('Unknown chart action:', chart);
+        }
+    }
+
+    handleKeyboardShortcuts(e) {
+        // Ctrl/Cmd + K for search
+        if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+            e.preventDefault();
+            this.showNotification('Search functionality coming soon!', 'info');
+        }
+        
+        // Ctrl/Cmd + N for new lead
+        if ((e.ctrlKey || e.metaKey) && e.key === 'n') {
+            e.preventDefault();
+            window.location.href = '/prospecting-leads.html?action=new';
+        }
+    }
+
+    async handleLogout() {
+        try {
+            if (this.realTimeSubscription) {
+                await this.supabase.removeChannel(this.realTimeSubscription);
+            }
+            
+            await this.supabase.auth.signOut();
+            window.location.href = '/index.html';
+        } catch (error) {
+            console.error('❌ Dashboard: Logout failed:', error);
+            this.showNotification('Logout failed', 'error');
+        }
+    }
+
+    handleSettings() {
+        this.showNotification('Settings page coming soon!', 'info');
+    }
+
+    async exportData() {
+        try {
+            this.showNotification('Preparing export...', 'info');
+            
+            // Simulate export process
+            setTimeout(() => {
+                this.showNotification('Data exported successfully!', 'success');
+            }, 2000);
+        } catch (error) {
+            console.error('❌ Dashboard: Export failed:', error);
+            this.showNotification('Export failed', 'error');
+        }
+    }
+
+    scheduleMeeting() {
+        this.showNotification('Meeting scheduler coming soon!', 'info');
+    }
+
     showNotification(message, type = 'info') {
-        // Create notification element
+        const container = document.getElementById('notification-container');
+        if (!container) return;
+
         const notification = document.createElement('div');
-        notification.className = `notification notification-${type}`;
+        notification.className = `notification ${type}`;
+        
+        const icon = this.getNotificationIcon(type);
         notification.innerHTML = `
-            <div class="notification-content">
-                <i data-feather="${this.getNotificationIcon(type)}"></i>
-                <span>${message}</span>
-            </div>
-            <button class="notification-close">
-                <i data-feather="x"></i>
-            </button>
+            <i data-feather="${icon}"></i>
+            <span>${message}</span>
         `;
-        
-        // Add styles
-        notification.style.cssText = `
-            position: fixed;
-            top: 100px;
-            right: 20px;
-            background: var(--background-card);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 1rem;
-            box-shadow: 0 8px 32px var(--shadow-color);
-            z-index: 10000;
-            transform: translateX(100%);
-            transition: transform 0.3s ease;
-            max-width: 300px;
-        `;
-        
-        // Add to page
-        document.body.appendChild(notification);
-        
-        // Animate in
-        setTimeout(() => {
-            notification.style.transform = 'translateX(0)';
-        }, 100);
-        
-        // Replace icons
+
+        container.appendChild(notification);
+
+        // Replace Feather icons
         if (typeof feather !== 'undefined') {
             feather.replace();
         }
-        
+
         // Auto remove after 5 seconds
         setTimeout(() => {
+            notification.style.opacity = '0';
             notification.style.transform = 'translateX(100%)';
             setTimeout(() => {
                 if (notification.parentNode) {
@@ -512,42 +746,40 @@ class Dashboard {
                 }
             }, 300);
         }, 5000);
-        
-        // Close button
-        const closeBtn = notification.querySelector('.notification-close');
-        closeBtn.addEventListener('click', () => {
-            notification.style.transform = 'translateX(100%)';
-            setTimeout(() => {
-                if (notification.parentNode) {
-                    notification.parentNode.removeChild(notification);
-                }
-            }, 300);
-        });
     }
 
     getNotificationIcon(type) {
-        const icons = {
-            'success': 'check-circle',
-            'error': 'alert-circle',
-            'warning': 'alert-triangle',
-            'info': 'info'
-        };
-        return icons[type] || 'info';
+        switch (type) {
+            case 'success': return 'check-circle';
+            case 'error': return 'alert-circle';
+            case 'warning': return 'alert-triangle';
+            default: return 'info';
+        }
+    }
+
+    // Cleanup method
+    destroy() {
+        if (this.realTimeSubscription) {
+            this.supabase.removeChannel(this.realTimeSubscription);
+        }
+        
+        // Destroy charts
+        Object.values(this.charts).forEach(chart => {
+            if (chart && chart.destroy) {
+                chart.destroy();
+            }
+        });
     }
 }
 
 // Initialize dashboard when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
-    // Initialize dashboard only
-    window.dashboard = new Dashboard();
+    window.Dashboard = new Dashboard();
 });
 
-// Handle page visibility changes for real-time updates
-document.addEventListener('visibilitychange', () => {
-    if (document.visibilityState === 'visible' && window.dashboard) {
-        window.dashboard.updateMetrics();
+// Cleanup on page unload
+window.addEventListener('beforeunload', () => {
+    if (window.Dashboard) {
+        window.Dashboard.destroy();
     }
-});
-
-// Export for global access
-window.Dashboard = Dashboard; 
+}); 
