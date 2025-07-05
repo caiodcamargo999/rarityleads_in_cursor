@@ -45,9 +45,9 @@ class UniversalNavigation {
     }
 
     setupSidebar() {
-        // Replace placeholder sidebar with universal sidebar
+        // Always inject the universal sidebar if the sidebar is present
         const sidebarPlaceholder = document.querySelector('aside.sidebar');
-        if (sidebarPlaceholder && sidebarPlaceholder.innerHTML.includes('<!-- Insert the new sidebar HTML')) {
+        if (sidebarPlaceholder) {
             this.injectUniversalSidebar();
         }
     }
