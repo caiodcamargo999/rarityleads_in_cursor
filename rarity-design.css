@@ -1144,6 +1144,9 @@ body.light-theme {
   --button-hover-bg: #d1d1e0;
   --primary-text: #232136;
   --secondary-text: #393552;
+  --sidebar-text: #232136;
+  --sidebar-text-secondary: #393552;
+  --button-text: #232136;
   --border: #d1d1e0;
 }
 body.light-theme .sidebar {

@@ -9,17 +9,18 @@
     <script src="https://unpkg.com/feather-icons"></script>
 </head>
 <body>
-    <!-- Top right language/theme panel -->
-    <div id="topright-lang-theme-panel"></div>
     <!-- Removed animated-cursor-arrow elements for strict design compliance -->
     <header class="main-header">
-        <nav class="main-nav" style="display: flex; align-items: center; justify-content: space-between; max-width: 1200px; margin: 0 auto; padding: 1.5em 2em;">
+        <nav class="main-nav" style="display: flex; align-items: center; justify-content: space-between; max-width: 1200px; margin: 0 auto; padding: 1.5em 2em; gap: 1.5em;">
             <div class="logo" data-i18n="common.brand" style="font-size: 1.5em; font-weight: 500; color: var(--primary-text); letter-spacing: 0.02em;">Rarity Leads</div>
-            <div class="nav-links" style="display: flex; gap: 1.5em; align-items: center;">
-                <a href="#features" data-i18n="landing.features" style="color: var(--primary-text); text-decoration: none; font-weight: 400;">Features</a>
-                <a href="#pricing" data-i18n="landing.pricing" style="color: var(--primary-text); text-decoration: none; font-weight: 400;">Pricing</a>
-                <a href="/auth.html" class="btn" data-i18n="common.signIn">Sign In</a>
-                <a href="/auth.html" class="btn btn-primary btn-large" data-i18n="common.getStartedFree">Get Started Free</a>
+            <div style="display: flex; align-items: center; gap: 1.2em;">
+                <div class="nav-links" style="display: flex; gap: 1.2em; align-items: center;">
+                    <a href="#features" data-i18n="landing.features" style="color: var(--primary-text); text-decoration: none; font-weight: 400;">Features</a>
+                    <a href="#pricing" data-i18n="landing.pricing" style="color: var(--primary-text); text-decoration: none; font-weight: 400;">Pricing</a>
+                    <a href="/auth.html" class="btn" data-i18n="common.signIn">Sign In</a>
+                    <a href="/auth.html" class="btn btn-primary btn-large" data-i18n="common.getStartedFree">Get Started Free</a>
+                </div>
+                <div id="language-theme-toggle" class="lang-theme-topright"></div>
             </div>
         </nav>
     </header>
@@ -102,23 +103,90 @@
         </section>
     </main>
 
-    <footer class="main-footer">
+    <footer class="main-footer" style="text-align:center;">
         <p data-i18n="common.copyright">&copy; 2024 Rarity Leads. All rights reserved.</p>
     </footer>
 
+    <style>
+    /* Responsive top-right Anthropic-style toggle */
+    .lang-theme-topright {
+        position: absolute;
+        top: 1.5em;
+        right: 2em;
+        z-index: 1000;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        min-width: 0;
+        pointer-events: auto;
+    }
+    .lang-theme-topright .pill, .lang-theme-topright > div {
+        font-size: 0.97em !important;
+        padding: 0.08em 0.7em 0.08em 0.7em !important;
+        min-height: 2em !important;
+        border-radius: 999px !important;
+        gap: 0.4em !important;
+        box-shadow: none !important;
+        border-width: 1.2px !important;
+    }
+    .lang-theme-topright .lang-btn, .lang-theme-topright .theme-toggle-btn {
+        font-size: 0.97em !important;
+        padding: 0.2em 0.7em !important;
+        min-width: 0 !important;
+        height: 1.8em !important;
+        border-radius: 999px !important;
+    }
+    @media (max-width: 900px) {
+        .main-nav .nav-links {
+            margin-right: 7.5em !important;
+        }
+    }
+    @media (max-width: 600px) {
+        .lang-theme-topright {
+            top: 0.7em;
+            right: 0.7em;
+            max-width: 98vw;
+            padding: 0.1em 0.2em;
+        }
+        .lang-theme-topright > div, .lang-theme-topright .pill {
+            flex-direction: row !important;
+            gap: 0.2em !important;
+            flex-wrap: nowrap !important;
+            font-size: 0.93em !important;
+            padding: 0.04em 0.4em 0.04em 0.4em !important;
+        }
+        .lang-theme-topright .lang-btn, .lang-theme-topright .theme-toggle-btn {
+            font-size: 0.93em !important;
+            padding: 0.1em 0.4em !important;
+            min-width: 0 !important;
+            height: 1.5em !important;
+        }
+        .main-nav .nav-links {
+            margin-right: 5.5em !important;
+        }
+    }
+    .main-nav .nav-links {
+        margin-right: 10em;
+        transition: margin 0.2s;
+    }
+    </style>
+
     <script src="i18n.js"></script>
+    <script src="app-config.js"></script>
     <script src="language-theme-toggle.js"></script>
     <script>
         feather.replace();
         document.addEventListener('DOMContentLoaded', function() {
-            if (window.LanguageThemePanel) {
-                window.LanguageThemePanel.initTopRightPanel('topright-lang-theme-panel');
-            }
-            if (window.i18n) {
-                window.i18n.applyTranslations();
-                window.addEventListener('languageChanged', function() {
+            window.i18nReady.then(function() {
+                if (window.i18n) {
                     window.i18n.applyTranslations();
-                });
+                    window.addEventListener('languageChanged', function() {
+                        window.i18n.applyTranslations();
+                    });
+                }
+            });
+            if (window.LanguageThemeToggle && document.getElementById('language-theme-toggle')) {
+                window.LanguageThemeToggle.init('language-theme-toggle');
             }
         });
     </script>

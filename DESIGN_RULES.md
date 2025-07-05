@@ -456,4 +456,12 @@ color: var(--primary-text);
 - The top-right language/theme switcher must be removed from all post-login pages.
 - The panel must be responsive and accessible.
 
-**This document is the single source of truth for Rarity Leads design. All developers must follow these rules without exception.** 
+**This document is the single source of truth for Rarity Leads design. All developers must follow these rules without exception.**
+
+## 🟦 Public/Pre-Login Pages: Tiny Anthropic-Style Language/Theme Toggle (Top Right)
+
+- The sales page (index.html) and all public/pre-login pages must have a tiny, Anthropic-style language/theme toggle panel in the top right corner.
+- This panel must be visually compact, minimalist, and strictly follow the Rarity Leads design system (no gradients, no glass, no excessive bolding, only allowed colors and font weights).
+- The panel must use <div id="language-theme-toggle"></div> and be initialized with LanguageThemeToggle.init('language-theme-toggle') after DOMContentLoaded.
+- No legacy or duplicate toggles are allowed.
+- The panel must not interfere with the main navigation or hero section, and must always be accessible. 

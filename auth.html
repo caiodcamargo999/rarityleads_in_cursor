@@ -12,10 +12,8 @@
     <div id="topright-lang-theme-panel"></div>
     <header class="main-header motion-fade-in">
         <nav class="main-nav">
-            <div class="logo motion-pop" data-i18n="common.brand">Rarity Leads</div>
-            <div class="nav-links">
-                <div class="language-selector" id="language-selector"></div>
-            </div>
+            <!-- <div class="logo motion-pop" data-i18n="common.brand">Rarity Leads</div> -->
+            <div class="nav-links"></div>
         </nav>
     </header>
     <main class="auth-main">
@@ -101,6 +99,42 @@
             </div>
         </div>
     </main>
+    <div id="language-theme-toggle" class="lang-theme-topright"></div>
+
+    <style>
+    /* Responsive top-right Anthropic-style toggle */
+    .lang-theme-topright {
+        position: absolute;
+        top: 1.5em;
+        right: 2em;
+        z-index: 1000;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        min-width: 0;
+        pointer-events: auto;
+    }
+    @media (max-width: 600px) {
+        .lang-theme-topright {
+            top: 0.7em;
+            right: 0.7em;
+            max-width: 98vw;
+            padding: 0.1em 0.2em;
+        }
+        .lang-theme-topright > div, .lang-theme-topright > .pill {
+            flex-direction: row !important;
+            gap: 0.3em !important;
+            flex-wrap: nowrap !important;
+        }
+        .lang-btn, .theme-toggle-btn {
+            font-size: 0.95em !important;
+            padding: 0.3em 0.7em !important;
+            min-width: 0 !important;
+            height: 2em !important;
+        }
+    }
+    </style>
+
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="app-config.js"></script>
     <script src="auth-guard.js"></script>
@@ -233,12 +267,19 @@
             if (window.LanguageThemePanel) {
                 window.LanguageThemePanel.initTopRightPanel('topright-lang-theme-panel');
             }
-            if (window.i18n) {
-                window.i18n.applyTranslations();
-                window.addEventListener('languageChanged', function() {
-                    window.i18n.applyTranslations();
+            document.addEventListener('DOMContentLoaded', function() {
+                window.i18nReady.then(function() {
+                    if (window.i18n) {
+                        window.i18n.applyTranslations();
+                        window.addEventListener('languageChanged', function() {
+                            window.i18n.applyTranslations();
+                        });
+                    }
                 });
-            }
+                if (window.LanguageThemeToggle && document.getElementById('language-theme-toggle')) {
+                    window.LanguageThemeToggle.init('language-theme-toggle');
+                }
+            });
         });
     </script>
 </body>

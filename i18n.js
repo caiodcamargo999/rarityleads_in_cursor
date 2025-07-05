@@ -232,7 +232,14 @@ class I18nManager {
 
 // Initialize i18n system
 const i18n = new I18nManager();
-
+// Expose a Promise that resolves when i18n.init() is done
+window.i18nReady = (async () => {
+  // Wait for the async init to finish
+  if (i18n.isLoading) {
+    while (i18n.isLoading) await new Promise(r => setTimeout(r, 10));
+  }
+  return i18n;
+})();
 // Export for global use
 window.i18n = i18n;
 
