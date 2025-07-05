@@ -44,7 +44,7 @@ class AuthGuard {
 
         try {
             const { data: { session }, error } = await this.supabase.auth.getSession();
-            
+            console.log('🛡️ AuthGuard: Supabase session:', session);
             if (error) {
                 console.error('❌ AuthGuard: Session check error:', error);
                 return false;
@@ -54,22 +54,17 @@ class AuthGuard {
                 this.currentUser = session.user;
                 this.isAuthenticated = true;
                 this.isEmailVerified = !!session.user.email_confirmed_at;
-                
-                console.log('🔐 AuthGuard: User authenticated:', {
-                    email: session.user.email,
-                    verified: this.isEmailVerified
-                });
-                
+                console.log('🛡️ AuthGuard: isAuthenticated:', this.isAuthenticated);
+                console.log('🛡️ AuthGuard: isEmailVerified:', this.isEmailVerified);
+                console.log('🛡️ AuthGuard: session.user:', session.user);
                 return true;
             } else {
                 this.currentUser = null;
                 this.isAuthenticated = false;
                 this.isEmailVerified = false;
-                
-                console.log('🚫 AuthGuard: No valid session');
+                console.log('🛡️ AuthGuard: No valid session');
                 return false;
             }
-            
         } catch (error) {
             console.error('❌ AuthGuard: Error checking auth status:', error);
             return false;
@@ -144,6 +139,8 @@ class AuthGuard {
     protectRoute() {
         const currentPath = window.location.pathname;
         console.log('🛡️ AuthGuard: Protecting route:', currentPath);
+        console.log('🛡️ AuthGuard: protectedRoutes:', window.AppConfig.auth.protectedRoutes);
+        console.log('🛡️ AuthGuard: isProtectedPage() result:', this.isProtectedPage());
 
         // Public routes that don't need protection
         if (this.isPublicPage()) {
