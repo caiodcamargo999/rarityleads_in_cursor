@@ -26,14 +26,12 @@ class AuthGuard {
 
             console.log('🛡️ AuthGuard: Initializing...');
 
-            // Check current authentication status
+            // Check current authentication status and then protect the route
             await this.checkAuthStatus();
-            
-            // Setup auth state listener
-            this.setupAuthListener();
-            
-            // Protect current route
             this.protectRoute();
+            
+            // Setup auth state listener for subsequent changes
+            this.setupAuthListener();
             
         } catch (error) {
             console.error('❌ AuthGuard: Initialization failed:', error);
@@ -162,6 +160,7 @@ class AuthGuard {
 
         // Protected routes
         if (this.isProtectedPage()) {
+            console.log('AuthGuard: Current page is protected.');
             if (!this.isAuthenticated) {
                 console.log('🚫 AuthGuard: Unauthenticated user on protected page');
                 this.handleUnauthenticated();
@@ -226,7 +225,10 @@ class AuthGuard {
     }
 
     isProtectedPage() {
-        return window.AppConfig.auth.protectedRoutes.includes(window.location.pathname);
+        const currentPath = window.location.pathname;
+        const isProtected = window.AppConfig.auth.protectedRoutes.includes(currentPath);
+        console.log('AuthGuard: isProtectedPage() - Path:', currentPath, 'Is Protected:', isProtected);
+        return isProtected;
     }
 
     // Public methods for external use

@@ -9,221 +9,85 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="rarity-design.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/feather-icons"></script>
-    <style>
-        .form-row {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1.5em;
-        }
-        @media (max-width: 900px) {
-            .form-row {
-                flex-direction: column;
-                gap: 1em;
-            }
-        }
-        .sidebar {
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
-            position: fixed;
-            left: 0;
-            top: 0;
-            width: var(--sidebar-width);
-            min-width: var(--sidebar-width);
-            border-right: 1px solid var(--border);
-            background: var(--sidebar-bg);
-            z-index: 100;
-        }
-        .sidebar-bottom {
-            margin-top: auto;
-            padding: 2em 2em 2.5em 2em;
-            border-top: 1px solid var(--logout-separator);
-            background: var(--sidebar-bg);
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            gap: 1em;
-            position: sticky;
-            bottom: 0;
-            left: 0;
-            right: 0;
-        }
-    </style>
 </head>
-<body class="dark-bg">
+<body>
     <div class="dashboard-container">
-        <aside class="sidebar" id="sidebar" role="navigation" aria-label="Main navigation">
-            <div class="sidebar-header">
-                <img src="rarity-logo.jpg" alt="Rarity Leads Logo" class="sidebar-logo">
-            </div>
-            <nav class="sidebar-nav">
-                <ul>
-                    <li>
-                        <a href="dashboard.html" data-i18n="nav.dashboard" data-page="dashboard">
-                            <i class="nav-icon" data-feather="home"></i>
-                            <span data-i18n="nav.dashboard">Dashboard</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="prospecting-leads.html" data-i18n="nav.leads" data-page="leads">
-                            <i class="nav-icon" data-feather="users"></i>
-                            <span data-i18n="nav.leads">Leads</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="prospecting-companies.html" data-i18n="nav.companies" data-page="companies">
-                            <i class="nav-icon" data-feather="briefcase"></i>
-                            <span data-i18n="nav.companies">Companies</span>
-                        </a>
-                    </li>
-                    <li class="nav-section">
-                        <span class="nav-section-title" data-i18n="nav.outreach">Outreach</span>
-                    </li>
-                    <li>
-                        <a href="approaching-whatsapp.html" data-i18n="nav.whatsapp" data-page="whatsapp">
-                            <i class="nav-icon" data-feather="message-circle"></i>
-                            <span data-i18n="nav.whatsapp">WhatsApp</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="approaching-linkedin.html" data-i18n="nav.linkedin" data-page="linkedin">
-                            <i class="nav-icon" data-feather="linkedin"></i>
-                            <span data-i18n="nav.linkedin">LinkedIn</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="approaching-instagram.html" class="active" data-i18n="nav.instagram" data-page="instagram">
-                            <i class="nav-icon" data-feather="instagram"></i>
-                            <span data-i18n="nav.instagram">Instagram</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="approaching-facebook.html" data-i18n="nav.facebook" data-page="facebook">
-                            <i class="nav-icon" data-feather="facebook"></i>
-                            <span data-i18n="nav.facebook">Facebook</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="approaching-x.html" data-i18n="nav.x" data-page="x">
-                            <i class="nav-icon" data-feather="twitter"></i>
-                            <span data-i18n="nav.x">X (Twitter)</span>
-                        </a>
-                    </li>
-                    <li class="nav-section">
-                        <span class="nav-section-title" data-i18n="nav.analyticsSupport">Analytics & Support</span>
-                    </li>
-                    <li>
-                        <a href="analytics.html" data-i18n="nav.analytics" data-page="analytics">
-                            <i class="nav-icon" data-feather="bar-chart-2"></i>
-                            <span data-i18n="nav.analytics">Analytics</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="support.html" data-i18n="nav.support" data-page="support">
-                            <i class="nav-icon" data-feather="help-circle"></i>
-                            <span data-i18n="nav.support">Support</span>
-                        </a>
-                    </li>
-                </ul>
-            </nav>
-            <div class="sidebar-bottom">
-                <button class="sidebar-profile-btn" id="profile-btn">
-                    <i data-feather="settings"></i>
-                    <span data-i18n="common.profileSettings">Profile & Settings</span>
-                </button>
-                <button class="sidebar-logout-btn" id="logout-btn" data-i18n="common.logout">Logout</button>
-            </div>
-        </aside>
+        <aside class="sidebar" id="sidebar" role="navigation" aria-label="Main navigation"></aside>
         <main class="main-content" role="main">
             <div class="instagram-header">
                 <div>
-                    <div class="instagram-title" data-i18n="instagram.title">Instagram Automation</div>
-                    <div class="instagram-subtitle" data-i18n="instagram.subtitle">Automate your Instagram outreach with AI-powered messaging and achieve high response rates</div>
+                    <h1 class="instagram-title" data-i18n="instagram.title">Instagram Automation</h1>
+                    <p class="instagram-subtitle" data-i18n="instagram.subtitle">Automate your Instagram outreach with AI-powered messaging and achieve high response rates.</p>
                 </div>
-                <div style="display: flex; gap: 12px;">
-                    <button class="connect-btn btn btn-primary btn-large" id="connect-btn" data-i18n="instagram.connect">
-                        <i class="fab fa-instagram"></i>
+                <div class="header-actions">
+                    <button class="btn" id="connect-btn" data-i18n="instagram.connect">
+                        <i data-feather="instagram"></i>
                         <span data-i18n="instagram.connect">Connect Instagram</span>
                     </button>
-                    <button class="new-campaign-btn btn btn-primary btn-large" id="new-campaign-btn" data-i18n="instagram.newCampaign">
-                        <i class="fas fa-plus"></i>
+                    <button class="btn btn-primary" id="new-campaign-btn" data-i18n="instagram.newCampaign">
+                        <i data-feather="plus"></i>
                         <span data-i18n="instagram.newCampaign">New Campaign</span>
                     </button>
                 </div>
             </div>
-            <div class="metrics-grid" role="region" aria-label="Instagram metrics">
-                <div class="metric-card" role="article">
-                    <div class="metric-icon messages">
-                        <i class="fab fa-instagram"></i>
-                    </div>
-                    <div class="metric-value" id="messages-sent" aria-live="polite">0</div>
+
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-icon"><i data-feather="send"></i></div>
+                    <div class="metric-value" id="messages-sent">0</div>
                     <div class="metric-label" data-i18n="instagram.metrics.messagesSent">Messages Sent</div>
                 </div>
-                <div class="metric-card" role="article">
-                    <div class="metric-icon response">
-                        <i class="fas fa-reply"></i>
-                    </div>
-                    <div class="metric-value" id="response-rate" aria-live="polite">92%</div>
+                <div class="metric-card">
+                    <div class="metric-icon"><i data-feather="percent"></i></div>
+                    <div class="metric-value" id="response-rate">0%</div>
                     <div class="metric-label" data-i18n="instagram.metrics.responseRate">Response Rate</div>
                 </div>
-                <div class="metric-card" role="article">
-                    <div class="metric-icon campaigns">
-                        <i class="fas fa-bullhorn"></i>
-                    </div>
-                    <div class="metric-value" id="active-campaigns" aria-live="polite">0</div>
+                <div class="metric-card">
+                    <div class="metric-icon"><i data-feather="briefcase"></i></div>
+                    <div class="metric-value" id="active-campaigns">0</div>
                     <div class="metric-label" data-i18n="instagram.metrics.activeCampaigns">Active Campaigns</div>
                 </div>
-                <div class="metric-card" role="article">
-                    <div class="metric-icon conversions">
-                        <i class="fas fa-handshake"></i>
-                    </div>
-                    <div class="metric-value" id="conversions" aria-live="polite">0</div>
+                <div class="metric-card">
+                    <div class="metric-icon"><i data-feather="check-circle"></i></div>
+                    <div class="metric-value" id="conversions">0</div>
                     <div class="metric-label" data-i18n="instagram.metrics.conversions">Conversions</div>
                 </div>
             </div>
-            <div class="tabs" role="tablist" aria-label="Instagram views">
-                <button class="tab active" id="tab-campaigns" role="tab" aria-selected="true" aria-controls="campaigns-view" data-i18n="instagram.tabs.campaigns">Campaigns</button>
-                <button class="tab" id="tab-templates" role="tab" aria-selected="false" aria-controls="templates-view" data-i18n="instagram.tabs.templates">Templates</button>
-                <button class="tab" id="tab-analytics" role="tab" aria-selected="false" aria-controls="analytics-view" data-i18n="instagram.tabs.analytics">Analytics</button>
-                <button class="tab" id="tab-settings" role="tab" aria-selected="false" aria-controls="settings-view" data-i18n="instagram.tabs.settings">Settings</button>
+
+            <div class="tabs">
+                <button class="tab active" id="tab-campaigns" data-i18n="instagram.tabs.campaigns">Campaigns</button>
+                <button class="tab" id="tab-templates" data-i18n="instagram.tabs.templates">Templates</button>
+                <button class="tab" id="tab-settings" data-i18n="instagram.tabs.settings">Settings</button>
             </div>
-            <div class="tab-content" id="tab-content">
-                <div id="campaigns-view" role="tabpanel" aria-labelledby="tab-campaigns">
-                    <div class="connection-status" id="connection-status">
-                        <div class="status-indicator status-disconnected" id="status-indicator"></div>
-                        <div class="status-text" id="status-text" data-i18n="instagram.status.disconnected">Instagram not connected</div>
+
+            <div class="tab-content">
+                <div id="campaigns-view">
+                    <div class="empty-state">
+                        <i data-feather="zap"></i>
+                        <h3 data-i18n="instagram.empty.title">No Campaigns Yet</h3>
+                        <p data-i18n="instagram.empty.description">Get started by creating your first Instagram campaign.</p>
+                        <button class="btn btn-primary" id="add-first-campaign" data-i18n="instagram.newCampaign">Create Campaign</button>
                     </div>
-                    <div class="campaigns-grid" id="campaigns-grid">
-                        <!-- Campaigns will be loaded here -->
-                    </div>
-                    <div id="campaigns-empty" class="empty-state" style="display:none;">
-                        <div class="empty-icon">
-                            <i class="fab fa-instagram"></i>
+                </div>
+                <div id="templates-view" style="display:none;">
+                    <!-- Templates content will go here -->
+                </div>
+                <div id="settings-view" style="display:none;">
+                    <div class="settings-card">
+                        <h3 data-i18n="instagram.settings.title">Instagram Settings</h3>
+                        <div class="form-group">
+                            <label for="auto-responder-toggle" data-i18n="instagram.settings.autoResponder">Enable Auto-Responder</label>
+                            <label class="switch">
+                                <input type="checkbox" id="auto-responder-toggle">
+                                <span class="slider round"></span>
+                            </label>
                         </div>
-                        <h3 class="empty-title" data-i18n="instagram.empty.title">No campaigns found</h3>
-                        <p class="empty-description" data-i18n="instagram.empty.description">Start by creating your first Instagram campaign.</p>
-                        <button class="new-campaign-btn btn btn-primary btn-large" id="add-first-campaign" data-i18n="instagram.newCampaign">
-                            <i class="fas fa-plus"></i>
-                            Create Your First Campaign
-                        </button>
+                        <div class="form-group">
+                            <label for="auto-responder-message" data-i18n="instagram.settings.autoResponderMessage">Auto-Responder Message</label>
+                            <textarea id="auto-responder-message" class="form-input" rows="4" data-i18n-placeholder="instagram.settings.autoResponderPlaceholder"></textarea>
+                        </div>
                     </div>
-                </div>
-                <div id="templates-view" role="tabpanel" aria-labelledby="tab-templates" style="display:none;">
-                    <h3 data-i18n="instagram.templates.title">Message Templates</h3>
-                    <p data-i18n="instagram.templates.description">Create and manage your Instagram message templates for consistent outreach</p>
-                    <!-- Templates content -->
-                </div>
-                <div id="analytics-view" role="tabpanel" aria-labelledby="tab-analytics" style="display:none;">
-                    <h3 data-i18n="instagram.analytics.title">Instagram Analytics</h3>
-                    <p data-i18n="instagram.analytics.description">Track your Instagram campaign performance and engagement metrics</p>
-                    <!-- Analytics content -->
-                </div>
-                <div id="settings-view" role="tabpanel" aria-labelledby="tab-settings" style="display:none;">
-                    <h3 data-i18n="instagram.settings.title">Instagram Settings</h3>
-                    <p data-i18n="instagram.settings.description">Configure your Instagram integration and automation preferences</p>
-                    <!-- Settings content -->
                 </div>
             </div>
         </main>
@@ -232,240 +96,5 @@
     <script src="i18n.js"></script>
     <script src="auth-guard.js"></script>
     <script src="universal-navigation.js"></script>
-    <script>
-        // Instagram Module
-        const Instagram = {
-            supabase: null,
-            currentLanguage: 'en',
-            campaignsData: [],
-            isConnected: false,
-            
-            async init() {
-                this.supabase = window.AppUtils ? window.AppUtils.initSupabase() : null;
-                await this.checkAuth();
-                await this.initI18n();
-                this.bindEvents();
-                this.loadCampaigns();
-                this.checkConnection();
-            },
-            
-            async checkAuth() {
-                if (!this.supabase) return;
-                const { data: { session } } = await this.supabase.auth.getSession();
-                if (!session || !session.user || !session.user.email_confirmed_at) {
-                    window.location.href = '/register.html';
-                    return;
-                }
-            },
-            
-            async initI18n() {
-                if (window.i18n) {
-                    this.currentLanguage = await window.i18n.detectLanguage();
-                    await window.i18n.translatePage();
-                }
-            },
-            
-            bindEvents() {
-                // Logout
-                document.getElementById('logout-btn').addEventListener('click', () => this.logout());
-                
-                // Tabs
-                const tabs = document.querySelectorAll('.tab');
-                tabs.forEach(tab => {
-                    tab.addEventListener('click', () => this.switchTab(tab));
-                });
-                
-                // Buttons
-                document.getElementById('connect-btn').addEventListener('click', () => this.connectInstagram());
-                document.getElementById('new-campaign-btn').addEventListener('click', () => this.createCampaign());
-                document.getElementById('add-first-campaign').addEventListener('click', () => this.createCampaign());
-                
-                // Keyboard navigation
-                document.addEventListener('keydown', (e) => this.handleKeyboard(e));
-            },
-            
-            switchTab(activeTab) {
-                // Update tab states
-                document.querySelectorAll('.tab').forEach(tab => {
-                    tab.classList.remove('active');
-                    tab.setAttribute('aria-selected', 'false');
-                });
-                activeTab.classList.add('active');
-                activeTab.setAttribute('aria-selected', 'true');
-                
-                // Show corresponding content
-                const targetId = activeTab.getAttribute('aria-controls');
-                document.querySelectorAll('[role="tabpanel"]').forEach(panel => {
-                    panel.style.display = 'none';
-                });
-                document.getElementById(targetId).style.display = '';
-            },
-            
-            handleKeyboard(e) {
-                // Tab navigation with arrow keys
-                if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
-                    const tabs = document.querySelectorAll('.tab');
-                    const activeTab = document.querySelector('.tab.active');
-                    const currentIndex = Array.from(tabs).indexOf(activeTab);
-                    
-                    if (e.key === 'ArrowLeft' && currentIndex > 0) {
-                        tabs[currentIndex - 1].click();
-                    } else if (e.key === 'ArrowRight' && currentIndex < tabs.length - 1) {
-                        tabs[currentIndex + 1].click();
-                    }
-                }
-            },
-            
-            async logout() {
-                if (this.supabase) await this.supabase.auth.signOut();
-                window.location.href = '/register.html';
-            },
-            
-            async loadCampaigns() {
-                try {
-                    if (!this.supabase) return;
-                    
-                    const { data, error } = await this.supabase
-                        .from('instagram_campaigns')
-                        .select('*')
-                        .order('created_at', { ascending: false });
-                    
-                    if (error) throw error;
-                    
-                    this.campaignsData = data || [];
-                    this.renderCampaignsGrid();
-                    this.updateMetrics();
-                    
-                } catch (error) {
-                    console.error('Failed to load campaigns:', error);
-                    this.showError('Failed to load campaigns');
-                }
-            },
-            
-            renderCampaignsGrid() {
-                const grid = document.getElementById('campaigns-grid');
-                const emptyState = document.getElementById('campaigns-empty');
-                
-                if (this.campaignsData.length === 0) {
-                    grid.innerHTML = '';
-                    emptyState.style.display = 'block';
-                    return;
-                }
-                
-                emptyState.style.display = 'none';
-                
-                grid.innerHTML = this.campaignsData.map(campaign => `
-                    <div class="campaign-card">
-                        <div class="campaign-header">
-                            <div class="campaign-icon">
-                                <i class="fab fa-instagram"></i>
-                            </div>
-                            <div class="campaign-info">
-                                <div class="campaign-name">${campaign.name || 'N/A'}</div>
-                                <div class="campaign-status">${this.formatStatus(campaign.status)}</div>
-                            </div>
-                        </div>
-                        <div class="campaign-stats">
-                            <div class="stat-item">
-                                <div class="stat-value">${campaign.messages_sent || 0}</div>
-                                <div class="stat-label">Response</div>
-                            </div>
-                            <div class="stat-item">
-                                <div class="stat-value">${campaign.response_rate || 0}%</div>
-                                <div class="stat-label">Response</div>
-                            </div>
-                        </div>
-                        <div class="campaign-actions">
-                            <button class="action-btn btn btn-primary" onclick="Instagram.viewCampaign('${campaign.id}')" data-i18n="instagram.actions.view">View</button>
-                            <button class="action-btn btn btn-primary" onclick="Instagram.editCampaign('${campaign.id}')" data-i18n="instagram.actions.edit">Edit</button>
-                            <button class="action-btn btn btn-primary" onclick="Instagram.startCampaign('${campaign.id}')" data-i18n="instagram.actions.start">Start</button>
-                        </div>
-                    </div>
-                `).join('');
-            },
-            
-            updateMetrics() {
-                const messagesSent = this.campaignsData.reduce((sum, campaign) => sum + (campaign.messages_sent || 0), 0);
-                const activeCampaigns = this.campaignsData.filter(campaign => campaign.status === 'active').length;
-                const conversions = this.campaignsData.reduce((sum, campaign) => sum + (campaign.conversions || 0), 0);
-                
-                document.getElementById('messages-sent').textContent = messagesSent.toLocaleString();
-                document.getElementById('active-campaigns').textContent = activeCampaigns;
-                document.getElementById('conversions').textContent = conversions;
-            },
-            
-            checkConnection() {
-                // Simulate connection check
-                this.isConnected = Math.random() > 0.5;
-                this.updateConnectionStatus();
-            },
-            
-            updateConnectionStatus() {
-                const indicator = document.getElementById('status-indicator');
-                const statusText = document.getElementById('status-text');
-                
-                if (this.isConnected) {
-                    indicator.className = 'status-indicator status-connected';
-                    statusText.textContent = 'Instagram connected';
-                    statusText.className = 'status-text status-connected';
-                } else {
-                    indicator.className = 'status-indicator status-disconnected';
-                    statusText.textContent = 'Instagram not connected';
-                    statusText.className = 'status-text status-disconnected';
-                }
-            },
-            
-            formatStatus(status) {
-                const statusMap = {
-                    'draft': 'Draft',
-                    'active': 'Active',
-                    'paused': 'Paused',
-                    'completed': 'Completed'
-                };
-                return statusMap[status] || 'Draft';
-            },
-            
-            connectInstagram() {
-                // Placeholder for Instagram connection functionality
-                console.log('Connecting to Instagram...');
-                alert('Instagram connection functionality coming soon');
-            },
-            
-            createCampaign() {
-                // Placeholder for create campaign functionality
-                console.log('Creating new campaign...');
-                alert('Create campaign functionality coming soon');
-            },
-            
-            viewCampaign(campaignId) {
-                // Placeholder for view campaign functionality
-                console.log('Viewing campaign:', campaignId);
-                alert('View campaign functionality coming soon');
-            },
-            
-            editCampaign(campaignId) {
-                // Placeholder for edit campaign functionality
-                console.log('Editing campaign:', campaignId);
-                alert('Edit campaign functionality coming soon');
-            },
-            
-            startCampaign(campaignId) {
-                // Placeholder for start campaign functionality
-                console.log('Starting campaign:', campaignId);
-                alert('Start campaign functionality coming soon');
-            },
-            
-            showError(message) {
-                console.error(message);
-                // Placeholder for error display
-            }
-        };
-        
-        // Initialize Instagram when DOM is ready
-        document.addEventListener('DOMContentLoaded', () => {
-            window.AuthGuard = new AuthGuard();
-            Instagram.init();
-        });
-    </script>
 </body>
 </html>

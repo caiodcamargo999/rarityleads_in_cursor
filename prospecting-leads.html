@@ -127,7 +127,7 @@
                     </form>
                 </div>
             </section>
-            <section id="leads-list-section" style="display:none;">
+            <section id="leads-list-section">
                 <div class="chart-card">
                     <h3 style="font-weight:500;">Warm Leads & Major Contacts</h3>
                     <div class="leads-table-container">
@@ -161,42 +161,5 @@
     <script src="app-config.js"></script>
     <script src="auth-guard.js"></script>
     <script src="universal-navigation.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            if (typeof feather !== 'undefined') feather.replace();
-            window.AuthGuard = new AuthGuard();
-
-            // Metrics update (real data or zero only)
-            document.getElementById('total-leads').textContent = 0;
-            document.getElementById('hot-leads').textContent = 0;
-            document.getElementById('warm-leads').textContent = 0;
-            document.getElementById('converted-leads').textContent = 0;
-
-            // Sidebar logout button logic
-            const logoutBtn = document.getElementById('logout-btn');
-            if (logoutBtn) {
-                logoutBtn.addEventListener('click', async () => {
-                    if (window.AuthGuard && window.AuthGuard.supabase) {
-                        await window.AuthGuard.supabase.auth.signOut();
-                    }
-                    window.location.href = '/index.html';
-                });
-            }
-
-            // Lead generation form logic
-            const form = document.getElementById('lead-criteria-form');
-            const leadsSection = document.getElementById('leads-list-section');
-            const leadsTableBody = document.getElementById('leads-table-body');
-            const leadsEmpty = document.getElementById('leads-empty');
-
-            form.addEventListener('submit', function(e) {
-                e.preventDefault();
-                // For demo, show an empty list (no example numbers)
-                leadsTableBody.innerHTML = '';
-                leadsSection.style.display = '';
-                leadsEmpty.style.display = 'block';
-            });
-        });
-    </script>
 </body>
 </html>

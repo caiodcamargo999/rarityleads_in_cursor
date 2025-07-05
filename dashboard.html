@@ -5,112 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title data-i18n="dashboard.meta.title">Rarity Leads - Dashboard</title>
     <link rel="stylesheet" href="rarity-design.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/feather-icons"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
-<body class="dark-bg">
+<body>
     <div class="dashboard-container">
-        <!-- Sidebar with consistent design -->
-        <aside class="sidebar" id="sidebar" role="navigation" aria-label="Main navigation">
-            <div class="sidebar-header">
-                <img src="rarity-logo.jpg" alt="Rarity Leads Logo" class="sidebar-logo">
-            </div>
-            
-            <nav class="sidebar-nav">
-                <ul>
-                    <li>
-                        <a href="dashboard.html" class="active" data-i18n="nav.dashboard" data-page="dashboard">
-                            <i class="nav-icon" data-feather="home"></i>
-                            <span data-i18n="nav.dashboard">Dashboard</span>
-                        </a>
-                    </li>
-                    
-                    <li>
-                        <a href="prospecting-leads.html" data-i18n="nav.leads" data-page="leads">
-                            <i class="nav-icon" data-feather="users"></i>
-                            <span data-i18n="nav.leads">Leads</span>
-                        </a>
-                    </li>
-                    
-                    <li>
-                        <a href="prospecting-companies.html" data-i18n="nav.companies" data-page="companies">
-                            <i class="nav-icon" data-feather="briefcase"></i>
-                            <span data-i18n="nav.companies">Companies</span>
-                        </a>
-                    </li>
-                    
-                    <li class="nav-section">
-                        <span class="nav-section-title" data-i18n="nav.outreach">Outreach</span>
-                    </li>
-                    
-                    <li>
-                        <a href="approaching-whatsapp.html" data-i18n="nav.whatsapp" data-page="whatsapp">
-                            <i class="nav-icon" data-feather="message-circle"></i>
-                            <span data-i18n="nav.whatsapp">WhatsApp</span>
-                        </a>
-                    </li>
-                    
-                    <li>
-                        <a href="approaching-linkedin.html" data-i18n="nav.linkedin" data-page="linkedin">
-                            <i class="nav-icon" data-feather="linkedin"></i>
-                            <span data-i18n="nav.linkedin">LinkedIn</span>
-                        </a>
-                    </li>
-                    
-                    <li>
-                        <a href="approaching-instagram.html" data-i18n="nav.instagram" data-page="instagram">
-                            <i class="nav-icon" data-feather="instagram"></i>
-                            <span data-i18n="nav.instagram">Instagram</span>
-                        </a>
-                    </li>
-                    
-                    <li>
-                        <a href="approaching-facebook.html" data-i18n="nav.facebook" data-page="facebook">
-                            <i class="nav-icon" data-feather="facebook"></i>
-                            <span data-i18n="nav.facebook">Facebook</span>
-                        </a>
-                    </li>
-                    
-                    <li>
-                        <a href="approaching-x.html" data-i18n="nav.x" data-page="x">
-                            <i class="nav-icon" data-feather="twitter"></i>
-                            <span data-i18n="nav.x">X (Twitter)</span>
-                        </a>
-                    </li>
-                    
-                    <li class="nav-section">
-                        <span class="nav-section-title" data-i18n="nav.analyticsSupport">Analytics & Support</span>
-                    </li>
-                    
-                    <li>
-                        <a href="analytics.html" data-i18n="nav.analytics" data-page="analytics">
-                            <i class="nav-icon" data-feather="bar-chart-2"></i>
-                            <span data-i18n="nav.analytics">Analytics</span>
-                        </a>
-                    </li>
-                    
-                    <li>
-                        <a href="support.html" data-i18n="nav.support" data-page="support">
-                            <i class="nav-icon" data-feather="help-circle"></i>
-                            <span data-i18n="nav.support">Support</span>
-                        </a>
-                    </li>
-                </ul>
-            </nav>
-            
-            <div class="sidebar-bottom">
-                <button class="sidebar-profile-btn" id="profile-btn">
-                    <i data-feather="settings"></i>
-                    <span data-i18n="common.profileSettings">Profile & Settings</span>
-                </button>
-                <button class="sidebar-logout-btn" id="logout-btn" data-i18n="common.logout">Logout</button>
-            </div>
-        </aside>
+        <aside class="sidebar" id="sidebar" role="navigation" aria-label="Main navigation"></aside>
 
         <!-- Main Content Area -->
         <main class="main-content" role="main">
-            <header class="main-header" style="margin-bottom: 2.5em;">
+            <header class="main-header">
                 <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 2rem;">
                     <div style="flex: 1;">
                         <h1 class="dashboard-title" data-i18n="dashboard.title" style="font-size: 2.2em; font-weight: 500; margin-bottom: 0.2em; letter-spacing: 0.01em;">Dashboard</h1>
@@ -127,116 +31,116 @@
             </header>
 
             <!-- Metrics Grid -->
-            <section class="metrics-grid" style="margin-bottom: 2.5em;">
+            <section class="metrics-grid">
                 <div class="metric-card">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-                        <div style="width: 48px; height: 48px; border-radius: 8px; background: var(--button-bg); display: flex; align-items: center; justify-content: center;">
-                            <i data-feather="users" style="color: var(--primary-text); width: 1.5rem; height: 1.5rem;"></i>
+                    <div >
+                        <div >
+                            <i data-feather="users" ></i>
                         </div>
-                        <div style="display: flex; align-items: center; gap: 0.25rem; font-size: 0.875rem; font-weight: 600; color: var(--secondary-text); background: rgba(161, 161, 170, 0.1); padding: 0.25rem 0.5rem; border-radius: 4px;">
-                            <i data-feather="minus" style="width: 1rem; height: 1rem;"></i>
+                        <div >
+                            <i data-feather="minus" ></i>
                             <span>0%</span>
                         </div>
                     </div>
-                    <div style="margin-bottom: 1rem;">
-                        <div id="leads-count" style="font-size: 2.5rem; font-weight: 700; color: var(--primary-text); margin-bottom: 0.5rem; line-height: 1;">0</div>
-                        <div data-i18n="dashboard.metrics.activeLeads" style="font-size: 0.875rem; color: var(--secondary-text); font-weight: 500;">Active Leads</div>
+                    <div >
+                        <div id="leads-count" >0</div>
+                        <div data-i18n="dashboard.metrics.activeLeads" >Active Leads</div>
                     </div>
                 </div>
 
                 <div class="metric-card">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-                        <div style="width: 48px; height: 48px; border-radius: 8px; background: var(--button-bg); display: flex; align-items: center; justify-content: center;">
-                            <i data-feather="target" style="color: var(--primary-text); width: 1.5rem; height: 1.5rem;"></i>
+                    <div >
+                        <div >
+                            <i data-feather="target" ></i>
                         </div>
-                        <div style="display: flex; align-items: center; gap: 0.25rem; font-size: 0.875rem; font-weight: 600; color: var(--secondary-text); background: rgba(161, 161, 170, 0.1); padding: 0.25rem 0.5rem; border-radius: 4px;">
-                            <i data-feather="minus" style="width: 1rem; height: 1rem;"></i>
+                        <div >
+                            <i data-feather="minus" ></i>
                             <span>0%</span>
                         </div>
                     </div>
-                    <div style="margin-bottom: 1rem;">
-                        <div id="conversion-rate" style="font-size: 2.5rem; font-weight: 700; color: var(--primary-text); margin-bottom: 0.5rem; line-height: 1;">0%</div>
-                        <div data-i18n="dashboard.metrics.conversionRate" style="font-size: 0.875rem; color: var(--secondary-text); font-weight: 500;">Conversion Rate</div>
+                    <div >
+                        <div id="conversion-rate" >0%</div>
+                        <div data-i18n="dashboard.metrics.conversionRate" >Conversion Rate</div>
                     </div>
                 </div>
 
                 <div class="metric-card">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-                        <div style="width: 48px; height: 48px; border-radius: 8px; background: var(--button-bg); display: flex; align-items: center; justify-content: center;">
-                            <i data-feather="bar-chart-2" style="color: var(--primary-text); width: 1.5rem; height: 1.5rem;"></i>
+                    <div >
+                        <div >
+                            <i data-feather="bar-chart-2" ></i>
                         </div>
-                        <div style="display: flex; align-items: center; gap: 0.25rem; font-size: 0.875rem; font-weight: 600; color: var(--secondary-text); background: rgba(161, 161, 170, 0.1); padding: 0.25rem 0.5rem; border-radius: 4px;">
-                            <i data-feather="minus" style="width: 1rem; height: 1rem;"></i>
+                        <div >
+                            <i data-feather="minus" ></i>
                             <span>0%</span>
                         </div>
                     </div>
-                    <div style="margin-bottom: 1rem;">
-                        <div id="active-campaigns" style="font-size: 2.5rem; font-weight: 700; color: var(--primary-text); margin-bottom: 0.5rem; line-height: 1;">0</div>
-                        <div data-i18n="dashboard.metrics.activeCampaigns" style="font-size: 0.875rem; color: var(--secondary-text); font-weight: 500;">Active Campaigns</div>
+                    <div >
+                        <div id="active-campaigns" >0</div>
+                        <div data-i18n="dashboard.metrics.activeCampaigns" >Active Campaigns</div>
                     </div>
                 </div>
 
                 <div class="metric-card">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-                        <div style="width: 48px; height: 48px; border-radius: 8px; background: var(--button-bg); display: flex; align-items: center; justify-content: center;">
-                            <i data-feather="dollar-sign" style="color: var(--primary-text); width: 1.5rem; height: 1.5rem;"></i>
+                    <div >
+                        <div >
+                            <i data-feather="dollar-sign" ></i>
                         </div>
-                        <div style="display: flex; align-items: center; gap: 0.25rem; font-size: 0.875rem; font-weight: 600; color: var(--secondary-text); background: rgba(161, 161, 170, 0.1); padding: 0.25rem 0.5rem; border-radius: 4px;">
-                            <i data-feather="minus" style="width: 1rem; height: 1rem;"></i>
+                        <div >
+                            <i data-feather="minus" ></i>
                             <span>0%</span>
                         </div>
                     </div>
-                    <div style="margin-bottom: 1rem;">
-                        <div id="monthly-revenue" style="font-size: 2.5rem; font-weight: 700; color: var(--primary-text); margin-bottom: 0.5rem; line-height: 1;">$0</div>
-                        <div data-i18n="dashboard.metrics.monthlyRevenue" style="font-size: 0.875rem; color: var(--secondary-text); font-weight: 500;">Monthly Revenue</div>
+                    <div >
+                        <div id="monthly-revenue" >$0</div>
+                        <div data-i18n="dashboard.metrics.monthlyRevenue" >Monthly Revenue</div>
                     </div>
                 </div>
             </section>
 
             <!-- Charts Section -->
-            <section style="display: grid; grid-template-columns: 2fr 1fr; gap: 2em; margin-bottom: 2.5em;">
+            <section>
                 <div class="chart-card">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
-                        <h3 data-i18n="dashboard.leadGenerationTrend.title" style="font-size: 1.25em; font-weight: 500; margin: 0; color: var(--primary-text);">Lead Generation Trend</h3>
-                        <button class="btn" data-chart="leads" data-i18n="dashboard.charts.viewAll" style="background: var(--button-bg); color: var(--button-text); border: none; border-radius: 6px; padding: 0.5rem 1rem; font-size: 0.875rem; font-weight: 500; cursor: pointer; transition: background 0.2s;">View All</button>
+                    <div >
+                        <h3 data-i18n="dashboard.leadGenerationTrend.title" >Lead Generation Trend</h3>
+                        <button class="btn" data-chart="leads" data-i18n="dashboard.charts.viewAll" >View All</button>
                     </div>
-                    <div style="height: 300px; position: relative;">
+                    <div >
                         <canvas id="leadsChart"></canvas>
                     </div>
                 </div>
 
                 <div class="chart-card">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
-                        <h3 data-i18n="dashboard.channelPerformance.title" style="font-size: 1.25em; font-weight: 500; margin: 0; color: var(--primary-text);">Channel Performance</h3>
-                        <button class="btn" data-chart="channels" data-i18n="dashboard.charts.viewAll" style="background: var(--button-bg); color: var(--button-text); border: none; border-radius: 6px; padding: 0.5rem 1rem; font-size: 0.875rem; font-weight: 500; cursor: pointer; transition: background 0.2s;">View All</button>
+                    <div >
+                        <h3 data-i18n="dashboard.channelPerformance.title" >Channel Performance</h3>
+                        <button class="btn" data-chart="channels" data-i18n="dashboard.charts.viewAll" >View All</button>
                     </div>
-                    <div style="height: 300px; position: relative;">
+                    <div >
                         <canvas id="channelsChart"></canvas>
                     </div>
                 </div>
             </section>
 
             <!-- Quick Actions Section -->
-            <section style="margin-bottom: 2rem;">
-                <div style="margin-bottom: 1.5rem;">
-                    <h3 data-i18n="dashboard.quickActions.title" style="font-size: 1.25em; font-weight: 600; margin: 0; color: var(--primary-text);">Quick Actions</h3>
+            <section>
+                <div >
+                    <h3 data-i18n="dashboard.quickActions.title" >Quick Actions</h3>
                 </div>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
-                    <button class="action-btn" data-action="new-lead" style="display: flex; flex-direction: column; align-items: center; gap: 0.75rem; padding: 1.5rem; border-radius: 10px; border: 1px solid var(--border); background: var(--card-bg); color: var(--secondary-text); cursor: pointer; transition: all 0.3s; text-decoration: none;" onmouseover="this.style.background='var(--button-bg)'; this.style.color='var(--primary-text)';" onmouseout="this.style.background='var(--card-bg)'; this.style.color='var(--secondary-text)';">
-                        <i data-feather="user-plus" style="width: 2rem; height: 2rem; color: var(--primary-text);"></i>
-                        <span data-i18n="dashboard.actions.newLead" style="font-size: 0.875rem; font-weight: 500; text-align: center;">Add New Lead</span>
+                <div >
+                    <button class="action-btn" data-action="new-lead"  onmouseover="this.style.background='var(--button-bg)'; this.style.color='var(--primary-text)';" onmouseout="this.style.background='var(--card-bg)'; this.style.color='var(--secondary-text)';">
+                        <i data-feather="user-plus" ></i>
+                        <span data-i18n="dashboard.actions.newLead" >Add New Lead</span>
                     </button>
-                    <button class="action-btn" data-action="new-campaign" style="display: flex; flex-direction: column; align-items: center; gap: 0.75rem; padding: 1.5rem; border-radius: 10px; border: 1px solid var(--border); background: var(--card-bg); color: var(--secondary-text); cursor: pointer; transition: all 0.3s; text-decoration: none;" onmouseover="this.style.background='var(--button-bg)'; this.style.color='var(--primary-text)';" onmouseout="this.style.background='var(--card-bg)'; this.style.color='var(--secondary-text)';">
-                        <i data-feather="plus-circle" style="width: 2rem; height: 2rem; color: var(--primary-text);"></i>
-                        <span data-i18n="dashboard.actions.newCampaign" style="font-size: 0.875rem; font-weight: 500; text-align: center;">Create Campaign</span>
+                    <button class="action-btn" data-action="new-campaign"  onmouseover="this.style.background='var(--button-bg)'; this.style.color='var(--primary-text)';" onmouseout="this.style.background='var(--card-bg)'; this.style.color='var(--secondary-text)';">
+                        <i data-feather="plus-circle" ></i>
+                        <span data-i18n="dashboard.actions.newCampaign" >Create Campaign</span>
                     </button>
-                    <button class="action-btn" data-action="export-data" style="display: flex; flex-direction: column; align-items: center; gap: 0.75rem; padding: 1.5rem; border-radius: 10px; border: 1px solid var(--border); background: var(--card-bg); color: var(--secondary-text); cursor: pointer; transition: all 0.3s; text-decoration: none;" onmouseover="this.style.background='var(--button-bg)'; this.style.color='var(--primary-text)';" onmouseout="this.style.background='var(--card-bg)'; this.style.color='var(--secondary-text)';">
-                        <i data-feather="download" style="width: 2rem; height: 2rem; color: var(--primary-text);"></i>
-                        <span data-i18n="dashboard.actions.exportData" style="font-size: 0.875rem; font-weight: 500; text-align: center;">Export Data</span>
+                    <button class="action-btn" data-action="export-data"  onmouseover="this.style.background='var(--button-bg)'; this.style.color='var(--primary-text)';" onmouseout="this.style.background='var(--card-bg)'; this.style.color='var(--secondary-text)';">
+                        <i data-feather="download" ></i>
+                        <span data-i18n="dashboard.actions.exportData" >Export Data</span>
                     </button>
-                    <button class="action-btn" data-action="schedule-meeting" style="display: flex; flex-direction: column; align-items: center; gap: 0.75rem; padding: 1.5rem; border-radius: 10px; border: 1px solid var(--border); background: var(--card-bg); color: var(--secondary-text); cursor: pointer; transition: all 0.3s; text-decoration: none;" onmouseover="this.style.background='var(--button-bg)'; this.style.color='var(--primary-text)';" onmouseout="this.style.background='var(--card-bg)'; this.style.color='var(--secondary-text)';">
-                        <i data-feather="calendar" style="width: 2rem; height: 2rem; color: var(--primary-text);"></i>
-                        <span data-i18n="dashboard.actions.scheduleMeeting" style="font-size: 0.875rem; font-weight: 500; text-align: center;">Schedule Meeting</span>
+                    <button class="action-btn" data-action="schedule-meeting"  onmouseover="this.style.background='var(--button-bg)'; this.style.color='var(--primary-text)';" onmouseout="this.style.background='var(--card-bg)'; this.style.color='var(--secondary-text)';">
+                        <i data-feather="calendar" ></i>
+                        <span data-i18n="dashboard.actions.scheduleMeeting" >Schedule Meeting</span>
                     </button>
                 </div>
             </section>
@@ -267,6 +171,7 @@
             }
         });
     </script>
+    <script src="universal-navigation.js"></script>
     <script src="dashboard.js"></script>
 </body>
 </html>

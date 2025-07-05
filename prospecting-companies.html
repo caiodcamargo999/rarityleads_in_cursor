@@ -145,7 +145,7 @@
                         </div>
                         <h3 class="empty-title" data-i18n="companies.empty.title">No companies found</h3>
                         <p class="empty-description" data-i18n="companies.empty.description">Start by adding your first company or adjust your filters.</p>
-                        <button class="btn" id="add-first-company" data-i18n="companies.addCompany" style="margin-top:1em;">
+                        <button class="btn" id="add-first-company" data-i18n="companies.addCompany">
                             <i data-feather="plus"></i>
                             Add Your First Company
                         </button>
@@ -159,30 +159,5 @@
     <script src="i18n.js"></script>
     <script src="auth-guard.js"></script>
     <script src="universal-navigation.js"></script>
-    <script src="companies.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            if (typeof feather !== 'undefined') feather.replace();
-            window.AuthGuard = new AuthGuard();
-            Companies.init();
-
-            // Metrics update (real data or zero only)
-            document.getElementById('total-companies').textContent = 0;
-            document.getElementById('targeted-companies').textContent = 0;
-            document.getElementById('contacted-companies').textContent = 0;
-            document.getElementById('converted-companies').textContent = 0;
-
-            // Sidebar logout button logic
-            const logoutBtn = document.getElementById('logout-btn');
-            if (logoutBtn) {
-                logoutBtn.addEventListener('click', async () => {
-                    if (window.AuthGuard && window.AuthGuard.supabase) {
-                        await window.AuthGuard.supabase.auth.signOut();
-                    }
-                    window.location.href = '/index.html';
-                });
-            }
-        });
-    </script>
 </body>
 </html>

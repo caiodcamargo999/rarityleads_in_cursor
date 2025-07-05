@@ -59,7 +59,7 @@ class UniversalNavigation {
                 <div class="sidebar-header">
                     <img src="rarity-logo.jpg" alt="Rarity Leads Logo" class="sidebar-logo">
                 </div>
-                <nav class="sidebar-nav">
+                <nav class="sidebar-nav" style="flex:1; overflow-y:auto;">
                     <ul>
                         <li>
                             <a href="dashboard.html" data-i18n="nav.dashboard" data-page="dashboard">
@@ -84,31 +84,31 @@ class UniversalNavigation {
                         </li>
                         <li>
                             <a href="approaching-whatsapp.html" data-i18n="nav.whatsapp" data-page="whatsapp">
-                                <i class="nav-icon" data-feather="message-circle"></i>
+                                <span class="nav-icon">${this.getSvgIcon('whatsapp')}</span>
                                 <span data-i18n="nav.whatsapp">WhatsApp</span>
                             </a>
                         </li>
                         <li>
                             <a href="approaching-linkedin.html" data-i18n="nav.linkedin" data-page="linkedin">
-                                <i class="nav-icon" data-feather="linkedin"></i>
+                                <span class="nav-icon">${this.getSvgIcon('linkedin')}</span>
                                 <span data-i18n="nav.linkedin">LinkedIn</span>
                             </a>
                         </li>
                         <li>
                             <a href="approaching-instagram.html" data-i18n="nav.instagram" data-page="instagram">
-                                <i class="nav-icon" data-feather="instagram"></i>
+                                <span class="nav-icon">${this.getSvgIcon('instagram')}</span>
                                 <span data-i18n="nav.instagram">Instagram</span>
                             </a>
                         </li>
                         <li>
                             <a href="approaching-facebook.html" data-i18n="nav.facebook" data-page="facebook">
-                                <i class="nav-icon" data-feather="facebook"></i>
+                                <span class="nav-icon">${this.getSvgIcon('facebook')}</span>
                                 <span data-i18n="nav.facebook">Facebook</span>
                             </a>
                         </li>
                         <li>
                             <a href="approaching-x.html" data-i18n="nav.x" data-page="x">
-                                <i class="nav-icon" data-feather="twitter"></i>
+                                <span class="nav-icon">${this.getSvgIcon('x')}</span>
                                 <span data-i18n="nav.x">X (Twitter)</span>
                             </a>
                         </li>
@@ -129,17 +129,34 @@ class UniversalNavigation {
                         </li>
                     </ul>
                 </nav>
-                <div class="sidebar-bottom" style="margin-top:auto; padding:2em 2em 2.5em 2em; border-top:1px solid var(--logout-separator); background:var(--sidebar-bg); text-align:center; display:flex; flex-direction:column; gap:1em; position:sticky; bottom:0; left:0; right:0;">
-                    <button class="sidebar-profile-btn" id="profile-btn" style="display:flex; align-items:center; gap:0.5em; justify-content:center; background:none; border:none; color:var(--text-secondary); font-size:1rem; cursor:pointer;">
+                <div class="sidebar-bottom">
+                    <button class="sidebar-profile-btn" id="profile-btn">
                         <i data-feather="settings"></i>
                         <span data-i18n="common.profileSettings">Profile & Settings</span>
                     </button>
-                    <button class="sidebar-logout-btn" id="logout-btn" data-i18n="common.logout" style="display:flex; align-items:center; gap:0.5em; justify-content:center; background:none; border:none; color:var(--text-secondary); font-size:1rem; cursor:pointer;">
+                    <button class="sidebar-logout-btn" id="logout-btn" data-i18n="common.logout">
                         <i data-feather="log-out"></i>
                         <span data-i18n="common.logout">Logout</span>
                     </button>
                 </div>
             `;
+        }
+    }
+
+    getSvgIcon(name) {
+        switch (name) {
+            case 'whatsapp':
+                return `<svg width="20" height="20" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M16 3C9.373 3 4 8.373 4 15c0 2.385.832 4.584 2.236 6.364L4 29l7.818-2.236A12.94 12.94 0 0 0 16 27c6.627 0 12-5.373 12-12S22.627 3 16 3Zm0 22c-1.98 0-3.85-.577-5.418-1.57l-.386-.24-4.65 1.33 1.33-4.65-.24-.386A9.96 9.96 0 0 1 6 15c0-5.514 4.486-10 10-10s10 4.486 10 10-4.486 10-10 10Zm5.29-7.71c-.29-.145-1.71-.844-1.974-.94-.264-.097-.456-.145-.648.145-.193.29-.744.94-.912 1.133-.168.193-.336.217-.626.072-.29-.145-1.225-.452-2.334-1.44-.863-.77-1.445-1.72-1.615-2.01-.168-.29-.018-.447.127-.592.13-.13.29-.336.435-.504.145-.168.193-.29.29-.483.097-.193.048-.362-.024-.507-.072-.145-.648-1.566-.888-2.146-.234-.563-.472-.486-.648-.495-.168-.007-.362-.009-.555-.009-.193 0-.507.073-.773.362-.264.29-1.01.99-1.01 2.415 0 1.425 1.034 2.803 1.178 2.997.145.193 2.04 3.12 5.04 4.253.705.242 1.254.387 1.683.495.707.18 1.35.155 1.86.094.567-.067 1.71-.698 1.953-1.372.242-.674.242-1.252.168-1.372-.072-.12-.264-.193-.555-.338Z" fill="currentColor"/></svg>`;
+            case 'linkedin':
+                return `<svg width="20" height="20" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M27 27h-4.5v-7c0-1.1-.9-2-2-2s-2 .9-2 2v7H9V12h4.5v2.1c.7-1.2 2.1-2.1 3.5-2.1 2.5 0 4.5 2 4.5 4.5v10.5ZM7 10.5A2.5 2.5 0 1 1 7 5a2.5 2.5 0 0 1 0 5Zm2.25 16.5H4.75V12h4.5v15ZM27 3H5C3.9 3 3 3.9 3 5v22c0 1.1.9 2 2 2h22c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2Z" fill="currentColor"/></svg>`;
+            case 'instagram':
+                return `<svg width="20" height="20" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="6" y="6" width="20" height="20" rx="6" stroke="currentColor" stroke-width="2"/><circle cx="16" cy="16" r="5" stroke="currentColor" stroke-width="2"/><circle cx="23" cy="9" r="1" fill="currentColor"/></svg>`;
+            case 'facebook':
+                return `<svg width="20" height="20" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M29 16c0-7.18-5.82-13-13-13S3 8.82 3 16c0 6.48 4.84 11.82 11 12.82V20.5h-3v-3h3v-2.5c0-3.03 1.79-4.7 4.52-4.7 1.31 0 2.68.24 2.68.24v3h-1.51c-1.49 0-1.95.93-1.95 1.88V17.5h3.32l-.53 3h-2.79v8.32C24.16 27.82 29 22.48 29 16Z" fill="currentColor"/></svg>`;
+            case 'x':
+                return `<svg width="20" height="20" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M25.5 7h-3.1l-5.1 6.6L12.1 7H6.5l7.1 9.2L6 25h3.1l5.3-6.9 5.3 6.9h5.6l-7.6-9.8L25.5 7Zm-4.2 15.2-3.2-4.2-3.2 4.2H8.9l5.1-6.7-7.1-9.2h3.1l5.1 6.6 5.1-6.6h3.1l-7.1 9.2 5.1 6.7h-3.1Z" fill="currentColor"/></svg>`;
+            default:
+                return '';
         }
     }
 
