@@ -141,7 +141,8 @@ window.AppConfig = {
       '/approaching-facebook.html',
       '/approaching-x.html',
       '/approaching-linkedin.html',
-      '/support.html'
+      '/support.html',
+      '/profile.html'
     ],
     publicRoutes: [
       '/index.html',

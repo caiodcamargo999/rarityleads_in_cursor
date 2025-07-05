@@ -9,11 +9,9 @@
 </head>
 <body>
     <!-- Top right language/theme panel -->
-    <div id="topright-lang-theme-panel"></div>
-    <header class="main-header motion-fade-in">
-        <nav class="main-nav">
-            <!-- <div class="logo motion-pop" data-i18n="common.brand">Rarity Leads</div> -->
-            <div class="nav-links"></div>
+    <header class="main-header">
+        <nav class="main-nav" style="display: flex; align-items: center; justify-content: flex-end; max-width: 1200px; margin: 0 auto; padding: 1.5em 2em; gap: 1.2em;">
+            <div id="language-theme-toggle" class="lang-theme-topright"></div>
         </nav>
     </header>
     <main class="auth-main">
@@ -99,7 +97,6 @@
             </div>
         </div>
     </main>
-    <div id="language-theme-toggle" class="lang-theme-topright"></div>
 
     <style>
     /* Responsive top-right Anthropic-style toggle */
@@ -113,25 +110,69 @@
         justify-content: flex-end;
         min-width: 0;
         pointer-events: auto;
+        background: none;
+        box-shadow: none;
+        border-radius: 999px;
+        padding: 0;
     }
-    @media (max-width: 600px) {
+    .lang-theme-topright .pill, .lang-theme-topright > div {
+        font-size: 0.97em !important;
+        padding: 0.08em 0.7em 0.08em 0.7em !important;
+        min-height: 2em !important;
+        border-radius: 999px !important;
+        gap: 0.4em !important;
+        box-shadow: none !important;
+        border-width: 1.2px !important;
+    }
+    .lang-theme-topright .lang-btn, .lang-theme-topright .theme-toggle-btn {
+        font-size: 0.97em !important;
+        padding: 0.2em 0.7em !important;
+        min-width: 0 !important;
+        height: 1.8em !important;
+        border-radius: 999px !important;
+    }
+    @media (max-width: 900px) {
         .lang-theme-topright {
             top: 0.7em;
             right: 0.7em;
             max-width: 98vw;
             padding: 0.1em 0.2em;
         }
-        .lang-theme-topright > div, .lang-theme-topright > .pill {
+        .lang-theme-topright > div, .lang-theme-topright .pill {
             flex-direction: row !important;
-            gap: 0.3em !important;
+            gap: 0.2em !important;
             flex-wrap: nowrap !important;
+            font-size: 0.93em !important;
+            padding: 0.04em 0.4em 0.04em 0.4em !important;
         }
-        .lang-btn, .theme-toggle-btn {
-            font-size: 0.95em !important;
-            padding: 0.3em 0.7em !important;
+        .lang-theme-topright .lang-btn, .lang-theme-topright .theme-toggle-btn {
+            font-size: 0.93em !important;
+            padding: 0.1em 0.4em !important;
             min-width: 0 !important;
-            height: 2em !important;
+            height: 1.5em !important;
         }
+    }
+    /* Light theme fixes for toggle */
+    body.light-theme .lang-theme-topright {
+        background: none;
+        box-shadow: none;
+    }
+    body.light-theme .lang-theme-topright .pill, body.light-theme .lang-theme-topright > div {
+        background: var(--card-bg, #fff) !important;
+        border: 1.5px solid var(--border);
+        color: var(--primary-text);
+    }
+    body.light-theme .lang-theme-topright .lang-btn, body.light-theme .lang-theme-topright .theme-toggle-btn {
+        color: var(--primary-text);
+        background: transparent;
+        border: 1.5px solid var(--border);
+    }
+    body.light-theme .lang-theme-topright .lang-btn.active, body.light-theme .lang-theme-topright .lang-btn:hover {
+        background: var(--button-bg);
+        color: #fff;
+    }
+    body.light-theme .lang-theme-topright .theme-toggle-btn:hover {
+        color: var(--accent-color, #8B5CF6);
     }
     </style>
 

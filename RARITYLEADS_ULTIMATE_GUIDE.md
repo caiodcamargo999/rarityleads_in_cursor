@@ -4,7 +4,7 @@
 
 > **DESIGN RULE:** The entire project must use a minimalist, dark, non-colorful design. White, light, or colorful backgrounds are strictly forbidden. No example numbers (e.g., 12, 0, 7, etc.) should appear anywhere in the UI—only real data or zero. All UI/UX must be modern, tech-inspired, and include motion effects for a premium SaaS feel. The sidebar menu must always include every prospecting channel as in the dashboard. All buttons must be visually consistent, functional, and never broken. The Sign In button must always work and be visually correct.
 
-> **MAJOR DESIGN REFERENCES:** The primary web and motion design references for the entire project are [tempo.new](https://www.tempo.new/), [codecademy.com](https://www.codecademy.com/), and [sounext.xyz](https://www.sounext.xyz/). All pages (Sales, Auth, Dashboard, Leads, etc.) must follow the minimalist, dark, tech-inspired, and motion-rich style of these references. All buttons and interactive elements must always work and have a premium, animated feel.
+> **MAJOR DESIGN REFERENCES:** The primary web and motion design references for the entire project are [tempo.new](https://www.tempo.new/), [codecademy.com](https://www.codecademy.com/), [sounext.xyz](https://www.sounext.xyz/), [console.anthropic.com/dashboard](https://console.anthropic.com/dashboard), and [docs.anthropic.com/en/docs/intro](https://docs.anthropic.com/en/docs/intro). All pages (Sales, Auth, Dashboard, Leads, etc.) must follow the minimalist, dark, tech-inspired, and motion-rich style of these references. All buttons and interactive elements must always work and have a premium, animated feel.
 
 This is the single source of truth for the Rarity Leads project. It covers vision, features, design, database, deployment, copywriting, and all technical and business steps for building, launching, and maintaining the platform.
 
@@ -225,6 +225,9 @@ Rarity Leads is a B2B SaaS lead prospecting platform powered by AI, focused on a
 ### Performance & Optimization
 - GPU-accelerated transforms, will-change for animated elements, optimized backdrop-filter, cubic-bezier transitions
 - Progressive enhancement, lazy loading of effects, reduced motion support, fallbacks for old browsers
+
+### Anthropic Console & Docs
+- **Anthropic Console & Docs:** [console.anthropic.com/dashboard](https://console.anthropic.com/dashboard) and [docs.anthropic.com/en/docs/intro](https://docs.anthropic.com/en/docs/intro) - Floating profile panel, minimalist sidebar, and clean navigation for SaaS apps
 
 ---
 

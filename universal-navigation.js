@@ -129,17 +129,38 @@ class UniversalNavigation {
                         </li>
                     </ul>
                 </nav>
-                <div class="sidebar-bottom">
-                    <button class="sidebar-profile-btn" id="profile-btn">
-                        <i data-feather="settings"></i>
-                        <span data-i18n="common.profileSettings">Profile & Settings</span>
-                    </button>
-                    <button class="sidebar-logout-btn" id="logout-btn" data-i18n="common.logout">
-                        <i data-feather="log-out"></i>
-                        <span data-i18n="common.logout">Logout</span>
+                <div class="sidebar-bottom" id="sidebar-avatar-trigger" style="display: flex; justify-content: center; align-items: center; padding: 2em 0 2.5em 0; border-top: 1px solid var(--logout-separator); background: var(--sidebar-bg);">
+                    <button id="sidebar-avatar-btn" aria-label="Open profile panel" style="width: 44px; height: 44px; border-radius: 50%; background: var(--sidebar-bg, #101014); display: flex; align-items: center; justify-content: center; font-weight: 500; font-size: 1.1em; color: var(--primary-text); border: 1.5px solid var(--border); box-shadow: 0 2px 8px rgba(0,0,0,0.10); cursor: pointer; transition: box-shadow 0.18s, border 0.18s;">
+                        <span id="sidebar-avatar-initial">?</span>
                     </button>
                 </div>
             `;
+            // After rendering, wire up the avatar button to open the floating panel
+            setTimeout(() => {
+                const avatarBtn = document.getElementById('sidebar-avatar-btn');
+                if (avatarBtn && window.LanguageThemePanel) {
+                    avatarBtn.onclick = function(e) {
+                        e.stopPropagation();
+                        // Open the floating profile panel (bottom left)
+                        const panelContainer = document.getElementById('floating-profile-panel');
+                        if (panelContainer && panelContainer.firstChild) {
+                            // Toggle panel visibility
+                            const panel = panelContainer.querySelector('div[style*="position: fixed"]');
+                            if (panel) {
+                                if (panel.style.visibility === 'visible') {
+                                    panel.style.visibility = 'hidden';
+                                    panel.style.opacity = '0';
+                                    panel.style.pointerEvents = 'none';
+                                } else {
+                                    panel.style.visibility = 'visible';
+                                    panel.style.opacity = '1';
+                                    panel.style.pointerEvents = 'auto';
+                                }
+                            }
+                        }
+                    };
+                }
+            }, 100);
         }
     }
 

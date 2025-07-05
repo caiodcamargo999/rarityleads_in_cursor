@@ -49,7 +49,8 @@ class I18nManager {
       
       const translations = await response.json();
       this.translations[language] = translations;
-      
+      // DEBUG: Log the loaded translations structure
+      console.log('[i18n] Loaded translations for', language, translations);
       return translations;
     } catch (error) {
       console.warn(`Failed to load translations for ${language}:`, error);
@@ -93,24 +94,21 @@ class I18nManager {
     try {
       // Load translations for new language
       await this.loadTranslations(language);
-      
-      // Update current language
+      // Wait for translations to be available before updating currentLanguage
       this.currentLanguage = language;
-      
       // Save to localStorage
       localStorage.setItem('rarity-leads-language', language);
-      
       // Update document language
       document.documentElement.lang = language;
-      
-      // Apply translations
+      // Wait for i18nReady to resolve before applying translations
+      if (window.i18nReady) {
+        await window.i18nReady;
+      }
       this.applyTranslations();
-      
       // Trigger custom event
       window.dispatchEvent(new CustomEvent('languageChanged', {
         detail: { language, translations: this.translations[language] }
       }));
-      
     } catch (error) {
       console.error('Failed to switch language:', error);
     } finally {

@@ -8,6 +8,8 @@
 - **Main Reference:** [tempo.new](https://www.tempo.new/) - Modern, premium SaaS aesthetic
 - **Secondary Reference:** [codecademy.com](https://www.codecademy.com/) - Tech, dark, minimalist, professional, educational
 - **Tertiary Reference:** [sounext.xyz](https://www.sounext.xyz/) - Minimalist, dark, tech-inspired
+- **Anthropic Console:** [console.anthropic.com/dashboard](https://console.anthropic.com/dashboard) - Minimalist, floating profile panel and settings, sidebar, and overall SaaS dashboard style
+- **Anthropic Docs:** [docs.anthropic.com/en/docs/intro](https://docs.anthropic.com/en/docs/intro) - Minimalist, clean, accessible documentation and navigation style
 
 **Core Principles:**
 - Minimalist, dark, non-colorful design (inspired by Codecademy's clean interface)
@@ -443,7 +445,7 @@ color: var(--primary-text);
 
 ## 🟦 Profile, Theme, and Language Panel (Anthropic-Style, Bottom Left)
 
-- After login, the theme switcher, language switcher, profile/settings, and logout controls must be grouped in a single, beautiful, minimalist floating panel in the **bottom left corner** of the app (inspired by https://console.anthropic.com/dashboard).
+- After login, the theme switcher, language switcher, profile/settings, and logout controls must be grouped in a single, beautiful, minimalist floating panel in the **bottom left corner** of the app (inspired by https://console.anthropic.com/dashboard and https://docs.anthropic.com/en/docs/intro).
 - This panel must be visually distinct (card style, subtle shadow, rounded corners), compact, and always accessible on all post-login pages (Dashboard, Leads, Companies, Outreach, Analytics, Support, Profile, etc).
 - The panel must include:
   - User avatar or initials (circle)
