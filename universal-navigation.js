@@ -31,7 +31,8 @@ class UniversalNavigation {
             '/approaching-facebook.html': 'facebook',
             '/approaching-x.html': 'x',
             '/analytics.html': 'analytics',
-            '/support.html': 'support'
+            '/support.html': 'support',
+            '/profile.html': 'profile'
         };
         return pageMap[path] || 'dashboard';
     }
@@ -129,23 +130,27 @@ class UniversalNavigation {
                         </li>
                     </ul>
                 </nav>
-                <div class="sidebar-bottom" id="sidebar-avatar-trigger" style="display: flex; justify-content: center; align-items: center; padding: 2em 0 2.5em 0; border-top: 1px solid var(--logout-separator); background: var(--sidebar-bg);">
-                    <button id="sidebar-avatar-btn" aria-label="Open profile panel" style="width: 44px; height: 44px; border-radius: 50%; background: var(--sidebar-bg, #101014); display: flex; align-items: center; justify-content: center; font-weight: 500; font-size: 1.1em; color: var(--primary-text); border: 1.5px solid var(--border); box-shadow: 0 2px 8px rgba(0,0,0,0.10); cursor: pointer; transition: box-shadow 0.18s, border 0.18s;">
+                <div class="sidebar-bottom" id="sidebar-avatar-trigger" style="margin-top: auto; padding: 1.2em 0 1.2em 0; border-top: 1px solid var(--logout-separator); background: var(--sidebar-bg); display: flex; flex-direction: column; align-items: center; gap: 0.5em; box-shadow: none; min-height: 0;">
+                    <!-- Compact User Info Section -->
+                    <button id="sidebar-avatar-btn" aria-label="Open profile panel" style="width: 44px; height: 44px; border-radius: 50%; background: var(--button-bg); display: flex; align-items: center; justify-content: center; font-weight: 500; font-size: 1.1em; color: var(--primary-text); border: 1.5px solid var(--border); box-shadow: 0 2px 8px rgba(0,0,0,0.10); cursor: pointer; transition: box-shadow 0.18s, border 0.18s, transform 0.18s; position: relative; margin-bottom: 0.2em;">
                         <span id="sidebar-avatar-initial">?</span>
+                        <!-- Subtle glow effect on hover -->
+                        <div style="position: absolute; inset: -2px; border-radius: 50%; background: linear-gradient(45deg, transparent, rgba(139, 92, 246, 0.10), transparent); opacity: 0; transition: opacity 0.2s; pointer-events: none;"></div>
                     </button>
+                    <div id="sidebar-user-email" style="font-weight: 400; font-size: 0.92em; color: var(--secondary-text); opacity: 0.85; text-align: center; max-width: 120px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">user@example.com</div>
                 </div>
             `;
-            // After rendering, wire up the avatar button to open the floating panel
+            // After rendering, wire up the avatar button and other functionality
             setTimeout(() => {
                 const avatarBtn = document.getElementById('sidebar-avatar-btn');
-                if (avatarBtn && window.LanguageThemePanel) {
+                // Avatar button functionality
+                if (avatarBtn) {
                     avatarBtn.onclick = function(e) {
                         e.stopPropagation();
-                        // Open the floating profile panel (bottom left)
+                        // Open/close the floating profile panel (bottom left)
                         const panelContainer = document.getElementById('floating-profile-panel');
-                        if (panelContainer && panelContainer.firstChild) {
-                            // Toggle panel visibility
-                            const panel = panelContainer.querySelector('div[style*="position: fixed"]');
+                        if (panelContainer) {
+                            const panel = Array.from(panelContainer.children).find(child => child._floatingProfilePanel);
                             if (panel) {
                                 if (panel.style.visibility === 'visible') {
                                     panel.style.visibility = 'hidden';
@@ -159,6 +164,29 @@ class UniversalNavigation {
                             }
                         }
                     };
+                    // Close the panel when clicking outside
+                    document.addEventListener('click', function(e) {
+                        const panelContainer = document.getElementById('floating-profile-panel');
+                        if (panelContainer) {
+                            const panel = Array.from(panelContainer.children).find(child => child._floatingProfilePanel);
+                            if (panel && panel.style.visibility === 'visible') {
+                                if (!panel.contains(e.target) && e.target !== avatarBtn) {
+                                    panel.style.visibility = 'hidden';
+                                    panel.style.opacity = '0';
+                                    panel.style.pointerEvents = 'none';
+                                }
+                            }
+                        }
+                    });
+                    // Add hover effects
+                    avatarBtn.addEventListener('mouseenter', function() {
+                        const glow = this.querySelector('div');
+                        if (glow) glow.style.opacity = '1';
+                    });
+                    avatarBtn.addEventListener('mouseleave', function() {
+                        const glow = this.querySelector('div');
+                        if (glow) glow.style.opacity = '0';
+                    });
                 }
             }, 100);
         }
@@ -186,6 +214,16 @@ class UniversalNavigation {
         const currentLink = document.querySelector(`[data-page="${this.currentPage}"]`);
         if (currentLink) {
             currentLink.classList.add('active');
+        }
+
+        // Special handling for profile page - highlight the profile button
+        if (this.currentPage === 'profile') {
+            const profileBtn = document.getElementById('sidebar-profile-btn');
+            if (profileBtn) {
+                profileBtn.style.background = 'var(--button-hover-bg)';
+                profileBtn.style.color = '#fff';
+                profileBtn.style.borderColor = 'var(--accent-color, #8B5CF6)';
+            }
         }
 
         // Remove active class from all other links
@@ -240,13 +278,32 @@ class UniversalNavigation {
     updateUserDisplay(user, profile = null) {
         const userName = document.getElementById('user-name');
         const userEmail = document.getElementById('user-email');
+        const sidebarUserName = document.getElementById('sidebar-user-name');
+        const sidebarUserEmail = document.getElementById('sidebar-user-email');
+        const sidebarAvatarInitial = document.getElementById('sidebar-avatar-initial');
+
+        const displayName = profile?.full_name || user.email || 'User';
+        const displayEmail = user.email || 'user@example.com';
+        const avatarInitial = displayName.charAt(0).toUpperCase();
 
         if (userName) {
-            userName.textContent = profile?.full_name || user.email || 'User';
+            userName.textContent = displayName;
         }
 
         if (userEmail) {
-            userEmail.textContent = user.email || 'user@example.com';
+            userEmail.textContent = displayEmail;
+        }
+
+        if (sidebarUserName) {
+            sidebarUserName.textContent = displayName;
+        }
+
+        if (sidebarUserEmail) {
+            sidebarUserEmail.textContent = displayEmail;
+        }
+
+        if (sidebarAvatarInitial) {
+            sidebarAvatarInitial.textContent = avatarInitial;
         }
     }
 

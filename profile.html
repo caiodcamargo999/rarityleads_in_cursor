@@ -9,43 +9,11 @@
   <script src="https://unpkg.com/feather-icons"></script>
 </head>
 <body>
-  <!-- Place this at the very top right, outside main content -->
-  <div style="position: absolute; top: 1.5em; right: 2em; z-index: 100;">
-    <div id="appbar-lang-theme-toggle"></div>
-  </div>
+  <!-- Floating profile panel in the bottom left -->
+    <div id="floating-profile-panel"></div>
   <div class="dashboard-container">
     <!-- Sidebar -->
-    <aside class="sidebar" id="sidebar" role="navigation" aria-label="Main navigation">
-      <div class="sidebar-header">
-        <img src="rarity-logo.jpg" alt="Rarity Leads Logo" class="sidebar-logo" style="width: 44px; height: 44px; border-radius: 12px; margin: 1.5em auto 1em auto; display: block;" />
-      </div>
-      <nav class="sidebar-nav" style="flex:1; overflow-y:auto;">
-        <ul>
-          <li><a href="dashboard.html" data-page="dashboard"><i class="nav-icon" data-feather="home"></i><span>Dashboard</span></a></li>
-          <li><a href="prospecting-leads.html" data-page="leads"><i class="nav-icon" data-feather="users"></i><span>Leads</span></a></li>
-          <li><a href="prospecting-companies.html" data-page="companies"><i class="nav-icon" data-feather="briefcase"></i><span>Companies</span></a></li>
-          <li class="nav-section"><span class="nav-section-title">OUTREACH</span></li>
-          <li><a href="approaching-whatsapp.html" data-page="whatsapp"><span class="nav-icon">📱</span><span>WhatsApp</span></a></li>
-          <li><a href="approaching-linkedin.html" data-page="linkedin"><span class="nav-icon">💼</span><span>LinkedIn</span></a></li>
-          <li><a href="approaching-instagram.html" data-page="instagram"><span class="nav-icon">📸</span><span>Instagram</span></a></li>
-          <li><a href="approaching-facebook.html" data-page="facebook"><span class="nav-icon">📘</span><span>Facebook</span></a></li>
-          <li><a href="approaching-x.html" data-page="x"><span class="nav-icon">𝕏</span><span>X (Twitter)</span></a></li>
-          <li class="nav-section"><span class="nav-section-title">ANALYTICS & SUPPORT</span></li>
-          <li><a href="analytics.html" data-page="analytics"><i class="nav-icon" data-feather="bar-chart-2"></i><span>Analytics</span></a></li>
-          <li><a href="support.html" data-page="support"><i class="nav-icon" data-feather="help-circle"></i><span>Support</span></a></li>
-        </ul>
-      </nav>
-      <div class="sidebar-bottom">
-        <button class="sidebar-profile-btn" id="profile-btn" aria-current="page">
-          <i data-feather="user"></i>
-          <span>Profile & Settings</span>
-        </button>
-        <button class="sidebar-logout-btn" id="logout-btn">
-          <i data-feather="log-out"></i>
-          <span>Logout</span>
-        </button>
-      </div>
-    </aside>
+    <aside class="sidebar" id="sidebar" role="navigation" aria-label="Main navigation"></aside>
     <!-- Main Content -->
     <main class="main-content" role="main">
       <section style="max-width: 520px; margin: 0 auto; padding: 2.5em 0 2em 0;">
@@ -118,11 +86,49 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
     document.addEventListener('DOMContentLoaded', async function() {
-      if (window.LanguageThemeToggle) {
-        window.LanguageThemeToggle.init('appbar-lang-theme-toggle');
+      // Initialize AuthGuard first
+      if (window.AuthGuard) {
+        await window.AuthGuard.init();
       }
+      
+      // DEBUG: Print Supabase user/session status
+      if (window.AppUtils && window.AppUtils.initSupabase) {
+        const supabase = window.AppUtils.initSupabase();
+        try {
+          const { data: { user: debugUser }, error: debugError } = await supabase.auth.getUser();
+          console.log('[DEBUG] Supabase user:', debugUser);
+          if (debugError) console.error('[DEBUG] Supabase user error:', debugError);
+        } catch (e) {
+          console.error('[DEBUG] Supabase user fetch exception:', e);
+        }
+      }
+      
+      // Remove top-right switcher if present
+      const old = document.getElementById('appbar-lang-theme-toggle');
+      if (old) old.parentNode.removeChild(old);
+      
+      // Initialize Feather icons
       if (typeof feather !== 'undefined') {
         feather.replace();
+      }
+
+      // Fetch user info for floating panel
+      let panelUser = { name: 'User', email: '' };
+      if (window.AppUtils && window.AppUtils.initSupabase) {
+        const supabase = window.AppUtils.initSupabase();
+        try {
+          const { data: { user: u } } = await supabase.auth.getUser();
+          if (u) panelUser = { name: u.user_metadata && u.user_metadata.full_name ? u.user_metadata.full_name : (u.email || 'User'), email: u.email };
+        } catch {}
+      }
+      
+      if (window.LanguageThemePanel) {
+        window.LanguageThemePanel.initFloatingPanel('floating-profile-panel', panelUser);
+      }
+
+      // Initialize Universal Navigation
+      if (window.UniversalNavigation) {
+        await window.UniversalNavigation.init();
       }
 
       // Supabase init
@@ -136,7 +142,6 @@
       const emailInput = document.getElementById('email');
       const planInput = document.getElementById('plan');
       const passwordForm = document.getElementById('profile-password-form');
-      const logoutBtn = document.getElementById('logout-btn');
 
       // Notification helper
       function showNotification(msg, type = 'info') {
@@ -215,11 +220,8 @@
         }
       });
 
-      // Logout
-      logoutBtn.addEventListener('click', async function() {
-        await supabase.auth.signOut();
-        window.location.href = '/auth.html';
-      });
+      // Logout functionality is now handled by UniversalNavigation
+      // No need to add event listener here as it's handled in the sidebar
     });
   </script>
 </body>

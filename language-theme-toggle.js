@@ -160,29 +160,6 @@ window.LanguageThemePanel = {
     if (!container) return;
     container.innerHTML = '';
 
-    // Avatar button (always visible, bottom left)
-    const avatarBtn = document.createElement('button');
-    avatarBtn.setAttribute('aria-label', 'Open profile panel');
-    avatarBtn.style.position = 'fixed';
-    avatarBtn.style.left = '2em';
-    avatarBtn.style.bottom = '2em';
-    avatarBtn.style.zIndex = '1001';
-    avatarBtn.style.width = '44px';
-    avatarBtn.style.height = '44px';
-    avatarBtn.style.borderRadius = '50%';
-    avatarBtn.style.background = 'var(--sidebar-bg, #101014)';
-    avatarBtn.style.display = 'flex';
-    avatarBtn.style.alignItems = 'center';
-    avatarBtn.style.justifyContent = 'center';
-    avatarBtn.style.fontWeight = '500';
-    avatarBtn.style.fontSize = '1.1em';
-    avatarBtn.style.color = 'var(--primary-text)';
-    avatarBtn.style.border = '1.5px solid var(--border)';
-    avatarBtn.style.boxShadow = '0 2px 8px rgba(0,0,0,0.10)';
-    avatarBtn.style.cursor = 'pointer';
-    avatarBtn.style.transition = 'box-shadow 0.18s, border 0.18s';
-    avatarBtn.textContent = user && user.name ? user.name[0].toUpperCase() : '?';
-
     // Panel (hidden by default)
     const panel = document.createElement('div');
     panel.style.position = 'fixed';
@@ -193,12 +170,12 @@ window.LanguageThemePanel = {
     panel.style.border = '1.5px solid var(--border)';
     panel.style.borderRadius = '16px';
     panel.style.boxShadow = '0 4px 24px rgba(0,0,0,0.13)';
-    panel.style.padding = '1.1em 1.3em 1.1em 1.3em';
+    panel.style.padding = '1.3em 1.5em 1.3em 1.5em';
     panel.style.display = 'flex';
     panel.style.flexDirection = 'column';
     panel.style.alignItems = 'flex-start';
-    panel.style.gap = '1em';
-    panel.style.minWidth = '220px';
+    panel.style.gap = '1.1em';
+    panel.style.minWidth = '260px';
     panel.style.maxWidth = '320px';
     panel.style.visibility = 'hidden';
     panel.style.opacity = '0';
@@ -209,7 +186,8 @@ window.LanguageThemePanel = {
     const userRow = document.createElement('div');
     userRow.style.display = 'flex';
     userRow.style.alignItems = 'center';
-    userRow.style.gap = '0.9em';
+    userRow.style.gap = '1em';
+    userRow.style.width = '100%';
     // Avatar in panel
     const avatar = document.createElement('div');
     avatar.style.width = '38px';
@@ -229,6 +207,8 @@ window.LanguageThemePanel = {
     userInfo.style.display = 'flex';
     userInfo.style.flexDirection = 'column';
     userInfo.style.gap = '0.1em';
+    userInfo.style.justifyContent = 'center';
+    userInfo.style.alignItems = 'flex-start';
     const name = document.createElement('span');
     name.textContent = user && user.name ? user.name : 'User';
     name.style.fontWeight = '500';
@@ -250,9 +230,9 @@ window.LanguageThemePanel = {
     profileLink.textContent = 'Profile & Settings';
     profileLink.className = 'btn';
     profileLink.style.width = '100%';
-    profileLink.style.marginTop = '0.2em';
-    profileLink.style.marginBottom = '0.2em';
-    profileLink.style.textAlign = 'left';
+    profileLink.style.margin = '0.2em 0 0.5em 0';
+    profileLink.style.textAlign = 'center';
+    profileLink.style.display = 'block';
     panel.appendChild(profileLink);
 
     // Language/Theme row (Anthropic style)
@@ -269,6 +249,7 @@ window.LanguageThemePanel = {
     pill.style.userSelect = 'none';
     pill.style.transition = 'border 0.2s, background 0.2s';
     pill.style.maxWidth = '100vw';
+    pill.style.margin = '0.5em 0 0.5em 0';
 
     // Language Dropdown
     const langs = window.AppConfig.languages.supported;
@@ -397,11 +378,12 @@ window.LanguageThemePanel = {
 
     // Logout button
     const logoutBtn = document.createElement('button');
-    logoutBtn.className = 'btn';
     logoutBtn.textContent = 'Logout';
+    logoutBtn.className = 'btn';
     logoutBtn.style.width = '100%';
-    logoutBtn.style.marginTop = '0.2em';
-    logoutBtn.style.textAlign = 'left';
+    logoutBtn.style.margin = '0.5em 0 0 0';
+    logoutBtn.style.textAlign = 'center';
+    logoutBtn.style.display = 'block';
     logoutBtn.onclick = function() {
       if (window.AppUtils && window.AppUtils.navigateTo) {
         window.AppUtils.navigateTo('/auth.html');
@@ -411,34 +393,9 @@ window.LanguageThemePanel = {
     };
     panel.appendChild(logoutBtn);
 
-    // Show/hide logic
-    function openPanel() {
-      panel.style.visibility = 'visible';
-      panel.style.opacity = '1';
-      panel.style.pointerEvents = 'auto';
-    }
-    function closePanel() {
-      panel.style.visibility = 'hidden';
-      panel.style.opacity = '0';
-      panel.style.pointerEvents = 'none';
-    }
-    avatarBtn.onclick = function(e) {
-      e.stopPropagation();
-      if (panel.style.visibility === 'visible') {
-        closePanel();
-      } else {
-        openPanel();
-      }
-    };
-    document.addEventListener('click', function(e) {
-      if (!panel.contains(e.target) && e.target !== avatarBtn) {
-        closePanel();
-      }
-    });
-
-    // Add to DOM
-    container.appendChild(avatarBtn);
+    // Show/hide logic is now handled by the sidebar avatar button
     container.appendChild(panel);
+    panel._floatingProfilePanel = true; // mark for external toggling
   },
   // Add a top-right panel for pre-login pages (index, auth)
   initTopRightPanel: function(containerId) {

@@ -12,10 +12,8 @@
     <script src="https://unpkg.com/feather-icons"></script>
 </head>
 <body>
-    <!-- Place this at the very top right, outside main content -->
-    <div style="position: absolute; top: 1.5em; right: 2em; z-index: 100;">
-      <div id="appbar-lang-theme-toggle"></div>
-    </div>
+    <!-- Floating profile panel in the bottom left -->
+    <div id="floating-profile-panel"></div>
     <div class="dashboard-container">
         <aside class="sidebar" id="sidebar" role="navigation" aria-label="Main navigation">
             <div id="x-lang-theme-toggle" style="margin: 1em 0;"></div>
@@ -105,9 +103,23 @@
     <script src="universal-navigation.js"></script>
     <script src="language-theme-toggle.js"></script>
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      if (window.LanguageThemeToggle) {
-        window.LanguageThemeToggle.init('appbar-lang-theme-toggle');
+    document.addEventListener('DOMContentLoaded', async function() {
+      // Remove top-right switcher if present
+      const old = document.getElementById('appbar-lang-theme-toggle');
+      if (old) old.parentNode.removeChild(old);
+      
+      // Fetch user info (replace with real Supabase user fetch in production)
+      let user = { name: 'User', email: '' };
+      if (window.AppUtils && window.AppUtils.initSupabase) {
+        const supabase = window.AppUtils.initSupabase();
+        try {
+          const { data: { user: u } } = await supabase.auth.getUser();
+          if (u) user = { name: u.user_metadata && u.user_metadata.full_name ? u.user_metadata.full_name : (u.email || 'User'), email: u.email };
+        } catch {}
+      }
+      
+      if (window.LanguageThemePanel) {
+        window.LanguageThemePanel.initFloatingPanel('floating-profile-panel', user);
       }
     });
     </script>

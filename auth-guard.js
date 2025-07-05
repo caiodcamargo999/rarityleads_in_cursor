@@ -163,13 +163,16 @@ class AuthGuard {
                 this.handleUnauthenticated();
                 return;
             }
-
+            // Allow /profile.html for any authenticated user
+            if (currentPath === '/profile.html') {
+                console.log('✅ AuthGuard: Allowing access to profile page for authenticated user (email verification not required)');
+                return;
+            }
             if (!this.isEmailVerified) {
                 console.log('📧 AuthGuard: Unverified user on protected page');
                 this.handleUnverified();
                 return;
             }
-
             console.log('✅ AuthGuard: Access granted to protected page');
         }
     }

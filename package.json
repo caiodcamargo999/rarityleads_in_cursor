@@ -25,6 +25,7 @@
     "@whiskeysockets/baileys": "^6.7.18",
     "dotenv": "^17.0.1",
     "express": "^5.1.0",
+    "motion": "^12.23.0",
     "ws": "^8.18.3"
   },
   "devDependencies": {

@@ -1,152 +1,70 @@
-// Script to update all outreach pages with standardized sidebar
+// Update all outreach pages to include floating profile panel and improve sidebar bottom section
 const fs = require('fs');
 const path = require('path');
 
 const outreachPages = [
+    'approaching-instagram.html',
+    'approaching-facebook.html', 
+    'approaching-x.html',
     'approaching-linkedin.html',
-    'approaching-instagram.html', 
-    'approaching-facebook.html',
-    'approaching-x.html'
+    'analytics.html',
+    'support.html',
+    'profile.html',
+    'whatsapp-management.html'
 ];
 
-const standardizedSidebar = `        <aside class="sidebar" id="sidebar" role="navigation" aria-label="Main navigation">
-            <div class="sidebar-header">
-                <img src="rarity-logo.jpg" alt="Rarity Leads Logo" class="sidebar-logo">
-            </div>
-            
-            <nav class="sidebar-nav">
-                <ul>
-                    <li>
-                        <a href="dashboard.html" data-i18n="nav.dashboard" data-page="dashboard">
-                            <i class="nav-icon" data-feather="home"></i>
-                            <span data-i18n="nav.dashboard">Dashboard</span>
-                        </a>
-                    </li>
-                    
-                    <li>
-                        <a href="prospecting-leads.html" data-i18n="nav.leads" data-page="leads">
-                            <i class="nav-icon" data-feather="users"></i>
-                            <span data-i18n="nav.leads">Leads</span>
-                        </a>
-                    </li>
-                    
-                    <li>
-                        <a href="prospecting-companies.html" data-i18n="nav.companies" data-page="companies">
-                            <i class="nav-icon" data-feather="briefcase"></i>
-                            <span data-i18n="nav.companies">Companies</span>
-                        </a>
-                    </li>
-                    
-                    <li class="nav-section">
-                        <span class="nav-section-title" data-i18n="nav.outreach">Outreach</span>
-                    </li>
-                    
-                    <li>
-                        <a href="approaching-whatsapp.html" data-i18n="nav.whatsapp" data-page="whatsapp">
-                            <i class="nav-icon" data-feather="message-circle"></i>
-                            <span data-i18n="nav.whatsapp">WhatsApp</span>
-                        </a>
-                    </li>
-                    
-                    <li>
-                        <a href="approaching-linkedin.html" data-i18n="nav.linkedin" data-page="linkedin">
-                            <i class="nav-icon" data-feather="linkedin"></i>
-                            <span data-i18n="nav.linkedin">LinkedIn</span>
-                        </a>
-                    </li>
-                    
-                    <li>
-                        <a href="approaching-instagram.html" data-i18n="nav.instagram" data-page="instagram">
-                            <i class="nav-icon" data-feather="instagram"></i>
-                            <span data-i18n="nav.instagram">Instagram</span>
-                        </a>
-                    </li>
-                    
-                    <li>
-                        <a href="approaching-facebook.html" data-i18n="nav.facebook" data-page="facebook">
-                            <i class="nav-icon" data-feather="facebook"></i>
-                            <span data-i18n="nav.facebook">Facebook</span>
-                        </a>
-                    </li>
-                    
-                    <li>
-                        <a href="approaching-x.html" data-i18n="nav.x" data-page="x">
-                            <i class="nav-icon" data-feather="twitter"></i>
-                            <span data-i18n="nav.x">X (Twitter)</span>
-                        </a>
-                    </li>
-                    
-                    <li class="nav-section">
-                        <span class="nav-section-title" data-i18n="nav.analyticsSupport">Analytics & Support</span>
-                    </li>
-                    
-                    <li>
-                        <a href="analytics.html" data-i18n="nav.analytics" data-page="analytics">
-                            <i class="nav-icon" data-feather="bar-chart-2"></i>
-                            <span data-i18n="nav.analytics">Analytics</span>
-                        </a>
-                    </li>
-                    
-                    <li>
-                        <a href="support.html" data-i18n="nav.support" data-page="support">
-                            <i class="nav-icon" data-feather="help-circle"></i>
-                            <span data-i18n="nav.support">Support</span>
-                        </a>
-                    </li>
-                </ul>
-            </nav>
-            
-            <div class="sidebar-logout">
-                <div class="user-profile" style="display: flex; align-items: center; gap: 0.75em; margin-bottom: 1em;">
-                    <i data-feather="user" style="color: var(--sidebar-text-secondary); width: 1.5em; height: 1.5em;"></i>
-                    <div style="flex: 1; min-width: 0;">
-                        <span id="user-name" style="display: block; font-weight: 500; font-size: 0.875rem; color: var(--sidebar-text); margin-bottom: 0.25rem;">Loading...</span>
-                        <span id="user-email" style="display: block; font-size: 0.75rem; color: var(--sidebar-text-secondary);">loading@example.com</span>
-                    </div>
-                </div>
-                <button class="sidebar-logout-btn" id="logout-btn" data-i18n="common.logout">Logout</button>
-            </div>
-        </aside>`;
-
-const pageActiveStates = {
-    'approaching-linkedin.html': 'linkedin',
-    'approaching-instagram.html': 'instagram', 
-    'approaching-facebook.html': 'facebook',
-    'approaching-x.html': 'x'
-};
-
-outreachPages.forEach(page => {
-    const filePath = path.join(__dirname, page);
+function updatePage(filePath) {
+    console.log(`Updating ${filePath}...`);
+    
     let content = fs.readFileSync(filePath, 'utf8');
     
-    // Replace the old sidebar with the standardized one
+    // Replace top-right language/theme toggle with floating profile panel
     content = content.replace(
-        /<aside class="sidebar"[^>]*>[\s\S]*?<!-- Insert the new sidebar HTML[\s\S]*?<\/aside>/,
-        standardizedSidebar
+        /<!-- Place this at the very top right, outside main content -->\s*<div style="position: absolute; top: 1\.5em; right: 2em; z-index: 100;">\s*<div id="appbar-lang-theme-toggle"><\/div>\s*<\/div>/g,
+        '<!-- Floating profile panel in the bottom left -->\n    <div id="floating-profile-panel"></div>'
     );
     
-    // Set the active state for the current page
-    const activePage = pageActiveStates[page];
-    if (activePage) {
-        content = content.replace(
-            new RegExp(`href="${page}"([^>]*)>`),
-            `href="${page}"$1 class="active">`
-        );
-    }
+    // Update the script section to initialize floating panel
+    content = content.replace(
+        /document\.addEventListener\('DOMContentLoaded', function\(\) \{\s*if \(window\.LanguageThemeToggle\) \{\s*window\.LanguageThemeToggle\.init\('appbar-lang-theme-toggle'\);\s*\}\s*\}\);/g,
+        `document.addEventListener('DOMContentLoaded', async function() {
+      // Remove top-right switcher if present
+      const old = document.getElementById('appbar-lang-theme-toggle');
+      if (old) old.parentNode.removeChild(old);
+      
+      // Fetch user info (replace with real Supabase user fetch in production)
+      let user = { name: 'User', email: '' };
+      if (window.AppUtils && window.AppUtils.initSupabase) {
+        const supabase = window.AppUtils.initSupabase();
+        try {
+          const { data: { user: u } } = await supabase.auth.getUser();
+          if (u) user = { name: u.user_metadata && u.user_metadata.full_name ? u.user_metadata.full_name : (u.email || 'User'), email: u.email };
+        } catch {}
+      }
+      
+      if (window.LanguageThemePanel) {
+        window.LanguageThemePanel.initFloatingPanel('floating-profile-panel', user);
+      }
+    });`
+    );
     
-    // Add universal navigation script if not present
-    if (!content.includes('universal-navigation.js')) {
-        content = content.replace(
-            /<script src="auth-guard\.js"><\/script>/,
-            '<script src="auth-guard.js"></script>\n    <script src="universal-navigation.js"></script>'
-        );
-    }
-    
-    // Ensure dashboard-container class is used
-    content = content.replace(/class="dashboard-layout"/g, 'class="dashboard-container"');
-    
+    // Write the updated content back
     fs.writeFileSync(filePath, content, 'utf8');
-    console.log(`✅ Updated ${page}`);
+    console.log(`✅ Updated ${filePath}`);
+}
+
+// Update all pages
+outreachPages.forEach(page => {
+    if (fs.existsSync(page)) {
+        updatePage(page);
+    } else {
+        console.log(`⚠️  File not found: ${page}`);
+    }
 });
 
-console.log('🎉 All outreach pages updated with standardized sidebar!'); 
+console.log('\n🎉 All outreach pages updated successfully!');
+console.log('\n📋 Summary of changes:');
+console.log('- Added floating profile panel container to all pages');
+console.log('- Removed top-right language/theme toggle from post-login pages');
+console.log('- Updated scripts to initialize floating profile panel');
+console.log('- Improved sidebar bottom section with better UI/UX'); 
