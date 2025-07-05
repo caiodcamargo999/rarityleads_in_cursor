@@ -53,14 +53,6 @@ class Dashboard {
         this.leadsChart = document.getElementById('leadsChart');
         this.channelsChart = document.getElementById('channelsChart');
         
-        // Mini charts
-        this.miniCharts = {
-            leads: document.getElementById('leads-mini-chart'),
-            conversion: document.getElementById('conversion-mini-chart'),
-            campaigns: document.getElementById('campaigns-mini-chart'),
-            revenue: document.getElementById('revenue-mini-chart')
-        };
-        
         // User elements
         this.userName = document.getElementById('user-name');
         this.userEmail = document.getElementById('user-email');
@@ -76,7 +68,7 @@ class Dashboard {
         
         // Action buttons
         this.actionButtons = document.querySelectorAll('.action-btn');
-        this.chartActionButtons = document.querySelectorAll('.chart-action-btn');
+        this.chartActionButtons = document.querySelectorAll('.btn[data-chart]');
         
         // Initialize Feather icons
         if (typeof feather !== 'undefined') {
@@ -164,7 +156,7 @@ class Dashboard {
     async updateChartData(period) {
         try {
             // Show loading state
-            const chartContainers = document.querySelectorAll('.chart-container');
+            const chartContainers = document.querySelectorAll('[style*="height: 300px"]');
             chartContainers.forEach(container => container.classList.add('loading'));
             
             // Fetch new data based on period
@@ -173,7 +165,6 @@ class Dashboard {
             // Update charts
             this.updateLeadsChart(data.leads);
             this.updateChannelsChart(data.channels);
-            this.updateMiniCharts(data.miniCharts);
             
             // Remove loading state
             setTimeout(() => {
@@ -196,12 +187,6 @@ class Dashboard {
             channels: {
                 labels: ['WhatsApp', 'LinkedIn', 'Instagram', 'Facebook', 'X'],
                 data: [35, 25, 20, 15, 5]
-            },
-            miniCharts: {
-                leads: this.generateMockData(period, 10, 30),
-                conversion: this.generateMockData(period, 5, 15),
-                campaigns: this.generateMockData(period, 2, 8),
-                revenue: this.generateMockData(period, 1000, 5000)
             }
         };
         
@@ -252,8 +237,6 @@ class Dashboard {
         if (this.channelsChart) {
             this.createChannelsChart();
         }
-        
-        this.createMiniCharts();
     }
 
     createLeadsChart() {
@@ -263,17 +246,17 @@ class Dashboard {
             labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
             datasets: [{
                 label: 'Leads Generated',
-                data: [45, 52, 38, 67, 89, 34, 56],
-                borderColor: '#8B5CF6',
-                backgroundColor: 'rgba(139, 92, 246, 0.1)',
-                borderWidth: 3,
+                data: [0, 0, 0, 0, 0, 0, 0],
+                borderColor: '#e0e0e0',
+                backgroundColor: 'rgba(224, 224, 224, 0.1)',
+                borderWidth: 2,
                 fill: true,
                 tension: 0.4,
-                pointBackgroundColor: '#8B5CF6',
-                pointBorderColor: '#ffffff',
+                pointBackgroundColor: '#e0e0e0',
+                pointBorderColor: '#18181c',
                 pointBorderWidth: 2,
-                pointRadius: 6,
-                pointHoverRadius: 8
+                pointRadius: 4,
+                pointHoverRadius: 6
             }]
         };
 
@@ -288,12 +271,12 @@ class Dashboard {
                         display: false
                     },
                     tooltip: {
-                        backgroundColor: 'rgba(10, 10, 35, 0.95)',
-                        titleColor: '#ffffff',
-                        bodyColor: '#a1a1aa',
-                        borderColor: '#8B5CF6',
+                        backgroundColor: 'rgba(24, 24, 28, 0.95)',
+                        titleColor: '#e0e0e0',
+                        bodyColor: '#b0b0b0',
+                        borderColor: '#232336',
                         borderWidth: 1,
-                        cornerRadius: 8,
+                        cornerRadius: 6,
                         displayColors: false,
                         callbacks: {
                             title: function(context) {
@@ -308,11 +291,11 @@ class Dashboard {
                 scales: {
                     x: {
                         grid: {
-                            color: 'rgba(255, 255, 255, 0.1)',
+                            color: 'rgba(35, 35, 54, 0.3)',
                             drawBorder: false
                         },
                         ticks: {
-                            color: '#a1a1aa',
+                            color: '#b0b0b0',
                             font: {
                                 size: 12
                             }
@@ -320,11 +303,11 @@ class Dashboard {
                     },
                     y: {
                         grid: {
-                            color: 'rgba(255, 255, 255, 0.1)',
+                            color: 'rgba(35, 35, 54, 0.3)',
                             drawBorder: false
                         },
                         ticks: {
-                            color: '#a1a1aa',
+                            color: '#b0b0b0',
                             font: {
                                 size: 12
                             }
@@ -343,7 +326,7 @@ class Dashboard {
         const data = {
             labels: ['WhatsApp', 'LinkedIn', 'Instagram', 'Facebook', 'X'],
             datasets: [{
-                data: [35, 25, 20, 15, 5],
+                data: [0, 0, 0, 0, 0],
                 backgroundColor: [
                     '#25D366',
                     '#0077B5',
@@ -366,18 +349,18 @@ class Dashboard {
                     legend: {
                         position: 'bottom',
                         labels: {
-                            color: '#a1a1aa',
+                            color: '#b0b0b0',
                             padding: 20,
                             usePointStyle: true
                         }
                     },
                     tooltip: {
-                        backgroundColor: 'rgba(10, 10, 35, 0.95)',
-                        titleColor: '#ffffff',
-                        bodyColor: '#a1a1aa',
-                        borderColor: '#8B5CF6',
+                        backgroundColor: 'rgba(24, 24, 28, 0.95)',
+                        titleColor: '#e0e0e0',
+                        bodyColor: '#b0b0b0',
+                        borderColor: '#232336',
                         borderWidth: 1,
-                        cornerRadius: 8,
+                        cornerRadius: 6,
                         callbacks: {
                             label: function(context) {
                                 return `${context.label}: ${context.parsed}%`;
@@ -391,43 +374,7 @@ class Dashboard {
         this.charts.channels = new Chart(ctx, config);
     }
 
-    createMiniCharts() {
-        Object.keys(this.miniCharts).forEach(key => {
-            const canvas = this.miniCharts[key];
-            if (canvas) {
-                const ctx = canvas.getContext('2d');
-                const data = this.generateMockData('7d', 5, 25);
-                
-                new Chart(ctx, {
-                    type: 'line',
-                    data: {
-                        labels: Array(7).fill(''),
-                        datasets: [{
-                            data: data,
-                            borderColor: '#8B5CF6',
-                            backgroundColor: 'rgba(139, 92, 246, 0.1)',
-                            borderWidth: 2,
-                            fill: true,
-                            tension: 0.4,
-                            pointRadius: 0
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: { display: false },
-                            tooltip: { enabled: false }
-                        },
-                        scales: {
-                            x: { display: false },
-                            y: { display: false }
-                        }
-                    }
-                });
-            }
-        });
-    }
+
 
     updateLeadsChart(data) {
         if (this.charts.leads) {
@@ -445,11 +392,7 @@ class Dashboard {
         }
     }
 
-    updateMiniCharts(data) {
-        Object.keys(data).forEach(key => {
-            // Update mini chart data if needed
-        });
-    }
+
 
     setupAnimations() {
         // Add entrance animations
@@ -540,12 +483,12 @@ class Dashboard {
             this.updateMetricsDisplay(metrics);
         } catch (error) {
             console.error('❌ Dashboard: Failed to load metrics:', error);
-            // Use mock data as fallback
+            // Use zero data as fallback
             this.updateMetricsDisplay({
-                leadsCount: 156,
-                conversionRate: 12.5,
-                activeCampaigns: 8,
-                monthlyRevenue: 15420
+                leadsCount: 0,
+                conversionRate: 0,
+                activeCampaigns: 0,
+                monthlyRevenue: 0
             });
         }
     }
@@ -555,10 +498,10 @@ class Dashboard {
         return new Promise((resolve) => {
             setTimeout(() => {
                 resolve({
-                    leadsCount: 156,
-                    conversionRate: 12.5,
-                    activeCampaigns: 8,
-                    monthlyRevenue: 15420
+                    leadsCount: 0,
+                    conversionRate: 0,
+                    activeCampaigns: 0,
+                    monthlyRevenue: 0
                 });
             }, 1000);
         });
@@ -721,11 +664,24 @@ class Dashboard {
         if (!container) return;
 
         const notification = document.createElement('div');
-        notification.className = `notification ${type}`;
+        notification.style.cssText = `
+            padding: 1rem 1.5rem;
+            border-radius: 6px;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            color: var(--primary-text);
+            font-size: 0.875rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            animation: slideInRight 0.3s ease;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        `;
         
         const icon = this.getNotificationIcon(type);
         notification.innerHTML = `
-            <i data-feather="${icon}"></i>
+            <i data-feather="${icon}" style="width: 1rem; height: 1rem; color: ${type === 'success' ? '#10B981' : type === 'error' ? '#EF4444' : type === 'warning' ? '#F59E0B' : '#b0b0b0'};"></i>
             <span>${message}</span>
         `;
 

@@ -94,20 +94,54 @@ h1, h2, h3, h4, h5, h6 {
 }
 .nav-section-title {
   color: var(--sidebar-text-secondary);
-  font-size: 0.95em;
-  padding: 1.2em 2em 0.5em 2em;
+  font-size: 0.85em;
+  padding: 2.2em 2em 0.7em 2em;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  font-weight: 400;
+  letter-spacing: 0.12em;
+  font-weight: 500;
+  opacity: 0.85;
+  line-height: 1.2;
+  transition: color 0.2s;
+}
+/* Extra space above Analytics & Support */
+.sidebar-nav .nav-section-title[data-i18n="nav.analyticsSupport"] {
+  margin-top: 2.5em;
+  padding-top: 2.5em;
+  border-top: 1px solid var(--border);
 }
 
-/* Sidebar logout at bottom */
-.sidebar-logout {
+/* Sidebar bottom section: profile/settings + logout */
+.sidebar-bottom {
   margin-top: auto;
-  padding: 1.5em 2em 2em 2em;
+  padding: 2em 2em 2.5em 2em;
   border-top: 1px solid var(--logout-separator);
   background: var(--sidebar-bg);
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+}
+.sidebar-profile-btn {
+  width: 100%;
+  background: none;
+  color: var(--sidebar-text-secondary);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.7em 0;
+  font-size: 1em;
+  font-weight: 500;
+  cursor: pointer;
+  margin-bottom: 0.5em;
+  transition: background 0.2s, color 0.2s, border 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5em;
+}
+.sidebar-profile-btn:hover {
+  background: var(--button-hover-bg);
+  color: #fff;
+  border-color: var(--primary-text);
 }
 .sidebar-logout-btn {
   width: 100%;
@@ -126,6 +160,14 @@ h1, h2, h3, h4, h5, h6 {
   background: var(--button-hover-bg);
   color: #fff;
   text-decoration: underline;
+}
+
+/* More space between sidebar sections */
+.sidebar-nav ul > li:not(:last-child) {
+  margin-bottom: 0.1em;
+}
+.sidebar-nav .nav-section-title {
+  margin-bottom: 0.5em;
 }
 
 /* Main content */
@@ -210,6 +252,18 @@ h1, h2, h3, h4, h5, h6 {
   background: none !important;
 }
 
+/* Animations */
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
 /* Responsive */
 @media (max-width: 900px) {
   .main-content {
@@ -270,3 +324,6 @@ h1, h2, h3, h4, h5, h6 {
     margin-top: 0;
   }
 }
+
+/* --- Animated Cursor Arrow (tempo.new style) --- */
+/* Removed for strict design compliance */

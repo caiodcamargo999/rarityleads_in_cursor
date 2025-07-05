@@ -446,3 +446,5 @@ body, .btn, .btn-primary, .btn-gradient, .tab, .sidebar-nav a, .main-header, .da
     color: #fff;
     border-color: #8B5CF6;
 }
+
+/* Remove all gradients, glass morphism, and colorful accent styles for strict design compliance */

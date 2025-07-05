@@ -4,7 +4,7 @@
 
 > **DESIGN RULE:** The entire project must use a minimalist, dark, non-colorful design. White, light, or colorful backgrounds are strictly forbidden. No example numbers (e.g., 12, 0, 7, etc.) should appear anywhere in the UI—only real data or zero. All UI/UX must be modern, tech-inspired, and include motion effects for a premium SaaS feel. The sidebar menu must always include every prospecting channel as in the dashboard. All buttons must be visually consistent, functional, and never broken. The Sign In button must always work and be visually correct.
 
-> **MAJOR DESIGN REFERENCE:** The primary web and motion design reference for the entire project is [sounext.xyz](https://www.sounext.xyz/). All pages (Sales, Auth, Dashboard, Leads, etc.) must follow the minimalist, dark, tech-inspired, and motion-rich style of this reference. All buttons and interactive elements must always work and have a premium, animated feel.
+> **MAJOR DESIGN REFERENCES:** The primary web and motion design references for the entire project are [tempo.new](https://www.tempo.new/), [codecademy.com](https://www.codecademy.com/), and [sounext.xyz](https://www.sounext.xyz/). All pages (Sales, Auth, Dashboard, Leads, etc.) must follow the minimalist, dark, tech-inspired, and motion-rich style of these references. All buttons and interactive elements must always work and have a premium, animated feel.
 
 This is the single source of truth for the Rarity Leads project. It covers vision, features, design, database, deployment, copywriting, and all technical and business steps for building, launching, and maintaining the platform.
 
@@ -100,7 +100,7 @@ Rarity Leads is a B2B SaaS lead prospecting platform powered by AI, focused on a
 ---
 
 ## 🎨 Design System & Guidelines
-### Color Palette (Inspired by tempo.new)
+### Color Palette (Inspired by tempo.new and codecademy.com)
 - Deep Blue: #0A0A23
 - Slate Gray: #232136
 - Light Gray: #E5E7EB
@@ -132,7 +132,7 @@ Rarity Leads is a B2B SaaS lead prospecting platform powered by AI, focused on a
 - Sidebar with icons, badges, status indicators
 - Responsive menu: fixed sidebar (desktop), overlay (mobile)
 - Automatic active states, clear navigation
-- **All UI/UX is inspired by the modern, premium SaaS style of [tempo.new](https://www.tempo.new/).**
+- **All UI/UX is inspired by the modern, premium SaaS style of [tempo.new](https://www.tempo.new/) and the tech-focused, educational approach of [codecademy.com](https://www.codecademy.com/).**
 
 ---
 
@@ -453,8 +453,11 @@ Rarity Leads is an AI-powered B2B lead generation platform with bulletproof auth
 
 **This guide is a living document. Always consult it for the latest on building, deploying, and maintaining Rarity Leads.** 
 
-## Web Design Reference
-All visual and UI/UX decisions are inspired by the modern, premium aesthetic of [tempo.new](https://www.tempo.new/).
+## Web Design References
+All visual and UI/UX decisions are inspired by:
+- The modern, premium SaaS aesthetic of [tempo.new](https://www.tempo.new/)
+- The tech-focused, educational, and professional design of [codecademy.com](https://www.codecademy.com/)
+- The minimalist, dark, tech-inspired style of [sounext.xyz](https://www.sounext.xyz/)
 
 ## Dashboard & UI/UX (Premium Summary)
 - All dashboard numbers and metrics start at zero by default (no fake/example data).
@@ -467,7 +470,7 @@ All visual and UI/UX decisions are inspired by the modern, premium aesthetic of 
 - Sidebar and header use glass morphism, gradients, and a minimalist, modern layout.
 - Navigation is intuitive, with dynamic badges and status indicators.
 - Responsive design: desktop (full layout), tablet (adaptive grid), mobile (stacked cards, overlay navigation).
-- All UI/UX follows the modern, premium SaaS style of tempo.new.
+- All UI/UX follows the modern, premium SaaS style of tempo.new and the tech-focused, professional approach of codecademy.com.
 
 ## Supabase Setup (Database & Email)
 - See the database schema in `supabase_schema.sql`.

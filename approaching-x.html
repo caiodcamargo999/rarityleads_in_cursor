@@ -11,11 +11,143 @@
     <link rel="stylesheet" href="rarity-design.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://unpkg.com/feather-icons"></script>
+    <style>
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5em;
+        }
+        @media (max-width: 900px) {
+            .form-row {
+                flex-direction: column;
+                gap: 1em;
+            }
+        }
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: var(--sidebar-width);
+            min-width: var(--sidebar-width);
+            border-right: 1px solid var(--border);
+            background: var(--sidebar-bg);
+            z-index: 100;
+        }
+        .sidebar-bottom {
+            margin-top: auto;
+            padding: 2em 2em 2.5em 2em;
+            border-top: 1px solid var(--logout-separator);
+            background: var(--sidebar-bg);
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            gap: 1em;
+            position: sticky;
+            bottom: 0;
+            left: 0;
+            right: 0;
+        }
+    </style>
 </head>
 <body class="dark-bg">
-    <div class="dashboard-layout">
-        <aside class="sidebar" role="navigation" aria-label="Main navigation">
-            <!-- Insert the new sidebar HTML from dashboard.html here, replacing any old sidebar markup. Ensure all navigation, icons, and structure match the latest dashboard.html sidebar, including user profile/settings and logout at the bottom. -->
+    <div class="dashboard-container">
+                <aside class="sidebar" id="sidebar" role="navigation" aria-label="Main navigation">
+            <div class="sidebar-header">
+                <img src="rarity-logo.jpg" alt="Rarity Leads Logo" class="sidebar-logo">
+            </div>
+            
+            <nav class="sidebar-nav">
+                <ul>
+                    <li>
+                        <a href="dashboard.html" data-i18n="nav.dashboard" data-page="dashboard">
+                            <i class="nav-icon" data-feather="home"></i>
+                            <span data-i18n="nav.dashboard">Dashboard</span>
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="prospecting-leads.html" data-i18n="nav.leads" data-page="leads">
+                            <i class="nav-icon" data-feather="users"></i>
+                            <span data-i18n="nav.leads">Leads</span>
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="prospecting-companies.html" data-i18n="nav.companies" data-page="companies">
+                            <i class="nav-icon" data-feather="briefcase"></i>
+                            <span data-i18n="nav.companies">Companies</span>
+                        </a>
+                    </li>
+                    
+                    <li class="nav-section">
+                        <span class="nav-section-title" data-i18n="nav.outreach">Outreach</span>
+                    </li>
+                    
+                    <li>
+                        <a href="approaching-whatsapp.html" data-i18n="nav.whatsapp" data-page="whatsapp">
+                            <i class="nav-icon" data-feather="message-circle"></i>
+                            <span data-i18n="nav.whatsapp">WhatsApp</span>
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="approaching-linkedin.html" data-i18n="nav.linkedin" data-page="linkedin">
+                            <i class="nav-icon" data-feather="linkedin"></i>
+                            <span data-i18n="nav.linkedin">LinkedIn</span>
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="approaching-instagram.html" data-i18n="nav.instagram" data-page="instagram">
+                            <i class="nav-icon" data-feather="instagram"></i>
+                            <span data-i18n="nav.instagram">Instagram</span>
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="approaching-facebook.html" data-i18n="nav.facebook" data-page="facebook">
+                            <i class="nav-icon" data-feather="facebook"></i>
+                            <span data-i18n="nav.facebook">Facebook</span>
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="approaching-x.html" class="active" data-i18n="nav.x" data-page="x">
+                            <i class="nav-icon" data-feather="twitter"></i>
+                            <span data-i18n="nav.x">X (Twitter)</span>
+                        </a>
+                    </li>
+                    
+                    <li class="nav-section">
+                        <span class="nav-section-title" data-i18n="nav.analyticsSupport">Analytics & Support</span>
+                    </li>
+                    
+                    <li>
+                        <a href="analytics.html" data-i18n="nav.analytics" data-page="analytics">
+                            <i class="nav-icon" data-feather="bar-chart-2"></i>
+                            <span data-i18n="nav.analytics">Analytics</span>
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="support.html" data-i18n="nav.support" data-page="support">
+                            <i class="nav-icon" data-feather="help-circle"></i>
+                            <span data-i18n="nav.support">Support</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            
+            <div class="sidebar-bottom">
+                <button class="sidebar-profile-btn" id="profile-btn">
+                    <i data-feather="settings"></i>
+                    <span data-i18n="common.profileSettings">Profile & Settings</span>
+                </button>
+                <button class="sidebar-logout-btn" id="logout-btn" data-i18n="common.logout">Logout</button>
+            </div>
         </aside>
         <main class="main-content" role="main">
             <div class="x-header">
@@ -112,6 +244,7 @@
     <script src="app-config.js"></script>
     <script src="i18n.js"></script>
     <script src="auth-guard.js"></script>
+    <script src="universal-navigation.js"></script>
     <script>
         // X Module
         const X = {
