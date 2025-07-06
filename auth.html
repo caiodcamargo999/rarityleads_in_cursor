@@ -6,15 +6,22 @@
     <title data-i18n="auth.meta.title">Auth - Rarity Leads</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="rarity-design.css">
+    <script src="https://unpkg.com/feather-icons"></script>
 </head>
 <body>
-    <!-- Top right language/theme panel -->
+    <!-- Minimalist Header for Auth Page -->
     <header class="main-header">
-        <nav class="main-nav" style="display: flex; align-items: center; justify-content: flex-end; max-width: 1200px; margin: 0 auto; padding: 1.5em 2em; gap: 1.2em;">
-            <div id="language-theme-toggle" class="lang-theme-topright"></div>
+        <nav class="main-nav">
+            <div class="nav-container" style="justify-content: space-between;">
+                <a href="/" class="logo" aria-label="home">
+                    <span>Rarity Leads</span>
+                </a>
+                <div id="language-theme-toggle" class="lang-theme-topright"></div>
+            </div>
         </nav>
     </header>
-    <main class="auth-main">
+
+    <main class="auth-main" style="margin-top: 80px;">
         <div class="auth-container">
             <div class="auth-logo">
                 <img src="rarity-logo.jpg" alt="Rarity Leads Logo" data-i18n-attr="alt:common.brandLogoAlt">
@@ -99,6 +106,178 @@
     </main>
 
     <style>
+    /* Modern SaaS Header Styles - Following Design Rules */
+    .main-header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        background: var(--sidebar-bg);
+        border-bottom: 1px solid var(--border);
+        z-index: 1000;
+        font-family: 'Inter', sans-serif;
+    }
+
+    .main-nav {
+        width: 100%;
+    }
+
+    .nav-container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 1.2em 2em;
+        gap: 2em;
+    }
+
+    .logo {
+        font-size: 1.5em;
+        font-weight: 500;
+        color: var(--primary-text);
+        text-decoration: none;
+        letter-spacing: 0.02em;
+        transition: color 0.2s;
+    }
+
+    .logo:hover {
+        color: var(--secondary-text);
+    }
+
+    .nav-links {
+        display: flex;
+        gap: 2em;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        align-items: center;
+    }
+
+    .nav-links a {
+        color: var(--primary-text);
+        text-decoration: none;
+        font-weight: 400;
+        font-size: 0.95em;
+        transition: color 0.2s;
+    }
+
+    .nav-links a:hover {
+        color: var(--secondary-text);
+    }
+
+    .nav-actions {
+        display: flex;
+        gap: 1em;
+        align-items: center;
+    }
+
+    .nav-toggle {
+        display: none;
+        background: none;
+        border: none;
+        color: var(--primary-text);
+        cursor: pointer;
+        padding: 0.5em;
+        border-radius: 6px;
+        transition: background 0.2s;
+    }
+
+    .nav-toggle:hover {
+        background: var(--button-bg);
+    }
+
+    .nav-toggle .menu-icon,
+    .nav-toggle .close-icon {
+        width: 1.5em;
+        height: 1.5em;
+    }
+
+    .nav-toggle .close-icon {
+        display: none;
+    }
+
+    .main-nav.active .nav-toggle .menu-icon {
+        display: none;
+    }
+
+    .main-nav.active .nav-toggle .close-icon {
+        display: block;
+    }
+
+    /* Mobile Styles */
+    @media (max-width: 900px) {
+        .nav-links,
+        .nav-actions {
+            display: none;
+        }
+
+        .nav-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .nav-container {
+            padding: 1em 1.5em;
+        }
+
+        .main-nav.active .nav-links,
+        .main-nav.active .nav-actions {
+            display: flex;
+            flex-direction: column;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            background: var(--sidebar-bg);
+            border-bottom: 1px solid var(--border);
+            padding: 1.5em 2em;
+            gap: 1.5em;
+        }
+
+        .main-nav.active .nav-links {
+            order: 1;
+            width: 100%;
+        }
+
+        .main-nav.active .nav-links li {
+            width: 100%;
+        }
+
+        .main-nav.active .nav-links a {
+            display: block;
+            padding: 0.75em 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .main-nav.active .nav-actions {
+            order: 2;
+            width: 100%;
+            flex-direction: column;
+        }
+
+        .main-nav.active .nav-actions .btn {
+            width: 100%;
+            text-align: center;
+        }
+    }
+
+    @media (max-width: 600px) {
+        .nav-container {
+            padding: 1em;
+        }
+
+        .logo {
+            font-size: 1.3em;
+        }
+
+        .main-nav.active .nav-links,
+        .main-nav.active .nav-actions {
+            padding: 1.5em 1em;
+        }
+    }
+
     /* Responsive top-right Anthropic-style toggle */
     .lang-theme-topright {
         position: absolute;
@@ -182,7 +361,33 @@
     <script src="i18n.js"></script>
     <script src="language-theme-toggle.js"></script>
     <script>
+        feather.replace();
         document.addEventListener('DOMContentLoaded', () => {
+            // Mobile menu toggle
+            const navToggle = document.querySelector('.nav-toggle');
+            const mainNav = document.querySelector('.main-nav');
+            
+            if (navToggle && mainNav) {
+                navToggle.addEventListener('click', function() {
+                    mainNav.classList.toggle('active');
+                });
+            }
+
+            // Close mobile menu when clicking outside
+            document.addEventListener('click', function(event) {
+                if (!mainNav.contains(event.target)) {
+                    mainNav.classList.remove('active');
+                }
+            });
+
+            // Close mobile menu when clicking on a link
+            const navLinks = document.querySelectorAll('.nav-links a');
+            navLinks.forEach(link => {
+                link.addEventListener('click', function() {
+                    mainNav.classList.remove('active');
+                });
+            });
+
             const supabase = window.AppUtils && window.AppUtils.initSupabase ? window.AppUtils.initSupabase() : null;
             if (!supabase) {
                 document.getElementById('login-message-container').innerHTML = '<div class="message message-error">Supabase not initialized. Please check your configuration.</div>';

@@ -226,13 +226,23 @@ window.LanguageThemePanel = {
 
     // Profile/settings link
     const profileLink = document.createElement('a');
-    profileLink.href = 'profile.html';
+    profileLink.href = '/profile.html';
     profileLink.textContent = 'Profile & Settings';
     profileLink.className = 'btn';
     profileLink.style.width = '100%';
     profileLink.style.margin = '0.2em 0 0.5em 0';
     profileLink.style.textAlign = 'center';
     profileLink.style.display = 'block';
+    // Fallback: force navigation if anchor click doesn't work
+    profileLink.addEventListener('click', function(e) {
+      if (window.location.pathname !== '/profile.html') {
+        setTimeout(() => {
+          if (window.location.pathname !== '/profile.html') {
+            window.location.href = '/profile.html';
+          }
+        }, 100);
+      }
+    });
     panel.appendChild(profileLink);
 
     // Language/Theme row (Anthropic style)
