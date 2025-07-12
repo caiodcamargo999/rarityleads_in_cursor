@@ -33,7 +33,7 @@ export default function ProfilePage() {
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 1000));
       alert('Profile updated successfully!');
-    } catch (error) {
+    } catch {
       alert('Failed to update profile');
     } finally {
       setLoading(false);
@@ -49,7 +49,7 @@ export default function ProfilePage() {
       await new Promise(resolve => setTimeout(resolve, 1000));
       alert('Password changed successfully!');
       setPasswords({ current_password: '', new_password: '' });
-    } catch (error) {
+    } catch {
       alert('Failed to change password');
     } finally {
       setLoading(false);

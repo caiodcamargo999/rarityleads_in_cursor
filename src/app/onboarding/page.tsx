@@ -79,7 +79,7 @@ export default function OnboardingPage() {
             Welcome to Rarity Leads
           </h2>
           <p className="mt-2 text-gray-600 dark:text-gray-400">
-            Let's set up your account in just a few steps
+            Let&apos;s set up your account in just a few steps
           </p>
         </div>
 

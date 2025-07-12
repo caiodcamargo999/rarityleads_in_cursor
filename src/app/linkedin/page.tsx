@@ -6,13 +6,20 @@ import Sidebar from "@/components/Sidebar";
 import FloatingProfilePanel from "@/components/FloatingProfilePanel";
 import { getSupabase } from "@/lib/supabase";
 
+interface LinkedInConfigData {
+  profile_url?: string;
+  api_key?: string;
+  message_template?: string;
+}
 interface LinkedInConfig {
   id: string;
   user_id: string;
-  data: any;
+  data: LinkedInConfigData;
   status: string;
   created_at: string;
 }
+
+interface User { id: string; name?: string; email?: string; }
 
 export default function LinkedInPage() {
   const [configs, setConfigs] = useState<LinkedInConfig[]>([]);
@@ -23,7 +30,7 @@ export default function LinkedInPage() {
     api_key: "", 
     message_template: "" 
   });
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<User | null>(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -52,7 +59,7 @@ export default function LinkedInPage() {
     // Simular criação de configuração
     const newConfigItem = {
       id: Date.now().toString(),
-      user_id: user.id,
+      user_id: (user as { id: string }).id,
       data: newConfig,
       status: "inactive",
       created_at: new Date().toISOString()
@@ -83,7 +90,7 @@ export default function LinkedInPage() {
 
   return (
     <div className="min-h-screen bg-main-bg flex">
-      <Sidebar user={user} onProfileClick={() => {}} />
+      <Sidebar user={user ?? undefined} onProfileClick={() => {}} />
       <main className="flex-1 lg:ml-64 p-6">
         <header className="mb-8 flex items-center justify-between">
           <h1 className="text-3xl font-medium text-primary-text">LinkedIn</h1>
@@ -155,7 +162,7 @@ export default function LinkedInPage() {
           )}
         </section>
       </main>
-      <FloatingProfilePanel user={user} />
+      <FloatingProfilePanel user={user ?? undefined} isVisible={true} onClose={() => {}} onLogout={() => {}} />
     </div>
   );
 } 

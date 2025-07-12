@@ -18,7 +18,7 @@ export default function WhatsAppPage() {
   const [loading, setLoading] = useState(true);
   const [showAdd, setShowAdd] = useState(false);
   const [newSession, setNewSession] = useState({ phone_number: "" });
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<unknown>(null);
   const router = useRouter();
 
   useEffect(() => {

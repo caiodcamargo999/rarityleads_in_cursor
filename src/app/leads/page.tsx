@@ -6,19 +6,25 @@ import Sidebar from "@/components/Sidebar";
 import FloatingProfilePanel from "@/components/FloatingProfilePanel";
 import { getSupabase } from "@/lib/supabase";
 
+interface LeadData {
+  name?: string;
+  email?: string;
+}
 interface Lead {
   id: string;
-  data: any;
+  data: LeadData;
   status: string | null;
   created_at: string;
 }
+
+interface User { id: string; name?: string; email?: string; }
 
 export default function LeadsPage() {
   const [leads, setLeads] = useState<Lead[]>([]);
   const [loading, setLoading] = useState(true);
   const [showAdd, setShowAdd] = useState(false);
   const [newLead, setNewLead] = useState({ name: "", email: "" });
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<User | null>(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -37,7 +43,19 @@ export default function LeadsPage() {
         .select("id, data, status, created_at")
         .eq("user_id", user.id)
         .order("created_at", { ascending: false });
-      if (!error && data) setLeads(data);
+      if (!error && data) {
+        setLeads(
+          (data as unknown[]).map((item) => {
+            const obj = item as { id: string; data: LeadData; status: string | null; created_at: string };
+            return {
+              id: String(obj.id),
+              data: obj.data,
+              status: obj.status,
+              created_at: String(obj.created_at),
+            };
+          })
+        );
+      }
       setLoading(false);
     };
     fetchUserAndLeads();
@@ -60,7 +78,7 @@ export default function LeadsPage() {
 
   return (
     <div className="min-h-screen bg-main-bg flex">
-      <Sidebar user={user} onProfileClick={() => {}} />
+      <Sidebar user={user ?? undefined} onProfileClick={() => {}} />
       <main className="flex-1 lg:ml-64 p-6">
         <header className="mb-8 flex items-center justify-between">
           <h1 className="text-3xl font-medium text-primary-text">Leads</h1>
@@ -116,7 +134,7 @@ export default function LeadsPage() {
           )}
         </section>
       </main>
-      <FloatingProfilePanel user={user} />
+      <FloatingProfilePanel user={user ?? undefined} isVisible={true} onClose={() => {}} onLogout={() => {}} />
     </div>
   );
 } 

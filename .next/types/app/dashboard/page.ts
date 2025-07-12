@@ -1,4 +1,4 @@
-// File: C:\Users\55519\Desktop\DIGITAL MARKETING\SAAS AND APP DEVELOPMENT\Rarity Leads Saas\Rarity Leads in Cursor\rarity-leads-next\src\app\dashboard\page.tsx
+// File: C:\Users\55519\Desktop\DIGITAL MARKETING\SAAS AND APP DEVELOPMENT\Rarity Leads Saas\Rarity Leads in Cursor\src\app\dashboard\page.tsx
 import * as entry from '../../../../src/app/dashboard/page.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

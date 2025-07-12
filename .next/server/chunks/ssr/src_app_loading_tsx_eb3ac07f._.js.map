@@ -1,6 +1,0 @@
-{
-  "version": 3,
-  "sources": [],
-  "sections": [
-    {"offset": {"line": 7, "column": 0}, "map": {"version":3,"sources":["file:///C:/Users/55519/Desktop/DIGITAL%20MARKETING/SAAS%20AND%20APP%20DEVELOPMENT/Rarity%20Leads%20Saas/Rarity%20Leads%20in%20Cursor/src/app/loading.tsx"],"sourcesContent":["export default function Loading() {\r\n  return (\r\n    <div className=\"min-h-screen bg-main-bg flex items-center justify-center\">\r\n      <div className=\"text-center\">\r\n        <div className=\"w-16 h-16 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin mx-auto mb-4\"></div>\r\n        <h2 className=\"text-xl font-semibold text-gray-900 dark:text-white mb-2\">\r\n          Loading...\r\n        </h2>\r\n        <p className=\"text-gray-600 dark:text-gray-400\">\r\n          Please wait while we load your content\r\n        </p>\r\n      </div>\r\n    </div>\r\n  );\r\n} "],"names":[],"mappings":";;;;;AAAe,SAAS;IACtB,qBACE,8OAAC;QAAI,WAAU;kBACb,cAAA,8OAAC;YAAI,WAAU;;8BACb,8OAAC;oBAAI,WAAU;;;;;;8BACf,8OAAC;oBAAG,WAAU;8BAA2D;;;;;;8BAGzE,8OAAC;oBAAE,WAAU;8BAAmC;;;;;;;;;;;;;;;;;AAMxD","debugId":null}}]
-}

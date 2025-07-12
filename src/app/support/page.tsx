@@ -147,7 +147,7 @@ export default function SupportPage() {
                       How do I get started with Rarity Leads?
                     </h3>
                     <p className="text-gray-600 dark:text-gray-400">
-                      Sign up for an account and follow our onboarding process. We'll guide you through setting up your first campaign.
+                      Sign up for an account and follow our onboarding process. We&apos;ll guide you through setting up your first campaign.
                     </p>
                   </div>
                   <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-4">

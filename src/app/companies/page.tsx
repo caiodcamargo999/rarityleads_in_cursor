@@ -6,19 +6,26 @@ import Sidebar from "@/components/Sidebar";
 import FloatingProfilePanel from "@/components/FloatingProfilePanel";
 import { getSupabase } from "@/lib/supabase";
 
+interface CompanyData {
+  industry?: string;
+  website?: string;
+}
+
 interface Company {
   id: string;
   name: string;
-  data: any;
+  data: CompanyData;
   created_at: string;
 }
+
+interface User { id: string; name?: string; email?: string; }
 
 export default function CompaniesPage() {
   const [companies, setCompanies] = useState<Company[]>([]);
   const [loading, setLoading] = useState(true);
   const [showAdd, setShowAdd] = useState(false);
-  const [newCompany, setNewCompany] = useState({ name: "", industry: "", website: "" });
-  const [user, setUser] = useState<any>(null);
+  const [newCompany, setNewCompany] = useState<{ industry?: string; website?: string }>({ industry: "", website: "" });
+  const [user, setUser] = useState<User | null>(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -30,14 +37,26 @@ export default function CompaniesPage() {
         router.push("/auth");
         return;
       }
-      setUser(user);
+      setUser(user as User);
       // Buscar empresas do usuário
       const { data, error } = await supabase
         .from("companies")
         .select("id, name, data, created_at")
         .eq("user_id", user.id)
         .order("created_at", { ascending: false });
-      if (!error && data) setCompanies(data);
+      if (!error && data) {
+        setCompanies(
+          (data as unknown[]).map((item) => {
+            const obj = item as { id: string; name: string; data: CompanyData; created_at: string };
+            return {
+              id: String(obj.id),
+              name: String(obj.name),
+              data: obj.data,
+              created_at: String(obj.created_at),
+            };
+          })
+        );
+      }
       setLoading(false);
     };
     fetchUserAndCompanies();
@@ -52,19 +71,19 @@ export default function CompaniesPage() {
       .from("companies")
       .insert({ 
         user_id: user.id, 
-        name: newCompany.name, 
+        name: newCompany.industry, 
         data: { industry: newCompany.industry, website: newCompany.website } 
       })
       .select();
-    if (!error && data) setCompanies([data[0], ...companies]);
+    if (!error && data) setCompanies([data[0] as Company, ...companies]);
     setShowAdd(false);
-    setNewCompany({ name: "", industry: "", website: "" });
+    setNewCompany({ industry: "", website: "" });
     setLoading(false);
   };
 
   return (
     <div className="min-h-screen bg-main-bg flex">
-      <Sidebar user={user} onProfileClick={() => {}} />
+      <Sidebar user={user ?? undefined} onProfileClick={() => {}} />
       <main className="flex-1 lg:ml-64 p-6">
         <header className="mb-8 flex items-center justify-between">
           <h1 className="text-3xl font-medium text-primary-text">Empresas</h1>
@@ -83,8 +102,8 @@ export default function CompaniesPage() {
             <input
               className="bg-main-bg border border-border rounded-btn px-4 py-2 text-primary-text"
               placeholder="Nome da empresa"
-              value={newCompany.name}
-              onChange={e => setNewCompany({ ...newCompany, name: e.target.value })}
+              value={newCompany.industry}
+              onChange={e => setNewCompany({ ...newCompany, industry: e.target.value })}
               required
             />
             <input
@@ -131,7 +150,7 @@ export default function CompaniesPage() {
           )}
         </section>
       </main>
-      <FloatingProfilePanel user={user} />
+      <FloatingProfilePanel user={user ?? undefined} isVisible={true} onClose={() => {}} onLogout={() => {}} />
     </div>
   );
 } 
