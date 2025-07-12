@@ -1,42 +1,28 @@
 {
-  "name": "rarity-leads",
-  "version": "1.0.0",
-  "description": "AI-Powered Lead Generation Platform",
-  "main": "home.html",
+  "name": "rarity-leads-next",
+  "version": "0.1.0",
+  "private": true,
   "scripts": {
-    "dev": "live-server --port=3000",
-    "build": "echo 'Static site build complete - no build step required'",
-    "start": "live-server --port=8080",
-    "test": "echo 'No tests specified'",
-    "deploy": "echo 'Deploy via Netlify GitHub integration'",
-    "validate": "echo 'Validating auth configuration...'"
+    "dev": "next dev --turbopack",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
   },
-  "keywords": [
-    "lead-generation",
-    "ai",
-    "saas",
-    "marketing",
-    "automation"
-  ],
-  "author": "Rarity Agency",
-  "license": "MIT",
   "dependencies": {
-    "@supabase/supabase-js": "^2.50.3",
-    "@whiskeysockets/baileys": "^6.7.18",
-    "dotenv": "^17.0.1",
-    "express": "^5.1.0",
-    "motion": "^12.23.0",
-    "ws": "^8.18.3"
+    "@supabase/supabase-js": "^2.50.5",
+    "next": "15.3.5",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
   },
   "devDependencies": {
-    "live-server": "^1.2.2"
-  },
-  "engines": {
-    "node": ">=18.0.0"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/your-username/rarity-leads.git"
-  },
-  "homepage": "https://rarityleads.netlify.app"
+    "@eslint/eslintrc": "^3",
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "15.3.5",
+    "tailwindcss": "^4",
+    "typescript": "^5"
+  }
 }
