@@ -1,0 +1,16 @@
+{
+  "/favicon.ico/route": "/favicon.ico",
+  "/analytics/page": "/analytics",
+  "/leads/page": "/leads",
+  "/dashboard/page": "/dashboard",
+  "/companies/page": "/companies",
+  "/linkedin/page": "/linkedin",
+  "/_not-found/page": "/_not-found",
+  "/page": "/",
+  "/onboarding/page": "/onboarding",
+  "/support/page": "/support",
+  "/profile/page": "/profile",
+  "/settings/page": "/settings",
+  "/whatsapp/page": "/whatsapp",
+  "/auth/page": "/auth"
+}

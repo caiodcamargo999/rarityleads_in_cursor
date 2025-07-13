@@ -1,4 +1,16 @@
 {
   "/favicon.ico/route": "app/favicon.ico/route.js",
-  "/page": "app/page.js"
+  "/analytics/page": "app/analytics/page.js",
+  "/leads/page": "app/leads/page.js",
+  "/dashboard/page": "app/dashboard/page.js",
+  "/companies/page": "app/companies/page.js",
+  "/linkedin/page": "app/linkedin/page.js",
+  "/_not-found/page": "app/_not-found/page.js",
+  "/page": "app/page.js",
+  "/onboarding/page": "app/onboarding/page.js",
+  "/support/page": "app/support/page.js",
+  "/profile/page": "app/profile/page.js",
+  "/settings/page": "app/settings/page.js",
+  "/whatsapp/page": "app/whatsapp/page.js",
+  "/auth/page": "app/auth/page.js"
 }

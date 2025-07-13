@@ -18,7 +18,7 @@ export default function WhatsAppPage() {
   const [loading, setLoading] = useState(true);
   const [showAdd, setShowAdd] = useState(false);
   const [newSession, setNewSession] = useState({ phone_number: "" });
-  const [user, setUser] = useState<unknown>(null);
+  const [user, setUser] = useState<{ id: string; name?: string; email?: string } | null>(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -37,7 +37,14 @@ export default function WhatsAppPage() {
         .select("id, phone_number, status, created_at")
         .eq("user_id", user.id)
         .order("created_at", { ascending: false });
-      if (!error && data) setSessions(data);
+      if (!error && data) setSessions(
+        data.map((item) => ({
+          id: String(item.id),
+          phone_number: item.phone_number ? String(item.phone_number) : null,
+          status: String(item.status),
+          created_at: String(item.created_at),
+        }))
+      );
       setLoading(false);
     };
     fetchUserAndSessions();
@@ -56,7 +63,15 @@ export default function WhatsAppPage() {
         status: "inactive"
       })
       .select();
-    if (!error && data) setSessions([data[0], ...sessions]);
+    if (!error && data) setSessions([
+      {
+        id: String(data[0].id),
+        phone_number: data[0].phone_number ? String(data[0].phone_number) : null,
+        status: String(data[0].status),
+        created_at: String(data[0].created_at),
+      },
+      ...sessions
+    ]);
     setShowAdd(false);
     setNewSession({ phone_number: "" });
     setLoading(false);
@@ -82,7 +97,7 @@ export default function WhatsAppPage() {
 
   return (
     <div className="min-h-screen bg-main-bg flex">
-      <Sidebar user={user} onProfileClick={() => {}} />
+      <Sidebar user={user ? { name: user.name, email: user.email } : undefined} onProfileClick={() => {}} />
       <main className="flex-1 lg:ml-64 p-6">
         <header className="mb-8 flex items-center justify-between">
           <h1 className="text-3xl font-medium text-primary-text">WhatsApp</h1>
@@ -141,7 +156,12 @@ export default function WhatsAppPage() {
           )}
         </section>
       </main>
-      <FloatingProfilePanel user={user} />
+      <FloatingProfilePanel
+        user={user ? { name: user.name, email: user.email } : undefined}
+        isVisible={true}
+        onClose={() => {}}
+        onLogout={() => {}}
+      />
     </div>
   );
 } 
