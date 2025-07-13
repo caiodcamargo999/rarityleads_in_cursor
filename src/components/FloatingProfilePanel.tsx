@@ -116,7 +116,7 @@ export default function FloatingProfilePanel({
                     : 'text-secondary-text hover:bg-button-bg hover:text-primary-text'
                 }`}
               >
-                🌙 Dark
+                Dark
               </button>
               <button
                 onClick={() => setTheme('light')}
@@ -126,7 +126,7 @@ export default function FloatingProfilePanel({
                     : 'text-secondary-text hover:bg-button-bg hover:text-primary-text'
                 }`}
               >
-                ☀️ Light
+                Light
               </button>
             </div>
           </div>
@@ -138,7 +138,7 @@ export default function FloatingProfilePanel({
                 onLogout();
                 onClose();
               }}
-              className="w-full flex items-center px-3 py-2 text-sm text-red-400 hover:bg-red-900/20 rounded-btn transition-colors"
+              className="w-full flex items-center px-3 py-2 text-sm text-secondary-text hover:bg-button-bg rounded-btn transition-colors"
             >
               <svg className="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />

@@ -7,7 +7,7 @@
 ## 🌐 Live Demo
 **🔗 (https://rarityleads.netlify.app/)**
 
-Rarity Leads is a modern, AI-native platform for automated lead acquisition and qualification with bulletproof authentication. Built with pure HTML, CSS, and JavaScript, featuring multi-channel outreach capabilities and comprehensive lead management.
+Rarity Leads is a modern, AI-native platform for automated lead acquisition and qualification with bulletproof authentication. Built with Next.js, Tailwind CSS, and Framer Motion, featuring multi-channel outreach capabilities and comprehensive lead management.
 
 ## ✨ Features
 
@@ -26,39 +26,49 @@ Rarity Leads is a modern, AI-native platform for automated lead acquisition and 
 
 ```
 rarity-leads/
-├── home.html              # Main homepage
-├── register.html          # User registration
-├── login.html             # User login
-├── dashboard.html         # Main dashboard
-├── analytics.html         # Analytics page
-├── support.html           # Support center
-├── prospecting-leads.html # Lead management
-├── prospecting-companies.html # Company management
-├── approaching-*.html     # Social media outreach pages
-├── rarity-design.css      # Global styles
-├── auth-guard.js          # Authentication protection
-├── app-config.js          # Application configuration
-├── navigation-manager.js  # Navigation logic
-└── i18n/                  # Language files
-    ├── en.json           # English translations
-    ├── pt-BR.json        # Portuguese translations
-    ├── es.json           # Spanish translations
-    └── fr.json           # French translations
+├── src/
+│   ├── app/                # Next.js app directory (routing, pages)
+│   ├── components/         # Modular, motion-enabled React components
+│   ├── lib/                # Utilities, motion variants, API helpers
+│   ├── styles/             # Tailwind CSS config, global styles
+│   └── i18n/               # Language files (en.json, pt-BR.json, etc)
+├── public/                 # Static assets
+├── tailwind.config.js      # Tailwind CSS configuration
+├── next.config.js          # Next.js configuration
+├── package.json            # Project dependencies and scripts
+└── README.md               # Project documentation
 ```
 
 ## Getting Started
 
-1. Clone the repository
-2. Open `home.html` in your browser
-3. No build process required - it's pure HTML/CSS/JS!
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/caiodcamargo999/rarityleads_in_cursor_2.git
+   cd rarityleads_in_cursor_2
+   ```
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Create a `.env.local` file in the root with:
+   ```env
+   NEXT_PUBLIC_SUPABASE_URL=https://yejheyrdsucgzpzwxuxs.supabase.co
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InllamhleXJkc3VjZ3pwend4dXhzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg4MDg2NzQsImV4cCI6MjA2NDM4NDY3NH0.NzCJ8i3SKpABO6ykWRX3nHDYmjVB82KL1wfgaY3trM4
+   ```
+   (Add any other required environment variables as needed.)
+4. Start the development server:
+   ```bash
+   npm run dev
+   ```
+5. Open `http://localhost:3000` in your browser
 
 ## Development
 
 ### Prerequisites
 
+- Node.js 18+
 - Modern web browser
-- Text editor
-- No build tools required
+- Code editor (VSCode recommended)
 
 ### Local Development
 
@@ -67,18 +77,17 @@ rarity-leads/
    git clone https://github.com/your-username/rarity-leads.git
    ```
 
-2. Open the project in your favorite code editor
-
-3. Start a local server (optional):
+2. Install dependencies:
    ```bash
-   # Using Python
-   python -m http.server 8000
-   
-   # Using Node.js
-   npx serve
+   npm install
    ```
 
-4. Open `http://localhost:8000` in your browser
+3. Start the development server:
+   ```bash
+   npm run dev
+   ```
+
+4. Open `http://localhost:3000` in your browser
 
 ## 🚀 Deployment
 
@@ -96,7 +105,7 @@ rarity-leads/
    - Click "Deploy site"
 
 3. **Configure Supabase:**
-   - Update `app-config.js` with your Supabase credentials
+   - Update your environment variables in the Netlify dashboard with your Supabase credentials
    - Enable Google OAuth in Supabase dashboard
    - Set up email templates for verification
 
@@ -109,34 +118,44 @@ rarity-leads/
    npm run build
    ```
 
-2. **Upload files** to your hosting provider
+2. **Deploy the `.next` and `public` directories to your hosting provider**
 
 3. **Configure redirects** according to `netlify.toml`
 
 ## Design System
 
-### Colors
+### Colors (Design System)
 
-- Primary: `#D50057`
-- Secondary: `#9B00C8`
-- Accent: `#B044FF`
-- Info: `#5DB5FF`
-- Link: `#0046FF`
-- Dark: `#001A70`
+- Sidebar BG: `#101014`
+- Main BG: `#18181c`
+- Card BG: `#18181c`
+- Button BG: `#232336`
+- Button Hover BG: `#232136`
+- Primary Text: `#e0e0e0`
+- Secondary Text: `#b0b0b0`
+- Border: `#232336`
+
+**No gradients, glassmorphism, or excessive bold.**
 
 ### Typography
 
-- Font: Bento Sans (Google Fonts)
-- Weights: 400 (Regular), 500 (Medium), 600 (Semibold), 700 (Bold)
+- Font: Inter (body), BentoSans or Plus Jakarta Sans (headers)
+- Weights: 400 (Regular), 500 (Medium)
+
+**No font weights above 500.**
+
+### Motion & Animations
+- Framer Motion for all major UI elements (buttons, cards, sections)
+- AnimatePresence for route/page transitions
+- useInView for scroll-based animations
+- Subtle, premium-feel micro-interactions
 
 ## Accessibility
 
 The platform follows WCAG 2.1 guidelines and includes:
-
-- Semantic HTML structure
+- Semantic React structure
 - ARIA labels where needed
 - Keyboard navigation support
-- Skip links
 - High contrast ratios
 - Screen reader compatibility
 

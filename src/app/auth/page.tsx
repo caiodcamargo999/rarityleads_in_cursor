@@ -6,6 +6,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { getSupabase } from '@/lib/supabase';
+import Button from '@/components/ui/Button';
 
 export default function AuthPage() {
   const [activeTab, setActiveTab] = useState<'login' | 'register'>('login');
@@ -209,22 +210,26 @@ export default function AuthPage() {
             <p className="text-secondary-text text-center mb-6">
               We&apos;ve sent a verification link to <strong className="text-primary-text">{unverifiedEmail}</strong>.
             </p>
-            <button
+            <Button
               onClick={handleResendVerification}
-              disabled={loading}
-              className="w-full bg-button-bg text-button-text font-medium rounded-btn py-3 px-6 transition-colors hover:bg-button-hover-bg disabled:opacity-50"
+              loading={loading}
+              aria-label="Resend Verification Email"
+              className="w-full"
+              variant="primary"
             >
               {loading ? 'Sending...' : 'Resend Verification Email'}
-            </button>
-            <button
+            </Button>
+            <Button
               onClick={() => {
                 setShowVerification(false);
                 setActiveTab('login');
               }}
-              className="w-full bg-transparent text-primary-text border border-border rounded-btn py-3 px-6 mt-3 transition-colors hover:bg-button-bg"
+              variant="secondary"
+              aria-label="Back to Login"
+              className="w-full mt-3"
             >
               Back to Login
-            </button>
+            </Button>
           </div>
         </div>
       </div>
@@ -245,26 +250,22 @@ export default function AuthPage() {
         <div className="bg-card-bg border border-border rounded-card p-8">
           {/* Tab Buttons */}
           <div className="flex mb-8 bg-button-bg rounded-btn p-1">
-            <button
+            <Button
               onClick={() => setActiveTab('login')}
-              className={`flex-1 py-2 px-4 rounded-btn font-medium transition-colors ${
-                activeTab === 'login'
-                  ? 'bg-main-bg text-primary-text'
-                  : 'text-secondary-text hover:text-primary-text'
-              }`}
+              variant={activeTab === 'login' ? 'primary' : 'secondary'}
+              aria-label="Sign In"
+              className="flex-1 py-2 px-4"
             >
               Sign In
-            </button>
-            <button
+            </Button>
+            <Button
               onClick={() => setActiveTab('register')}
-              className={`flex-1 py-2 px-4 rounded-btn font-medium transition-colors ${
-                activeTab === 'register'
-                  ? 'bg-main-bg text-primary-text'
-                  : 'text-secondary-text hover:text-primary-text'
-              }`}
+              variant={activeTab === 'register' ? 'primary' : 'secondary'}
+              aria-label="Register"
+              className="flex-1 py-2 px-4"
             >
               Register
-            </button>
+            </Button>
           </div>
 
           {/* Message Display */}
@@ -281,11 +282,13 @@ export default function AuthPage() {
           {/* Login Form */}
           {activeTab === 'login' && !showForgotPassword && (
             <form onSubmit={handleLogin} className="space-y-6">
-              <button
+              <Button
                 type="button"
                 onClick={handleGoogleAuth}
-                disabled={loading}
+                loading={loading}
+                aria-label="Sign in with Google"
                 className="w-full bg-transparent text-primary-text border border-border rounded-btn py-3 px-6 flex items-center justify-center gap-3 transition-colors hover:bg-button-bg disabled:opacity-50"
+                variant="outline"
               >
                 <Image 
                   src="https://www.svgrepo.com/show/475656/google-color.svg" 
@@ -295,7 +298,7 @@ export default function AuthPage() {
                   unoptimized
                 />
                 Sign in with Google
-              </button>
+              </Button>
               
               <div className="relative">
                 <div className="absolute inset-0 flex items-center">
@@ -346,33 +349,38 @@ export default function AuthPage() {
                   />
                   <span className="text-sm text-secondary-text">Remember me</span>
                 </label>
-                <button
+                <Button
                   type="button"
                   onClick={() => setShowForgotPassword(true)}
+                  variant="outline"
+                  aria-label="Forgot password"
                   className="text-sm text-primary-text hover:text-secondary-text transition-colors"
                 >
                   Forgot password?
-                </button>
+                </Button>
               </div>
 
-              <button
+              <Button
                 type="submit"
-                disabled={loading}
-                className="w-full bg-button-bg text-button-text font-medium rounded-btn py-3 px-6 transition-colors hover:bg-button-hover-bg disabled:opacity-50"
+                loading={loading}
+                aria-label="Sign In"
+                className="w-full"
               >
                 {loading ? 'Signing in...' : 'Sign In'}
-              </button>
+              </Button>
             </form>
           )}
 
           {/* Register Form */}
           {activeTab === 'register' && (
             <form onSubmit={handleRegister} className="space-y-6">
-              <button
+              <Button
                 type="button"
                 onClick={handleGoogleAuth}
-                disabled={loading}
+                loading={loading}
+                aria-label="Sign up with Google"
                 className="w-full bg-transparent text-primary-text border border-border rounded-btn py-3 px-6 flex items-center justify-center gap-3 transition-colors hover:bg-button-bg disabled:opacity-50"
+                variant="outline"
               >
                 <Image 
                   src="https://www.svgrepo.com/show/475656/google-color.svg" 
@@ -382,7 +390,7 @@ export default function AuthPage() {
                   unoptimized
                 />
                 Sign up with Google
-              </button>
+              </Button>
               
               <div className="relative">
                 <div className="absolute inset-0 flex items-center">
@@ -424,13 +432,14 @@ export default function AuthPage() {
                 />
               </div>
 
-              <button
+              <Button
                 type="submit"
-                disabled={loading}
-                className="w-full bg-button-bg text-button-text font-medium rounded-btn py-3 px-6 transition-colors hover:bg-button-hover-bg disabled:opacity-50"
+                loading={loading}
+                aria-label="Create Account"
+                className="w-full"
               >
                 {loading ? 'Creating account...' : 'Create Account'}
-              </button>
+              </Button>
             </form>
           )}
 
@@ -459,21 +468,24 @@ export default function AuthPage() {
                 />
               </div>
 
-              <button
+              <Button
                 type="submit"
-                disabled={loading}
-                className="w-full bg-button-bg text-button-text font-medium rounded-btn py-3 px-6 transition-colors hover:bg-button-hover-bg disabled:opacity-50"
+                loading={loading}
+                aria-label="Send Reset Link"
+                className="w-full"
               >
                 {loading ? 'Sending...' : 'Send Reset Link'}
-              </button>
+              </Button>
 
-              <button
+              <Button
                 type="button"
                 onClick={() => setShowForgotPassword(false)}
-                className="w-full bg-transparent text-primary-text border border-border rounded-btn py-3 px-6 transition-colors hover:bg-button-bg"
+                variant="secondary"
+                aria-label="Cancel"
+                className="w-full"
               >
                 Cancel
-              </button>
+              </Button>
             </form>
           )}
         </div>

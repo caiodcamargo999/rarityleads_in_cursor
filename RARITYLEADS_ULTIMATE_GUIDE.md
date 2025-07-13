@@ -1,6 +1,6 @@
 # 🧠 Rarity Leads - Ultimate Guide
 
-> **IMPORTANT: The sales page is finalized and approved. Do not modify, redesign, or change any aspect of the sales page. It is good as it is and should not be touched in any way.**
+> **IMPORTANT: All frontend and web design guidelines must strictly follow the system defined in DESIGN_RULES.md. Any mention of gradients, glassmorphism, vivid colors, excessive bold, or legacy styles is strictly forbidden and must be ignored. The design is dark, minimalist, tech-inspired, with no gradients, no glass, no bold above 500, flat sidebar, flat buttons, Inter font 400/500 only, allowed color palette, only subtle smooth animations, and a profile/theme/language panel in the bottom left corner.**
 
 > **DESIGN RULE:** The entire project must use a minimalist, dark, non-colorful design. White, light, or colorful backgrounds are strictly forbidden. No example numbers (e.g., 12, 0, 7, etc.) should appear anywhere in the UI—only real data or zero. All UI/UX must be modern, tech-inspired, and include motion effects for a premium SaaS feel. The sidebar menu must always include every prospecting channel as in the dashboard. All buttons must be visually consistent, functional, and never broken. The Sign In button must always work and be visually correct.
 
@@ -30,7 +30,7 @@ Rarity Leads is a B2B SaaS lead prospecting platform powered by AI, focused on a
 ---
 
 ## 🏗️ Technical Architecture
-- **Frontend:** Pure HTML, CSS, JS (no frameworks)
+- **Frontend:** Next.js, Tailwind CSS, Framer Motion (modular, motion-rich, premium SaaS UI)
 - **Backend:** Supabase (PostgreSQL, Auth, Realtime)
 - **Hosting:** Netlify (CDN, CI/CD)
 - **Version Control:** GitHub
@@ -289,7 +289,7 @@ Rarity Leads is a B2B SaaS lead prospecting platform powered by AI, focused on a
 ---
 
 ## 1. Project Overview
-Rarity Leads is an AI-powered B2B lead generation platform with bulletproof authentication, multi-channel outreach, and a modern, premium SaaS design. Built with HTML, CSS, vanilla JS, and Supabase.
+Rarity Leads is an AI-powered B2B lead generation platform with bulletproof authentication, multi-channel outreach, and a modern, premium SaaS design. Built with Next.js, Tailwind CSS, Framer Motion, and Supabase.
 
 ## 2. Strategic Vision & Personas
 - **Vision:** Automate and humanize lead capture, qualification, and follow-up for agencies and service businesses.
@@ -300,14 +300,14 @@ Rarity Leads is an AI-powered B2B lead generation platform with bulletproof auth
   - Client: Fast response, relevant offers, seamless onboarding
 
 ## 3. Features & Architecture
-- **Frontend:** HTML5, CSS3, Vanilla JS (no frameworks)
+- **Frontend:** Next.js (React), Tailwind CSS, Framer Motion
 - **Backend:** Supabase (PostgreSQL, Auth, Realtime)
 - **Hosting:** Netlify (CDN, CI/CD)
 - **Authentication:** Google OAuth, Email/Password, route protection, persistent sessions
 - **Pages:**
-  - Public: home.html, register.html, login.html
-  - Protected: dashboard.html, analytics.html, support.html, prospecting-leads.html, prospecting-companies.html, approaching-whatsapp.html, approaching-instagram.html, approaching-facebook.html, approaching-x.html, approaching-linkedin.html
-- **Core System Files:** auth-guard.js, app-config.js, navigation-manager.js, rarity-design.css, i18n.js + language files
+  - Public: / (Home), /auth (Register/Login)
+  - Protected: /dashboard, /analytics, /support, /prospecting/leads, /prospecting/companies, /approaching/whatsapp, /approaching/instagram, /approaching/facebook, /approaching/x, /approaching/linkedin
+- **Core System Files:** Modular Next.js pages and components, Tailwind CSS config, Framer Motion variants, i18n JSON files
 
 ## 4. Design System & Copywriting
 ### Color Palette (Inspired by tempo.new)
@@ -330,7 +330,7 @@ Rarity Leads is an AI-powered B2B lead generation platform with bulletproof auth
 - Mobile-first, SEO, WCAG 2.1
 
 ### Components
-- Buttons, cards, grids, navigation, glass morphism, micro-interactions
+- Buttons, cards, grids, navigation, modular React components, micro-interactions (motion-enabled)
 
 ### Copywriting (Landing Page)
 - **Hero:**

@@ -1,6 +1,6 @@
 # 🎨 Rarity Leads - Design Rules & Standards
 
-> **IMPORTANT:** This document defines the official design system for Rarity Leads. All pages must follow these rules without exception.
+> **IMPORTANT: This document is the single source of truth for Rarity Leads frontend/web design. All legacy guidelines, gradients, glassmorphism, excessive bold, or deprecated styles are strictly forbidden. The design is dark, minimalist, tech-inspired, with no gradients, no glass, no bold above 500, flat sidebar, flat buttons, Inter font 400/500 only, allowed color palette, only subtle smooth animations, and a profile/theme/language panel in the bottom left corner.**
 
 ## 🎯 Design Philosophy
 
@@ -114,6 +114,50 @@ small: 0.875em, font-weight: 400
 
 ---
 
+## 🔘 Button Component (NEW)
+
+### Motion-Enabled Button System
+All buttons throughout the app must use the new `<Button />` component located at `src/components/ui/Button.tsx`.
+
+### Button Variants
+```tsx
+// Primary button (main actions)
+<Button variant="primary" aria-label="Action description">
+  Action Text
+</Button>
+
+// Secondary button (secondary actions)
+<Button variant="secondary" aria-label="Action description">
+  Action Text
+</Button>
+
+// Outline button (tertiary actions)
+<Button variant="outline" aria-label="Action description">
+  Action Text
+</Button>
+
+// Danger button (destructive actions)
+<Button variant="danger" aria-label="Action description">
+  Action Text
+</Button>
+```
+
+### Button Features
+- **Motion-enabled:** Smooth hover and tap animations using Framer Motion
+- **Accessible:** All buttons must have descriptive `aria-label` props
+- **Loading states:** Built-in loading spinner for async actions
+- **Consistent styling:** Pill-shaped, premium design with proper spacing
+- **Responsive:** Touch-friendly on all devices
+
+### **REQUIRED:**
+- ✅ Always use `<Button />` component, never raw `<button>` elements
+- ✅ Always include descriptive `aria-label` prop
+- ✅ Use appropriate variant for the action type
+- ✅ Include loading state for async actions
+- ✅ Consistent spacing and layout classes only
+
+---
+
 ## 🧭 Sidebar Design
 
 ### Structure
@@ -195,38 +239,6 @@ small: 0.875em, font-weight: 400
 
 ---
 
-## 🔘 Button Design
-
-### Standard Buttons
-```css
-.btn, .btn-primary, .btn-large {
-  background: var(--button-bg);
-  color: var(--button-text);
-  border: none;
-  border-radius: 6px;
-  padding: 0.85em 2em;
-  font-size: 1em;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background 0.25s cubic-bezier(0.4,0,0.2,1), color 0.2s;
-  text-decoration: none;
-  display: inline-block;
-}
-
-.btn:hover, .btn-primary:hover, .btn-large:hover {
-  background: #2d215a;
-  color: #fff;
-}
-```
-
-### **REQUIRED:**
-- ✅ Always functional and never broken
-- ✅ Consistent styling across all pages
-- ✅ Hover effects with smooth transitions
-- ✅ Clear visual feedback
-
----
-
 ## 📱 Responsive Design
 
 ### Breakpoints
@@ -277,6 +289,12 @@ transition: background 0.2s, color 0.2s, transform 0.2s;
 /* Hover effects */
 transform: translateY(-1px);
 ```
+
+### Framer Motion Integration
+- **Button animations:** Scale and shadow effects on hover/tap
+- **Page transitions:** Smooth enter/exit animations
+- **Component animations:** Staggered children animations
+- **Loading states:** Shimmer effects and spinners
 
 ### **FORBIDDEN:**
 - ❌ Excessive animations
@@ -373,16 +391,17 @@ transform: translateY(-1px);
 ## ✅ Quality Checklist
 
 ### Before Deployment
-- [ ] All pages use rarity-design.css
+- [ ] All pages use the new Button component
 - [ ] No gradients or glass morphism
 - [ ] Only font-weight 400 and 500 used
 - [ ] Sidebar has logout button at bottom
-- [ ] All buttons are functional
+- [ ] All buttons are functional and accessible
 - [ ] Mobile responsive design
 - [ ] No example numbers in UI
 - [ ] Consistent color scheme
 - [ ] Smooth transitions and animations
 - [ ] Touch-friendly on mobile
+- [ ] All interactive elements have aria-labels
 
 ### Testing
 - [ ] Desktop layout (1200px+)
@@ -396,9 +415,14 @@ transform: translateY(-1px);
 
 ## 📚 Implementation Guide
 
-### 1. Include Design System
-```html
-<link rel="stylesheet" href="rarity-design.css">
+### 1. Use the Button Component
+```tsx
+import Button from '@/components/ui/Button';
+
+// Always use the Button component
+<Button variant="primary" aria-label="Action description">
+  Action Text
+</Button>
 ```
 
 ### 2. Use CSS Variables
@@ -407,20 +431,29 @@ background: var(--main-bg);
 color: var(--primary-text);
 ```
 
-### 3. Follow Button Pattern
-```html
-<button class="btn" data-action="example">Action</button>
+### 3. Follow Component Structure
+```tsx
+// Page structure
+<div className="min-h-screen bg-main-bg flex">
+  <Sidebar user={user} onProfileClick={handleProfileClick} />
+  <main className="flex-1 lg:ml-64 p-6">
+    {/* Page content */}
+  </main>
+  <FloatingProfilePanel 
+    user={user}
+    isVisible={isProfilePanelVisible}
+    onClose={() => setIsProfilePanelVisible(false)}
+    onLogout={handleLogout}
+  />
+</div>
 ```
 
 ### 4. Implement Sidebar Structure
-```html
-<div class="sidebar">
-  <div class="sidebar-header">...</div>
-  <nav class="sidebar-nav">...</nav>
-  <div class="sidebar-logout">
-    <button class="sidebar-logout-btn">Logout</button>
-  </div>
-</div>
+```tsx
+<Sidebar 
+  user={user} 
+  onProfileClick={() => setIsProfilePanelVisible(true)} 
+/>
 ```
 
 ---
@@ -451,7 +484,7 @@ color: var(--primary-text);
   - User avatar or initials (circle)
   - User name and email (if available)
   - Profile/Settings link
-  - Theme toggle (dark/light)
+  - Theme toggle (dark/light) - **NO EMOJIS**
   - Language switcher (dropdown)
   - Logout button
 - The panel must be visually harmonious, minimalist, and strictly follow the Rarity Leads design system (no gradients, no glass, no excessive bolding, only allowed colors and font weights).

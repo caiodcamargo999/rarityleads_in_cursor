@@ -1,88 +1,95 @@
 'use client';
-
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { motion } from 'framer-motion';
 
 export default function Header() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
 
-  const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
-  const closeMenu = () => setIsMenuOpen(false);
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 10);
+    window.addEventListener('scroll', onScroll);
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  const navLinks = [
+    { label: 'Features', href: '#features' },
+    { label: 'Solution', href: '#solution' },
+    { label: 'Pricing', href: '#pricing' },
+    { label: 'About', href: '#about' },
+  ];
 
   return (
-    <header className="fixed top-0 left-0 w-full bg-sidebar-bg border-b border-border z-50 font-sans">
+    <motion.header
+      initial={{ y: -60, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 0.6, ease: 'easeOut' }}
+      className={`fixed top-0 left-0 w-full z-50 font-sans transition-all duration-300 ${
+        scrolled
+          ? 'backdrop-blur-lg bg-sidebar-bg/80 shadow-xl border-b border-border'
+          : 'backdrop-blur bg-sidebar-bg/60 border-b border-border'
+      }`}
+      style={{ WebkitBackdropFilter: 'blur(16px)' }}
+    >
       <nav className="w-full">
-        <div className="flex items-center justify-between max-w-6xl mx-auto px-8 py-5 gap-8">
+        <div className="flex items-center justify-between max-w-6xl mx-auto px-8 gap-8 h-20 min-h-[72px] py-0">
           {/* Logo */}
           <Link href="/" className="text-2xl font-medium text-primary-text no-underline tracking-wide transition-colors hover:text-secondary-text">
             Rarity Leads
           </Link>
-          
-          {/* Mobile Menu Toggle */}
-          <button 
-            onClick={toggleMenu}
-            className="hidden md:hidden bg-transparent border-none text-primary-text cursor-pointer p-2 rounded-btn transition-colors hover:bg-button-bg"
-            aria-label="Toggle Menu"
-          >
-            <svg 
-              className={`w-6 h-6 transition-all ${isMenuOpen ? 'hidden' : 'block'}`} 
-              fill="none" 
-              stroke="currentColor" 
-              viewBox="0 0 24 24"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
-            <svg 
-              className={`w-6 h-6 transition-all ${isMenuOpen ? 'block' : 'hidden'}`} 
-              fill="none" 
-              stroke="currentColor" 
-              viewBox="0 0 24 24"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
 
           {/* Desktop Navigation */}
-          <ul className="hidden md:flex gap-8 list-none m-0 p-0 items-center">
-            <li><a href="#features" className="text-primary-text no-underline font-normal text-sm transition-colors hover:text-secondary-text">Features</a></li>
-            <li><a href="#solution" className="text-primary-text no-underline font-normal text-sm transition-colors hover:text-secondary-text">Solution</a></li>
-            <li><a href="#pricing" className="text-primary-text no-underline font-normal text-sm transition-colors hover:text-secondary-text">Pricing</a></li>
-            <li><a href="#about" className="text-primary-text no-underline font-normal text-sm transition-colors hover:text-secondary-text">About</a></li>
+          <ul className="hidden md:flex gap-8 list-none m-0 p-0 items-center h-full">
+            {navLinks.map((item) => (
+              <motion.li
+                key={item.label}
+                whileHover={{ scale: 1.08 }}
+                whileTap={{ scale: 0.96 }}
+                className="relative h-full flex items-center"
+              >
+                <Link
+                  href={item.href}
+                  className="text-primary-text no-underline font-normal text-base transition-colors hover:text-secondary-text px-2 py-0 flex items-center h-full"
+                >
+                  {item.label}
+                  <motion.span
+                    className="block h-0.5 bg-gradient-to-r from-[#6D28D9] via-[#8B5CF6] to-[#232336] mt-1 rounded-full origin-left"
+                    layoutId="nav-underline"
+                    initial={{ scaleX: 0 }}
+                    whileHover={{ scaleX: 1 }}
+                    transition={{ duration: 0.2 }}
+                  />
+                </Link>
+              </motion.li>
+            ))}
           </ul>
 
           {/* Desktop Actions */}
-          <div className="hidden md:flex gap-4 items-center">
-            <Link href="/auth" className="bg-transparent text-primary-text border border-border rounded-btn px-6 py-2 font-medium text-sm no-underline transition-colors hover:bg-button-bg">
-              Login
-            </Link>
-            <Link href="/auth" className="bg-button-bg text-button-text border-none rounded-btn px-6 py-2 font-medium text-sm no-underline transition-colors hover:bg-button-hover-bg">
-              Sign Up
-            </Link>
+          <div className="hidden md:flex gap-4 items-center h-full">
+            <motion.div whileHover={{ scale: 1.06, boxShadow: '0 2px 16px 0 rgba(139, 92, 246, 0.12)' }} whileTap={{ scale: 0.97 }} className="h-full flex items-center">
+              <Link
+                href="/auth?mode=login"
+                className="rounded-full border border-[#8B5CF6] px-7 py-0 text-base font-medium text-primary-text bg-transparent transition-all duration-300 shadow-sm hover:bg-[#232336] hover:text-white focus:outline-none focus:ring-2 focus:ring-[#8B5CF6] h-12 flex items-center"
+                aria-label="Login"
+              >
+                Login
+              </Link>
+            </motion.div>
+            <motion.div whileHover={{ scale: 1.08, boxShadow: '0 2px 24px 0 rgba(139, 92, 246, 0.18)' }} whileTap={{ scale: 0.97 }} className="h-full flex items-center">
+              <Link
+                href="/auth?mode=signup"
+                className="rounded-full bg-gradient-to-r from-[#6D28D9] via-[#8B5CF6] to-[#232336] px-7 py-0 text-base font-medium text-white shadow-lg transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#8B5CF6] h-12 flex items-center"
+                aria-label="Sign Up"
+              >
+                Sign Up
+              </Link>
+            </motion.div>
           </div>
         </div>
-
-        {/* Mobile Menu */}
-        {isMenuOpen && (
-          <div className="md:hidden absolute top-full left-0 w-full bg-sidebar-bg border-b border-border">
-            <div className="px-8 py-6 space-y-6">
-              <ul className="space-y-4">
-                <li><a href="#features" onClick={closeMenu} className="block text-primary-text no-underline font-normal py-3 border-b border-border transition-colors hover:text-secondary-text">Features</a></li>
-                <li><a href="#solution" onClick={closeMenu} className="block text-primary-text no-underline font-normal py-3 border-b border-border transition-colors hover:text-secondary-text">Solution</a></li>
-                <li><a href="#pricing" onClick={closeMenu} className="block text-primary-text no-underline font-normal py-3 border-b border-border transition-colors hover:text-secondary-text">Pricing</a></li>
-                <li><a href="#about" onClick={closeMenu} className="block text-primary-text no-underline font-normal py-3 border-b border-border transition-colors hover:text-secondary-text">About</a></li>
-              </ul>
-              <div className="space-y-3 pt-4">
-                <Link href="/auth" onClick={closeMenu} className="block w-full bg-transparent text-primary-text border border-border rounded-btn px-6 py-3 font-medium text-center no-underline transition-colors hover:bg-button-bg">
-                  Login
-                </Link>
-                <Link href="/auth" onClick={closeMenu} className="block w-full bg-button-bg text-button-text border-none rounded-btn px-6 py-3 font-medium text-center no-underline transition-colors hover:bg-button-hover-bg">
-                  Sign Up
-                </Link>
-              </div>
-            </div>
-          </div>
-        )}
       </nav>
-    </header>
+      <style jsx>{`
+        header { box-shadow: 0 2px 24px 0 rgba(0,0,0,0.08); }
+      `}</style>
+    </motion.header>
   );
 } 

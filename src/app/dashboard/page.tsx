@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Sidebar from '@/components/Sidebar';
 import FloatingProfilePanel from '@/components/FloatingProfilePanel';
 import { getSupabase } from '@/lib/supabase';
+import Button from '@/components/ui/Button';
 
 export default function Dashboard() {
   const [user, setUser] = useState<{ id: string; email?: string; name?: string } | null>(null);
@@ -170,17 +171,15 @@ export default function Dashboard() {
             <div className="flex items-center">
               <div className="flex gap-1 bg-button-bg border border-border rounded-btn p-1">
                 {['7d', '30d', '90d'].map((period) => (
-                  <button
+                  <Button
                     key={period}
                     onClick={() => setTimeFilter(period)}
-                    className={`px-3 py-1 text-sm font-medium rounded transition-colors ${
-                      timeFilter === period
-                        ? 'bg-main-bg text-primary-text'
-                        : 'text-secondary-text hover:text-primary-text'
-                    }`}
+                    variant={timeFilter === period ? 'primary' : 'secondary'}
+                    aria-label={`Select time filter for ${period}`}
+                    className="px-3 py-1 text-sm font-medium rounded transition-colors"
                   >
                     {period.toUpperCase()}
-                  </button>
+                  </Button>
                 ))}
               </div>
             </div>
@@ -222,9 +221,9 @@ export default function Dashboard() {
                 <h3 className="text-lg font-medium text-primary-text">
                   Lead Generation Trend
                 </h3>
-                <button className="text-sm text-primary-text hover:text-secondary-text transition-colors">
+                <Button variant="secondary" aria-label="View all lead generation trend">
                   View All
-                </button>
+                </Button>
               </div>
               <div className="h-64 flex items-center justify-center text-secondary-text">
                 Chart placeholder
@@ -236,9 +235,9 @@ export default function Dashboard() {
                 <h3 className="text-lg font-medium text-primary-text">
                   Channel Performance
                 </h3>
-                <button className="text-sm text-primary-text hover:text-secondary-text transition-colors">
+                <Button variant="secondary" aria-label="View all channel performance">
                   View All
-                </button>
+                </Button>
               </div>
               <div className="h-64 flex items-center justify-center text-secondary-text">
                 Chart placeholder
@@ -254,10 +253,12 @@ export default function Dashboard() {
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {quickActions.map((action, index) => (
-              <button
+              <Button
                 key={index}
                 onClick={action.action}
-                className="bg-card-bg border border-border rounded-card p-4 hover:bg-button-bg hover:text-primary-text transition-colors text-left"
+                variant="secondary"
+                aria-label={`Perform quick action: ${action.title}`}
+                className="p-4 text-left"
               >
                 <div className="flex items-center space-x-3">
                   <div className="text-sidebar-text-secondary">
@@ -267,7 +268,7 @@ export default function Dashboard() {
                     {action.title}
                   </span>
                 </div>
-              </button>
+              </Button>
             ))}
           </div>
         </section>

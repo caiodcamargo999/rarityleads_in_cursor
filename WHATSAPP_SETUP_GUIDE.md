@@ -4,7 +4,7 @@ This guide will walk you through setting up the complete WhatsApp integration sy
 
 ## 🚀 Quick Start
 
-### 1. Backend Setup
+### 1. Backend Setup (after cloning the repo and setting up .env.local)
 
 ```bash
 # Navigate to the backend directory
@@ -20,9 +20,9 @@ npm start
 
 ### 2. Frontend Setup
 
-The frontend is already integrated into your existing Rarity Leads application. Simply navigate to the WhatsApp Management page:
+The frontend WhatsApp management interface is integrated as a dedicated page and modular React components in your Rarity Leads Next.js application. Simply navigate to the WhatsApp Management page:
 
-- Go to `whatsapp-management.html` in your browser
+- Go to `/whatsapp` in your browser
 - Or click "Manage WhatsApp" from the main WhatsApp page
 
 ## 📋 Prerequisites
@@ -125,9 +125,9 @@ CREATE TABLE IF NOT EXISTS public.messages (
 
 The frontend is already integrated. The key files are:
 
-- `whatsapp-management.html` - Main management interface
-- `whatsapp-management.js` - JavaScript functionality
-- `whatsapp-management.css` - Styling
+- `src/app/whatsapp/page.tsx` - Main WhatsApp management page (Next.js)
+- `src/components/WhatsappManager.tsx` - Modular React component for WhatsApp management
+- `src/styles/globals.css` - Global styles (Tailwind CSS)
 
 ### Step 4: Testing the Integration
 
@@ -175,7 +175,7 @@ Expected response:
 ### Connecting WhatsApp Accounts
 
 1. **Navigate to WhatsApp Management**
-   - Go to `whatsapp-management.html`
+   - Go to `/whatsapp`
    - Or click "Manage WhatsApp" from the main WhatsApp page
 
 2. **Connect New Account**
