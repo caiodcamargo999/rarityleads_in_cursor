@@ -146,7 +146,7 @@ function Header() {
                                     className: "h-full flex items-center",
                                     children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
                                         href: "/auth?mode=login",
-                                        className: "rounded-full border border-[#8B5CF6] px-7 py-0 text-base font-medium text-primary-text bg-transparent transition-all duration-300 shadow-sm hover:bg-[#232336] hover:text-white focus:outline-none focus:ring-2 focus:ring-[#8B5CF6] h-12 flex items-center",
+                                        className: "rounded-full border border-[#8B5CF6] px-7 py-0 text-base font-medium text-primary-text bg-transparent transition-all duration-300 hover:bg-[#232336] hover:text-white h-12 flex items-center focus:outline-none",
                                         "aria-label": "Login",
                                         children: "Login"
                                     }, void 0, false, {
@@ -170,7 +170,7 @@ function Header() {
                                     className: "h-full flex items-center",
                                     children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
                                         href: "/auth?mode=signup",
-                                        className: "rounded-full bg-gradient-to-r from-[#6D28D9] via-[#8B5CF6] to-[#232336] px-7 py-0 text-base font-medium text-white shadow-lg transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#8B5CF6] h-12 flex items-center",
+                                        className: "rounded-full bg-gradient-to-r from-[#6D28D9] via-[#8B5CF6] to-[#232336] px-7 py-0 text-base font-medium text-white transition-all duration-300 h-12 flex items-center focus:outline-none",
                                         "aria-label": "Sign Up",
                                         children: "Sign Up"
                                     }, void 0, false, {
@@ -319,7 +319,7 @@ function HeroSection() {
                             className: "relative rounded-full overflow-hidden shadow-lg",
                             children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
                                 href: "/auth",
-                                className: "inline-flex items-center justify-center w-full h-full bg-gradient-to-r from-[#6D28D9] via-[#8B5CF6] to-[#232336] text-white font-medium rounded-full px-10 py-5 text-xl transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-border min-w-[220px] text-center group",
+                                className: "inline-flex items-center justify-center w-full h-full bg-gradient-to-r from-[#6D28D9] via-[#8B5CF6] to-[#232336] text-white font-medium rounded-full px-10 py-5 text-xl transition-all duration-300 min-w-[220px] text-center group",
                                 "aria-label": "Start for Free",
                                 style: {
                                     boxShadow: '0 2px 24px 0 rgba(139, 92, 246, 0.18)',
@@ -685,7 +685,7 @@ const plans = [
 ];
 function PricingCard({ name, price, features, cta, href, popular }) {
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["motion"].div, {
-        className: `border border-border rounded-2xl p-8 bg-card-bg relative shadow-md transition-all duration-300 ${popular ? 'ring-2 ring-[#8B5CF6]' : ''}`,
+        className: `border border-border rounded-2xl p-8 bg-card-bg relative transition-all duration-300 ${popular ? '' : ''}`,
         whileHover: {
             scale: 1.04,
             boxShadow: '0 8px 32px 0 rgba(139, 92, 246, 0.18)'
@@ -777,7 +777,7 @@ function PricingCard({ name, price, features, cta, href, popular }) {
                 },
                 children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
                     href: href,
-                    className: "block w-full text-center font-medium rounded-full py-3 px-6 bg-gradient-to-r from-[#6D28D9] via-[#8B5CF6] to-[#232336] text-white shadow-lg transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#8B5CF6] text-lg",
+                    className: "block w-full text-center font-medium rounded-full py-3 px-6 bg-gradient-to-r from-[#6D28D9] via-[#8B5CF6] to-[#232336] text-white transition-all duration-300 text-lg",
                     "aria-label": cta,
                     children: cta
                 }, void 0, false, {
@@ -959,7 +959,7 @@ function FinalCTASection() {
                         className: "relative rounded-full overflow-hidden shadow-lg inline-block",
                         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
                             href: "/auth?cta=final",
-                            className: "inline-flex items-center justify-center w-full h-full bg-gradient-to-r from-[#6D28D9] via-[#8B5CF6] to-[#232336] text-white font-medium rounded-full px-10 py-5 text-xl transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-border min-w-[220px] text-center group",
+                            className: "inline-flex items-center justify-center w-full h-full bg-gradient-to-r from-[#6D28D9] via-[#8B5CF6] to-[#232336] text-white font-medium rounded-full px-10 py-5 text-xl transition-all duration-300 min-w-[220px] text-center group",
                             "aria-label": "Get Started for Free",
                             style: {
                                 boxShadow: '0 2px 24px 0 rgba(139, 92, 246, 0.18)',

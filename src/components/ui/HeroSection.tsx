@@ -42,7 +42,7 @@ export default function HeroSection() {
           >
             <Link
               href="/auth"
-              className="inline-flex items-center justify-center w-full h-full bg-gradient-to-r from-[#6D28D9] via-[#8B5CF6] to-[#232336] text-white font-medium rounded-full px-10 py-5 text-xl transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-border min-w-[220px] text-center group"
+              className="inline-flex items-center justify-center w-full h-full bg-gradient-to-r from-[#6D28D9] via-[#8B5CF6] to-[#232336] text-white font-medium rounded-full px-10 py-5 text-xl transition-all duration-300 min-w-[220px] text-center group"
               aria-label="Start for Free"
               style={{
                 boxShadow: '0 2px 24px 0 rgba(139, 92, 246, 0.18)',

@@ -69,7 +69,7 @@ export default function Header() {
             <motion.div whileHover={{ scale: 1.06, boxShadow: '0 2px 16px 0 rgba(139, 92, 246, 0.12)' }} whileTap={{ scale: 0.97 }} className="h-full flex items-center">
               <Link
                 href="/auth?mode=login"
-                className="rounded-full border border-[#8B5CF6] px-7 py-0 text-base font-medium text-primary-text bg-transparent transition-all duration-300 shadow-sm hover:bg-[#232336] hover:text-white focus:outline-none focus:ring-2 focus:ring-[#8B5CF6] h-12 flex items-center"
+                className="rounded-full border border-[#8B5CF6] px-7 py-0 text-base font-medium text-primary-text bg-transparent transition-all duration-300 hover:bg-[#232336] hover:text-white h-12 flex items-center focus:outline-none"
                 aria-label="Login"
               >
                 Login
@@ -78,7 +78,7 @@ export default function Header() {
             <motion.div whileHover={{ scale: 1.08, boxShadow: '0 2px 24px 0 rgba(139, 92, 246, 0.18)' }} whileTap={{ scale: 0.97 }} className="h-full flex items-center">
               <Link
                 href="/auth?mode=signup"
-                className="rounded-full bg-gradient-to-r from-[#6D28D9] via-[#8B5CF6] to-[#232336] px-7 py-0 text-base font-medium text-white shadow-lg transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#8B5CF6] h-12 flex items-center"
+                className="rounded-full bg-gradient-to-r from-[#6D28D9] via-[#8B5CF6] to-[#232336] px-7 py-0 text-base font-medium text-white transition-all duration-300 h-12 flex items-center focus:outline-none"
                 aria-label="Sign Up"
               >
                 Sign Up

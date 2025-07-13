@@ -56,7 +56,7 @@ interface PricingCardProps {
 function PricingCard({ name, price, features, cta, href, popular }: PricingCardProps) {
   return (
     <motion.div
-      className={`border border-border rounded-2xl p-8 bg-card-bg relative shadow-md transition-all duration-300 ${popular ? 'ring-2 ring-[#8B5CF6]' : ''}`}
+      className={`border border-border rounded-2xl p-8 bg-card-bg relative transition-all duration-300 ${popular ? '' : ''}`}
       whileHover={{ scale: 1.04, boxShadow: '0 8px 32px 0 rgba(139, 92, 246, 0.18)' }}
       whileTap={{ scale: 0.98 }}
     >
@@ -82,7 +82,7 @@ function PricingCard({ name, price, features, cta, href, popular }: PricingCardP
       <motion.div whileHover={{ scale: 1.06 }} whileTap={{ scale: 0.97 }}>
         <Link
           href={href}
-          className="block w-full text-center font-medium rounded-full py-3 px-6 bg-gradient-to-r from-[#6D28D9] via-[#8B5CF6] to-[#232336] text-white shadow-lg transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#8B5CF6] text-lg"
+          className="block w-full text-center font-medium rounded-full py-3 px-6 bg-gradient-to-r from-[#6D28D9] via-[#8B5CF6] to-[#232336] text-white transition-all duration-300 text-lg"
           aria-label={cta}
         >
           {cta}
