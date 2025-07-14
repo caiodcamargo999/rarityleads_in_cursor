@@ -2,9 +2,11 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
+import { HiOutlineMenu, HiOutlineX } from 'react-icons/hi';
 
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 10);
@@ -85,7 +87,63 @@ export default function Header() {
               </Link>
             </motion.div>
           </div>
+
+          {/* Mobile Actions + Hamburger */}
+          <div className="flex md:hidden items-center gap-2">
+            <Link
+              href="/auth?mode=login"
+              className="rounded-full border border-[#8B5CF6] px-5 py-2 text-base font-medium text-primary-text bg-transparent transition-all duration-300 hover:bg-[#232336] hover:text-white h-10 flex items-center focus:outline-none"
+              aria-label="Login"
+            >
+              Login
+            </Link>
+            <Link
+              href="/auth?mode=signup"
+              className="rounded-full bg-gradient-to-r from-[#6D28D9] via-[#8B5CF6] to-[#232336] px-5 py-2 text-base font-medium text-white transition-all duration-300 h-10 flex items-center focus:outline-none"
+              aria-label="Sign Up"
+            >
+              Sign Up
+            </Link>
+            <button
+              className="ml-2 p-2 rounded-md text-primary-text hover:bg-[#232336] focus:outline-none focus:ring-2 focus:ring-[#8B5CF6]"
+              aria-label="Open menu"
+              onClick={() => setMobileMenuOpen(true)}
+            >
+              <HiOutlineMenu size={28} />
+            </button>
+          </div>
         </div>
+
+        {/* Mobile Menu Overlay */}
+        {mobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, x: 80 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: 80 }}
+            transition={{ duration: 0.25, ease: 'easeOut' }}
+            className="fixed inset-0 z-50 bg-sidebar-bg/95 backdrop-blur flex flex-col items-end md:hidden"
+          >
+            <button
+              className="m-6 p-2 rounded-md text-primary-text hover:bg-[#232336] focus:outline-none focus:ring-2 focus:ring-[#8B5CF6]"
+              aria-label="Close menu"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              <HiOutlineX size={32} />
+            </button>
+            <nav className="w-full flex flex-col items-center gap-8 mt-12">
+              {navLinks.map((item) => (
+                <Link
+                  key={item.label}
+                  href={item.href}
+                  className="text-2xl font-medium text-primary-text no-underline tracking-wide transition-colors hover:text-[#8B5CF6]"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  {item.label}
+                </Link>
+              ))}
+            </nav>
+          </motion.div>
+        )}
       </nav>
       <style jsx>{`
         header { box-shadow: 0 2px 24px 0 rgba(0,0,0,0.08); }

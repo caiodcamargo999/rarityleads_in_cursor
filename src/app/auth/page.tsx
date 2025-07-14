@@ -237,7 +237,7 @@ export default function AuthPage() {
   }
 
   return (
-    <div className="min-h-screen bg-main-bg flex items-center justify-center px-4">
+    <div className="min-h-screen bg-main-bg flex items-center justify-center px-4 pt-12 md:pt-24">
       <div className="max-w-md w-full">
         {/* Header */}
         <div className="text-center mb-8">
