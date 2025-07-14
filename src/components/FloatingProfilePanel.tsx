@@ -53,17 +53,6 @@ export default function FloatingProfilePanel({
     { code: 'fr', name: 'FR' },
   ];
 
-  // Persistência de tema e idioma
-  const handleThemeChange = (t: string) => {
-    setTheme(t);
-    if (typeof window !== 'undefined') localStorage.setItem('theme', t);
-    document.documentElement.classList.toggle('dark', t === 'dark');
-  };
-  const handleLanguageChange = (code: string) => {
-    setLanguage(code);
-    if (typeof window !== 'undefined') localStorage.setItem('lang', code);
-  };
-
   // Upload de avatar (apenas preview local)
   const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
