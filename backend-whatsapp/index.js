@@ -1,402 +1,684 @@
 const express = require('express');
-const http = require('http');
-const WebSocket = require('ws');
 const cors = require('cors');
 const helmet = require('helmet');
-const rateLimit = require('express-rate-limit');
+const { createServer } = require('http');
+const { Server } = require('socket.io');
 const { v4: uuidv4 } = require('uuid');
-const { createClient } = require('@supabase/supabase-js');
-require('dotenv').config();
+const pino = require('pino');
+const pinoPretty = require('pino-pretty');
+const cron = require('node-cron');
+const path = require('path');
+const fs = require('fs');
 
-// Import session manager
-const { 
-  createSession, 
-  sendMessage, 
-  getSessionStatus, 
-  getUserSessions, 
-  disconnectSession,
-  restoreSessions,
-  sessions 
-} = require('./sessionManager');
+// Import our modules
+const SessionManager = require('./sessionManager');
+const SupabaseClient = require('./supabaseClient');
+const MessageQueue = require('./messageQueue');
+const WebhookManager = require('./webhookManager');
 
-// Initialize Express app
-const app = express();
-const server = http.createServer(app);
-
-// Initialize WebSocket server
-const wss = new WebSocket.Server({ server });
-
-// Initialize Supabase client
-const supabase = createClient(
-  process.env.SUPABASE_URL,
-  process.env.SUPABASE_SERVICE_KEY
-);
-
-// Security middleware
-app.use(helmet());
-app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:3000',
-  credentials: true
-}));
-
-// Rate limiting
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // limit each IP to 100 requests per windowMs
-  message: 'Too many requests from this IP, please try again later.'
+// Initialize logger
+const logger = pino({
+  level: process.env.LOG_LEVEL || 'info',
+  transport: {
+    target: 'pino-pretty',
+    options: {
+      colorize: true,
+      translateTime: 'SYS:standard',
+      ignore: 'pid,hostname'
+    }
+  }
 });
-app.use('/api/', limiter);
 
-// Body parsing middleware
-app.use(express.json({ limit: '10mb' }));
-app.use(express.urlencoded({ extended: true }));
+class WhatsAppService {
+  constructor() {
+    this.app = express();
+    this.server = createServer(this.app);
+    this.io = new Server(this.server, {
+      cors: {
+        origin: process.env.FRONTEND_URL || "http://localhost:3000",
+        methods: ["GET", "POST"]
+      }
+    });
+    
+    this.port = process.env.PORT || 3001;
+    this.sessions = new Map();
+    this.sessionManager = new SessionManager(logger);
+    this.supabase = new SupabaseClient();
+    this.messageQueue = new MessageQueue();
+    this.webhookManager = new WebhookManager(this.supabase);
+    
+    this.setupMiddleware();
+    this.setupRoutes();
+    this.setupSocketIO();
+    this.setupCronJobs();
+  }
 
-// Authentication middleware
-async function authenticateUser(req, res, next) {
-  try {
-    const authHeader = req.headers.authorization;
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      return res.status(401).json({ error: 'No token provided' });
+  setupMiddleware() {
+    // Security middleware
+    this.app.use(helmet());
+    this.app.use(cors({
+      origin: process.env.FRONTEND_URL || "http://localhost:3000",
+      credentials: true
+    }));
+    
+    // Body parsing
+    this.app.use(express.json({ limit: '10mb' }));
+    this.app.use(express.urlencoded({ extended: true }));
+    
+    // Request logging
+    this.app.use((req, res, next) => {
+      logger.info(`${req.method} ${req.path}`, {
+        ip: req.ip,
+        userAgent: req.get('User-Agent')
+      });
+      next();
+    });
+  }
+
+  setupRoutes() {
+    // Health check
+    this.app.get('/health', (req, res) => {
+      res.json({
+        status: 'healthy',
+        timestamp: new Date().toISOString(),
+        sessions: this.sessions.size,
+        uptime: process.uptime()
+      });
+    });
+
+    // Session management routes
+    this.app.post('/api/sessions', this.createSession.bind(this));
+    this.app.get('/api/sessions', this.getSessions.bind(this));
+    this.app.get('/api/sessions/:sessionId', this.getSession.bind(this));
+    this.app.delete('/api/sessions/:sessionId', this.deleteSession.bind(this));
+    this.app.post('/api/sessions/:sessionId/connect', this.connectSession.bind(this));
+    this.app.post('/api/sessions/:sessionId/disconnect', this.disconnectSession.bind(this));
+
+    // Message routes
+    this.app.post('/api/sessions/:sessionId/messages', this.sendMessage.bind(this));
+    this.app.get('/api/sessions/:sessionId/messages', this.getMessages.bind(this));
+    this.app.post('/api/sessions/:sessionId/messages/bulk', this.sendBulkMessages.bind(this));
+
+    // Media routes
+    this.app.post('/api/sessions/:sessionId/media', this.uploadMedia.bind(this));
+    this.app.get('/api/sessions/:sessionId/media/:mediaId', this.getMedia.bind(this));
+
+    // Webhook routes
+    this.app.post('/api/webhooks/whatsapp', this.handleWebhook.bind(this));
+    this.app.get('/api/webhooks/verify', this.verifyWebhook.bind(this));
+
+    // Analytics routes
+    this.app.get('/api/analytics/sessions/:sessionId', this.getSessionAnalytics.bind(this));
+    this.app.get('/api/analytics/overview', this.getOverviewAnalytics.bind(this));
+
+    // Error handling
+    this.app.use((err, req, res, next) => {
+      logger.error('Unhandled error:', err);
+      res.status(500).json({
+        error: 'Internal server error',
+        message: process.env.NODE_ENV === 'development' ? err.message : 'Something went wrong'
+      });
+    });
+
+    // 404 handler
+    this.app.use('*', (req, res) => {
+      res.status(404).json({ error: 'Route not found' });
+    });
+  }
+
+  setupSocketIO() {
+    this.io.on('connection', (socket) => {
+      logger.info('Client connected:', socket.id);
+
+      // Join session room
+      socket.on('join-session', (sessionId) => {
+        socket.join(`session-${sessionId}`);
+        logger.info(`Client ${socket.id} joined session ${sessionId}`);
+      });
+
+      // Leave session room
+      socket.on('leave-session', (sessionId) => {
+        socket.leave(`session-${sessionId}`);
+        logger.info(`Client ${socket.id} left session ${sessionId}`);
+      });
+
+      // Handle real-time message sending
+      socket.on('send-message', async (data) => {
+        try {
+          const { sessionId, message } = data;
+          const session = this.sessions.get(sessionId);
+          
+          if (!session) {
+            socket.emit('error', { message: 'Session not found' });
+            return;
+          }
+
+          const result = await this.sessionManager.sendMessage(session, message);
+          socket.emit('message-sent', result);
+          
+          // Notify other clients in the same session
+          socket.to(`session-${sessionId}`).emit('message-received', result);
+        } catch (error) {
+          logger.error('Error sending message via socket:', error);
+          socket.emit('error', { message: error.message });
+        }
+      });
+
+      socket.on('disconnect', () => {
+        logger.info('Client disconnected:', socket.id);
+      });
+    });
+  }
+
+  setupCronJobs() {
+    // Clean up expired sessions every hour
+    cron.schedule('0 * * * *', async () => {
+      try {
+        await this.cleanupExpiredSessions();
+      } catch (error) {
+        logger.error('Error cleaning up expired sessions:', error);
+      }
+    });
+
+    // Sync sessions with database every 5 minutes
+    cron.schedule('*/5 * * * *', async () => {
+      try {
+        await this.syncSessionsWithDatabase();
+      } catch (error) {
+        logger.error('Error syncing sessions with database:', error);
+      }
+    });
+
+    // Process message queue every minute
+    cron.schedule('* * * * *', async () => {
+      try {
+        await this.processMessageQueue();
+      } catch (error) {
+        logger.error('Error processing message queue:', error);
+      }
+    });
+  }
+
+  // Session Management Methods
+  async createSession(req, res) {
+    try {
+      const { userId, phoneNumber, name } = req.body;
+      
+      if (!userId || !phoneNumber) {
+        return res.status(400).json({
+          error: 'Missing required fields: userId, phoneNumber'
+        });
+      }
+
+      const sessionId = uuidv4();
+      const session = await this.sessionManager.createSession(sessionId, {
+        userId,
+        phoneNumber,
+        name: name || `WhatsApp ${phoneNumber}`,
+        status: 'initializing'
+      });
+
+      this.sessions.set(sessionId, session);
+
+      // Save to database
+      await this.supabase.createWhatsAppSession({
+        id: sessionId,
+        user_id: userId,
+        phone_number: phoneNumber,
+        status: 'initializing',
+        session_data: {},
+        created_at: new Date().toISOString()
+      });
+
+      logger.info(`Created new session: ${sessionId} for user: ${userId}`);
+      
+      res.status(201).json({
+        sessionId,
+        status: 'initializing',
+        message: 'Session created successfully'
+      });
+    } catch (error) {
+      logger.error('Error creating session:', error);
+      res.status(500).json({ error: error.message });
+    }
+  }
+
+  async getSessions(req, res) {
+    try {
+      const { userId } = req.query;
+      
+      if (!userId) {
+        return res.status(400).json({ error: 'userId is required' });
+      }
+
+      const sessions = await this.supabase.getWhatsAppSessions(userId);
+      
+      res.json({
+        sessions: sessions.map(session => ({
+          id: session.id,
+          phoneNumber: session.phone_number,
+          status: session.status,
+          lastActivity: session.last_activity,
+          createdAt: session.created_at
+        }))
+      });
+    } catch (error) {
+      logger.error('Error getting sessions:', error);
+      res.status(500).json({ error: error.message });
+    }
+  }
+
+  async getSession(req, res) {
+    try {
+      const { sessionId } = req.params;
+      const session = this.sessions.get(sessionId);
+      
+      if (!session) {
+        return res.status(404).json({ error: 'Session not found' });
+      }
+
+      res.json({
+        id: sessionId,
+        status: session.status,
+        phoneNumber: session.phoneNumber,
+        qrCode: session.qrCode,
+        lastActivity: session.lastActivity
+      });
+    } catch (error) {
+      logger.error('Error getting session:', error);
+      res.status(500).json({ error: error.message });
+    }
+  }
+
+  async deleteSession(req, res) {
+    try {
+      const { sessionId } = req.params;
+      const session = this.sessions.get(sessionId);
+      
+      if (session) {
+        await this.sessionManager.disconnectSession(session);
+        this.sessions.delete(sessionId);
+      }
+
+      // Delete from database
+      await this.supabase.deleteWhatsAppSession(sessionId);
+      
+      logger.info(`Deleted session: ${sessionId}`);
+      res.json({ message: 'Session deleted successfully' });
+    } catch (error) {
+      logger.error('Error deleting session:', error);
+      res.status(500).json({ error: error.message });
+    }
+  }
+
+  async connectSession(req, res) {
+    try {
+      const { sessionId } = req.params;
+      const session = this.sessions.get(sessionId);
+      
+      if (!session) {
+        return res.status(404).json({ error: 'Session not found' });
+      }
+
+      const result = await this.sessionManager.connectSession(session);
+      
+      // Update database
+      await this.supabase.updateWhatsAppSession(sessionId, {
+        status: result.status,
+        qr_code: result.qrCode,
+        last_activity: new Date().toISOString()
+      });
+
+      // Emit to connected clients
+      this.io.to(`session-${sessionId}`).emit('session-updated', result);
+      
+      res.json(result);
+    } catch (error) {
+      logger.error('Error connecting session:', error);
+      res.status(500).json({ error: error.message });
+    }
+  }
+
+  async disconnectSession(req, res) {
+    try {
+      const { sessionId } = req.params;
+      const session = this.sessions.get(sessionId);
+      
+      if (!session) {
+        return res.status(404).json({ error: 'Session not found' });
+      }
+
+      await this.sessionManager.disconnectSession(session);
+      
+      // Update database
+      await this.supabase.updateWhatsAppSession(sessionId, {
+        status: 'disconnected',
+        last_activity: new Date().toISOString()
+      });
+
+      // Emit to connected clients
+      this.io.to(`session-${sessionId}`).emit('session-disconnected');
+      
+      res.json({ message: 'Session disconnected successfully' });
+    } catch (error) {
+      logger.error('Error disconnecting session:', error);
+      res.status(500).json({ error: error.message });
+    }
+  }
+
+  // Message Management Methods
+  async sendMessage(req, res) {
+    try {
+      const { sessionId } = req.params;
+      const { to, message, type = 'text' } = req.body;
+      
+      const session = this.sessions.get(sessionId);
+      if (!session) {
+        return res.status(404).json({ error: 'Session not found' });
+      }
+
+      const result = await this.sessionManager.sendMessage(session, {
+        to,
+        message,
+        type
+      });
+
+      // Save message to database
+      await this.supabase.createMessage({
+        user_id: session.userId,
+        lead_id: null, // Will be updated when lead is identified
+        campaign_id: null,
+        channel: 'whatsapp',
+        channel_session_id: sessionId,
+        direction: 'sent',
+        content: { to, message, type },
+        status: 'sent',
+        external_id: result.messageId,
+        timestamp: new Date().toISOString()
+      });
+
+      // Emit to connected clients
+      this.io.to(`session-${sessionId}`).emit('message-sent', result);
+      
+      res.json(result);
+    } catch (error) {
+      logger.error('Error sending message:', error);
+      res.status(500).json({ error: error.message });
+    }
+  }
+
+  async sendBulkMessages(req, res) {
+    try {
+      const { sessionId } = req.params;
+      const { messages } = req.body;
+      
+      const session = this.sessions.get(sessionId);
+      if (!session) {
+        return res.status(404).json({ error: 'Session not found' });
+      }
+
+      const results = [];
+      for (const messageData of messages) {
+        try {
+          const result = await this.sessionManager.sendMessage(session, messageData);
+          results.push({ ...result, success: true });
+        } catch (error) {
+          results.push({ 
+            to: messageData.to, 
+            success: false, 
+            error: error.message 
+          });
+        }
+      }
+
+      res.json({ results });
+    } catch (error) {
+      logger.error('Error sending bulk messages:', error);
+      res.status(500).json({ error: error.message });
+    }
+  }
+
+  async getMessages(req, res) {
+    try {
+      const { sessionId } = req.params;
+      const { limit = 50, offset = 0 } = req.query;
+      
+      const messages = await this.supabase.getMessages({
+        channel_session_id: sessionId,
+        limit: parseInt(limit),
+        offset: parseInt(offset)
+      });
+      
+      res.json({ messages });
+    } catch (error) {
+      logger.error('Error getting messages:', error);
+      res.status(500).json({ error: error.message });
+    }
+  }
+
+  // Media Management Methods
+  async uploadMedia(req, res) {
+    try {
+      const { sessionId } = req.params;
+      const { file } = req;
+      
+      if (!file) {
+        return res.status(400).json({ error: 'No file uploaded' });
+      }
+
+      const session = this.sessions.get(sessionId);
+      if (!session) {
+        return res.status(404).json({ error: 'Session not found' });
+      }
+
+      const mediaId = await this.sessionManager.uploadMedia(session, file);
+      
+      res.json({ mediaId });
+    } catch (error) {
+      logger.error('Error uploading media:', error);
+      res.status(500).json({ error: error.message });
+    }
+  }
+
+  async getMedia(req, res) {
+    try {
+      const { sessionId, mediaId } = req.params;
+      
+      const session = this.sessions.get(sessionId);
+      if (!session) {
+        return res.status(404).json({ error: 'Session not found' });
+      }
+
+      const media = await this.sessionManager.getMedia(session, mediaId);
+      
+      res.set('Content-Type', media.mimetype);
+      res.send(media.data);
+    } catch (error) {
+      logger.error('Error getting media:', error);
+      res.status(500).json({ error: error.message });
+    }
+  }
+
+  // Webhook Methods
+  async handleWebhook(req, res) {
+    try {
+      const { body } = req;
+      
+      // Process incoming webhook
+      await this.webhookManager.processWebhook(body);
+      
+      res.status(200).json({ status: 'ok' });
+    } catch (error) {
+      logger.error('Error handling webhook:', error);
+      res.status(500).json({ error: error.message });
+    }
+  }
+
+  async verifyWebhook(req, res) {
+    try {
+      const { mode, challenge, verify_token } = req.query;
+      
+      if (mode === 'subscribe' && verify_token === process.env.WEBHOOK_VERIFY_TOKEN) {
+        res.status(200).send(challenge);
+      } else {
+        res.status(403).json({ error: 'Verification failed' });
+      }
+    } catch (error) {
+      logger.error('Error verifying webhook:', error);
+      res.status(500).json({ error: error.message });
+    }
+  }
+
+  // Analytics Methods
+  async getSessionAnalytics(req, res) {
+    try {
+      const { sessionId } = req.params;
+      const { startDate, endDate } = req.query;
+      
+      const analytics = await this.supabase.getSessionAnalytics(sessionId, {
+        startDate: startDate || new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
+        endDate: endDate || new Date().toISOString()
+      });
+      
+      res.json(analytics);
+    } catch (error) {
+      logger.error('Error getting session analytics:', error);
+      res.status(500).json({ error: error.message });
+    }
+  }
+
+  async getOverviewAnalytics(req, res) {
+    try {
+      const { userId } = req.query;
+      
+      if (!userId) {
+        return res.status(400).json({ error: 'userId is required' });
+      }
+
+      const analytics = await this.supabase.getOverviewAnalytics(userId);
+      
+      res.json(analytics);
+    } catch (error) {
+      logger.error('Error getting overview analytics:', error);
+      res.status(500).json({ error: error.message });
+    }
+  }
+
+  // Utility Methods
+  async cleanupExpiredSessions() {
+    const now = new Date();
+    const expiredSessions = [];
+
+    for (const [sessionId, session] of this.sessions) {
+      const lastActivity = new Date(session.lastActivity);
+      const hoursSinceActivity = (now - lastActivity) / (1000 * 60 * 60);
+      
+      if (hoursSinceActivity > 24) { // 24 hours
+        expiredSessions.push(sessionId);
+      }
     }
 
-    const token = authHeader.substring(7);
-    const { data: { user }, error } = await supabase.auth.getUser(token);
-
-    if (error || !user) {
-      return res.status(401).json({ error: 'Invalid token' });
+    for (const sessionId of expiredSessions) {
+      try {
+        await this.deleteSession({ params: { sessionId } }, { json: () => {} });
+        logger.info(`Cleaned up expired session: ${sessionId}`);
+      } catch (error) {
+        logger.error(`Error cleaning up session ${sessionId}:`, error);
+      }
     }
+  }
 
-    req.user = user;
-    next();
-  } catch (error) {
-    console.error('Authentication error:', error);
-    res.status(500).json({ error: 'Authentication failed' });
+  async syncSessionsWithDatabase() {
+    try {
+      const dbSessions = await this.supabase.getAllWhatsAppSessions();
+      
+      for (const dbSession of dbSessions) {
+        if (!this.sessions.has(dbSession.id)) {
+          // Session exists in DB but not in memory - restore it
+          const session = await this.sessionManager.restoreSession(dbSession);
+          if (session) {
+            this.sessions.set(dbSession.id, session);
+            logger.info(`Restored session from database: ${dbSession.id}`);
+          }
+        }
+      }
+    } catch (error) {
+      logger.error('Error syncing sessions with database:', error);
+    }
+  }
+
+  async processMessageQueue() {
+    try {
+      const messages = await this.messageQueue.getPendingMessages();
+      
+      for (const message of messages) {
+        try {
+          const session = this.sessions.get(message.sessionId);
+          if (session) {
+            await this.sessionManager.sendMessage(session, message);
+            await this.messageQueue.markMessageAsSent(message.id);
+          }
+        } catch (error) {
+          logger.error(`Error processing queued message ${message.id}:`, error);
+          await this.messageQueue.markMessageAsFailed(message.id, error.message);
+        }
+      }
+    } catch (error) {
+      logger.error('Error processing message queue:', error);
+    }
+  }
+
+  async start() {
+    try {
+      // Initialize database connection
+      await this.supabase.initialize();
+      
+      // Load existing sessions from database
+      await this.syncSessionsWithDatabase();
+      
+      // Start server
+      this.server.listen(this.port, () => {
+        logger.info(`WhatsApp service started on port ${this.port}`);
+        logger.info(`Health check available at http://localhost:${this.port}/health`);
+      });
+    } catch (error) {
+      logger.error('Failed to start WhatsApp service:', error);
+      process.exit(1);
+    }
+  }
+
+  async stop() {
+    try {
+      // Disconnect all sessions
+      for (const [sessionId, session] of this.sessions) {
+        await this.sessionManager.disconnectSession(session);
+      }
+      
+      // Close server
+      this.server.close(() => {
+        logger.info('WhatsApp service stopped');
+        process.exit(0);
+      });
+    } catch (error) {
+      logger.error('Error stopping WhatsApp service:', error);
+      process.exit(1);
+    }
   }
 }
 
-// WebSocket connection handling
-const wsClients = new Map(); // Map to store WebSocket connections by user ID
-
-wss.on('connection', async (ws, req) => {
-  try {
-    // Extract token from query string or headers
-    const url = new URL(req.url, `http://${req.headers.host}`);
-    const token = url.searchParams.get('token') || req.headers['authorization']?.replace('Bearer ', '');
-
-    if (!token) {
-      ws.close(1008, 'No token provided');
-      return;
-    }
-
-    // Authenticate user
-    const { data: { user }, error } = await supabase.auth.getUser(token);
-    if (error || !user) {
-      ws.close(1008, 'Invalid token');
-      return;
-    }
-
-    // Store WebSocket connection
-    wsClients.set(user.id, ws);
-    console.log(`WebSocket connected for user: ${user.id}`);
-
-    // Send initial session data
-    const userSessions = await getUserSessions(user.id);
-    ws.send(JSON.stringify({
-      type: 'sessions_update',
-      data: userSessions
-    }));
-
-    // Handle WebSocket messages
-    ws.on('message', async (message) => {
-      try {
-        const data = JSON.parse(message);
-        
-        switch (data.type) {
-          case 'ping':
-            ws.send(JSON.stringify({ type: 'pong' }));
-            break;
-          
-          case 'create_session':
-            const sessionId = uuidv4();
-            await createSession(
-              user.id,
-              sessionId,
-              (qr, sessionId) => {
-                ws.send(JSON.stringify({
-                  type: 'qr_code',
-                  sessionId: sessionId,
-                  qr: qr
-                }));
-              },
-              (sessionId, phoneNumber) => {
-                ws.send(JSON.stringify({
-                  type: 'session_ready',
-                  sessionId: sessionId,
-                  phoneNumber: phoneNumber
-                }));
-              },
-              (sessionId, messageData) => {
-                ws.send(JSON.stringify({
-                  type: 'message_received',
-                  sessionId: sessionId,
-                  message: messageData
-                }));
-              },
-              (sessionId, status, phoneNumber) => {
-                ws.send(JSON.stringify({
-                  type: 'status_update',
-                  sessionId: sessionId,
-                  status: status,
-                  phoneNumber: phoneNumber
-                }));
-              }
-            );
-            break;
-
-          case 'send_message':
-            const result = await sendMessage(
-              data.sessionId,
-              data.to,
-              data.message,
-              user.id
-            );
-            ws.send(JSON.stringify({
-              type: 'message_sent',
-              success: true,
-              messageId: result.messageId
-            }));
-            break;
-
-          case 'disconnect_session':
-            await disconnectSession(data.sessionId);
-            ws.send(JSON.stringify({
-              type: 'session_disconnected',
-              sessionId: data.sessionId
-            }));
-            break;
-        }
-      } catch (error) {
-        console.error('WebSocket message error:', error);
-        ws.send(JSON.stringify({
-          type: 'error',
-          message: error.message
-        }));
-      }
-    });
-
-    // Handle WebSocket close
-    ws.on('close', () => {
-      wsClients.delete(user.id);
-      console.log(`WebSocket disconnected for user: ${user.id}`);
-    });
-
-  } catch (error) {
-    console.error('WebSocket connection error:', error);
-    ws.close(1011, 'Internal server error');
-  }
-});
-
-// REST API Endpoints
-
-// Health check
-app.get('/api/health', (req, res) => {
-  res.json({ 
-    status: 'ok', 
-    timestamp: new Date().toISOString(),
-    activeSessions: Object.keys(sessions).length
-  });
-});
-
-// Get user's WhatsApp sessions
-app.get('/api/sessions', authenticateUser, async (req, res) => {
-  try {
-    const sessions = await getUserSessions(req.user.id);
-    res.json({ sessions });
-  } catch (error) {
-    console.error('Error fetching sessions:', error);
-    res.status(500).json({ error: 'Failed to fetch sessions' });
-  }
-});
-
-// Create a new WhatsApp session
-app.post('/api/sessions', authenticateUser, async (req, res) => {
-  try {
-    const sessionId = uuidv4();
-    
-    // Start session creation (QR will be sent via WebSocket)
-    createSession(
-      req.user.id,
-      sessionId,
-      (qr, sessionId) => {
-        // QR code will be sent via WebSocket
-      },
-      (sessionId, phoneNumber) => {
-        // Session ready notification will be sent via WebSocket
-      },
-      (sessionId, messageData) => {
-        // Incoming message will be sent via WebSocket
-      },
-      (sessionId, status, phoneNumber) => {
-        // Status update will be sent via WebSocket
-      }
-    );
-
-    res.json({ 
-      sessionId: sessionId,
-      message: 'Session creation started. Check WebSocket for QR code.'
-    });
-  } catch (error) {
-    console.error('Error creating session:', error);
-    res.status(500).json({ error: 'Failed to create session' });
-  }
-});
-
-// Get session status
-app.get('/api/sessions/:sessionId/status', authenticateUser, async (req, res) => {
-  try {
-    const status = getSessionStatus(req.params.sessionId);
-    res.json({ status });
-  } catch (error) {
-    console.error('Error getting session status:', error);
-    res.status(500).json({ error: 'Failed to get session status' });
-  }
-});
-
-// Disconnect session
-app.delete('/api/sessions/:sessionId', authenticateUser, async (req, res) => {
-  try {
-    await disconnectSession(req.params.sessionId);
-    res.json({ success: true });
-  } catch (error) {
-    console.error('Error disconnecting session:', error);
-    res.status(500).json({ error: 'Failed to disconnect session' });
-  }
-});
-
-// Send message via REST API (alternative to WebSocket)
-app.post('/api/sessions/:sessionId/messages', authenticateUser, async (req, res) => {
-  try {
-    const { to, message } = req.body;
-    
-    if (!to || !message) {
-      return res.status(400).json({ error: 'Missing required fields: to, message' });
-    }
-
-    const result = await sendMessage(req.params.sessionId, to, message, req.user.id);
-    res.json(result);
-  } catch (error) {
-    console.error('Error sending message:', error);
-    res.status(500).json({ error: error.message });
-  }
-});
-
-// Get messages for a session
-app.get('/api/sessions/:sessionId/messages', authenticateUser, async (req, res) => {
-  try {
-    const { data, error } = await supabase
-      .from('messages')
-      .select('*')
-      .eq('whatsapp_session_id', req.params.sessionId)
-      .eq('user_id', req.user.id)
-      .order('timestamp', { ascending: false })
-      .limit(50);
-
-    if (error) {
-      throw error;
-    }
-
-    res.json({ messages: data || [] });
-  } catch (error) {
-    console.error('Error fetching messages:', error);
-    res.status(500).json({ error: 'Failed to fetch messages' });
-  }
-});
-
-// Get leads for a user
-app.get('/api/leads', authenticateUser, async (req, res) => {
-  try {
-    const { data, error } = await supabase
-      .from('leads')
-      .select('*')
-      .eq('user_id', req.user.id)
-      .order('created_at', { ascending: false });
-
-    if (error) {
-      throw error;
-    }
-
-    res.json({ leads: data || [] });
-  } catch (error) {
-    console.error('Error fetching leads:', error);
-    res.status(500).json({ error: 'Failed to fetch leads' });
-  }
-});
-
-// Create a new lead
-app.post('/api/leads', authenticateUser, async (req, res) => {
-  try {
-    const { data, error } = await supabase
-      .from('leads')
-      .insert([{
-        user_id: req.user.id,
-        ...req.body
-      }])
-      .select()
-      .single();
-
-    if (error) {
-      throw error;
-    }
-
-    res.json({ lead: data });
-  } catch (error) {
-    console.error('Error creating lead:', error);
-    res.status(500).json({ error: 'Failed to create lead' });
-  }
-});
-
-// Error handling middleware
-app.use((error, req, res, next) => {
-  console.error('Unhandled error:', error);
-  res.status(500).json({ error: 'Internal server error' });
-});
-
-// 404 handler
-app.use('*', (req, res) => {
-  res.status(404).json({ error: 'Endpoint not found' });
-});
-
-// Start server
-const PORT = process.env.PORT || 3001;
-
-// Restore sessions on startup
-restoreSessions().then(() => {
-  server.listen(PORT, () => {
-    console.log(`🚀 WhatsApp Integration Server running on port ${PORT}`);
-    console.log(`📱 WebSocket server ready for connections`);
-    console.log(`🔐 Authentication required for all endpoints`);
-    console.log(`🌐 CORS enabled for: ${process.env.FRONTEND_URL || 'http://localhost:3000'}`);
-  });
-}).catch(error => {
-  console.error('Failed to restore sessions:', error);
-  server.listen(PORT, () => {
-    console.log(`🚀 WhatsApp Integration Server running on port ${PORT} (without session restoration)`);
-  });
-});
-
-// Graceful shutdown
+// Handle graceful shutdown
 process.on('SIGTERM', () => {
-  console.log('SIGTERM received, shutting down gracefully');
-  server.close(() => {
-    console.log('Server closed');
-    process.exit(0);
-  });
+  logger.info('SIGTERM received, shutting down gracefully');
+  service.stop();
 });
 
 process.on('SIGINT', () => {
-  console.log('SIGINT received, shutting down gracefully');
-  server.close(() => {
-    console.log('Server closed');
-    process.exit(0);
-  });
+  logger.info('SIGINT received, shutting down gracefully');
+  service.stop();
 });
+
+// Start the service
+const service = new WhatsAppService();
+service.start();
+
+module.exports = service;

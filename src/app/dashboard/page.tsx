@@ -4,63 +4,137 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Sidebar from '@/components/Sidebar';
 import FloatingProfilePanel from '@/components/FloatingProfilePanel';
-import { getSupabase } from '@/lib/supabase';
+import { supabase, getCurrentUser, getLeads, getCampaigns, getAnalytics } from '@/lib/supabase';
 import Button from '@/components/ui/Button';
+import { motion } from 'framer-motion';
+
+interface User {
+  id: string;
+  email?: string;
+  name?: string;
+}
+
+interface Lead {
+  id: string;
+  first_name: string | null;
+  last_name: string | null;
+  email: string | null;
+  phone: string | null;
+  title: string | null;
+  status: string;
+  ai_score: number;
+  created_at: string;
+}
+
+interface Campaign {
+  id: string;
+  name: string;
+  status: string;
+  created_at: string;
+}
+
+interface Analytics {
+  id: string;
+  metric_type: string;
+  metric_value: number;
+  date: string;
+}
 
 export default function Dashboard() {
-  const [user, setUser] = useState<{ id: string; email?: string; name?: string } | null>(null);
+  const [user, setUser] = useState<User | null>(null);
   const [isProfilePanelVisible, setIsProfilePanelVisible] = useState(false);
   const [timeFilter, setTimeFilter] = useState('7d');
+  const [leads, setLeads] = useState<Lead[]>([]);
+  const [campaigns, setCampaigns] = useState<Campaign[]>([]);
+  const [analytics, setAnalytics] = useState<Analytics[]>([]);
+  const [loading, setLoading] = useState(true);
   const router = useRouter();
 
   useEffect(() => {
     const checkUser = async () => {
-      const supabase = getSupabase();
-      if (!supabase) return;
-      
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) {
+      try {
+        const currentUser = await getCurrentUser();
+        if (!currentUser) {
+          router.push('/auth');
+          return;
+        }
+        setUser(currentUser);
+        await loadDashboardData(currentUser.id);
+      } catch (error) {
+        console.error('Error checking user:', error);
         router.push('/auth');
-        return;
       }
-      setUser(user);
     };
     checkUser();
   }, [router]);
 
-  const handleLogout = async () => {
-    const supabase = getSupabase();
-    if (supabase) {
-      await supabase.auth.signOut();
+  const loadDashboardData = async (userId: string) => {
+    try {
+      setLoading(true);
+      
+      // Load leads
+      const leadsData = await getLeads(userId);
+      setLeads(leadsData || []);
+      
+      // Load campaigns
+      const campaignsData = await getCampaigns(userId);
+      setCampaigns(campaignsData || []);
+      
+      // Load analytics for the last 7 days
+      const endDate = new Date().toISOString().split('T')[0];
+      const startDate = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+      const analyticsData = await getAnalytics(userId, { start: startDate, end: endDate });
+      setAnalytics(analyticsData || []);
+      
+    } catch (error) {
+      console.error('Error loading dashboard data:', error);
+    } finally {
+      setLoading(false);
     }
-    router.push('/');
   };
+
+  const handleLogout = async () => {
+    try {
+      await supabase.auth.signOut();
+      router.push('/');
+    } catch (error) {
+      console.error('Error signing out:', error);
+    }
+  };
+
+  // Calculate metrics from data
+  const activeLeads = leads.filter(lead => lead.status === 'new' || lead.status === 'contacted').length;
+  const qualifiedLeads = leads.filter(lead => lead.status === 'qualified').length;
+  const activeCampaigns = campaigns.filter(campaign => campaign.status === 'active').length;
+  const totalLeads = leads.length;
+
+  const conversionRate = totalLeads > 0 ? Math.round((qualifiedLeads / totalLeads) * 100) : 0;
 
   const metrics = [
     {
       title: 'Active Leads',
-      value: '0',
+      value: activeLeads.toString(),
       change: '0%',
       icon: 'users',
       trend: 'neutral'
     },
     {
       title: 'Conversion Rate',
-      value: '0%',
+      value: `${conversionRate}%`,
       change: '0%',
       icon: 'target',
       trend: 'neutral'
     },
     {
       title: 'Active Campaigns',
-      value: '0',
+      value: activeCampaigns.toString(),
       change: '0%',
       icon: 'bar-chart-2',
       trend: 'neutral'
     },
     {
-      title: 'Monthly Revenue',
-      value: '$0',
+      title: 'Total Leads',
+      value: totalLeads.toString(),
       change: '0%',
       icon: 'dollar-sign',
       trend: 'neutral'
@@ -71,22 +145,22 @@ export default function Dashboard() {
     {
       title: 'Add New Lead',
       icon: 'user-plus',
-      action: () => router.push('/leads/new')
+      action: () => router.push('/dashboard/prospecting/leads/new')
     },
     {
       title: 'Create Campaign',
       icon: 'plus-circle',
-      action: () => router.push('/campaigns/new')
+      action: () => router.push('/dashboard/campaigns/new')
     },
     {
-      title: 'Export Data',
-      icon: 'download',
-      action: () => console.log('Export data')
+      title: 'Connect WhatsApp',
+      icon: 'message-circle',
+      action: () => router.push('/dashboard/whatsapp/accounts')
     },
     {
-      title: 'Schedule Meeting',
-      icon: 'calendar',
-      action: () => console.log('Schedule meeting')
+      title: 'View Analytics',
+      icon: 'bar-chart',
+      action: () => router.push('/dashboard/analytics')
     }
   ];
 
@@ -128,16 +202,16 @@ export default function Dashboard() {
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
           </svg>
         );
-      case 'download':
+      case 'message-circle':
         return (
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
           </svg>
         );
-      case 'calendar':
+      case 'bar-chart':
         return (
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
           </svg>
         );
       default:
@@ -145,8 +219,16 @@ export default function Dashboard() {
     }
   };
 
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-main-bg flex items-center justify-center">
+        <div className="text-primary-text">Loading...</div>
+      </div>
+    );
+  }
+
   if (!user) {
-    return <div className="min-h-screen bg-main-bg flex items-center justify-center">Loading...</div>;
+    return null;
   }
 
   return (
@@ -158,7 +240,12 @@ export default function Dashboard() {
       
       <main className="flex-1 lg:ml-64 p-6">
         {/* Header */}
-        <header className="mb-8">
+        <motion.header 
+          className="mb-8"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
           <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
             <div className="flex-1">
               <h1 className="text-3xl lg:text-4xl font-medium text-primary-text mb-2">
@@ -184,13 +271,25 @@ export default function Dashboard() {
               </div>
             </div>
           </div>
-        </header>
+        </motion.header>
 
         {/* Metrics Grid */}
-        <section className="mb-8">
+        <motion.section 
+          className="mb-8"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+        >
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {metrics.map((metric, index) => (
-              <div key={index} className="bg-card-bg border border-border rounded-card p-6">
+              <motion.div 
+                key={index} 
+                className="bg-card-bg border border-border rounded-card p-6"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.1 + index * 0.1 }}
+                whileHover={{ y: -2 }}
+              >
                 <div className="flex items-center justify-between mb-4">
                   <div className="text-sidebar-text-secondary">
                     {getIcon(metric.icon)}
@@ -199,86 +298,96 @@ export default function Dashboard() {
                     <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
                     </svg>
-                    <span>{metric.change}</span>
+                    {metric.change}
                   </div>
                 </div>
-                <div className="text-2xl font-medium text-primary-text mb-1">
-                  {metric.value}
+                <div className="mb-2">
+                  <h3 className="text-2xl font-medium text-primary-text">{metric.value}</h3>
+                  <p className="text-sm text-secondary-text">{metric.title}</p>
                 </div>
-                <div className="text-sm text-secondary-text">
-                  {metric.title}
-                </div>
-              </div>
+              </motion.div>
             ))}
           </div>
-        </section>
-
-        {/* Charts Section */}
-        <section className="mb-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <div className="bg-card-bg border border-border rounded-card p-6">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-medium text-primary-text">
-                  Lead Generation Trend
-                </h3>
-                <Button variant="secondary" aria-label="View all lead generation trend">
-                  View All
-                </Button>
-              </div>
-              <div className="h-64 flex items-center justify-center text-secondary-text">
-                Chart placeholder
-              </div>
-            </div>
-
-            <div className="bg-card-bg border border-border rounded-card p-6">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-medium text-primary-text">
-                  Channel Performance
-                </h3>
-                <Button variant="secondary" aria-label="View all channel performance">
-                  View All
-                </Button>
-              </div>
-              <div className="h-64 flex items-center justify-center text-secondary-text">
-                Chart placeholder
-              </div>
-            </div>
-          </div>
-        </section>
+        </motion.section>
 
         {/* Quick Actions */}
-        <section>
-          <h3 className="text-lg font-medium text-primary-text mb-4">
-            Quick Actions
-          </h3>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <motion.section 
+          className="mb-8"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+        >
+          <h2 className="text-xl font-medium text-primary-text mb-4">Quick Actions</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {quickActions.map((action, index) => (
-              <Button
+              <motion.button
                 key={index}
                 onClick={action.action}
-                variant="secondary"
-                aria-label={`Perform quick action: ${action.title}`}
-                className="p-4 text-left"
+                className="bg-button-bg border border-border rounded-card p-4 text-left hover:bg-button-hover-bg transition-colors"
+                whileHover={{ y: -2 }}
+                whileTap={{ scale: 0.98 }}
               >
-                <div className="flex items-center space-x-3">
+                <div className="flex items-center gap-3">
                   <div className="text-sidebar-text-secondary">
                     {getIcon(action.icon)}
                   </div>
-                  <span className="text-sm font-medium text-secondary-text group-hover:text-primary-text">
-                    {action.title}
-                  </span>
+                  <span className="text-primary-text font-medium">{action.title}</span>
                 </div>
-              </Button>
+              </motion.button>
             ))}
           </div>
-        </section>
+        </motion.section>
+
+        {/* Recent Activity */}
+        <motion.section 
+          className="mb-8"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.3 }}
+        >
+          <h2 className="text-xl font-medium text-primary-text mb-4">Recent Leads</h2>
+          <div className="bg-card-bg border border-border rounded-card overflow-hidden">
+            {leads.length === 0 ? (
+              <div className="p-6 text-center text-secondary-text">
+                No leads yet. Start by adding your first lead.
+              </div>
+            ) : (
+              <div className="divide-y divide-border">
+                {leads.slice(0, 5).map((lead) => (
+                  <div key={lead.id} className="p-4 hover:bg-button-bg transition-colors">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <h3 className="text-primary-text font-medium">
+                          {lead.first_name} {lead.last_name}
+                        </h3>
+                        <p className="text-sm text-secondary-text">{lead.title}</p>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className={`px-2 py-1 text-xs rounded-full ${
+                          lead.status === 'new' ? 'bg-blue-500/20 text-blue-400' :
+                          lead.status === 'contacted' ? 'bg-yellow-500/20 text-yellow-400' :
+                          lead.status === 'qualified' ? 'bg-green-500/20 text-green-400' :
+                          'bg-gray-500/20 text-gray-400'
+                        }`}>
+                          {lead.status}
+                        </span>
+                        <span className="text-xs text-secondary-text">
+                          Score: {lead.ai_score}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </motion.section>
       </main>
 
-      {/* Floating Profile Panel */}
       <FloatingProfilePanel
-        user={user}
         isVisible={isProfilePanelVisible}
         onClose={() => setIsProfilePanelVisible(false)}
+        user={user}
         onLogout={handleLogout}
       />
     </div>

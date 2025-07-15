@@ -1,338 +1,611 @@
-const { default: makeWASocket, useMultiFileAuthState, DisconnectReason } = require('@whiskeysockets/baileys');
+const { default: makeWASocket, DisconnectReason, useMultiFileAuthState } = require('@whiskeysockets/baileys');
 const { Boom } = require('@hapi/boom');
-const supabase = require('./supabaseClient');
-const fs = require('fs');
-const path = require('path');
-const crypto = require('crypto');
 const QRCode = require('qrcode');
+const fs = require('fs').promises;
+const path = require('path');
+const { v4: uuidv4 } = require('uuid');
 
-// In-memory session storage (will be persisted to Supabase)
-const sessions = {};
-const sessionStatus = {};
-
-// Encryption key (should be in environment variables in production)
-const ENCRYPTION_KEY = process.env.SESSION_ENCRYPTION_KEY || 'your-secret-key-32-chars-long!!';
-
-// Encrypt session data
-function encryptSessionData(data) {
-  const iv = crypto.randomBytes(16);
-  const cipher = crypto.createCipher('aes-256-cbc', ENCRYPTION_KEY);
-  let encrypted = cipher.update(JSON.stringify(data), 'utf8', 'hex');
-  encrypted += cipher.final('hex');
-  return {
-    iv: iv.toString('hex'),
-    data: encrypted
-  };
-}
-
-// Decrypt session data
-function decryptSessionData(encryptedData) {
-  const decipher = crypto.createDecipher('aes-256-cbc', ENCRYPTION_KEY);
-  let decrypted = decipher.update(encryptedData.data, 'hex', 'utf8');
-  decrypted += decipher.final('utf8');
-  return JSON.parse(decrypted);
-}
-
-// Update session status in Supabase
-async function updateSessionStatus(sessionId, status, phoneNumber = null) {
-  try {
-    const updateData = {
-      status: status,
-      updated_at: new Date().toISOString()
-    };
-    
-    if (phoneNumber) {
-      updateData.phone_number = phoneNumber;
-    }
-
-    const { error } = await supabase
-      .from('whatsapp_sessions')
-      .update(updateData)
-      .eq('id', sessionId);
-
-    if (error) {
-      console.error('Error updating session status:', error);
-    }
-  } catch (error) {
-    console.error('Error updating session status:', error);
+class SessionManager {
+  constructor(logger) {
+    this.logger = logger;
+    this.sessions = new Map();
+    this.authStates = new Map();
+    this.sessionDir = path.join(__dirname, 'sessions');
+    this.ensureSessionDirectory();
   }
-}
 
-// Save session data to Supabase
-async function saveSessionData(sessionId, userId, sessionData, phoneNumber = null) {
-  try {
-    const encryptedData = encryptSessionData(sessionData);
-    
-    const { error } = await supabase
-      .from('whatsapp_sessions')
-      .upsert([{
+  async ensureSessionDirectory() {
+    try {
+      await fs.mkdir(this.sessionDir, { recursive: true });
+    } catch (error) {
+      this.logger.error('Error creating session directory:', error);
+    }
+  }
+
+  async createSession(sessionId, config) {
+    try {
+      this.logger.info(`Creating new WhatsApp session: ${sessionId}`);
+      
+      const session = {
         id: sessionId,
-        user_id: userId,
-        phone_number: phoneNumber,
-        session_data: encryptedData,
-        status: 'connected',
-        updated_at: new Date().toISOString()
-      }], { onConflict: 'id' });
+        userId: config.userId,
+        phoneNumber: config.phoneNumber,
+        name: config.name,
+        status: 'initializing',
+        qrCode: null,
+        lastActivity: new Date(),
+        socket: null,
+        messageHandlers: new Map(),
+        mediaHandlers: new Map(),
+        config: config
+      };
 
-    if (error) {
-      console.error('Error saving session data:', error);
+      this.sessions.set(sessionId, session);
+      
+      // Initialize auth state
+      const authState = await this.initializeAuthState(sessionId);
+      this.authStates.set(sessionId, authState);
+      
+      return session;
+    } catch (error) {
+      this.logger.error(`Error creating session ${sessionId}:`, error);
+      throw error;
     }
-  } catch (error) {
-    console.error('Error saving session data:', error);
   }
-}
 
-// Create a new WhatsApp session
-async function createSession(userId, sessionId, onQr, onReady, onMessage, onStatusChange) {
-  try {
-    // Create session directory
-    const sessionDir = path.join(__dirname, 'sessions', sessionId);
-    if (!fs.existsSync(sessionDir)) {
-      fs.mkdirSync(sessionDir, { recursive: true });
+  async initializeAuthState(sessionId) {
+    try {
+      const sessionPath = path.join(this.sessionDir, sessionId);
+      await fs.mkdir(sessionPath, { recursive: true });
+      
+      const authState = await useMultiFileAuthState(sessionPath);
+      return authState;
+    } catch (error) {
+      this.logger.error(`Error initializing auth state for session ${sessionId}:`, error);
+      throw error;
     }
+  }
 
-    // Update status to 'connecting'
-    sessionStatus[sessionId] = 'connecting';
-    await updateSessionStatus(sessionId, 'connecting');
+  async connectSession(session) {
+    try {
+      this.logger.info(`Connecting session: ${session.id}`);
+      
+      const authState = this.authStates.get(session.id);
+      if (!authState) {
+        throw new Error('Auth state not found');
+      }
 
-    // Use multi-file auth state for session persistence
-    const { state, saveCreds } = await useMultiFileAuthState(sessionDir);
+      // Create WhatsApp socket
+      const sock = makeWASocket({
+        auth: authState.state,
+        printQRInTerminal: false,
+        logger: this.logger.child({ sessionId: session.id }),
+        browser: ['Rarity Leads', 'Chrome', '1.0.0'],
+        connectTimeoutMs: 60000,
+        keepAliveIntervalMs: 30000,
+        emitOwnEvents: false,
+        defaultQueryTimeoutMs: 60000,
+        retryRequestDelayMs: 250,
+        markOnlineOnConnect: true,
+        generateHighQualityLinkPreview: true,
+        getMessage: async (key) => {
+          // Implement message retrieval from database if needed
+          return null;
+        }
+      });
 
-    // Create WhatsApp socket
-    const sock = makeWASocket({
-      auth: state,
-      printQRInTerminal: false,
-      defaultQueryTimeoutMs: 60000,
-      connectTimeoutMs: 60000,
-      keepAliveIntervalMs: 30000,
-    });
+      // Store socket in session
+      session.socket = sock;
+      session.status = 'connecting';
 
-    // Handle connection updates
+      // Set up event handlers
+      this.setupEventHandlers(session);
+
+      // Generate QR code if needed
+      if (!authState.state.creds.registered) {
+        const qrCode = await this.generateQRCode(session);
+        session.qrCode = qrCode;
+        session.status = 'qr_ready';
+      } else {
+        session.status = 'connected';
+        session.qrCode = null;
+      }
+
+      session.lastActivity = new Date();
+      
+      this.logger.info(`Session ${session.id} connection setup complete`);
+      return {
+        status: session.status,
+        qrCode: session.qrCode,
+        phoneNumber: session.phoneNumber
+      };
+    } catch (error) {
+      this.logger.error(`Error connecting session ${session.id}:`, error);
+      session.status = 'error';
+      throw error;
+    }
+  }
+
+  setupEventHandlers(session) {
+    const sock = session.socket;
+    const sessionId = session.id;
+
+    // Connection updates
     sock.ev.on('connection.update', async (update) => {
-      const { connection, lastDisconnect, qr } = update;
-
-      if (qr) {
-        // Generate QR code image
-        try {
-          const qrImage = await QRCode.toDataURL(qr);
-          onQr(qrImage, sessionId);
-        } catch (error) {
-          console.error('Error generating QR code:', error);
-          onQr(qr, sessionId); // Send raw QR if image generation fails
+      try {
+        this.logger.info(`Connection update for session ${sessionId}:`, update.status);
+        
+        switch (update.status) {
+          case 'connecting':
+            session.status = 'connecting';
+            break;
+            
+          case 'open':
+            session.status = 'connected';
+            session.qrCode = null;
+            session.lastActivity = new Date();
+            this.logger.info(`Session ${sessionId} connected successfully`);
+            break;
+            
+          case 'close':
+            session.status = 'disconnected';
+            this.logger.info(`Session ${sessionId} disconnected`);
+            break;
         }
-      }
 
-      if (connection === 'open') {
-        console.log(`Session ${sessionId} connected successfully`);
-        sessionStatus[sessionId] = 'connected';
-        sessions[sessionId] = sock;
-        
-        // Get phone number
-        const phoneNumber = sock.user?.id?.split('@')[0] || null;
-        
-        // Save session data
-        const sessionData = {
-          creds: state.creds,
-          keys: state.keys
-        };
-        await saveSessionData(sessionId, userId, sessionData, phoneNumber);
-        
-        // Update status
-        await updateSessionStatus(sessionId, 'connected', phoneNumber);
-        
-        // Notify frontend
-        onReady(sessionId, phoneNumber);
-        onStatusChange(sessionId, 'connected', phoneNumber);
+        // Emit status update to connected clients
+        this.emitToSession(sessionId, 'status_update', {
+          sessionId,
+          status: session.status,
+          phoneNumber: session.phoneNumber
+        });
+      } catch (error) {
+        this.logger.error(`Error handling connection update for session ${sessionId}:`, error);
       }
+    });
 
-      if (connection === 'close') {
-        const shouldReconnect = (lastDisconnect?.error instanceof Boom)?.output?.statusCode !== DisconnectReason.loggedOut;
-        
-        if (shouldReconnect) {
-          console.log(`Session ${sessionId} disconnected, attempting to reconnect...`);
-          sessionStatus[sessionId] = 'reconnecting';
-          await updateSessionStatus(sessionId, 'reconnecting');
-          onStatusChange(sessionId, 'reconnecting');
-        } else {
-          console.log(`Session ${sessionId} logged out`);
-          sessionStatus[sessionId] = 'logged_out';
-          await updateSessionStatus(sessionId, 'logged_out');
-          onStatusChange(sessionId, 'logged_out');
-          delete sessions[sessionId];
+    // QR code updates
+    sock.ev.on('connection.update', async (update) => {
+      if (update.qr) {
+        try {
+          const qrCode = await QRCode.toDataURL(update.qr);
+          session.qrCode = qrCode;
+          session.status = 'qr_ready';
+          
+          this.logger.info(`QR code generated for session ${sessionId}`);
+          
+          // Emit QR code to connected clients
+          this.emitToSession(sessionId, 'qr_code', {
+            sessionId,
+            qrCode
+          });
+        } catch (error) {
+          this.logger.error(`Error generating QR code for session ${sessionId}:`, error);
         }
       }
     });
 
-    // Handle credentials update
-    sock.ev.on('creds.update', saveCreds);
+    // Credentials updates
+    sock.ev.on('creds.update', async () => {
+      try {
+        const authState = this.authStates.get(sessionId);
+        if (authState) {
+          await authState.saveCreds();
+          this.logger.info(`Credentials saved for session ${sessionId}`);
+        }
+      } catch (error) {
+        this.logger.error(`Error saving credentials for session ${sessionId}:`, error);
+      }
+    });
 
-    // Handle incoming messages
+    // Message updates
     sock.ev.on('messages.upsert', async (m) => {
-      const msg = m.messages[0];
-      if (!msg.key.fromMe && msg.message) {
-        const messageData = {
-          from: msg.key.remoteJid,
-          content: msg.message,
-          timestamp: new Date().toISOString(),
-          sessionId: sessionId
-        };
-        
-        // Save message to Supabase
-        try {
-          const { error } = await supabase
-            .from('messages')
-            .insert([{
-              user_id: userId,
-              whatsapp_session_id: sessionId,
-              direction: 'received',
-              content: messageData,
-              status: 'delivered',
-              timestamp: new Date().toISOString()
-            }]);
-
-          if (error) {
-            console.error('Error saving received message:', error);
-          }
-        } catch (error) {
-          console.error('Error saving received message:', error);
+      try {
+        for (const message of m.messages) {
+          if (message.key.fromMe) continue; // Skip own messages
+          
+          const messageData = await this.processIncomingMessage(session, message);
+          
+          // Emit message to connected clients
+          this.emitToSession(sessionId, 'message_received', {
+            sessionId,
+            message: messageData
+          });
         }
-
-        // Notify frontend
-        onMessage(sessionId, messageData);
+      } catch (error) {
+        this.logger.error(`Error processing incoming message for session ${sessionId}:`, error);
       }
     });
 
-    return sock;
-  } catch (error) {
-    console.error('Error creating session:', error);
-    sessionStatus[sessionId] = 'error';
-    await updateSessionStatus(sessionId, 'error');
-    throw error;
+    // Message status updates
+    sock.ev.on('messages.update', async (updates) => {
+      try {
+        for (const update of updates) {
+          const messageData = {
+            key: update.key,
+            update: update.update
+          };
+          
+          // Emit status update to connected clients
+          this.emitToSession(sessionId, 'message_status_update', {
+            sessionId,
+            message: messageData
+          });
+        }
+      } catch (error) {
+        this.logger.error(`Error processing message status update for session ${sessionId}:`, error);
+      }
+    });
+
+    // Presence updates
+    sock.ev.on('presence.update', async (presence) => {
+      try {
+        // Emit presence update to connected clients
+        this.emitToSession(sessionId, 'presence_update', {
+          sessionId,
+          presence
+        });
+      } catch (error) {
+        this.logger.error(`Error processing presence update for session ${sessionId}:`, error);
+      }
+    });
+
+    // Handle disconnection
+    sock.ev.on('connection.update', async (update) => {
+      if (update.lastDisconnect?.error instanceof Boom) {
+        const { statusCode } = update.lastDisconnect.error.output;
+        
+        if (statusCode !== DisconnectReason.loggedOut) {
+          this.logger.warn(`Session ${sessionId} disconnected, attempting to reconnect...`);
+          // Implement reconnection logic here
+        } else {
+          this.logger.info(`Session ${sessionId} logged out`);
+          session.status = 'logged_out';
+        }
+      }
+    });
   }
-}
 
-// Send message via WhatsApp
-async function sendMessage(sessionId, to, message, userId) {
-  try {
-    const sock = sessions[sessionId];
-    if (!sock) {
-      throw new Error('Session not found or not connected');
+  async generateQRCode(session) {
+    try {
+      // QR code will be generated in the connection.update event
+      // This method is called when we need to manually generate one
+      return null;
+    } catch (error) {
+      this.logger.error(`Error generating QR code for session ${session.id}:`, error);
+      throw error;
     }
+  }
 
-    // Format phone number if needed
-    let formattedNumber = to;
-    if (!to.includes('@s.whatsapp.net')) {
-      formattedNumber = to.replace(/\D/g, '') + '@s.whatsapp.net';
-    }
+  async sendMessage(session, messageData) {
+    try {
+      const { to, message, type = 'text', mediaId } = messageData;
+      
+      if (!session.socket) {
+        throw new Error('Session not connected');
+      }
 
-    // Send message
-    const result = await sock.sendMessage(formattedNumber, { text: message });
+      if (session.status !== 'connected') {
+        throw new Error('Session not ready');
+      }
 
-    // Save message to Supabase
-    const messageData = {
-      to: formattedNumber,
-      content: message,
-      timestamp: new Date().toISOString(),
-      sessionId: sessionId,
-      messageId: result.key.id
-    };
+      let messageOptions = {};
+      let content = {};
 
-    const { error } = await supabase
-      .from('messages')
-      .insert([{
-        user_id: userId,
-        whatsapp_session_id: sessionId,
-        direction: 'sent',
-        content: messageData,
+      switch (type) {
+        case 'text':
+          content = { text: message };
+          break;
+          
+        case 'image':
+          if (!mediaId) {
+            throw new Error('Media ID required for image message');
+          }
+          const imageBuffer = await this.getMediaBuffer(mediaId);
+          content = { image: imageBuffer };
+          break;
+          
+        case 'video':
+          if (!mediaId) {
+            throw new Error('Media ID required for video message');
+          }
+          const videoBuffer = await this.getMediaBuffer(mediaId);
+          content = { video: videoBuffer };
+          break;
+          
+        case 'audio':
+          if (!mediaId) {
+            throw new Error('Media ID required for audio message');
+          }
+          const audioBuffer = await this.getMediaBuffer(mediaId);
+          content = { audio: audioBuffer };
+          break;
+          
+        case 'document':
+          if (!mediaId) {
+            throw new Error('Media ID required for document message');
+          }
+          const documentBuffer = await this.getMediaBuffer(mediaId);
+          content = { document: documentBuffer };
+          break;
+          
+        default:
+          throw new Error(`Unsupported message type: ${type}`);
+      }
+
+      const result = await session.socket.sendMessage(to, content, messageOptions);
+      
+      session.lastActivity = new Date();
+      
+      this.logger.info(`Message sent via session ${session.id} to ${to}`);
+      
+      return {
+        messageId: result.key.id,
+        to,
+        type,
         status: 'sent',
         timestamp: new Date().toISOString()
-      }]);
-
-    if (error) {
-      console.error('Error saving sent message:', error);
+      };
+    } catch (error) {
+      this.logger.error(`Error sending message via session ${session.id}:`, error);
+      throw error;
     }
-
-    return { success: true, messageId: result.key.id };
-  } catch (error) {
-    console.error('Error sending message:', error);
-    throw error;
   }
-}
 
-// Get session status
-function getSessionStatus(sessionId) {
-  return sessionStatus[sessionId] || 'unknown';
-}
+  async processIncomingMessage(session, message) {
+    try {
+      const messageData = {
+        id: message.key.id,
+        from: message.key.remoteJid,
+        timestamp: new Date(message.messageTimestamp * 1000).toISOString(),
+        type: this.getMessageType(message),
+        content: await this.extractMessageContent(message),
+        status: 'received'
+      };
 
-// Get all sessions for a user
-async function getUserSessions(userId) {
-  try {
-    const { data, error } = await supabase
-      .from('whatsapp_sessions')
-      .select('*')
-      .eq('user_id', userId)
-      .order('created_at', { ascending: false });
-
-    if (error) {
-      console.error('Error fetching user sessions:', error);
-      return [];
+      session.lastActivity = new Date();
+      
+      this.logger.info(`Processed incoming message for session ${session.id}:`, messageData.id);
+      
+      return messageData;
+    } catch (error) {
+      this.logger.error(`Error processing incoming message for session ${session.id}:`, error);
+      throw error;
     }
-
-    return data || [];
-  } catch (error) {
-    console.error('Error fetching user sessions:', error);
-    return [];
   }
-}
 
-// Disconnect session
-async function disconnectSession(sessionId) {
-  try {
-    const sock = sessions[sessionId];
-    if (sock) {
-      await sock.logout();
-      delete sessions[sessionId];
+  getMessageType(message) {
+    if (message.message?.conversation) return 'text';
+    if (message.message?.imageMessage) return 'image';
+    if (message.message?.videoMessage) return 'video';
+    if (message.message?.audioMessage) return 'audio';
+    if (message.message?.documentMessage) return 'document';
+    if (message.message?.stickerMessage) return 'sticker';
+    if (message.message?.locationMessage) return 'location';
+    if (message.message?.contactMessage) return 'contact';
+    return 'unknown';
+  }
+
+  async extractMessageContent(message) {
+    try {
+      const msg = message.message;
+      
+      if (msg.conversation) {
+        return { text: msg.conversation };
+      }
+      
+      if (msg.imageMessage) {
+        return {
+          caption: msg.imageMessage.caption,
+          mimetype: msg.imageMessage.mimetype,
+          url: msg.imageMessage.url
+        };
+      }
+      
+      if (msg.videoMessage) {
+        return {
+          caption: msg.videoMessage.caption,
+          mimetype: msg.videoMessage.mimetype,
+          url: msg.videoMessage.url
+        };
+      }
+      
+      if (msg.audioMessage) {
+        return {
+          mimetype: msg.audioMessage.mimetype,
+          url: msg.audioMessage.url
+        };
+      }
+      
+      if (msg.documentMessage) {
+        return {
+          fileName: msg.documentMessage.fileName,
+          mimetype: msg.documentMessage.mimetype,
+          url: msg.documentMessage.url
+        };
+      }
+      
+      if (msg.stickerMessage) {
+        return {
+          mimetype: msg.stickerMessage.mimetype,
+          url: msg.stickerMessage.url
+        };
+      }
+      
+      if (msg.locationMessage) {
+        return {
+          latitude: msg.locationMessage.degreesLatitude,
+          longitude: msg.locationMessage.degreesLongitude,
+          name: msg.locationMessage.name,
+          address: msg.locationMessage.address
+        };
+      }
+      
+      if (msg.contactMessage) {
+        return {
+          displayName: msg.contactMessage.displayName,
+          vcard: msg.contactMessage.vcard
+        };
+      }
+      
+      return { type: 'unknown' };
+    } catch (error) {
+      this.logger.error('Error extracting message content:', error);
+      return { type: 'error', error: error.message };
+    }
+  }
+
+  async uploadMedia(session, file) {
+    try {
+      const mediaId = uuidv4();
+      const mediaPath = path.join(this.sessionDir, session.id, 'media', mediaId);
+      
+      await fs.mkdir(path.dirname(mediaPath), { recursive: true });
+      await fs.writeFile(mediaPath, file.buffer);
+      
+      session.mediaHandlers.set(mediaId, {
+        path: mediaPath,
+        mimetype: file.mimetype,
+        filename: file.originalname
+      });
+      
+      this.logger.info(`Media uploaded for session ${session.id}: ${mediaId}`);
+      
+      return mediaId;
+    } catch (error) {
+      this.logger.error(`Error uploading media for session ${session.id}:`, error);
+      throw error;
+    }
+  }
+
+  async getMedia(session, mediaId) {
+    try {
+      const mediaHandler = session.mediaHandlers.get(mediaId);
+      if (!mediaHandler) {
+        throw new Error('Media not found');
+      }
+      
+      const data = await fs.readFile(mediaHandler.path);
+      
+      return {
+        data,
+        mimetype: mediaHandler.mimetype,
+        filename: mediaHandler.filename
+      };
+    } catch (error) {
+      this.logger.error(`Error getting media ${mediaId} for session ${session.id}:`, error);
+      throw error;
+    }
+  }
+
+  async getMediaBuffer(mediaId) {
+    try {
+      // This would typically fetch media from storage
+      // For now, we'll return a placeholder
+      throw new Error('Media buffer retrieval not implemented');
+    } catch (error) {
+      this.logger.error(`Error getting media buffer for ${mediaId}:`, error);
+      throw error;
+    }
+  }
+
+  async disconnectSession(session) {
+    try {
+      this.logger.info(`Disconnecting session: ${session.id}`);
+      
+      if (session.socket) {
+        await session.socket.logout();
+        session.socket = null;
+      }
+      
+      session.status = 'disconnected';
+      session.qrCode = null;
+      session.lastActivity = new Date();
+      
+      // Clean up auth state
+      const authState = this.authStates.get(session.id);
+      if (authState) {
+        this.authStates.delete(session.id);
+      }
+      
+      this.logger.info(`Session ${session.id} disconnected successfully`);
+    } catch (error) {
+      this.logger.error(`Error disconnecting session ${session.id}:`, error);
+      throw error;
+    }
+  }
+
+  async restoreSession(dbSession) {
+    try {
+      this.logger.info(`Restoring session from database: ${dbSession.id}`);
+      
+      const session = await this.createSession(dbSession.id, {
+        userId: dbSession.user_id,
+        phoneNumber: dbSession.phone_number,
+        name: `WhatsApp ${dbSession.phone_number}`,
+        status: dbSession.status
+      });
+      
+      // Try to connect the session
+      await this.connectSession(session);
+      
+      return session;
+    } catch (error) {
+      this.logger.error(`Error restoring session ${dbSession.id}:`, error);
+      return null;
+    }
+  }
+
+  getSession(sessionId) {
+    return this.sessions.get(sessionId);
+  }
+
+  getAllSessions() {
+    return Array.from(this.sessions.values());
+  }
+
+  getSessionsByUser(userId) {
+    return Array.from(this.sessions.values()).filter(session => session.userId === userId);
+  }
+
+  emitToSession(sessionId, event, data) {
+    // This would emit to connected WebSocket clients
+    // Implementation depends on your WebSocket server setup
+    this.logger.debug(`Emitting ${event} to session ${sessionId}:`, data);
+  }
+
+  async cleanupSession(sessionId) {
+    try {
+      const session = this.sessions.get(sessionId);
+      if (session) {
+        await this.disconnectSession(session);
+        this.sessions.delete(sessionId);
+        
+        // Clean up session directory
+        const sessionPath = path.join(this.sessionDir, sessionId);
+        await fs.rm(sessionPath, { recursive: true, force: true });
+        
+        this.logger.info(`Session ${sessionId} cleaned up successfully`);
+      }
+    } catch (error) {
+      this.logger.error(`Error cleaning up session ${sessionId}:`, error);
+    }
+  }
+
+  getSessionStatus(sessionId) {
+    const session = this.sessions.get(sessionId);
+    if (!session) {
+      return null;
     }
     
-    sessionStatus[sessionId] = 'disconnected';
-    await updateSessionStatus(sessionId, 'disconnected');
-    
-    return { success: true };
-  } catch (error) {
-    console.error('Error disconnecting session:', error);
-    throw error;
+    return {
+      id: session.id,
+      status: session.status,
+      phoneNumber: session.phoneNumber,
+      lastActivity: session.lastActivity,
+      qrCode: session.qrCode
+    };
   }
 }
 
-// Restore sessions from Supabase on startup
-async function restoreSessions() {
-  try {
-    const { data, error } = await supabase
-      .from('whatsapp_sessions')
-      .select('*')
-      .eq('status', 'connected');
-
-    if (error) {
-      console.error('Error restoring sessions:', error);
-      return;
-    }
-
-    console.log(`Found ${data.length} sessions to restore`);
-    
-    // Note: In a production environment, you might want to restore sessions
-    // based on user activity or other criteria, rather than all at once
-  } catch (error) {
-    console.error('Error restoring sessions:', error);
-  }
-}
-
-module.exports = {
-  createSession,
-  sendMessage,
-  getSessionStatus,
-  getUserSessions,
-  disconnectSession,
-  restoreSessions,
-  sessions,
-  sessionStatus
-};
+module.exports = SessionManager;

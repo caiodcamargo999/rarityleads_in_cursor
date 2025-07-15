@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { motion } from 'framer-motion';
 
 interface SidebarProps {
   user?: {
@@ -17,29 +18,44 @@ export default function Sidebar({ user, onProfileClick }: SidebarProps) {
   const pathname = usePathname();
 
   const navigationItems = [
+    // Main Dashboard
     { href: '/dashboard', label: 'Dashboard', icon: 'home', page: 'dashboard' },
-    { href: '/leads', label: 'Leads', icon: 'users', page: 'leads' },
-    { href: '/companies', label: 'Companies', icon: 'briefcase', page: 'companies' },
-    { href: '/whatsapp', label: 'WhatsApp', icon: 'whatsapp', page: 'whatsapp' },
-    { href: '/linkedin', label: 'LinkedIn', icon: 'linkedin', page: 'linkedin' },
-    { href: '/instagram', label: 'Instagram', icon: 'instagram', page: 'instagram' },
-    { href: '/facebook', label: 'Facebook', icon: 'facebook', page: 'facebook' },
-    { href: '/x', label: 'X (Twitter)', icon: 'x', page: 'x' },
-    { href: '/analytics', label: 'Analytics', icon: 'bar-chart-2', page: 'analytics' },
-    { href: '/support', label: 'Support', icon: 'help-circle', page: 'support' },
+    
+    // Prospecting Section
+    { href: '/dashboard/prospecting/leads', label: 'Leads', icon: 'users', page: 'leads' },
+    { href: '/dashboard/prospecting/companies', label: 'Companies', icon: 'briefcase', page: 'companies' },
+    
+    // Approaching Section
+    { href: '/dashboard/approaching/whatsapp', label: 'WhatsApp', icon: 'message-circle', page: 'whatsapp' },
+    { href: '/dashboard/approaching/instagram', label: 'Instagram', icon: 'instagram', page: 'instagram' },
+    { href: '/dashboard/approaching/facebook', label: 'Facebook', icon: 'facebook', page: 'facebook' },
+    { href: '/dashboard/approaching/x', label: 'X (Twitter)', icon: 'x', page: 'x' },
+    { href: '/dashboard/approaching/linkedin', label: 'LinkedIn', icon: 'linkedin', page: 'linkedin' },
+    
+    // Management Section
+    { href: '/dashboard/campaigns', label: 'Campaigns', icon: 'target', page: 'campaigns' },
+    { href: '/dashboard/conversations', label: 'Conversations', icon: 'message-square', page: 'conversations' },
+    { href: '/dashboard/analytics', label: 'Analytics', icon: 'bar-chart-2', page: 'analytics' },
+    
+    // Settings & Support
+    { href: '/dashboard/settings', label: 'Settings', icon: 'settings', page: 'settings' },
+    { href: '/dashboard/support', label: 'Support', icon: 'help-circle', page: 'support' },
   ];
 
   const getCurrentPage = () => {
     if (pathname === '/dashboard') return 'dashboard';
-    if (pathname.startsWith('/leads')) return 'leads';
-    if (pathname.startsWith('/companies')) return 'companies';
-    if (pathname.startsWith('/whatsapp')) return 'whatsapp';
-    if (pathname.startsWith('/linkedin')) return 'linkedin';
-    if (pathname.startsWith('/instagram')) return 'instagram';
-    if (pathname.startsWith('/facebook')) return 'facebook';
-    if (pathname.startsWith('/x')) return 'x';
-    if (pathname.startsWith('/analytics')) return 'analytics';
-    if (pathname.startsWith('/support')) return 'support';
+    if (pathname.startsWith('/dashboard/prospecting/leads')) return 'leads';
+    if (pathname.startsWith('/dashboard/prospecting/companies')) return 'companies';
+    if (pathname.startsWith('/dashboard/approaching/whatsapp')) return 'whatsapp';
+    if (pathname.startsWith('/dashboard/approaching/instagram')) return 'instagram';
+    if (pathname.startsWith('/dashboard/approaching/facebook')) return 'facebook';
+    if (pathname.startsWith('/dashboard/approaching/x')) return 'x';
+    if (pathname.startsWith('/dashboard/approaching/linkedin')) return 'linkedin';
+    if (pathname.startsWith('/dashboard/campaigns')) return 'campaigns';
+    if (pathname.startsWith('/dashboard/conversations')) return 'conversations';
+    if (pathname.startsWith('/dashboard/analytics')) return 'analytics';
+    if (pathname.startsWith('/dashboard/settings')) return 'settings';
+    if (pathname.startsWith('/dashboard/support')) return 'support';
     return 'dashboard';
   };
 
@@ -65,10 +81,10 @@ export default function Sidebar({ user, onProfileClick }: SidebarProps) {
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2-2v2m8 0V6a2 2 0 012 2v6a2 2 0 01-2 2H8a2 2 0 01-2-2V8a2 2 0 012-2V6" />
           </svg>
         );
-      case 'whatsapp':
+      case 'message-circle':
         return (
-          <svg className="w-5 h-5" viewBox="0 0 32 32" fill="currentColor">
-            <path d="M16 3C9.373 3 4 8.373 4 15c0 2.385.832 4.584 2.236 6.364L4 29l7.818-2.236A12.94 12.94 0 0 0 16 27c6.627 0 12-5.373 12-12S22.627 3 16 3Zm0 22c-1.98 0-3.85-.577-5.418-1.57l-.386-.24-4.65 1.33 1.33-4.65-.24-.386A9.96 9.96 0 0 1 6 15c0-5.514 4.486-10 10-10s10 4.486 10 10-4.486 10-10 10Zm5.29-7.71c-.29-.145-1.71-.844-1.974-.94-.264-.097-.456-.145-.648.145-.193.29-.744.94-.912 1.133-.168.193-.336.217-.626.072-.29-.145-1.225-.452-2.334-1.44-.863-.77-1.445-1.72-1.615-2.01-.168-.29-.018-.447.127-.592.13-.13.29-.336.435-.504.145-.168.193-.29.29-.483.097-.193.048-.362-.024-.507-.072-.145-.648-1.566-.888-2.146-.234-.563-.472-.486-.648-.495-.168-.007-.362-.009-.555-.009-.193 0-.507.073-.773.362-.264.29-1.01.99-1.01 2.415 0 1.425 1.034 2.803 1.178 2.997.145.193 2.04 3.12 5.04 4.253.705.242 1.254.387 1.683.495.707.18 1.35.155 1.86.094.567-.067 1.71-.698 1.953-1.372.242-.674.242-1.252.168-1.372-.072-.12-.264-.193-.555-.338Z" />
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
           </svg>
         );
       case 'linkedin':
@@ -95,10 +111,29 @@ export default function Sidebar({ user, onProfileClick }: SidebarProps) {
             <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
           </svg>
         );
+      case 'target':
+        return (
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+          </svg>
+        );
+      case 'message-square':
+        return (
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+          </svg>
+        );
       case 'bar-chart-2':
         return (
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+          </svg>
+        );
+      case 'settings':
+        return (
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
           </svg>
         );
       case 'help-circle':
@@ -152,7 +187,28 @@ export default function Sidebar({ user, onProfileClick }: SidebarProps) {
         <nav className="flex-1 overflow-y-auto py-4">
           <ul className="space-y-1">
             {/* Main Navigation */}
-            {navigationItems.slice(0, 3).map((item) => (
+            <li>
+              <Link
+                href="/dashboard"
+                className={`flex items-center px-6 py-3 text-sm font-normal transition-colors ${
+                  currentPage === 'dashboard'
+                    ? 'bg-sidebar-link-active text-primary-text border-l-3 border-primary-text'
+                    : 'text-sidebar-text hover:bg-sidebar-link-hover hover:text-primary-text'
+                }`}
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                <span className="mr-3">{getIcon('home')}</span>
+                Dashboard
+              </Link>
+            </li>
+
+            {/* Prospecting Section */}
+            <li className="px-6 py-2 mt-6">
+              <span className="text-xs font-medium text-sidebar-text-secondary uppercase tracking-wider">
+                Prospecting
+              </span>
+            </li>
+            {navigationItems.slice(1, 3).map((item) => (
               <li key={item.page}>
                 <Link
                   href={item.href}
@@ -169,10 +225,10 @@ export default function Sidebar({ user, onProfileClick }: SidebarProps) {
               </li>
             ))}
 
-            {/* Outreach Section */}
+            {/* Approaching Section */}
             <li className="px-6 py-2 mt-6">
               <span className="text-xs font-medium text-sidebar-text-secondary uppercase tracking-wider">
-                Outreach
+                Approaching
               </span>
             </li>
             {navigationItems.slice(3, 8).map((item) => (
@@ -192,13 +248,36 @@ export default function Sidebar({ user, onProfileClick }: SidebarProps) {
               </li>
             ))}
 
-            {/* Analytics & Support Section */}
+            {/* Management Section */}
             <li className="px-6 py-2 mt-6">
               <span className="text-xs font-medium text-sidebar-text-secondary uppercase tracking-wider">
-                Analytics & Support
+                Management
               </span>
             </li>
-            {navigationItems.slice(8).map((item) => (
+            {navigationItems.slice(8, 11).map((item) => (
+              <li key={item.page}>
+                <Link
+                  href={item.href}
+                  className={`flex items-center px-6 py-3 text-sm font-normal transition-colors ${
+                    currentPage === item.page
+                      ? 'bg-sidebar-link-active text-primary-text border-l-3 border-primary-text'
+                      : 'text-sidebar-text hover:bg-sidebar-link-hover hover:text-primary-text'
+                  }`}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  <span className="mr-3">{getIcon(item.icon)}</span>
+                  {item.label}
+                </Link>
+              </li>
+            ))}
+
+            {/* Settings & Support Section */}
+            <li className="px-6 py-2 mt-6">
+              <span className="text-xs font-medium text-sidebar-text-secondary uppercase tracking-wider">
+                Settings & Support
+              </span>
+            </li>
+            {navigationItems.slice(11).map((item) => (
               <li key={item.page}>
                 <Link
                   href={item.href}
@@ -217,20 +296,26 @@ export default function Sidebar({ user, onProfileClick }: SidebarProps) {
           </ul>
         </nav>
 
-        {/* Sidebar Bottom - User Profile */}
-        <div className="border-t border-logout-separator p-4">
+        {/* User Profile Section */}
+        <div className="border-t border-border p-4">
           <button
             onClick={onProfileClick}
-            className="w-full flex flex-col items-center space-y-2 p-3 rounded-btn hover:bg-button-bg transition-colors"
+            className="flex items-center w-full p-3 rounded-btn hover:bg-button-bg transition-colors"
           >
-            <div className="w-10 h-10 bg-button-bg rounded-full flex items-center justify-center border border-border">
-              <span className="text-primary-text font-medium text-sm">
-                {getUserInitial()}
-              </span>
+            <div className="w-8 h-8 bg-button-bg rounded-full flex items-center justify-center mr-3">
+              <span className="text-primary-text font-medium text-sm">{getUserInitial()}</span>
             </div>
-            <div className="text-xs text-sidebar-text-secondary text-center truncate w-full">
-              {user?.email || 'user@example.com'}
+            <div className="flex-1 text-left">
+              <p className="text-sm font-medium text-primary-text">
+                {user?.name || 'User'}
+              </p>
+              <p className="text-xs text-secondary-text">
+                {user?.email || 'user@example.com'}
+              </p>
             </div>
+            <svg className="w-4 h-4 text-secondary-text" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+            </svg>
           </button>
         </div>
       </aside>
@@ -238,7 +323,7 @@ export default function Sidebar({ user, onProfileClick }: SidebarProps) {
       {/* Mobile Overlay */}
       {isMobileMenuOpen && (
         <div
-          className="fixed inset-0 bg-black bg-opacity-50 z-30 lg:hidden"
+          className="lg:hidden fixed inset-0 bg-black bg-opacity-50 z-30"
           onClick={() => setIsMobileMenuOpen(false)}
         />
       )}
