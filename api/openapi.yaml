@@ -1,0 +1,535 @@
+openapi: 3.0.0
+info:
+  title: Rarity Leads API
+  description: |
+    AI-powered B2B lead generation platform API.
+    
+    ## Authentication
+    All API requests require authentication using an API key in the `X-API-Key` header.
+    
+    ## Rate Limiting
+    - Standard: 100 requests per minute
+    - Enterprise: 1000 requests per minute
+    
+  version: 1.0.0
+  contact:
+    name: Rarity Leads Support
+    email: support@rarityleads.com
+    url: https://rarityleads.com/support
+
+servers:
+  - url: https://api.rarityleads.com/v1
+    description: Production server
+  - url: http://localhost:3000/v1
+    description: Local development
+
+security:
+  - ApiKeyAuth: []
+
+paths:
+  /leads:
+    get:
+      summary: List leads
+      description: Retrieve a paginated list of leads with optional filtering
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 50
+            maximum: 100
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [new, contacted, qualified, unqualified]
+        - name: score_min
+          in: query
+          schema:
+            type: integer
+            minimum: 0
+            maximum: 100
+        - name: campaign_id
+          in: query
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LeadList'
+    
+    post:
+      summary: Create lead
+      description: Create a new lead
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LeadCreate'
+      responses:
+        '201':
+          description: Lead created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Lead'
+
+  /leads/{leadId}:
+    get:
+      summary: Get lead by ID
+      parameters:
+        - name: leadId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Lead details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Lead'
+    
+    patch:
+      summary: Update lead
+      parameters:
+        - name: leadId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LeadUpdate'
+      responses:
+        '200':
+          description: Lead updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Lead'
+
+  /leads/{leadId}/enrich:
+    post:
+      summary: Enrich lead data
+      description: Trigger enrichment from multiple data sources
+      parameters:
+        - name: leadId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                sources:
+                  type: array
+                  items:
+                    type: string
+                    enum: [clearbit, apollo, linkedin, crunchbase, all]
+                  default: [all]
+      responses:
+        '202':
+          description: Enrichment job queued
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  jobId:
+                    type: string
+                  status:
+                    type: string
+                    default: queued
+
+  /campaigns:
+    get:
+      summary: List campaigns
+      responses:
+        '200':
+          description: Campaign list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CampaignList'
+    
+    post:
+      summary: Create campaign
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CampaignCreate'
+      responses:
+        '201':
+          description: Campaign created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Campaign'
+
+  /messages/send:
+    post:
+      summary: Send message
+      description: Send a message through specified channel
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MessageSend'
+      responses:
+        '200':
+          description: Message sent successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  messageIds:
+                    type: array
+                    items:
+                      type: string
+                  success:
+                    type: boolean
+
+  /conversations/{leadId}:
+    get:
+      summary: Get conversation history
+      parameters:
+        - name: leadId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Conversation messages
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConversationHistory'
+
+  /analytics/pipeline:
+    get:
+      summary: Get pipeline analytics
+      parameters:
+        - name: start_date
+          in: query
+          schema:
+            type: string
+            format: date
+        - name: end_date
+          in: query
+          schema:
+            type: string
+            format: date
+      responses:
+        '200':
+          description: Pipeline analytics data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PipelineAnalytics'
+
+  /webhooks:
+    post:
+      summary: Create webhook subscription
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WebhookCreate'
+      responses:
+        '201':
+          description: Webhook created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Webhook'
+
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+
+  schemas:
+    Lead:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        company:
+          $ref: '#/components/schemas/Company'
+        status:
+          type: string
+          enum: [new, contacted, qualified, unqualified]
+        score:
+          type: integer
+          minimum: 0
+          maximum: 100
+        data:
+          type: object
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+
+    LeadCreate:
+      type: object
+      required:
+        - company_name
+      properties:
+        company_name:
+          type: string
+        company_domain:
+          type: string
+        contact_email:
+          type: string
+          format: email
+        data:
+          type: object
+
+    LeadUpdate:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [new, contacted, qualified, unqualified]
+        data:
+          type: object
+
+    LeadList:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Lead'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+
+    Company:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        domain:
+          type: string
+        industry:
+          type: string
+        employees:
+          type: integer
+        revenue:
+          type: string
+        location:
+          type: object
+          properties:
+            city:
+              type: string
+            state:
+              type: string
+            country:
+              type: string
+
+    Campaign:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        status:
+          type: string
+          enum: [draft, active, paused, completed]
+        data:
+          type: object
+        created_at:
+          type: string
+          format: date-time
+
+    CampaignCreate:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+        whatsapp_session_id:
+          type: string
+          format: uuid
+        data:
+          type: object
+
+    CampaignList:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Campaign'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+
+    MessageSend:
+      type: object
+      required:
+        - channel
+        - recipients
+        - content
+      properties:
+        channel:
+          type: string
+          enum: [whatsapp, instagram, facebook, x, linkedin]
+        recipients:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+              phone:
+                type: string
+              channel_id:
+                type: string
+        content:
+          type: object
+          properties:
+            type:
+              type: string
+              enum: [text, image, video, document, template]
+            text:
+              type: string
+            template_id:
+              type: string
+            media_url:
+              type: string
+        campaign_id:
+          type: string
+          format: uuid
+
+    ConversationHistory:
+      type: object
+      properties:
+        lead_id:
+          type: string
+          format: uuid
+        messages:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                format: uuid
+              direction:
+                type: string
+                enum: [sent, received]
+              content:
+                type: object
+              timestamp:
+                type: string
+                format: date-time
+              status:
+                type: string
+
+    PipelineAnalytics:
+      type: object
+      properties:
+        stages:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+              count:
+                type: integer
+              value:
+                type: number
+        conversion_rate:
+          type: number
+        average_deal_size:
+          type: number
+        velocity:
+          type: number
+
+    WebhookCreate:
+      type: object
+      required:
+        - url
+        - events
+      properties:
+        url:
+          type: string
+          format: uri
+        events:
+          type: array
+          items:
+            type: string
+            enum: [lead.created, lead.updated, message.sent, message.received, campaign.completed]
+        secret:
+          type: string
+
+    Webhook:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        url:
+          type: string
+          format: uri
+        events:
+          type: array
+          items:
+            type: string
+        is_active:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+
+    Pagination:
+      type: object
+      properties:
+        page:
+          type: integer
+        limit:
+          type: integer
+        total:
+          type: integer
+        pages:
+          type: integer
