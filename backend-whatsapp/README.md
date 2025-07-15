@@ -35,8 +35,8 @@ A production-ready WhatsApp integration backend for Rarity Leads, supporting mul
 3. **Set up environment variables:**
    ```bash
    # Create .env file
-   SUPABASE_URL=your_supabase_project_url
-   SUPABASE_SERVICE_KEY=your_supabase_service_role_key
+   SUPABASE_URL=https://yejheyrdsucgzpzwxuxs.supabase.co
+   SUPABASE_SERVICE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InllamhleXJkc3VjZ3pwend4dXhzIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc0ODgwODY3NCwiZXhwIjoyMDY0Mzg0Njc0fQ.5s0WmC8H4QonZXrdvfiWeJy_aPitvpxakyX-hWAl0UA
    FRONTEND_URL=http://localhost:3000
    PORT=3001
    SESSION_ENCRYPTION_KEY=your-secret-key-32-chars-long!!
