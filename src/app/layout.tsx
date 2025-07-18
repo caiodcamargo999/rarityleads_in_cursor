@@ -4,9 +4,9 @@ import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
 import { Toaster as Sonner } from '@/components/ui/sonner';
 import { TooltipProvider } from '@/components/ui/tooltip';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { AuthProvider } from '@/hooks/useAuth';
 import { ThemeProvider } from '@/components/theme-provider';
+import { Providers } from '@/components/Providers';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -15,7 +15,6 @@ export const metadata: Metadata = {
   description: 'Automate lead capture, qualification, and multi-channel outreach with AI-powered intelligence.',
   keywords: 'B2B, lead generation, AI, automation, prospecting, outreach',
   authors: [{ name: 'Rarity Leads' }],
-  viewport: 'width=device-width, initial-scale=1',
   robots: 'index, follow',
   openGraph: {
     title: 'Rarity Leads - AI-Powered B2B Lead Generation',
@@ -30,7 +29,10 @@ export const metadata: Metadata = {
   },
 };
 
-const queryClient = new QueryClient();
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
+};
 
 export default function RootLayout({
   children,
@@ -40,7 +42,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
-        <QueryClientProvider client={queryClient}>
+        <Providers>
           <ThemeProvider
             attribute="class"
             defaultTheme="dark"
@@ -55,7 +57,7 @@ export default function RootLayout({
               </TooltipProvider>
             </AuthProvider>
           </ThemeProvider>
-        </QueryClientProvider>
+        </Providers>
       </body>
     </html>
   );
