@@ -1,0 +1,119 @@
+
+{
+  "common": {
+    "loading": "Chargement...",
+    "error": "Erreur",
+    "success": "Succès",
+    "cancel": "Annuler",
+    "save": "Enregistrer",
+    "edit": "Modifier",
+    "delete": "Supprimer",
+    "create": "Créer",
+    "update": "Mettre à jour",
+    "search": "Rechercher",
+    "filter": "Filtrer",
+    "export": "Exporter",
+    "import": "Importer",
+    "next": "Suivant",
+    "previous": "Précédent",
+    "finish": "Terminer"
+  },
+  "navigation": {
+    "dashboard": "Tableau de Bord",
+    "prospecting": "Prospection",
+    "leads": "Prospects",
+    "campaigns": "Campagnes",
+    "analytics": "Analytiques",
+    "settings": "Paramètres",
+    "logout": "Déconnexion"
+  },
+  "auth": {
+    "signIn": "Se Connecter",
+    "signUp": "S'Inscrire",
+    "signOut": "Se Déconnecter",
+    "email": "Email",
+    "password": "Mot de Passe",
+    "confirmPassword": "Confirmer le Mot de Passe",
+    "forgotPassword": "Mot de passe oublié?",
+    "resetPassword": "Réinitialiser le Mot de Passe",
+    "createAccount": "Créer un Compte",
+    "alreadyHaveAccount": "Vous avez déjà un compte?",
+    "dontHaveAccount": "Vous n'avez pas de compte?",
+    "invalidCredentials": "Email ou mot de passe invalide",
+    "accountCreated": "Compte créé avec succès",
+    "passwordReset": "Email de réinitialisation envoyé"
+  },
+  "prospecting": {
+    "title": "Flux de Prospection Commerciale",
+    "defineTarget": {
+      "title": "Définir le Marché Cible",
+      "description": "Identifiez votre profil client idéal",
+      "industry": "Industrie",
+      "subSegment": "Sous-segment",
+      "location": "Emplacement",
+      "companySize": "Taille de l'Entreprise",
+      "budget": "Gamme de Budget"
+    },
+    "exploreMarket": {
+      "title": "Explorer le Marché",
+      "description": "Rechercher les opportunités de marché",
+      "marketSize": "Taille du Marché",
+      "competitors": "Concurrents",
+      "trends": "Tendances du Marché"
+    },
+    "identifyContacts": {
+      "title": "Identifier les Contacts",
+      "description": "Trouvez les décideurs dans les entreprises cibles",
+      "targetCompany": "Entreprise Cible",
+      "decisionMakers": "Décideurs",
+      "contactInfo": "Informations de Contact"
+    },
+    "customizeApproach": {
+      "title": "Personnaliser l'Approche",
+      "description": "Personnalisez votre stratégie d'approche",
+      "template": "Modèle de Message",
+      "channel": "Canal de Communication",
+      "customMessage": "Message Personnalisé"
+    },
+    "startEngagement": {
+      "title": "Commencer l'Engagement",
+      "description": "Exécutez votre plan d'approche",
+      "schedule": "Programmer",
+      "followUp": "Plan de Suivi",
+      "track": "Suivre les Progrès"
+    }
+  },
+  "leads": {
+    "title": "Gestion des Prospects",
+    "addLead": "Ajouter un Prospect",
+    "editLead": "Modifier le Prospect",
+    "firstName": "Prénom",
+    "lastName": "Nom de Famille",
+    "email": "Email",
+    "phone": "Téléphone",
+    "company": "Entreprise",
+    "jobTitle": "Titre du Poste",
+    "status": "Statut",
+    "source": "Source",
+    "tags": "Étiquettes",
+    "notes": "Notes",
+    "score": "Score du Prospect",
+    "statuses": {
+      "new": "Nouveau",
+      "contacted": "Contacté",
+      "qualified": "Qualifié",
+      "converted": "Converti",
+      "lost": "Perdu"
+    }
+  },
+  "dashboard": {
+    "title": "Tableau de Bord",
+    "welcome": "Bienvenue sur Rarity Leads",
+    "totalLeads": "Total des Prospects",
+    "activeLeads": "Prospects Actifs",
+    "convertedLeads": "Prospects Convertis",
+    "conversionRate": "Taux de Conversion",
+    "recentActivity": "Activité Récente",
+    "upcomingTasks": "Tâches à Venir"
+  }
+}

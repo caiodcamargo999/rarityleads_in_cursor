@@ -1,0 +1,119 @@
+
+{
+  "common": {
+    "loading": "Cargando...",
+    "error": "Error",
+    "success": "Éxito",
+    "cancel": "Cancelar",
+    "save": "Guardar",
+    "edit": "Editar",
+    "delete": "Eliminar",
+    "create": "Crear",
+    "update": "Actualizar",
+    "search": "Buscar",
+    "filter": "Filtrar",
+    "export": "Exportar",
+    "import": "Importar",
+    "next": "Siguiente",
+    "previous": "Anterior",
+    "finish": "Finalizar"
+  },
+  "navigation": {
+    "dashboard": "Panel de Control",
+    "prospecting": "Prospección",
+    "leads": "Prospectos",
+    "campaigns": "Campañas",
+    "analytics": "Analíticas",
+    "settings": "Configuración",
+    "logout": "Cerrar Sesión"
+  },
+  "auth": {
+    "signIn": "Iniciar Sesión",
+    "signUp": "Registrarse",
+    "signOut": "Cerrar Sesión",
+    "email": "Correo Electrónico",
+    "password": "Contraseña",
+    "confirmPassword": "Confirmar Contraseña",
+    "forgotPassword": "¿Olvidaste tu contraseña?",
+    "resetPassword": "Restablecer Contraseña",
+    "createAccount": "Crear Cuenta",
+    "alreadyHaveAccount": "¿Ya tienes una cuenta?",
+    "dontHaveAccount": "¿No tienes una cuenta?",
+    "invalidCredentials": "Email o contraseña inválidos",
+    "accountCreated": "Cuenta creada exitosamente",
+    "passwordReset": "Email de restablecimiento enviado"
+  },
+  "prospecting": {
+    "title": "Flujo de Prospección de Ventas",
+    "defineTarget": {
+      "title": "Definir Mercado Objetivo",
+      "description": "Identifica tu perfil de cliente ideal",
+      "industry": "Industria",
+      "subSegment": "Sub-segmento",
+      "location": "Ubicación",
+      "companySize": "Tamaño de Empresa",
+      "budget": "Rango de Presupuesto"
+    },
+    "exploreMarket": {
+      "title": "Explorar Mercado",
+      "description": "Investigar oportunidades de mercado",
+      "marketSize": "Tamaño del Mercado",
+      "competitors": "Competidores",
+      "trends": "Tendencias del Mercado"
+    },
+    "identifyContacts": {
+      "title": "Identificar Contactos",
+      "description": "Encuentra tomadores de decisiones en empresas objetivo",
+      "targetCompany": "Empresa Objetivo",
+      "decisionMakers": "Tomadores de Decisiones",
+      "contactInfo": "Información de Contacto"
+    },
+    "customizeApproach": {
+      "title": "Personalizar Enfoque",
+      "description": "Personaliza tu estrategia de acercamiento",
+      "template": "Plantilla de Mensaje",
+      "channel": "Canal de Comunicación",
+      "customMessage": "Mensaje Personalizado"
+    },
+    "startEngagement": {
+      "title": "Iniciar Compromiso",
+      "description": "Ejecuta tu plan de acercamiento",
+      "schedule": "Programar",
+      "followUp": "Plan de Seguimiento",
+      "track": "Seguir Progreso"
+    }
+  },
+  "leads": {
+    "title": "Gestión de Prospectos",
+    "addLead": "Agregar Prospecto",
+    "editLead": "Editar Prospecto",
+    "firstName": "Nombre",
+    "lastName": "Apellido",
+    "email": "Correo Electrónico",
+    "phone": "Teléfono",
+    "company": "Empresa",
+    "jobTitle": "Cargo",
+    "status": "Estado",
+    "source": "Origen",
+    "tags": "Etiquetas",
+    "notes": "Notas",
+    "score": "Puntuación del Prospecto",
+    "statuses": {
+      "new": "Nuevo",
+      "contacted": "Contactado",
+      "qualified": "Calificado",
+      "converted": "Convertido",
+      "lost": "Perdido"
+    }
+  },
+  "dashboard": {
+    "title": "Panel de Control",
+    "welcome": "Bienvenido a Rarity Leads",
+    "totalLeads": "Total de Prospectos",
+    "activeLeads": "Prospectos Activos",
+    "convertedLeads": "Prospectos Convertidos",
+    "conversionRate": "Tasa de Conversión",
+    "recentActivity": "Actividad Reciente",
+    "upcomingTasks": "Tareas Pendientes"
+  }
+}

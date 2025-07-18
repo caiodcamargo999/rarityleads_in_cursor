@@ -1,0 +1,119 @@
+
+{
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "cancel": "Cancel",
+    "save": "Save",
+    "edit": "Edit",
+    "delete": "Delete",
+    "create": "Create",
+    "update": "Update",
+    "search": "Search",
+    "filter": "Filter",
+    "export": "Export",
+    "import": "Import",
+    "next": "Next",
+    "previous": "Previous",
+    "finish": "Finish"
+  },
+  "navigation": {
+    "dashboard": "Dashboard",
+    "prospecting": "Prospecting",
+    "leads": "Leads",
+    "campaigns": "Campaigns",
+    "analytics": "Analytics",
+    "settings": "Settings",
+    "logout": "Logout"
+  },
+  "auth": {
+    "signIn": "Sign In",
+    "signUp": "Sign Up",
+    "signOut": "Sign Out",
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "forgotPassword": "Forgot Password?",
+    "resetPassword": "Reset Password",
+    "createAccount": "Create Account",
+    "alreadyHaveAccount": "Already have an account?",
+    "dontHaveAccount": "Don't have an account?",
+    "invalidCredentials": "Invalid email or password",
+    "accountCreated": "Account created successfully",
+    "passwordReset": "Password reset email sent"
+  },
+  "prospecting": {
+    "title": "Sales Prospecting Workflow",
+    "defineTarget": {
+      "title": "Define Target Market",
+      "description": "Identify your ideal customer profile",
+      "industry": "Industry",
+      "subSegment": "Sub-segment",
+      "location": "Location",
+      "companySize": "Company Size",
+      "budget": "Budget Range"
+    },
+    "exploreMarket": {
+      "title": "Explore Market",
+      "description": "Research market opportunities",
+      "marketSize": "Market Size",
+      "competitors": "Competitors",
+      "trends": "Market Trends"
+    },
+    "identifyContacts": {
+      "title": "Identify Contacts",
+      "description": "Find decision makers in target companies",
+      "targetCompany": "Target Company",
+      "decisionMakers": "Decision Makers",
+      "contactInfo": "Contact Information"
+    },
+    "customizeApproach": {
+      "title": "Customize Approach",
+      "description": "Personalize your outreach strategy",
+      "template": "Message Template",
+      "channel": "Communication Channel",
+      "customMessage": "Custom Message"
+    },
+    "startEngagement": {
+      "title": "Start Engagement",
+      "description": "Execute your outreach plan",
+      "schedule": "Schedule",
+      "followUp": "Follow-up Plan",
+      "track": "Track Progress"
+    }
+  },
+  "leads": {
+    "title": "Lead Management",
+    "addLead": "Add Lead",
+    "editLead": "Edit Lead",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "email": "Email",
+    "phone": "Phone",
+    "company": "Company",
+    "jobTitle": "Job Title",
+    "status": "Status",
+    "source": "Source",
+    "tags": "Tags",
+    "notes": "Notes",
+    "score": "Lead Score",
+    "statuses": {
+      "new": "New",
+      "contacted": "Contacted",
+      "qualified": "Qualified",
+      "converted": "Converted",
+      "lost": "Lost"
+    }
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "welcome": "Welcome to Rarity Leads",
+    "totalLeads": "Total Leads",
+    "activeLeads": "Active Leads",
+    "convertedLeads": "Converted Leads",
+    "conversionRate": "Conversion Rate",
+    "recentActivity": "Recent Activity",
+    "upcomingTasks": "Upcoming Tasks"
+  }
+}
