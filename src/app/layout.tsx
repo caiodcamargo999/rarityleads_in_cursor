@@ -16,6 +16,11 @@ export const metadata: Metadata = {
   keywords: 'B2B, lead generation, AI, automation, prospecting, outreach',
   authors: [{ name: 'Rarity Leads' }],
   robots: 'index, follow',
+  icons: {
+    icon: '/favicon.svg',
+    shortcut: '/favicon.svg',
+    apple: '/favicon.svg',
+  },
   openGraph: {
     title: 'Rarity Leads - AI-Powered B2B Lead Generation',
     description: 'Automate lead capture, qualification, and multi-channel outreach with AI-powered intelligence.',
