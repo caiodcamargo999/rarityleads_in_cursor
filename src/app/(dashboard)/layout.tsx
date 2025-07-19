@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import Sidebar from '@/components/Sidebar';
 import { Loader2 } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 export default function DashboardLayout({
   children,
@@ -27,11 +28,20 @@ export default function DashboardLayout({
 
   if (!mounted || loading) {
     return (
-      <div className="min-h-screen bg-[#0A0A23] flex items-center justify-center">
-        <div className="text-center">
-          <Loader2 className="h-8 w-8 animate-spin text-[#8B5CF6] mx-auto mb-4" />
-          <p className="text-[#b0b0b0]">Loading...</p>
-        </div>
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="text-center"
+        >
+          <motion.div
+            animate={{ rotate: 360 }}
+            transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+          >
+            <Loader2 className="h-8 w-8 text-primary mx-auto mb-4" />
+          </motion.div>
+          <p className="text-muted-foreground">Loading your dashboard...</p>
+        </motion.div>
       </div>
     );
   }
@@ -43,9 +53,14 @@ export default function DashboardLayout({
   return (
     <div className="dashboard-container">
       <Sidebar user={user} />
-      <main className="main-content">
+      <motion.main 
+        className="main-content"
+        initial={{ opacity: 0, x: 20 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.5, delay: 0.2 }}
+      >
         {children}
-      </main>
+      </motion.main>
     </div>
   );
 } 
