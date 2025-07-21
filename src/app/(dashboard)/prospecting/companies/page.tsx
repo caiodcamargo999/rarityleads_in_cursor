@@ -68,28 +68,28 @@ export default function CompaniesPage() {
           transition={{ duration: 0.6, delay: 0.1 }}
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12"
         >
-          <Button variant="primary" size="lg" className="h-20 flex flex-col items-center justify-center gap-2 text-lg font-medium bg-[#8b5cf6] text-white border border-[#8b5cf6]">
+          <Button variant="primary" size="lg" className="h-20 flex flex-col items-center justify-center gap-2 text-lg font-medium">
             <Plus className="w-6 h-6" />
             <span>Add Company</span>
             <span className="text-sm opacity-80">Manual entry</span>
           </Button>
           
-          <Button variant="secondary" size="lg" className="h-20 flex flex-col items-center justify-center gap-2 text-lg font-medium bg-[#232336] text-white border border-[#8b5cf6]">
+          <Button variant="secondary" size="lg" className="h-20 flex flex-col items-center justify-center gap-2 text-lg font-medium">
             <Upload className="w-6 h-6" />
-            <span>Import List</span>
+            <span>Import CSV</span>
             <span className="text-sm opacity-80">Bulk import</span>
           </Button>
           
-          <Button variant="secondary" size="lg" className="h-20 flex flex-col items-center justify-center gap-2 text-lg font-medium bg-[#232336] text-white border border-[#8b5cf6]">
+          <Button variant="secondary" size="lg" className="h-20 flex flex-col items-center justify-center gap-2 text-lg font-medium">
             <Target className="w-6 h-6" />
             <span>Find Companies</span>
             <span className="text-sm opacity-80">AI discovery</span>
           </Button>
           
-          <Button variant="secondary" size="lg" className="h-20 flex flex-col items-center justify-center gap-2 text-lg font-medium bg-[#232336] text-white border border-[#8b5cf6]">
+          <Button variant="secondary" size="lg" className="h-20 flex flex-col items-center justify-center gap-2 text-lg font-medium">
             <Download className="w-6 h-6" />
             <span>Export Data</span>
-            <span className="text-sm opacity-80">Download list</span>
+            <span className="text-sm opacity-80">Download companies</span>
           </Button>
         </motion.div>
 
@@ -149,13 +149,13 @@ export default function CompaniesPage() {
                     }
                   </p>
                   <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                    <Button variant="primary" size="lg" className="flex items-center justify-center gap-2 text-base font-medium bg-[#8b5cf6] text-white border border-[#8b5cf6]">
+                    <Button variant="primary" size="lg" className="flex items-center justify-center gap-2 text-base font-medium">
                       <Plus className="w-5 h-5" />
                       <span>Add Your First Company</span>
                     </Button>
-                    <Button variant="secondary" size="lg" className="flex items-center justify-center gap-2 text-base font-medium bg-[#232336] text-white border border-[#8b5cf6]">
+                    <Button variant="secondary" size="lg" className="flex items-center justify-center gap-2 text-base font-medium">
                       <Upload className="w-5 h-5" />
-                      <span>Import List</span>
+                      <span>Import CSV</span>
                     </Button>
                   </div>
                 </div>

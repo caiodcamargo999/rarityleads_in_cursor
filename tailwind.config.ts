@@ -63,6 +63,12 @@ const config: Config = {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        'rarity-purple': '#8b5cf6',
+        'rarity-purple-dark': '#7c3aed',
+        'rarity-dark-bg': '#232336',
+        'rarity-dark-bg-2': '#18181c',
+        'rarity-border': '#393552',
+        'rarity-danger': '#ef4444',
       },
       borderRadius: {
         lg: "var(--radius)",

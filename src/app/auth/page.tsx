@@ -168,7 +168,7 @@ export default function AuthPage() {
                     variant="primary"
                     size="lg"
                     loading={loading}
-                    className="w-full flex items-center justify-center gap-2 text-lg font-medium bg-[#8b5cf6] text-white border border-[#8b5cf6]"
+                    className="w-full flex items-center justify-center gap-2 text-lg font-medium"
                   >
                     <span>{isLogin ? 'Sign In' : 'Create Account'}</span>
                     <ArrowRight className="w-5 h-5" />
@@ -188,7 +188,7 @@ export default function AuthPage() {
                   <Button
                     variant="secondary"
                     size="lg"
-                    className="w-full mt-4 flex items-center justify-center gap-2 text-lg font-medium bg-[#232336] text-white border border-[#8b5cf6]"
+                    className="w-full mt-4 flex items-center justify-center gap-2 text-lg font-medium"
                     onClick={handleGoogleSignIn}
                     loading={googleLoading}
                   >

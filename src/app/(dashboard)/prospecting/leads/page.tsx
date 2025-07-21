@@ -68,22 +68,22 @@ export default function LeadsPage() {
           transition={{ duration: 0.6, delay: 0.1 }}
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 mb-4"
         >
-          <Button variant="primary" size="lg" className="h-20 flex flex-col items-center justify-center gap-2 text-lg font-medium bg-[#8b5cf6] text-white border border-[#8b5cf6]">
+          <Button variant="primary" size="lg" className="h-20 flex flex-col items-center justify-center gap-2 text-lg font-medium">
             <Plus className="w-6 h-6" />
             <span>Add Lead</span>
             <span className="text-sm opacity-80">Manual entry</span>
           </Button>
-          <Button variant="secondary" size="lg" className="h-20 flex flex-col items-center justify-center gap-2 text-lg font-medium bg-[#232336] text-white border border-[#8b5cf6]">
+          <Button variant="secondary" size="lg" className="h-20 flex flex-col items-center justify-center gap-2 text-lg font-medium">
             <Upload className="w-6 h-6" />
             <span>Import CSV</span>
             <span className="text-sm opacity-80">Bulk import</span>
           </Button>
-          <Button variant="secondary" size="lg" className="h-20 flex flex-col items-center justify-center gap-2 text-lg font-medium bg-[#232336] text-white border border-[#8b5cf6]">
+          <Button variant="secondary" size="lg" className="h-20 flex flex-col items-center justify-center gap-2 text-lg font-medium">
             <Target className="w-6 h-6" />
             <span>Find Prospects</span>
             <span className="text-sm opacity-80">AI discovery</span>
           </Button>
-          <Button variant="secondary" size="lg" className="h-20 flex flex-col items-center justify-center gap-2 text-lg font-medium bg-[#232336] text-white border border-[#8b5cf6]">
+          <Button variant="secondary" size="lg" className="h-20 flex flex-col items-center justify-center gap-2 text-lg font-medium">
             <Download className="w-6 h-6" />
             <span>Export Data</span>
             <span className="text-sm opacity-80">Download leads</span>
@@ -110,7 +110,7 @@ export default function LeadsPage() {
                     className="w-full pl-10 pr-4 py-3 bg-[#0a0a0a]/50 backdrop-blur-sm border border-gray-800 rounded-lg focus:ring-2 focus:ring-[#8b5cf6]/50 focus:border-transparent transition-all duration-300 text-white placeholder-gray-400"
                   />
                 </div>
-                <Button variant="secondary" size="lg" className="flex items-center justify-center gap-2 text-base font-medium bg-[#232336] text-white border border-[#8b5cf6]">
+                <Button variant="secondary" size="lg" className="flex items-center justify-center gap-2 text-base font-medium">
                   <Filter className="w-5 h-5" />
                   <span>Filters</span>
                 </Button>
@@ -146,11 +146,11 @@ export default function LeadsPage() {
                     }
                   </p>
                   <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                    <Button variant="primary" size="lg" className="flex items-center justify-center gap-2 text-base font-medium bg-[#8b5cf6] text-white border border-[#8b5cf6]">
+                    <Button variant="primary" size="lg" className="flex items-center justify-center gap-2 text-base font-medium">
                       <Plus className="w-5 h-5" />
                       <span>Add Your First Lead</span>
                     </Button>
-                    <Button variant="secondary" size="lg" className="flex items-center justify-center gap-2 text-base font-medium bg-[#232336] text-white border border-[#8b5cf6]">
+                    <Button variant="secondary" size="lg" className="flex items-center justify-center gap-2 text-base font-medium">
                       <Upload className="w-5 h-5" />
                       <span>Import CSV</span>
                     </Button>
