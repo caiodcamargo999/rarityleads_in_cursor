@@ -158,7 +158,7 @@ export default function DashboardLayout({
                       : 'text-gray-400 hover:text-white hover:bg-[#18181c]'
                   }`}
                 >
-                  {item.icon ? <item.icon className="w-5 h-5" /> : null}
+                  {typeof item.icon === 'function' ? <item.icon className="w-5 h-5" /> : null}
                   <span>{item.name}</span>
                 </Link>
               )
