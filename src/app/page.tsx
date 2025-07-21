@@ -1,42 +1,133 @@
 "use client"
 
-import Link from 'next/link';
-import { motion } from 'framer-motion';
-import { Button } from '@/components/ui/button';
+import { motion } from 'framer-motion'
+import Link from 'next/link'
+import { Button } from '@/components/ui/button'
 import { 
-  ArrowRight, 
-  Zap, 
-  MessageSquare, 
-  BarChart3, 
-  Users, 
-  Target,
-  Check,
-  Star
-} from 'lucide-react';
+  ArrowRight
+} from 'lucide-react'
 
 export default function HomePage() {
+  const features = [
+    {
+      title: "AI Powered SDR That Qualifies Leads for You",
+      description: "Deploy an AI agent that identifies ideal customers, engages them in human like conversations, and qualifies their interest so your team only talks to meeting ready leads."
+    },
+    {
+      title: "Smart WhatsApp Follow ups, No Manual Messaging",
+      description: "Connect with prospects across any channel WhatsApp, LinkedIn, & Email. Our AI crafts and sends personalized follow ups at the perfect time, ensuring no opportunity is missed."
+    },
+    {
+      title: "Campaign Intelligence for Google and Meta",
+      description: "Move beyond vanity metrics. Rarity analyzes your entire sales funnel, providing actionable insights to optimize campaigns, lower acquisition costs, and maximize your return."
+    }
+  ]
+
+  const solutions = [
+    {
+      title: "AI Driven Automation",
+      features: [
+        "Capture, enrich, and score leads automatically",
+        "AI powered SDR qualifies and routes prospects",
+        "Smart WhatsApp, LinkedIn, and Email follow ups",
+        "Human handoff for high value conversations"
+      ]
+    },
+    {
+      title: "Actionable Intelligence",
+      features: [
+        "Real time analytics and campaign optimization",
+        "Intent targeting and decision maker identification",
+        "Predictive insights and AI recommendations",
+        "Custom dashboards for every role"
+      ]
+    }
+  ]
+
+  const pricingPlans = [
+    {
+      name: "Starter",
+      price: "$47",
+      period: "/month",
+      features: [
+        "Qualified Leads",
+        "AI Powered SDR",
+        "Multi Channel Outreach",
+        "Email & Chat Support"
+      ],
+      cta: "Choose Plan",
+      popular: false
+    },
+    {
+      name: "Pro",
+      price: "$97",
+      period: "/month",
+      features: [
+        "More Qualified Leads",
+        "Everything in Starter",
+        "Campaign Intelligence",
+        "Priority Support"
+      ],
+      cta: "Choose Plan",
+      popular: true
+    },
+    {
+      name: "Enterprise",
+      price: "$197",
+      period: "/month",
+      features: [
+        "Unlimited Leads",
+        "Everything in Pro",
+        "Dedicated Success Manager",
+        "Custom Integrations"
+      ],
+      cta: "Contact Sales",
+      popular: false
+    }
+  ]
+
   return (
-    <div className="min-h-screen bg-[#0A0A23] text-white">
+    <div className="min-h-screen bg-[#0a0a0a]">
       {/* Navigation */}
-      <nav className="fixed top-0 w-full z-50 bg-[#0A0A23]/80 backdrop-blur-md border-b border-[#232336]">
+      <nav className="fixed top-0 w-full z-50 bg-[#0a0a0a]/80 backdrop-blur-xl border-b border-gray-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
+            {/* Logo - Left */}
             <div className="flex items-center">
-              <h1 className="text-2xl font-bold gradient-text">Rarity Leads</h1>
+              <Link href="/" className="text-2xl font-medium text-white">
+                Rarity Leads
+              </Link>
             </div>
+
+            {/* Navigation Links - Center */}
             <div className="hidden md:flex items-center space-x-8">
-              <Link href="#features" className="text-[#e0e0e0] hover:text-white transition-colors">
+              <Link href="#features" className="text-gray-300 hover:text-white transition-colors">
                 Features
               </Link>
-              <Link href="#pricing" className="text-[#e0e0e0] hover:text-white transition-colors">
+              <Link href="#solution" className="text-gray-300 hover:text-white transition-colors">
+                Solution
+              </Link>
+              <Link href="#pricing" className="text-gray-300 hover:text-white transition-colors">
                 Pricing
               </Link>
-              <Link href="/auth" className="btn-secondary">
-                Sign In
+              <Link href="#about" className="text-gray-300 hover:text-white transition-colors">
+                About
               </Link>
-              <Link href="/auth" className="btn-primary">
-                Start Free
+            </div>
+
+            {/* Buttons - Right */}
+            <div className="flex items-center space-x-4">
+              <Link href="/auth" className="text-gray-300 hover:text-white transition-colors">
+                Login
               </Link>
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <Link href="/auth" className="inline-block bg-gradient-to-r from-[#7c3aed] to-[#8b5cf6] text-white px-4 py-2 rounded-lg font-medium hover:from-[#6d28d9] hover:to-[#7c3aed] transition-all duration-200">
+                  Sign Up
+                </Link>
+              </motion.div>
             </div>
           </div>
         </div>
@@ -48,94 +139,105 @@ export default function HomePage() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
+            transition={{ duration: 0.6 }}
           >
-            <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
-              AI-powered warm lead hunting for{' '}
-              <span className="gradient-text">faster deals</span>, deeper conversations, and scalable outreach
+            <h1 className="text-4xl md:text-6xl font-medium text-white mb-6 leading-tight">
+              AI powered warm lead hunting for faster deals, deeper conversations, and scalable outreach
+              <span className="text-[#8b5cf6]">
+                {" "} with zero guesswork.
+              </span>
             </h1>
-            <p className="text-xl md:text-2xl text-[#b0b0b0] mb-8 max-w-4xl mx-auto">
-              Rarity Leads is your AI-native platform to attract, qualify, and close clients — without the manual grind.
+            <p className="text-lg md:text-xl text-gray-400 mb-8 max-w-3xl mx-auto">
+              Rarity Leads is your AI native platform to attract, qualify, and close clients without the manual grind.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <Link href="/auth">
-                <Button size="lg" className="btn-primary text-lg px-8 py-4">
-                  Start for Free
-                  <ArrowRight className="ml-2 h-5 w-5" />
-                </Button>
+            <motion.div
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <Link href="/auth" className="inline-block bg-gradient-to-r from-[#7c3aed] to-[#8b5cf6] text-white px-8 py-4 rounded-lg font-medium hover:from-[#6d28d9] hover:to-[#7c3aed] transition-all duration-200 text-lg">
+                Start for Free
+                <ArrowRight className="w-5 h-5 ml-2 inline" />
               </Link>
-              <Link href="#features">
-                <Button variant="outline" size="lg" className="btn-secondary text-lg px-8 py-4">
-                  See How It Works
-                </Button>
-              </Link>
-            </div>
+            </motion.div>
           </motion.div>
         </div>
       </section>
 
       {/* Features Section */}
-      <section id="features" className="py-20 px-4 sm:px-6 lg:px-8 bg-[#232136]">
+      <section id="features" className="py-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
+            transition={{ duration: 0.6 }}
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <h2 className="text-4xl md:text-5xl font-bold mb-6">
-              Everything you need to scale your outreach
+            <h2 className="text-3xl md:text-4xl font-medium text-white mb-6">
+              The End of Manual Prospecting
             </h2>
-            <p className="text-xl text-[#b0b0b0] max-w-3xl mx-auto">
-              From AI-powered lead discovery to multi-channel messaging, we've got you covered.
-            </p>
           </motion.div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[
-              {
-                icon: Zap,
-                title: "AI-Powered SDR That Qualifies Leads for You",
-                description: "Automatically discover and score leads based on firmographics, technographics, and intent signals."
-              },
-              {
-                icon: MessageSquare,
-                title: "Smart WhatsApp Follow-ups, No Manual Messaging",
-                description: "Multi-account WhatsApp management with AI-suggested messages and automated sequences."
-              },
-              {
-                icon: BarChart3,
-                title: "Campaign Intelligence for Google and Meta",
-                description: "Track performance across all channels with real-time analytics and optimization insights."
-              },
-              {
-                icon: Users,
-                title: "Multi-Channel Outreach",
-                description: "Reach prospects on WhatsApp, LinkedIn, Instagram, Facebook, and X with unified messaging."
-              },
-              {
-                icon: Target,
-                title: "Intent-Based Targeting",
-                description: "Identify prospects showing buying signals through web activity and technology adoption."
-              },
-              {
-                icon: Check,
-                title: "Seamless CRM Integration",
-                description: "Sync leads and conversations with your existing CRM through our open API."
-              }
-            ].map((feature, index) => (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {features.map((feature, index) => (
               <motion.div
                 key={index}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
                 viewport={{ once: true }}
-                className="card p-8 hover:border-[#8B5CF6] transition-colors"
+                className="p-6 bg-[#18181c] border border-gray-800 rounded-lg"
               >
-                <feature.icon className="h-12 w-12 text-[#8B5CF6] mb-4" />
-                <h3 className="text-xl font-semibold mb-3">{feature.title}</h3>
-                <p className="text-[#b0b0b0]">{feature.description}</p>
+                <h3 className="text-lg font-medium text-white mb-3">
+                  {feature.title}
+                </h3>
+                <p className="text-gray-400 text-sm">
+                  {feature.description}
+                </p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Solution Section */}
+      <section id="solution" className="py-20 px-4 sm:px-6 lg:px-8 bg-[#18181c]">
+        <div className="max-w-7xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-3xl md:text-4xl font-medium text-white mb-6">
+              The Solution: AI Powered Prospecting, Human Results
+            </h2>
+            <p className="text-lg text-gray-400 max-w-3xl mx-auto">
+              Rarity Leads automates and humanizes your entire lead generation process, so you can focus on closing deals, not chasing prospects. Our platform combines advanced AI, real time data, and multi channel outreach to deliver qualified leads, actionable insights, and scalable growth for agencies and sales teams.
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {solutions.map((solution, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+                viewport={{ once: true }}
+                className="p-6 bg-[#0a0a0a] border border-gray-800 rounded-lg"
+              >
+                <h3 className="text-lg font-medium text-white mb-4">
+                  {solution.title}
+                </h3>
+                <ul className="space-y-2">
+                  {solution.features.map((feature, featureIndex) => (
+                    <li key={featureIndex} className="text-gray-300 text-sm">
+                      {feature}
+                    </li>
+                  ))}
+                </ul>
               </motion.div>
             ))}
           </div>
@@ -148,107 +250,66 @@ export default function HomePage() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
+            transition={{ duration: 0.6 }}
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <h2 className="text-4xl md:text-5xl font-bold mb-6">
-              Simple Pricing for Scalable Growth
+            <h2 className="text-3xl md:text-4xl font-medium text-white mb-6">
+              Simple, Transparent Pricing. No Surprises.
             </h2>
-            <p className="text-xl text-[#b0b0b0] max-w-3xl mx-auto">
-              Start free and scale as you grow. No hidden fees, no surprises.
-            </p>
           </motion.div>
 
-          <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-            {[
-              {
-                name: "Starter",
-                price: "$49",
-                period: "/month",
-                description: "Perfect for small teams getting started",
-                features: [
-                  "100 AI-qualified leads per month",
-                  "WhatsApp multi-account (2 accounts)",
-                  "Basic analytics dashboard",
-                  "Email support",
-                  "API access"
-                ],
-                cta: "Start for Free",
-                popular: false
-              },
-              {
-                name: "Professional",
-                price: "$149",
-                period: "/month",
-                description: "For growing teams and agencies",
-                features: [
-                  "500 AI-qualified leads per month",
-                  "WhatsApp multi-account (5 accounts)",
-                  "All social media channels",
-                  "Advanced analytics & reporting",
-                  "Priority support",
-                  "Custom integrations"
-                ],
-                cta: "Start Free Trial",
-                popular: true
-              },
-              {
-                name: "Enterprise",
-                price: "Custom",
-                period: "",
-                description: "For large organizations with custom needs",
-                features: [
-                  "Unlimited AI-qualified leads",
-                  "Unlimited WhatsApp accounts",
-                  "Custom AI models",
-                  "Dedicated account manager",
-                  "SLA guarantees",
-                  "On-premise deployment"
-                ],
-                cta: "Contact Sales",
-                popular: false
-              }
-            ].map((plan, index) => (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {pricingPlans.map((plan, index) => (
               <motion.div
                 key={index}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
                 viewport={{ once: true }}
-                className={`card p-8 relative ${plan.popular ? 'border-[#8B5CF6] ring-2 ring-[#8B5CF6]/20' : ''}`}
+                className={`relative p-6 bg-[#18181c] border rounded-lg ${
+                  plan.popular 
+                    ? 'border-[#8b5cf6]' 
+                    : 'border-gray-800'
+                }`}
               >
                 {plan.popular && (
-                  <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                    <span className="bg-[#8B5CF6] text-white px-4 py-1 rounded-full text-sm font-medium">
+                  <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
+                    <span className="bg-[#8b5cf6] text-white px-3 py-1 rounded-full text-xs font-medium">
                       Most Popular
                     </span>
                   </div>
                 )}
-                <div className="text-center mb-8">
-                  <h3 className="text-2xl font-bold mb-2">{plan.name}</h3>
-                  <div className="mb-4">
-                    <span className="text-4xl font-bold">{plan.price}</span>
-                    <span className="text-[#b0b0b0]">{plan.period}</span>
+                
+                <div className="text-center mb-6">
+                  <h3 className="text-xl font-medium text-white mb-2">{plan.name}</h3>
+                  <div className="flex items-baseline justify-center mb-2">
+                    <span className="text-3xl font-medium text-white">{plan.price}</span>
+                    <span className="text-gray-400 ml-1">{plan.period}</span>
                   </div>
-                  <p className="text-[#b0b0b0]">{plan.description}</p>
                 </div>
-                <ul className="space-y-3 mb-8">
+
+                <ul className="space-y-3 mb-6">
                   {plan.features.map((feature, featureIndex) => (
-                    <li key={featureIndex} className="flex items-center">
-                      <Check className="h-5 w-5 text-[#8B5CF6] mr-3 flex-shrink-0" />
-                      <span className="text-[#e0e0e0]">{feature}</span>
+                    <li key={featureIndex} className="text-gray-300 text-sm">
+                      {feature}
                     </li>
                   ))}
                 </ul>
-                <Link href="/auth" className="block">
-                  <Button 
-                    className={`w-full ${plan.popular ? 'btn-primary' : 'btn-secondary'}`}
-                    size="lg"
-                  >
+
+                <motion.div
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="w-full"
+                >
+                  <Link href="/auth" className={`block w-full text-center py-3 px-4 rounded-lg font-medium transition-all duration-200 ${
+                    plan.popular 
+                      ? 'bg-gradient-to-r from-[#7c3aed] to-[#8b5cf6] text-white hover:from-[#6d28d9] hover:to-[#7c3aed]' 
+                      : 'bg-[#232336] text-white hover:bg-[#2d2d47]'
+                  }`}>
                     {plan.cta}
-                  </Button>
-                </Link>
+                  </Link>
+                </motion.div>
               </motion.div>
             ))}
           </div>
@@ -256,86 +317,41 @@ export default function HomePage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-[#232136]">
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-[#18181c]">
         <div className="max-w-4xl mx-auto text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
+            transition={{ duration: 0.6 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-4xl md:text-5xl font-bold mb-6">
-              Stop Chasing Leads. Start Closing.
+            <h2 className="text-3xl md:text-4xl font-medium text-white mb-6">
+              Ready to Build Your Unfair Advantage?
             </h2>
-            <p className="text-xl text-[#b0b0b0] mb-8">
-              Join thousands of agencies and sales teams using Rarity Leads to scale their outreach.
+            <p className="text-lg text-gray-400 mb-8">
+              Join high growth companies that trust Rarity Leads to build their sales pipeline on autopilot.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
-              <Link href="/auth">
-                <Button size="lg" className="btn-primary text-lg px-8 py-4">
-                  Get Started
-                  <ArrowRight className="ml-2 h-5 w-5" />
-                </Button>
+            <motion.div
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <Link href="/auth" className="inline-block bg-gradient-to-r from-[#7c3aed] to-[#8b5cf6] text-white px-8 py-4 rounded-lg font-medium hover:from-[#6d28d9] hover:to-[#7c3aed] transition-all duration-200 text-lg">
+                Get Started for Free
+                <ArrowRight className="w-5 h-5 ml-2 inline" />
               </Link>
-            </div>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-8 text-[#b0b0b0]">
-              <div className="flex items-center">
-                <Star className="h-5 w-5 text-yellow-400 mr-2" />
-                <span>4.9 Stars on Clutch</span>
-              </div>
-              <div className="flex items-center">
-                <Users className="h-5 w-5 text-[#8B5CF6] mr-2" />
-                <span>1,200+ Clients</span>
-              </div>
-              <div className="flex items-center">
-                <Zap className="h-5 w-5 text-[#8B5CF6] mr-2" />
-                <span>AI-Powered and Human-Approved</span>
-              </div>
-            </div>
+            </motion.div>
           </motion.div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="py-12 px-4 sm:px-6 lg:px-8 border-t border-[#232336]">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid md:grid-cols-4 gap-8">
-            <div>
-              <h3 className="text-xl font-bold gradient-text mb-4">Rarity Leads</h3>
-              <p className="text-[#b0b0b0]">
-                AI-powered B2B lead generation platform for agencies and sales teams.
-              </p>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-4">Product</h4>
-              <ul className="space-y-2 text-[#b0b0b0]">
-                <li><Link href="#features" className="hover:text-white transition-colors">Features</Link></li>
-                <li><Link href="#pricing" className="hover:text-white transition-colors">Pricing</Link></li>
-                <li><Link href="/auth" className="hover:text-white transition-colors">Sign Up</Link></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-4">Support</h4>
-              <ul className="space-y-2 text-[#b0b0b0]">
-                <li><Link href="/support" className="hover:text-white transition-colors">Help Center</Link></li>
-                <li><Link href="/docs" className="hover:text-white transition-colors">Documentation</Link></li>
-                <li><Link href="/contact" className="hover:text-white transition-colors">Contact</Link></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-4">Company</h4>
-              <ul className="space-y-2 text-[#b0b0b0]">
-                <li><Link href="/about" className="hover:text-white transition-colors">About</Link></li>
-                <li><Link href="/privacy" className="hover:text-white transition-colors">Privacy</Link></li>
-                <li><Link href="/terms" className="hover:text-white transition-colors">Terms</Link></li>
-              </ul>
-            </div>
-          </div>
-          <div className="border-t border-[#232336] mt-8 pt-8 text-center text-[#b0b0b0]">
-            <p>&copy; 2024 Rarity Leads. All rights reserved.</p>
-          </div>
+      <footer className="py-12 px-4 sm:px-6 lg:px-8 border-t border-gray-800">
+        <div className="max-w-7xl mx-auto text-center">
+          <p className="text-gray-400 text-sm">
+            © 2024 Rarity Leads. All rights reserved.
+          </p>
         </div>
       </footer>
     </div>
-  );
+  )
 } 

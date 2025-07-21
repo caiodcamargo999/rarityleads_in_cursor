@@ -1,0 +1,72 @@
+{
+  "name": "rarity-leads-services",
+  "version": "1.0.0",
+  "description": "Rarity Leads Microservices - WhatsApp, Instagram, Facebook, X, LinkedIn",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "concurrently \"npm run dev:whatsapp\" \"npm run dev:instagram\" \"npm run dev:facebook\" \"npm run dev:x\" \"npm run dev:linkedin\" \"npm run dev:orchestrator\"",
+    "dev:whatsapp": "nodemon services/whatsapp/index.js",
+    "dev:instagram": "nodemon services/instagram/index.js",
+    "dev:facebook": "nodemon services/facebook/index.js",
+    "dev:x": "nodemon services/x/index.js",
+    "dev:linkedin": "nodemon services/linkedin/index.js",
+    "dev:orchestrator": "nodemon services/orchestrator/index.js",
+    "start": "node services/orchestrator/index.js",
+    "build": "echo 'No build step required for Node.js services'",
+    "test": "jest",
+    "lint": "eslint services/**/*.js"
+  },
+  "dependencies": {
+    "@whiskeysockets/baileys": "^6.6.0",
+    "qrcode": "^1.5.3",
+    "ws": "^8.14.2",
+    "redis": "^4.6.10",
+    "bull": "^4.12.0",
+    "axios": "^1.6.0",
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "helmet": "^7.1.0",
+    "dotenv": "^16.3.1",
+    "winston": "^3.11.0",
+    "joi": "^17.11.0",
+    "rate-limiter-flexible": "^3.0.8",
+    "node-cron": "^3.0.3",
+    "puppeteer": "^21.5.2",
+    "instagram-private-api": "^1.45.3",
+    "twitter-api-v2": "^1.15.2",
+    "linkedin-api-v2": "^1.0.0",
+    "facebook-nodejs-business-sdk": "^18.0.4",
+    "openai": "^4.20.1",
+    "anthropic": "^0.7.8",
+    "supabase": "^2.38.0",
+    "uuid": "^9.0.1",
+    "moment": "^2.29.4",
+    "lodash": "^4.17.21"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2",
+    "concurrently": "^8.2.2",
+    "jest": "^29.7.0",
+    "eslint": "^8.55.0",
+    "eslint-config-standard": "^17.1.0",
+    "eslint-plugin-import": "^2.29.0",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^6.1.1"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "keywords": [
+    "whatsapp",
+    "instagram",
+    "facebook",
+    "twitter",
+    "linkedin",
+    "microservices",
+    "lead-generation",
+    "automation"
+  ],
+  "author": "Rarity Leads Team",
+  "license": "MIT"
+} 

@@ -1,342 +1,231 @@
 "use client"
 
-import { useState } from 'react';
-import { motion } from 'framer-motion';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Badge } from '@/components/ui/badge';
+import { motion, useInView } from 'framer-motion'
+import { useRef, useState } from 'react'
 import { 
-  Search, 
+  Users, 
   Plus, 
+  Search, 
   Filter, 
   Download, 
-  Users, 
-  Building2, 
-  Mail, 
+  Upload,
+  ArrowRight,
+  Building2,
+  Mail,
   Phone,
-  Linkedin,
-  Target,
-  Star
-} from 'lucide-react';
-
-interface Lead {
-  id: string;
-  company_name: string;
-  contact_name: string;
-  email: string | null;
-  phone: string | null;
-  linkedin_url: string | null;
-  industry: string | null;
-  company_size: string | null;
-  location: string | null;
-  status: 'new' | 'contacted' | 'qualified' | 'converted' | 'lost';
-  ai_score: number | null;
-  created_at: string;
-}
+  MapPin,
+  Target
+} from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 
 export default function LeadsPage() {
-  const [leads, setLeads] = useState<Lead[]>([]);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedStatus, setSelectedStatus] = useState<string>('all');
-  const [isLoading, setIsLoading] = useState(false);
+  const leadsRef = useRef(null)
+  const leadsInView = useInView(leadsRef, { once: true })
+  const [searchTerm, setSearchTerm] = useState('')
 
-  const statusOptions = [
-    { value: 'all', label: 'All Leads', count: 0 },
-    { value: 'new', label: 'New', count: 0 },
-    { value: 'contacted', label: 'Contacted', count: 0 },
-    { value: 'qualified', label: 'Qualified', count: 0 },
-    { value: 'converted', label: 'Converted', count: 0 },
-    { value: 'lost', label: 'Lost', count: 0 }
-  ];
+  const leads: Array<{
+    id: string;
+    name: string;
+    company: string;
+    email: string;
+    phone: string;
+    location: string;
+    status: string;
+    score: number;
+  }> = [
+    // Empty for now - will be populated with real data
+  ]
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'new':
-        return 'bg-blue-500/10 text-blue-500';
-      case 'contacted':
-        return 'bg-yellow-500/10 text-yellow-500';
-      case 'qualified':
-        return 'bg-green-500/10 text-green-500';
-      case 'converted':
-        return 'bg-purple-500/10 text-purple-500';
-      case 'lost':
-        return 'bg-red-500/10 text-red-500';
-      default:
-        return 'bg-gray-500/10 text-gray-500';
-    }
-  };
-
-  const getScoreColor = (score: number) => {
-    if (score >= 80) return 'text-green-500';
-    if (score >= 60) return 'text-yellow-500';
-    return 'text-red-500';
-  };
-
-  const handleSearch = async () => {
-    setIsLoading(true);
-    // Simulate API call
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 2000);
-  };
-
-  const addLead = () => {
-    // TODO: Implement add lead modal
-    console.log('Add lead');
-  };
+  const filteredLeads = leads.filter(lead =>
+    lead.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    lead.company.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    lead.email.toLowerCase().includes(searchTerm.toLowerCase())
+  )
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-      >
-        <h1 className="text-3xl font-bold text-white mb-2">
-          Lead Prospecting
-        </h1>
-        <p className="text-[#b0b0b0]">
-          Discover and manage your leads with AI-powered intelligence.
-        </p>
-      </motion.div>
+    <div ref={leadsRef} className="min-h-screen bg-[#0a0a0a] p-8">
+      <div className="max-w-7xl mx-auto">
+        {/* Header */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={leadsInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+          transition={{ duration: 0.6 }}
+          className="mb-12"
+        >
+          <h1 className="text-4xl md:text-5xl font-normal text-white mb-4">
+            Lead Prospecting
+          </h1>
+          <p className="text-xl text-gray-400">
+            Manage and qualify your prospects with AI-powered insights.
+          </p>
+        </motion.div>
 
-      {/* Search and Filters */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.1 }}
-      >
-        <Card className="card">
-          <CardHeader>
-            <CardTitle className="text-white">Find Leads</CardTitle>
-            <CardDescription className="text-[#b0b0b0]">
-              Search for companies and contacts using AI-powered discovery
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div>
-                <Label htmlFor="company" className="text-[#e0e0e0]">Company Name</Label>
-                <Input
-                  id="company"
-                  placeholder="Enter company name..."
-                  className="bg-[#232336] border-[#232336] text-white placeholder:text-[#b0b0b0] focus:border-[#8B5CF6]"
-                />
-              </div>
-              <div>
-                <Label htmlFor="industry" className="text-[#e0e0e0]">Industry</Label>
-                <Input
-                  id="industry"
-                  placeholder="e.g., Technology, Finance..."
-                  className="bg-[#232336] border-[#232336] text-white placeholder:text-[#b0b0b0] focus:border-[#8B5CF6]"
-                />
-              </div>
-              <div>
-                <Label htmlFor="location" className="text-[#e0e0e0]">Location</Label>
-                <Input
-                  id="location"
-                  placeholder="e.g., United States, Europe..."
-                  className="bg-[#232336] border-[#232336] text-white placeholder:text-[#b0b0b0] focus:border-[#8B5CF6]"
-                />
-              </div>
-            </div>
-            <div className="flex flex-col sm:flex-row gap-4">
-              <Button 
-                onClick={handleSearch}
-                disabled={isLoading}
-                className="btn-primary flex-1"
-              >
-                {isLoading ? (
-                  <>
-                    <Search className="h-4 w-4 mr-2 animate-spin" />
-                    Searching...
-                  </>
-                ) : (
-                  <>
-                    <Search className="h-4 w-4 mr-2" />
-                    Search Leads
-                  </>
-                )}
-              </Button>
-              <Button 
-                onClick={addLead}
-                variant="outline"
-                className="btn-secondary"
-              >
-                <Plus className="h-4 w-4 mr-2" />
-                Add Lead
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-      </motion.div>
+        {/* Quick Actions */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={leadsInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+          transition={{ duration: 0.6, delay: 0.1 }}
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12"
+        >
+          <Button variant="primary" size="lg" className="h-20 flex flex-col items-center justify-center space-y-2">
+            <Plus className="w-6 h-6" />
+            <span>Add Lead</span>
+            <span className="text-sm opacity-80">Manual entry</span>
+          </Button>
+          
+          <Button variant="secondary" size="lg" className="h-20 flex flex-col items-center justify-center space-y-2">
+            <Upload className="w-6 h-6" />
+            <span>Import CSV</span>
+            <span className="text-sm opacity-80">Bulk import</span>
+          </Button>
+          
+          <Button variant="secondary" size="lg" className="h-20 flex flex-col items-center justify-center space-y-2">
+            <Target className="w-6 h-6" />
+            <span>Find Prospects</span>
+            <span className="text-sm opacity-80">AI discovery</span>
+          </Button>
+          
+          <Button variant="secondary" size="lg" className="h-20 flex flex-col items-center justify-center space-y-2">
+            <Download className="w-6 h-6" />
+            <span>Export Data</span>
+            <span className="text-sm opacity-80">Download leads</span>
+          </Button>
+        </motion.div>
 
-      {/* Status Filters */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.2 }}
-      >
-        <div className="flex flex-wrap gap-2">
-          {statusOptions.map((option) => (
-            <button
-              key={option.value}
-              onClick={() => setSelectedStatus(option.value)}
-              className={`px-4 py-2 rounded-lg border transition-colors ${
-                selectedStatus === option.value
-                  ? 'border-[#8B5CF6] bg-[#8B5CF6]/10 text-white'
-                  : 'border-[#232336] text-[#b0b0b0] hover:border-[#8B5CF6]'
-              }`}
-            >
-              {option.label}
-              {option.count > 0 && (
-                <Badge className="ml-2 bg-[#232336] text-[#b0b0b0]">
-                  {option.count}
-                </Badge>
-              )}
-            </button>
-          ))}
-        </div>
-      </motion.div>
-
-      {/* Leads List */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.3 }}
-      >
-        <Card className="card">
-          <CardHeader>
-            <div className="flex justify-between items-center">
-              <div>
-                <CardTitle className="text-white">Your Leads</CardTitle>
-                <CardDescription className="text-[#b0b0b0]">
-                  {leads.length} leads found
-                </CardDescription>
-              </div>
-              <div className="flex gap-2">
-                <Button variant="outline" size="sm" className="btn-secondary">
-                  <Filter className="h-4 w-4 mr-2" />
-                  Filter
-                </Button>
-                <Button variant="outline" size="sm" className="btn-secondary">
-                  <Download className="h-4 w-4 mr-2" />
-                  Export
+        {/* Search and Filters */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={leadsInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="mb-8"
+        >
+          <Card className="bg-[#1a1a1a]/50 backdrop-blur-xl border border-gray-800">
+            <CardContent className="p-6">
+              <div className="flex flex-col md:flex-row gap-4">
+                <div className="flex-1 relative">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                  <input
+                    type="text"
+                    placeholder="Search leads by name, company, or email..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="w-full pl-10 pr-4 py-3 bg-[#0a0a0a]/50 backdrop-blur-sm border border-gray-800 rounded-lg focus:ring-2 focus:ring-[#8b5cf6]/50 focus:border-transparent transition-all duration-300 text-white placeholder-gray-400"
+                  />
+                </div>
+                <Button variant="secondary" size="lg">
+                  <Filter className="w-5 h-5 mr-2" />
+                  Filters
                 </Button>
               </div>
-            </div>
-          </CardHeader>
-          <CardContent>
-            {leads.length === 0 ? (
-              <div className="text-center py-12">
-                <Users className="h-16 w-16 text-[#b0b0b0] mx-auto mb-4" />
-                <h3 className="text-lg font-medium text-white mb-2">No leads found</h3>
-                <p className="text-[#b0b0b0] mb-4">
-                  Start by searching for companies or adding leads manually
-                </p>
-                <Button onClick={addLead} className="btn-primary">
-                  <Plus className="h-4 w-4 mr-2" />
-                  Add Your First Lead
-                </Button>
-              </div>
-            ) : (
-              <div className="space-y-4">
-                {leads.map((lead) => (
-                  <div
-                    key={lead.id}
-                    className="flex items-center justify-between p-4 border border-[#232336] rounded-lg hover:border-[#8B5CF6] transition-colors"
-                  >
-                    <div className="flex items-center space-x-4">
-                      <div className="p-2 bg-[#232336] rounded-lg">
-                        <Building2 className="h-5 w-5 text-[#8B5CF6]" />
+            </CardContent>
+          </Card>
+        </motion.div>
+
+        {/* Leads List */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={leadsInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+          transition={{ duration: 0.6, delay: 0.3 }}
+        >
+          <Card className="bg-[#1a1a1a]/50 backdrop-blur-xl border border-gray-800">
+            <CardHeader>
+              <CardTitle className="text-2xl font-normal text-white">All Leads</CardTitle>
+              <CardDescription className="text-gray-400">
+                {filteredLeads.length} leads found
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              {filteredLeads.length === 0 ? (
+                <div className="text-center py-16">
+                  <Users className="w-16 h-16 text-gray-600 mx-auto mb-6" />
+                  <h3 className="text-xl font-normal text-white mb-4">
+                    {searchTerm ? 'No leads found' : 'No leads yet'}
+                  </h3>
+                  <p className="text-gray-400 mb-8 max-w-md mx-auto">
+                    {searchTerm 
+                      ? 'Try adjusting your search terms or filters.'
+                      : 'Start by adding your first lead or importing a CSV file.'
+                    }
+                  </p>
+                  <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                    <Button variant="primary" size="lg">
+                      <Plus className="w-5 h-5 mr-2" />
+                      Add Your First Lead
+                    </Button>
+                    <Button variant="secondary" size="lg">
+                      <Upload className="w-5 h-5 mr-2" />
+                      Import CSV
+                    </Button>
+                  </div>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  {filteredLeads.map((lead) => (
+                    <motion.div
+                      key={lead.id}
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.3 }}
+                      className="flex items-center space-x-4 p-6 bg-[#0a0a0a]/50 rounded-lg hover:bg-[#0a0a0a]/70 transition-all duration-300 border border-gray-800/50"
+                    >
+                      <div className="w-12 h-12 bg-[#8b5cf6] rounded-full flex items-center justify-center flex-shrink-0">
+                        <span className="text-white font-normal text-lg">{lead.name.charAt(0)}</span>
                       </div>
-                      <div>
-                        <h3 className="font-medium text-white">{lead.company_name}</h3>
-                        <p className="text-sm text-[#b0b0b0]">{lead.contact_name}</p>
-                        <div className="flex items-center space-x-4 mt-1">
-                          {lead.email && (
-                            <div className="flex items-center space-x-1">
-                              <Mail className="h-3 w-3 text-[#b0b0b0]" />
-                              <span className="text-xs text-[#b0b0b0]">{lead.email}</span>
-                            </div>
-                          )}
-                          {lead.phone && (
-                            <div className="flex items-center space-x-1">
-                              <Phone className="h-3 w-3 text-[#b0b0b0]" />
-                              <span className="text-xs text-[#b0b0b0]">{lead.phone}</span>
-                            </div>
-                          )}
-                          {lead.linkedin_url && (
-                            <div className="flex items-center space-x-1">
-                              <Linkedin className="h-3 w-3 text-[#b0b0b0]" />
-                              <span className="text-xs text-[#b0b0b0]">LinkedIn</span>
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                    <div className="flex items-center space-x-4">
-                      <div className="text-right">
-                        <div className="flex items-center space-x-1">
-                          <Target className="h-4 w-4 text-[#8B5CF6]" />
-                          <span className={`text-sm font-medium ${getScoreColor(lead.ai_score || 0)}`}>
-                            {lead.ai_score || 0}
+                      
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center space-x-3 mb-2">
+                          <h3 className="text-lg font-normal text-white truncate">{lead.name}</h3>
+                          <span className={`px-2 py-1 rounded-full text-xs font-normal ${
+                            lead.status === 'Qualified' ? 'bg-green-500/20 text-green-400' :
+                            lead.status === 'Contacted' ? 'bg-blue-500/20 text-blue-400' :
+                            'bg-gray-500/20 text-gray-400'
+                          }`}>
+                            {lead.status}
                           </span>
                         </div>
-                        <p className="text-xs text-[#b0b0b0]">AI Score</p>
+                        
+                        <div className="flex items-center space-x-6 text-sm text-gray-400">
+                          <div className="flex items-center space-x-1">
+                            <Building2 className="w-4 h-4" />
+                            <span className="truncate">{lead.company}</span>
+                          </div>
+                          <div className="flex items-center space-x-1">
+                            <Mail className="w-4 h-4" />
+                            <span className="truncate">{lead.email}</span>
+                          </div>
+                          {lead.phone && (
+                            <div className="flex items-center space-x-1">
+                              <Phone className="w-4 h-4" />
+                              <span>{lead.phone}</span>
+                            </div>
+                          )}
+                          {lead.location && (
+                            <div className="flex items-center space-x-1">
+                              <MapPin className="w-4 h-4" />
+                              <span className="truncate">{lead.location}</span>
+                            </div>
+                          )}
+                        </div>
                       </div>
-                      <Badge className={getStatusColor(lead.status)}>
-                        {lead.status}
-                      </Badge>
-                      <Button variant="ghost" size="sm">
-                        <Star className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </CardContent>
-        </Card>
-      </motion.div>
-
-      {/* AI Insights */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.4 }}
-      >
-        <Card className="card">
-          <CardHeader>
-            <CardTitle className="text-white">AI Insights</CardTitle>
-            <CardDescription className="text-[#b0b0b0]">
-              AI-powered recommendations for your lead strategy
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="text-center p-4 border border-[#232336] rounded-lg">
-                <Target className="h-8 w-8 text-[#8B5CF6] mx-auto mb-2" />
-                <h3 className="font-medium text-white mb-1">Best Time to Contact</h3>
-                <p className="text-sm text-[#b0b0b0]">Tuesday 10 AM - 2 PM</p>
-              </div>
-              <div className="text-center p-4 border border-[#232336] rounded-lg">
-                <Users className="h-8 w-8 text-[#8B5CF6] mx-auto mb-2" />
-                <h3 className="font-medium text-white mb-1">Recommended Channels</h3>
-                <p className="text-sm text-[#b0b0b0]">LinkedIn + Email</p>
-              </div>
-              <div className="text-center p-4 border border-[#232336] rounded-lg">
-                <Star className="h-8 w-8 text-[#8B5CF6] mx-auto mb-2" />
-                <h3 className="font-medium text-white mb-1">High-Value Prospects</h3>
-                <p className="text-sm text-[#b0b0b0]">12 leads identified</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      </motion.div>
+                      
+                      <div className="flex items-center space-x-4">
+                        <div className="text-right">
+                          <div className="text-sm text-gray-400">AI Score</div>
+                          <div className="text-lg font-normal text-[#8b5cf6]">{lead.score}%</div>
+                        </div>
+                        <Button variant="ghost" size="sm">
+                          <ArrowRight className="w-4 h-4" />
+                        </Button>
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </motion.div>
+      </div>
     </div>
-  );
+  )
 } 

@@ -1,306 +1,265 @@
 "use client"
 
-import { motion } from 'framer-motion';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
+import { motion, useInView } from 'framer-motion'
+import { useRef, useState } from 'react'
 import { 
   HelpCircle, 
   MessageSquare, 
   Mail, 
   Phone, 
-  BookOpen, 
-  Video,
+  Search,
   ChevronDown,
-  ChevronUp
-} from 'lucide-react';
-import { useState } from 'react';
-
-interface FAQItem {
-  question: string;
-  answer: string;
-  category: string;
-}
+  ChevronRight,
+  ExternalLink
+} from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 
 export default function SupportPage() {
-  const [expandedFAQ, setExpandedFAQ] = useState<number | null>(null);
-  const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const supportRef = useRef(null)
+  const supportInView = useInView(supportRef, { once: true })
+  const [searchTerm, setSearchTerm] = useState('')
+  const [expandedFaq, setExpandedFaq] = useState<string | null>(null)
 
-  const faqs: FAQItem[] = [
+  const faqs = [
     {
-      question: "How do I connect my WhatsApp account?",
-      answer: "To connect your WhatsApp account, go to the WhatsApp Management page, click 'Connect New Account', and scan the QR code with your WhatsApp app. Make sure your phone has a stable internet connection.",
-      category: "whatsapp"
+      id: 'getting-started',
+      question: 'How do I get started with Rarity Leads?',
+      answer: 'Getting started is easy! Simply sign up for an account, connect your WhatsApp number, and start importing your leads. Our AI will help you qualify and engage with prospects automatically.'
     },
     {
-      question: "How does AI lead scoring work?",
-      answer: "Our AI analyzes company size, industry, location, and other factors to assign a score from 1-100. Higher scores indicate better prospects based on your target criteria.",
-      category: "ai"
+      id: 'whatsapp-setup',
+      question: 'How do I connect my WhatsApp number?',
+      answer: 'To connect your WhatsApp number, go to the WhatsApp section in your dashboard, click "Connect Number", and follow the QR code setup process. Make sure your phone is nearby during setup.'
     },
     {
-      question: "Can I use multiple WhatsApp accounts?",
-      answer: "Yes! You can connect up to 5 WhatsApp accounts per user. Each account can be used for different campaigns or target audiences.",
-      category: "whatsapp"
+      id: 'lead-import',
+      question: 'What file formats can I import leads from?',
+      answer: 'We support CSV, Excel (.xlsx), and Google Sheets imports. Your file should include columns for contact name, email, phone number, and company information for best results.'
     },
     {
-      question: "How do I create a campaign?",
-      answer: "Navigate to the Approaching section, select your preferred channel, and click 'Create Campaign'. You can set target audience, message templates, and scheduling.",
-      category: "campaigns"
+      id: 'pricing',
+      question: 'How does the pricing work?',
+      answer: 'We offer three simple pricing tiers: Starter ($47/month), Pro ($97/month), and Enterprise ($197/month). All plans include unlimited leads, AI-powered qualification, and multi-channel outreach.'
     },
     {
-      question: "What data sources do you use for lead enrichment?",
-      answer: "We integrate with Clearbit, Apollo, Crunchbase, and LinkedIn Sales Navigator to provide comprehensive company and contact information.",
-      category: "data"
+      id: 'ai-features',
+      question: 'What AI features are included?',
+      answer: 'Our AI includes lead scoring, automated qualification, personalized message generation, optimal send time detection, and conversation routing to your team when prospects are ready to buy.'
     },
     {
-      question: "How do I export my data?",
-      answer: "You can export leads, campaigns, and analytics data from their respective pages using the export button. Data is available in CSV format.",
-      category: "data"
+      id: 'integrations',
+      question: 'What integrations are available?',
+      answer: 'We integrate with popular CRMs like HubSpot, Salesforce, and Pipedrive. We also support WhatsApp Business API, LinkedIn, and email channels for comprehensive outreach.'
     }
-  ];
+  ]
 
-  const categories = [
-    { value: 'all', label: 'All Questions' },
-    { value: 'whatsapp', label: 'WhatsApp' },
-    { value: 'ai', label: 'AI Features' },
-    { value: 'campaigns', label: 'Campaigns' },
-    { value: 'data', label: 'Data & Export' }
-  ];
+  const filteredFaqs = faqs.filter(faq =>
+    faq.question.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    faq.answer.toLowerCase().includes(searchTerm.toLowerCase())
+  )
 
-  const filteredFAQs = selectedCategory === 'all' 
-    ? faqs 
-    : faqs.filter(faq => faq.category === selectedCategory);
-
-  const toggleFAQ = (index: number) => {
-    setExpandedFAQ(expandedFAQ === index ? null : index);
-  };
+  const contactMethods = [
+    {
+      title: 'Live Chat',
+      description: 'Get instant help from our support team',
+      icon: MessageSquare,
+      action: 'Start Chat',
+      href: '#'
+    },
+    {
+      title: 'Email Support',
+      description: 'Send us a detailed message',
+      icon: Mail,
+      action: 'Send Email',
+      href: 'mailto:support@rarityleads.com'
+    },
+    {
+      title: 'Phone Support',
+      description: 'Speak with our team directly',
+      icon: Phone,
+      action: 'Call Us',
+      href: 'tel:+1234567890'
+    }
+  ]
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-      >
-        <h1 className="text-3xl font-bold text-white mb-2">
-          Support Center
-        </h1>
-        <p className="text-[#b0b0b0]">
-          Get help with Rarity Leads and find answers to common questions.
-        </p>
-      </motion.div>
+    <div ref={supportRef} className="min-h-screen bg-[#0a0a0a] p-8">
+      <div className="max-w-7xl mx-auto">
+        {/* Header */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={supportInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+          transition={{ duration: 0.6 }}
+          className="mb-12"
+        >
+          <h1 className="text-4xl md:text-5xl font-normal text-white mb-4">
+            Support Center
+          </h1>
+          <p className="text-xl text-gray-400">
+            Find answers to common questions and get help when you need it.
+          </p>
+        </motion.div>
 
-      {/* Quick Actions */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.1 }}
-        className="grid grid-cols-1 md:grid-cols-3 gap-6"
-      >
-        <Card className="card hover:border-[#8B5CF6] transition-colors cursor-pointer">
-          <CardContent className="p-6">
-            <div className="flex items-center space-x-4">
-              <div className="p-3 bg-[#232336] rounded-lg">
-                <MessageSquare className="h-6 w-6 text-[#8B5CF6]" />
-              </div>
-              <div>
-                <h3 className="font-semibold text-white">Live Chat</h3>
-                <p className="text-sm text-[#b0b0b0]">Get instant help</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="card hover:border-[#8B5CF6] transition-colors cursor-pointer">
-          <CardContent className="p-6">
-            <div className="flex items-center space-x-4">
-              <div className="p-3 bg-[#232336] rounded-lg">
-                <Mail className="h-6 w-6 text-[#8B5CF6]" />
-              </div>
-              <div>
-                <h3 className="font-semibold text-white">Email Support</h3>
-                <p className="text-sm text-[#b0b0b0]">support@rarityleads.com</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="card hover:border-[#8B5CF6] transition-colors cursor-pointer">
-          <CardContent className="p-6">
-            <div className="flex items-center space-x-4">
-              <div className="p-3 bg-[#232336] rounded-lg">
-                <BookOpen className="h-6 w-6 text-[#8B5CF6]" />
-              </div>
-              <div>
-                <h3 className="font-semibold text-white">Documentation</h3>
-                <p className="text-sm text-[#b0b0b0]">Read our guides</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      </motion.div>
-
-      {/* FAQ Section */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.2 }}
-      >
-        <Card className="card">
-          <CardHeader>
-            <CardTitle className="text-white">Frequently Asked Questions</CardTitle>
-            <CardDescription className="text-[#b0b0b0]">
-              Find answers to common questions about Rarity Leads
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            {/* Category Filter */}
-            <div className="flex flex-wrap gap-2 mb-6">
-              {categories.map((category) => (
-                <button
-                  key={category.value}
-                  onClick={() => setSelectedCategory(category.value)}
-                  className={`px-4 py-2 rounded-lg border transition-colors ${
-                    selectedCategory === category.value
-                      ? 'border-[#8B5CF6] bg-[#8B5CF6]/10 text-white'
-                      : 'border-[#232336] text-[#b0b0b0] hover:border-[#8B5CF6]'
-                  }`}
-                >
-                  {category.label}
-                </button>
-              ))}
-            </div>
-
-            {/* FAQ Items */}
-            <div className="space-y-4">
-              {filteredFAQs.map((faq, index) => (
-                <div
-                  key={index}
-                  className="border border-[#232336] rounded-lg overflow-hidden"
-                >
-                  <button
-                    onClick={() => toggleFAQ(index)}
-                    className="w-full p-4 text-left flex items-center justify-between hover:bg-[#232336] transition-colors"
-                  >
-                    <span className="font-medium text-white">{faq.question}</span>
-                    {expandedFAQ === index ? (
-                      <ChevronUp className="h-5 w-5 text-[#8B5CF6]" />
-                    ) : (
-                      <ChevronDown className="h-5 w-5 text-[#8B5CF6]" />
-                    )}
-                  </button>
-                  {expandedFAQ === index && (
-                    <div className="px-4 pb-4">
-                      <p className="text-[#b0b0b0]">{faq.answer}</p>
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-      </motion.div>
-
-      {/* Contact Form */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.3 }}
-      >
-        <Card className="card">
-          <CardHeader>
-            <CardTitle className="text-white">Contact Support</CardTitle>
-            <CardDescription className="text-[#b0b0b0]">
-              Can't find what you're looking for? Send us a message.
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <form className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <Label htmlFor="name" className="text-[#e0e0e0]">Name</Label>
-                  <Input
-                    id="name"
-                    placeholder="Your name"
-                    className="bg-[#232336] border-[#232336] text-white placeholder:text-[#b0b0b0] focus:border-[#8B5CF6]"
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="email" className="text-[#e0e0e0]">Email</Label>
-                  <Input
-                    id="email"
-                    type="email"
-                    placeholder="your@email.com"
-                    className="bg-[#232336] border-[#232336] text-white placeholder:text-[#b0b0b0] focus:border-[#8B5CF6]"
-                  />
-                </div>
-              </div>
-              <div>
-                <Label htmlFor="subject" className="text-[#e0e0e0]">Subject</Label>
-                <Input
-                  id="subject"
-                  placeholder="What can we help you with?"
-                  className="bg-[#232336] border-[#232336] text-white placeholder:text-[#b0b0b0] focus:border-[#8B5CF6]"
+        {/* Search */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={supportInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+          transition={{ duration: 0.6, delay: 0.1 }}
+          className="mb-12"
+        >
+          <Card className="bg-[#1a1a1a]/50 backdrop-blur-xl border border-gray-800">
+            <CardContent className="p-6">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <input
+                  type="text"
+                  placeholder="Search for help articles, FAQs, or guides..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="w-full pl-10 pr-4 py-3 bg-[#0a0a0a]/50 backdrop-blur-sm border border-gray-800 rounded-lg focus:ring-2 focus:ring-[#8b5cf6]/50 focus:border-transparent transition-all duration-300 text-white placeholder-gray-400"
                 />
               </div>
-              <div>
-                <Label htmlFor="message" className="text-[#e0e0e0]">Message</Label>
-                <Textarea
-                  id="message"
-                  placeholder="Describe your issue or question..."
-                  rows={4}
-                  className="bg-[#232336] border-[#232336] text-white placeholder:text-[#b0b0b0] focus:border-[#8B5CF6]"
-                />
-              </div>
-              <Button type="submit" className="btn-primary">
-                <Mail className="h-4 w-4 mr-2" />
-                Send Message
-              </Button>
-            </form>
-          </CardContent>
-        </Card>
-      </motion.div>
+            </CardContent>
+          </Card>
+        </motion.div>
 
-      {/* Additional Resources */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.4 }}
-      >
-        <Card className="card">
-          <CardHeader>
-            <CardTitle className="text-white">Additional Resources</CardTitle>
-            <CardDescription className="text-[#b0b0b0]">
-              Learn more about Rarity Leads and get the most out of the platform
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="space-y-4">
-                <h3 className="font-semibold text-white">Getting Started</h3>
-                <ul className="space-y-2 text-sm text-[#b0b0b0]">
-                  <li>• <a href="#" className="text-[#8B5CF6] hover:underline">Quick Start Guide</a></li>
-                  <li>• <a href="#" className="text-[#8B5CF6] hover:underline">Setting Up Your First Campaign</a></li>
-                  <li>• <a href="#" className="text-[#8B5CF6] hover:underline">Connecting WhatsApp Accounts</a></li>
-                  <li>• <a href="#" className="text-[#8B5CF6] hover:underline">Understanding AI Scoring</a></li>
-                </ul>
+        {/* Contact Methods */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={supportInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12"
+        >
+          {contactMethods.map((method, index) => (
+            <motion.div
+              key={method.title}
+              initial={{ opacity: 0, y: 20 }}
+              animate={supportInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+              transition={{ duration: 0.6, delay: 0.3 + index * 0.1 }}
+            >
+              <Card className="bg-[#1a1a1a]/50 backdrop-blur-xl border border-gray-800 hover:border-white/20 transition-all duration-300">
+                <CardContent className="p-6 text-center">
+                  <method.icon className="w-12 h-12 text-[#8b5cf6] mx-auto mb-4" />
+                  <h3 className="text-xl font-normal text-white mb-2">{method.title}</h3>
+                  <p className="text-gray-400 mb-4">{method.description}</p>
+                  <Button variant="secondary" size="sm" className="w-full">
+                    {method.action}
+                    <ExternalLink className="w-4 h-4 ml-2" />
+                  </Button>
+                </CardContent>
+              </Card>
+            </motion.div>
+          ))}
+        </motion.div>
+
+        {/* FAQ Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={supportInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+          transition={{ duration: 0.6, delay: 0.4 }}
+        >
+          <Card className="bg-[#1a1a1a]/50 backdrop-blur-xl border border-gray-800">
+            <CardHeader>
+              <CardTitle className="text-2xl font-normal text-white">Frequently Asked Questions</CardTitle>
+              <CardDescription className="text-gray-400">
+                {filteredFaqs.length} questions found
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              {filteredFaqs.length === 0 ? (
+                <div className="text-center py-12">
+                  <HelpCircle className="w-16 h-16 text-gray-600 mx-auto mb-6" />
+                  <h3 className="text-xl font-normal text-white mb-4">
+                    No questions found
+                  </h3>
+                  <p className="text-gray-400 mb-8 max-w-md mx-auto">
+                    Try adjusting your search terms or contact our support team directly.
+                  </p>
+                  <Button variant="primary" size="lg">
+                    <MessageSquare className="w-5 h-5 mr-2" />
+                    Contact Support
+                  </Button>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  {filteredFaqs.map((faq) => (
+                    <motion.div
+                      key={faq.id}
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.3 }}
+                      className="border border-gray-800 rounded-lg overflow-hidden"
+                    >
+                      <button
+                        onClick={() => setExpandedFaq(expandedFaq === faq.id ? null : faq.id)}
+                        className="w-full flex items-center justify-between p-6 bg-[#0a0a0a]/50 hover:bg-[#0a0a0a]/70 transition-all duration-300 text-left"
+                      >
+                        <h3 className="text-lg font-normal text-white pr-4">{faq.question}</h3>
+                        {expandedFaq === faq.id ? (
+                          <ChevronDown className="w-5 h-5 text-gray-400 flex-shrink-0" />
+                        ) : (
+                          <ChevronRight className="w-5 h-5 text-gray-400 flex-shrink-0" />
+                        )}
+                      </button>
+                      
+                      {expandedFaq === faq.id && (
+                        <motion.div
+                          initial={{ opacity: 0, height: 0 }}
+                          animate={{ opacity: 1, height: 'auto' }}
+                          exit={{ opacity: 0, height: 0 }}
+                          transition={{ duration: 0.3 }}
+                          className="px-6 pb-6"
+                        >
+                          <p className="text-gray-400 leading-relaxed">{faq.answer}</p>
+                        </motion.div>
+                      )}
+                    </motion.div>
+                  ))}
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </motion.div>
+
+        {/* Additional Resources */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={supportInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+          transition={{ duration: 0.6, delay: 0.5 }}
+          className="mt-12"
+        >
+          <Card className="bg-[#1a1a1a]/50 backdrop-blur-xl border border-gray-800">
+            <CardHeader>
+              <CardTitle className="text-2xl font-normal text-white">Additional Resources</CardTitle>
+              <CardDescription className="text-gray-400">
+                Learn more about getting the most out of Rarity Leads
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="p-6 bg-[#0a0a0a]/50 rounded-lg">
+                  <h3 className="text-lg font-normal text-white mb-2">Getting Started Guide</h3>
+                  <p className="text-gray-400 mb-4">Step-by-step instructions to set up your account and start generating leads.</p>
+                  <Button variant="secondary" size="sm">
+                    Read Guide
+                    <ExternalLink className="w-4 h-4 ml-2" />
+                  </Button>
+                </div>
+                
+                <div className="p-6 bg-[#0a0a0a]/50 rounded-lg">
+                  <h3 className="text-lg font-normal text-white mb-2">Video Tutorials</h3>
+                  <p className="text-gray-400 mb-4">Watch our video tutorials to learn advanced features and best practices.</p>
+                  <Button variant="secondary" size="sm">
+                    Watch Videos
+                    <ExternalLink className="w-4 h-4 ml-2" />
+                  </Button>
+                </div>
               </div>
-              <div className="space-y-4">
-                <h3 className="font-semibold text-white">Advanced Features</h3>
-                <ul className="space-y-2 text-sm text-[#b0b0b0]">
-                  <li>• <a href="#" className="text-[#8B5CF6] hover:underline">Multi-Channel Campaigns</a></li>
-                  <li>• <a href="#" className="text-[#8B5CF6] hover:underline">Analytics & Reporting</a></li>
-                  <li>• <a href="#" className="text-[#8B5CF6] hover:underline">API Documentation</a></li>
-                  <li>• <a href="#" className="text-[#8B5CF6] hover:underline">Best Practices</a></li>
-                </ul>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      </motion.div>
+            </CardContent>
+          </Card>
+        </motion.div>
+      </div>
     </div>
-  );
+  )
 } 

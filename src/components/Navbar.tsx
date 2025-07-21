@@ -1,5 +1,6 @@
 
-import { Link, useNavigate } from 'react-router-dom';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
@@ -16,11 +17,11 @@ import { User, LogOut, Settings, Sparkles } from 'lucide-react';
 const Navbar = () => {
   const { t } = useTranslation();
   const { user, signOut } = useAuth();
-  const navigate = useNavigate();
+  const router = useRouter();
 
   const handleSignOut = async () => {
     await signOut();
-    navigate('/auth');
+    router.push('/auth');
   };
 
   return (
@@ -28,7 +29,7 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center">
-            <Link to="/" className="flex items-center space-x-2">
+            <Link href="/" className="flex items-center space-x-2">
               <div className="w-8 h-8 bg-gradient-to-br from-purple-400 to-pink-400 rounded-lg flex items-center justify-center">
                 <Sparkles className="w-5 h-5 text-white" />
               </div>
@@ -40,19 +41,19 @@ const Navbar = () => {
             {user && (
               <div className="hidden md:flex ml-16 space-x-8">
                 <Link
-                  to="/dashboard"
+                  href="/dashboard"
                   className="text-gray-300 hover:text-white text-sm font-medium transition-colors"
                 >
                   {t('navigation.dashboard')}
                 </Link>
                 <Link
-                  to="/prospecting"
+                  href="/prospecting"
                   className="text-gray-300 hover:text-white text-sm font-medium transition-colors"
                 >
                   {t('navigation.prospecting')}
                 </Link>
                 <Link
-                  to="/leads"
+                  href="/leads"
                   className="text-gray-300 hover:text-white text-sm font-medium transition-colors"
                 >
                   {t('navigation.leads')}
@@ -73,7 +74,7 @@ const Navbar = () => {
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="bg-slate-900/95 backdrop-blur-xl border border-white/10 shadow-lg">
-                  <DropdownMenuItem onClick={() => navigate('/settings')} className="text-gray-300 hover:bg-white/10 hover:text-white">
+                  <DropdownMenuItem onClick={() => router.push('/settings')} className="text-gray-300 hover:bg-white/10 hover:text-white">
                     <Settings className="mr-2 h-4 w-4" />
                     {t('navigation.settings')}
                   </DropdownMenuItem>
@@ -86,7 +87,7 @@ const Navbar = () => {
               </DropdownMenu>
             ) : (
               <Button asChild className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white text-sm px-6 rounded-full">
-                <Link to="/auth">{t('auth.signIn')}</Link>
+                <Link href="/auth">{t('auth.signIn')}</Link>
               </Button>
             )}
           </div>

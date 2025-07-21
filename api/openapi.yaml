@@ -1,0 +1,1362 @@
+openapi: 3.0.3
+info:
+  title: Rarity Leads API
+  description: |
+    AI-powered B2B lead generation platform API for infinite scale, full control, and cost efficiency.
+    
+    ## Features
+    - Lead management and enrichment
+    - Multi-channel messaging (WhatsApp, Instagram, Facebook, X, LinkedIn)
+    - AI-powered lead scoring and qualification
+    - Campaign management and analytics
+    - Real-time conversation tracking
+    - Webhook integrations
+    
+    ## Authentication
+    All API requests require authentication using API keys. Include your API key in the `Authorization` header:
+    ```
+    Authorization: Bearer YOUR_API_KEY
+    ```
+    
+    ## Rate Limits
+    - 1000 requests per minute per API key
+    - 10000 requests per hour per API key
+    
+    ## Webhooks
+    Configure webhooks to receive real-time updates for lead events, message status changes, and conversation updates.
+  version: 1.0.0
+  contact:
+    name: Rarity Leads Support
+    email: support@rarityleads.com
+    url: https://rarityleads.com/support
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+
+servers:
+  - url: https://api.rarityleads.com/v1
+    description: Production server
+  - url: https://staging-api.rarityleads.com/v1
+    description: Staging server
+  - url: http://localhost:3000/api
+    description: Local development server
+
+security:
+  - BearerAuth: []
+
+paths:
+  /leads:
+    get:
+      summary: List leads
+      description: Retrieve a paginated list of leads with optional filtering and sorting
+      operationId: listLeads
+      parameters:
+        - name: page
+          in: query
+          description: Page number for pagination
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+        - name: limit
+          in: query
+          description: Number of leads per page
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+        - name: status
+          in: query
+          description: Filter by lead status
+          required: false
+          schema:
+            type: string
+            enum: [new, qualified, contacted, engaged, booked, closed, lost]
+        - name: ai_score_min
+          in: query
+          description: Minimum AI score filter
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+            maximum: 100
+        - name: ai_score_max
+          in: query
+          description: Maximum AI score filter
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+            maximum: 100
+        - name: industry
+          in: query
+          description: Filter by industry
+          required: false
+          schema:
+            type: string
+        - name: company_size
+          in: query
+          description: Filter by company size
+          required: false
+          schema:
+            type: string
+            enum: [1-10, 11-50, 51-200, 201-1000, 1001-10000, 10000+]
+        - name: sort_by
+          in: query
+          description: Sort field
+          required: false
+          schema:
+            type: string
+            enum: [created_at, ai_score, company_name, contact_name]
+            default: created_at
+        - name: sort_order
+          in: query
+          description: Sort order
+          required: false
+          schema:
+            type: string
+            enum: [asc, desc]
+            default: desc
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LeadListResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/RateLimitExceeded'
+    
+    post:
+      summary: Create a new lead
+      description: Create a new lead with optional AI enrichment and scoring
+      operationId: createLead
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateLeadRequest'
+      responses:
+        '201':
+          description: Lead created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LeadResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+
+  /leads/{lead_id}:
+    get:
+      summary: Get lead details
+      description: Retrieve detailed information about a specific lead
+      operationId: getLead
+      parameters:
+        - name: lead_id
+          in: path
+          required: true
+          description: Unique identifier for the lead
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LeadResponse'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    
+    patch:
+      summary: Update lead
+      description: Update lead information
+      operationId: updateLead
+      parameters:
+        - name: lead_id
+          in: path
+          required: true
+          description: Unique identifier for the lead
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateLeadRequest'
+      responses:
+        '200':
+          description: Lead updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LeadResponse'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+    
+    delete:
+      summary: Delete lead
+      description: Permanently delete a lead
+      operationId: deleteLead
+      parameters:
+        - name: lead_id
+          in: path
+          required: true
+          description: Unique identifier for the lead
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          description: Lead deleted successfully
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /leads/{lead_id}/enrich:
+    post:
+      summary: Enrich lead data
+      description: Enrich lead data using external sources (Clearbit, Apollo, etc.)
+      operationId: enrichLead
+      parameters:
+        - name: lead_id
+          in: path
+          required: true
+          description: Unique identifier for the lead
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                sources:
+                  type: array
+                  items:
+                    type: string
+                    enum: [clearbit, apollo, linkedin, crunchbase]
+                  description: Data sources to use for enrichment
+      responses:
+        '200':
+          description: Lead enriched successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LeadEnrichmentResponse'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /conversations:
+    get:
+      summary: List conversations
+      description: Retrieve a paginated list of conversations
+      operationId: listConversations
+      parameters:
+        - name: page
+          in: query
+          description: Page number for pagination
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+        - name: limit
+          in: query
+          description: Number of conversations per page
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+        - name: channel
+          in: query
+          description: Filter by channel
+          required: false
+          schema:
+            type: string
+            enum: [whatsapp, instagram, facebook, x, linkedin, email]
+        - name: status
+          in: query
+          description: Filter by conversation status
+          required: false
+          schema:
+            type: string
+            enum: [active, archived, blocked]
+        - name: lead_id
+          in: query
+          description: Filter by lead ID
+          required: false
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConversationListResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /conversations/{conversation_id}:
+    get:
+      summary: Get conversation details
+      description: Retrieve conversation details and message history
+      operationId: getConversation
+      parameters:
+        - name: conversation_id
+          in: path
+          required: true
+          description: Unique identifier for the conversation
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConversationResponse'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /conversations/{conversation_id}/messages:
+    post:
+      summary: Send message
+      description: Send a message in a conversation
+      operationId: sendMessage
+      parameters:
+        - name: conversation_id
+          in: path
+          required: true
+          description: Unique identifier for the conversation
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SendMessageRequest'
+      responses:
+        '201':
+          description: Message sent successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+
+  /campaigns:
+    get:
+      summary: List campaigns
+      description: Retrieve a paginated list of campaigns
+      operationId: listCampaigns
+      parameters:
+        - name: page
+          in: query
+          description: Page number for pagination
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+        - name: limit
+          in: query
+          description: Number of campaigns per page
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+        - name: status
+          in: query
+          description: Filter by campaign status
+          required: false
+          schema:
+            type: string
+            enum: [draft, active, paused, completed]
+        - name: channel
+          in: query
+          description: Filter by channel
+          required: false
+          schema:
+            type: string
+            enum: [whatsapp, instagram, facebook, x, linkedin, email]
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CampaignListResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    
+    post:
+      summary: Create campaign
+      description: Create a new campaign
+      operationId: createCampaign
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCampaignRequest'
+      responses:
+        '201':
+          description: Campaign created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CampaignResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+
+  /analytics/pipeline:
+    get:
+      summary: Get pipeline analytics
+      description: Retrieve pipeline analytics and performance metrics
+      operationId: getPipelineAnalytics
+      parameters:
+        - name: start_date
+          in: query
+          description: Start date for analytics (ISO 8601 format)
+          required: false
+          schema:
+            type: string
+            format: date
+        - name: end_date
+          in: query
+          description: End date for analytics (ISO 8601 format)
+          required: false
+          schema:
+            type: string
+            format: date
+        - name: group_by
+          in: query
+          description: Group analytics by
+          required: false
+          schema:
+            type: string
+            enum: [day, week, month, channel, status]
+            default: day
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PipelineAnalyticsResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /webhooks:
+    get:
+      summary: List webhooks
+      description: Retrieve a list of configured webhooks
+      operationId: listWebhooks
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebhookListResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    
+    post:
+      summary: Create webhook
+      description: Create a new webhook endpoint
+      operationId: createWebhook
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateWebhookRequest'
+      responses:
+        '201':
+          description: Webhook created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebhookResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: APIKey
+
+  schemas:
+    Lead:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier for the lead
+        user_id:
+          type: string
+          format: uuid
+          description: User ID who owns this lead
+        campaign_id:
+          type: string
+          format: uuid
+          nullable: true
+          description: Associated campaign ID
+        company_name:
+          type: string
+          description: Company name
+        contact_name:
+          type: string
+          description: Contact person name
+        email:
+          type: string
+          format: email
+          nullable: true
+          description: Contact email address
+        phone:
+          type: string
+          nullable: true
+          description: Contact phone number
+        linkedin_url:
+          type: string
+          format: uri
+          nullable: true
+          description: LinkedIn profile URL
+        website:
+          type: string
+          format: uri
+          nullable: true
+          description: Company website
+        industry:
+          type: string
+          nullable: true
+          description: Industry
+        company_size:
+          type: string
+          enum: [1-10, 11-50, 51-200, 201-1000, 1001-10000, 10000+]
+          nullable: true
+          description: Company size range
+        location:
+          type: string
+          nullable: true
+          description: Location
+        job_title:
+          type: string
+          nullable: true
+          description: Job title
+        department:
+          type: string
+          nullable: true
+          description: Department
+        seniority_level:
+          type: string
+          enum: [C-Level, VP, Director, Manager, Senior, Junior]
+          nullable: true
+          description: Seniority level
+        status:
+          type: string
+          enum: [new, qualified, contacted, engaged, booked, closed, lost]
+          description: Lead status
+        ai_score:
+          type: integer
+          minimum: 0
+          maximum: 100
+          description: AI-generated score (0-100)
+        tags:
+          type: array
+          items:
+            type: string
+          description: Tags associated with the lead
+        notes:
+          type: string
+          nullable: true
+          description: Notes about the lead
+        enrichment_data:
+          type: object
+          description: Enriched data from external sources
+        last_contacted_at:
+          type: string
+          format: date-time
+          nullable: true
+          description: Last contact timestamp
+        next_follow_up_at:
+          type: string
+          format: date-time
+          nullable: true
+          description: Next follow-up timestamp
+        created_at:
+          type: string
+          format: date-time
+          description: Creation timestamp
+        updated_at:
+          type: string
+          format: date-time
+          description: Last update timestamp
+      required:
+        - id
+        - user_id
+        - company_name
+        - contact_name
+        - status
+        - ai_score
+        - created_at
+        - updated_at
+
+    CreateLeadRequest:
+      type: object
+      properties:
+        company_name:
+          type: string
+          description: Company name
+        contact_name:
+          type: string
+          description: Contact person name
+        email:
+          type: string
+          format: email
+          description: Contact email address
+        phone:
+          type: string
+          description: Contact phone number
+        linkedin_url:
+          type: string
+          format: uri
+          description: LinkedIn profile URL
+        website:
+          type: string
+          format: uri
+          description: Company website
+        industry:
+          type: string
+          description: Industry
+        company_size:
+          type: string
+          enum: [1-10, 11-50, 51-200, 201-1000, 1001-10000, 10000+]
+          description: Company size range
+        location:
+          type: string
+          description: Location
+        job_title:
+          type: string
+          description: Job title
+        department:
+          type: string
+          description: Department
+        seniority_level:
+          type: string
+          enum: [C-Level, VP, Director, Manager, Senior, Junior]
+          description: Seniority level
+        campaign_id:
+          type: string
+          format: uuid
+          description: Associated campaign ID
+        tags:
+          type: array
+          items:
+            type: string
+          description: Tags to associate with the lead
+        notes:
+          type: string
+          description: Notes about the lead
+        enrich:
+          type: boolean
+          default: true
+          description: Whether to enrich the lead data automatically
+      required:
+        - company_name
+        - contact_name
+
+    UpdateLeadRequest:
+      type: object
+      properties:
+        company_name:
+          type: string
+          description: Company name
+        contact_name:
+          type: string
+          description: Contact person name
+        email:
+          type: string
+          format: email
+          description: Contact email address
+        phone:
+          type: string
+          description: Contact phone number
+        linkedin_url:
+          type: string
+          format: uri
+          description: LinkedIn profile URL
+        website:
+          type: string
+          format: uri
+          description: Company website
+        industry:
+          type: string
+          description: Industry
+        company_size:
+          type: string
+          enum: [1-10, 11-50, 51-200, 201-1000, 1001-10000, 10000+]
+          description: Company size range
+        location:
+          type: string
+          description: Location
+        job_title:
+          type: string
+          description: Job title
+        department:
+          type: string
+          description: Department
+        seniority_level:
+          type: string
+          enum: [C-Level, VP, Director, Manager, Senior, Junior]
+          description: Seniority level
+        status:
+          type: string
+          enum: [new, qualified, contacted, engaged, booked, closed, lost]
+          description: Lead status
+        tags:
+          type: array
+          items:
+            type: string
+          description: Tags to associate with the lead
+        notes:
+          type: string
+          description: Notes about the lead
+        next_follow_up_at:
+          type: string
+          format: date-time
+          description: Next follow-up timestamp
+
+    LeadListResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Lead'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+
+    LeadResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/Lead'
+
+    LeadEnrichmentResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/Lead'
+        enrichment:
+          type: object
+          properties:
+            sources:
+              type: array
+              items:
+                type: string
+              description: Data sources used for enrichment
+            enriched_at:
+              type: string
+              format: date-time
+              description: Enrichment timestamp
+            confidence_score:
+              type: number
+              minimum: 0
+              maximum: 1
+              description: Confidence score of enriched data
+
+    Conversation:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier for the conversation
+        user_id:
+          type: string
+          format: uuid
+          description: User ID who owns this conversation
+        lead_id:
+          type: string
+          format: uuid
+          nullable: true
+          description: Associated lead ID
+        campaign_id:
+          type: string
+          format: uuid
+          nullable: true
+          description: Associated campaign ID
+        channel:
+          type: string
+          enum: [whatsapp, instagram, facebook, x, linkedin, email]
+          description: Communication channel
+        session_id:
+          type: string
+          format: uuid
+          nullable: true
+          description: Session ID for the channel
+        contact_identifier:
+          type: string
+          description: Contact identifier (phone number, username, etc.)
+        contact_name:
+          type: string
+          nullable: true
+          description: Contact name
+        status:
+          type: string
+          enum: [active, archived, blocked]
+          description: Conversation status
+        last_message_at:
+          type: string
+          format: date-time
+          description: Last message timestamp
+        unread_count:
+          type: integer
+          minimum: 0
+          description: Number of unread messages
+        metadata:
+          type: object
+          description: Additional metadata
+        created_at:
+          type: string
+          format: date-time
+          description: Creation timestamp
+        updated_at:
+          type: string
+          format: date-time
+          description: Last update timestamp
+      required:
+        - id
+        - user_id
+        - channel
+        - contact_identifier
+        - status
+        - created_at
+        - updated_at
+
+    Message:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier for the message
+        conversation_id:
+          type: string
+          format: uuid
+          description: Conversation ID
+        user_id:
+          type: string
+          format: uuid
+          description: User ID who owns this message
+        direction:
+          type: string
+          enum: [inbound, outbound]
+          description: Message direction
+        content:
+          type: string
+          description: Message content
+        content_type:
+          type: string
+          enum: [text, image, video, audio, document, location]
+          default: text
+          description: Content type
+        media_url:
+          type: string
+          format: uri
+          nullable: true
+          description: Media URL for non-text content
+        status:
+          type: string
+          enum: [sending, sent, delivered, read, failed]
+          description: Message status
+        external_id:
+          type: string
+          nullable: true
+          description: External message ID from the platform
+        metadata:
+          type: object
+          description: Additional metadata
+        ai_generated:
+          type: boolean
+          default: false
+          description: Whether the message was AI-generated
+        created_at:
+          type: string
+          format: date-time
+          description: Creation timestamp
+      required:
+        - id
+        - conversation_id
+        - user_id
+        - direction
+        - content
+        - created_at
+
+    SendMessageRequest:
+      type: object
+      properties:
+        content:
+          type: string
+          description: Message content
+        content_type:
+          type: string
+          enum: [text, image, video, audio, document, location]
+          default: text
+          description: Content type
+        media_url:
+          type: string
+          format: uri
+          description: Media URL for non-text content
+        ai_generated:
+          type: boolean
+          default: false
+          description: Whether the message was AI-generated
+      required:
+        - content
+
+    ConversationListResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Conversation'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+
+    ConversationResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/Conversation'
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/Message'
+          description: Message history
+
+    MessageResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/Message'
+
+    Campaign:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier for the campaign
+        user_id:
+          type: string
+          format: uuid
+          description: User ID who owns this campaign
+        name:
+          type: string
+          description: Campaign name
+        description:
+          type: string
+          nullable: true
+          description: Campaign description
+        channel:
+          type: string
+          enum: [whatsapp, instagram, facebook, x, linkedin, email]
+          description: Communication channel
+        status:
+          type: string
+          enum: [draft, active, paused, completed]
+          description: Campaign status
+        target_audience:
+          type: object
+          description: Target audience criteria
+        message_template:
+          type: string
+          nullable: true
+          description: Message template
+        follow_up_sequence:
+          type: array
+          items:
+            type: object
+          description: Follow-up sequence configuration
+        settings:
+          type: object
+          description: Campaign settings
+        stats:
+          type: object
+          description: Campaign statistics
+        created_at:
+          type: string
+          format: date-time
+          description: Creation timestamp
+        updated_at:
+          type: string
+          format: date-time
+          description: Last update timestamp
+      required:
+        - id
+        - user_id
+        - name
+        - channel
+        - status
+        - created_at
+        - updated_at
+
+    CreateCampaignRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Campaign name
+        description:
+          type: string
+          description: Campaign description
+        channel:
+          type: string
+          enum: [whatsapp, instagram, facebook, x, linkedin, email]
+          description: Communication channel
+        target_audience:
+          type: object
+          description: Target audience criteria
+        message_template:
+          type: string
+          description: Message template
+        follow_up_sequence:
+          type: array
+          items:
+            type: object
+          description: Follow-up sequence configuration
+        settings:
+          type: object
+          description: Campaign settings
+      required:
+        - name
+        - channel
+
+    CampaignListResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Campaign'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+
+    CampaignResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/Campaign'
+
+    PipelineAnalyticsResponse:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            total_leads:
+              type: integer
+              description: Total number of leads
+            qualified_leads:
+              type: integer
+              description: Number of qualified leads
+            conversion_rate:
+              type: number
+              description: Conversion rate percentage
+            response_rate:
+              type: number
+              description: Response rate percentage
+            avg_response_time:
+              type: number
+              description: Average response time in hours
+            pipeline_value:
+              type: number
+              description: Total pipeline value
+            channel_breakdown:
+              type: object
+              description: Breakdown by channel
+            lead_status:
+              type: object
+              description: Breakdown by lead status
+            time_series:
+              type: array
+              items:
+                type: object
+              description: Time series data
+
+    Webhook:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier for the webhook
+        user_id:
+          type: string
+          format: uuid
+          description: User ID who owns this webhook
+        name:
+          type: string
+          description: Webhook name
+        url:
+          type: string
+          format: uri
+          description: Webhook URL
+        events:
+          type: array
+          items:
+            type: string
+            enum: [lead.created, lead.updated, lead.qualified, message.sent, message.delivered, message.read, conversation.created, conversation.updated]
+          description: Events to trigger the webhook
+        secret:
+          type: string
+          nullable: true
+          description: Webhook secret for signature verification
+        is_active:
+          type: boolean
+          default: true
+          description: Whether the webhook is active
+        last_triggered_at:
+          type: string
+          format: date-time
+          nullable: true
+          description: Last trigger timestamp
+        created_at:
+          type: string
+          format: date-time
+          description: Creation timestamp
+        updated_at:
+          type: string
+          format: date-time
+          description: Last update timestamp
+      required:
+        - id
+        - user_id
+        - name
+        - url
+        - events
+        - created_at
+        - updated_at
+
+    CreateWebhookRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Webhook name
+        url:
+          type: string
+          format: uri
+          description: Webhook URL
+        events:
+          type: array
+          items:
+            type: string
+            enum: [lead.created, lead.updated, lead.qualified, message.sent, message.delivered, message.read, conversation.created, conversation.updated]
+          description: Events to trigger the webhook
+        secret:
+          type: string
+          description: Webhook secret for signature verification
+      required:
+        - name
+        - url
+        - events
+
+    WebhookListResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Webhook'
+
+    WebhookResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/Webhook'
+
+    Pagination:
+      type: object
+      properties:
+        page:
+          type: integer
+          description: Current page number
+        limit:
+          type: integer
+          description: Number of items per page
+        total:
+          type: integer
+          description: Total number of items
+        total_pages:
+          type: integer
+          description: Total number of pages
+        has_next:
+          type: boolean
+          description: Whether there is a next page
+        has_prev:
+          type: boolean
+          description: Whether there is a previous page
+
+    Error:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+              description: Error code
+            message:
+              type: string
+              description: Error message
+            details:
+              type: object
+              description: Additional error details
+          required:
+            - code
+            - message
+
+  responses:
+    BadRequest:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error:
+              code: 'BAD_REQUEST'
+              message: 'Invalid request parameters'
+              details:
+                field: 'email'
+                reason: 'Invalid email format'
+
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error:
+              code: 'UNAUTHORIZED'
+              message: 'Invalid or missing API key'
+
+    Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error:
+              code: 'FORBIDDEN'
+              message: 'Insufficient permissions'
+
+    NotFound:
+      description: Not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error:
+              code: 'NOT_FOUND'
+              message: 'Resource not found'
+
+    ValidationError:
+      description: Validation error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error:
+              code: 'VALIDATION_ERROR'
+              message: 'Validation failed'
+              details:
+                field: 'company_name'
+                reason: 'Company name is required'
+
+    RateLimitExceeded:
+      description: Rate limit exceeded
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error:
+              code: 'RATE_LIMIT_EXCEEDED'
+              message: 'Rate limit exceeded. Please try again later.'
+              details:
+                retry_after: 60
+
+    InternalServerError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error:
+              code: 'INTERNAL_SERVER_ERROR'
+              message: 'An unexpected error occurred' 

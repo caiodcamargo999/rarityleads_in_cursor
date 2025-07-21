@@ -1,127 +1,135 @@
-import { useState, useEffect } from "react";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-  CardFooter
-} from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
-import {
-  MessageSquare,
-  Mail,
-  Send,
-  Linkedin,
-  RefreshCw,
-  Copy,
-  Check,
-  Sparkles
-} from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
+"use client"
+
+import { useState, useEffect } from 'react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Textarea } from '@/components/ui/textarea';
+import { Badge } from '@/components/ui/badge';
+import { useToast } from '@/hooks/use-toast';
+import { MessageSquare, Mail, Linkedin, Copy, RefreshCw, Check } from 'lucide-react';
+
+interface DecisionMaker {
+  id: string;
+  name: string;
+  role: string;
+  company: string;
+  jobChallenges: string[];
+  interests: string[];
+}
+
+interface Template {
+  id: string;
+  name: string;
+  template: string;
+}
+
+interface Channel {
+  id: string;
+  name: string;
+  icon: React.ReactNode;
+}
 
 interface CustomizeApproachProps {
   data: {
     template: string;
     channel: string;
     customMessage: string;
-    selectedDecisionMakers: Array<any>;
+    selectedDecisionMakers: DecisionMaker[];
   };
   onUpdate: (data: any) => void;
   onNext: () => void;
   onPrev: () => void;
 }
 
-const channels = [
-  { id: "whatsapp", name: "WhatsApp", icon: <MessageSquare className="h-5 w-5" /> },
-  { id: "email", name: "Email", icon: <Mail className="h-5 w-5" /> },
-  { id: "linkedin", name: "LinkedIn", icon: <Linkedin className="h-5 w-5" /> },
+const channels: Channel[] = [
+  {
+    id: 'whatsapp',
+    name: 'WhatsApp',
+    icon: <MessageSquare className="h-4 w-4" />
+  },
+  {
+    id: 'email',
+    name: 'Email',
+    icon: <Mail className="h-4 w-4" />
+  },
+  {
+    id: 'linkedin',
+    name: 'LinkedIn',
+    icon: <Linkedin className="h-4 w-4" />
+  }
 ];
 
-const templates = {
+const templates: Record<string, Template[]> = {
   whatsapp: [
     {
-      id: "wapp-intro",
-      name: "Introdução Direta",
-      template: "Olá {{nome}}, aqui é [Seu Nome] da [Sua Empresa]. Notei que a {{empresa}} tem se destacado em {{área}}. Como outros {{cargo}} no setor de {{indústria}}, imagino que esteja buscando soluções para {{problema comum}}. Desenvolvemos uma abordagem específica que aumentou em 32% a {{métrica relevante}} para {{empresa similar}}. Poderia compartilhar como vocês estão lidando com {{desafio específico}} atualmente?"
+      id: 'whatsapp-1',
+      name: 'Abordagem Direta',
+      template: 'Olá {{nome}}, tudo bem? Vi que você é {{cargo}} na {{empresa}} e pensei que poderia ser interessante conversarmos sobre como outras clínicas odontológicas estão aumentando sua captação de pacientes. Tem 2 minutos para uma conversa rápida?'
     },
     {
-      id: "wapp-value",
-      name: "Proposta de Valor",
-      template: "Olá {{nome}}, espero que esteja bem. Percebi que a {{empresa}} está investindo em {{área de interesse}}. Nossa solução especializada tem ajudado {{empresas similares}} a {{benefício principal}} e {{benefício secundário}}. Tenho alguns insights específicos para o setor de {{indústria}} que acredito serem relevantes para vocês. Teria interesse em uma breve conversa sobre como isso poderia beneficiar a {{empresa}}?"
+      id: 'whatsapp-2',
+      name: 'Problema Específico',
+      template: 'Oi {{nome}}! Como {{cargo}} da {{empresa}}, você deve enfrentar o desafio de {{problema comum}}. Gostaria de compartilhar como outras clínicas resolveram isso e aumentaram sua {{métrica relevante}} em {{percentual}}%. Interessante?'
     }
   ],
   email: [
     {
-      id: "email-formal",
-      name: "Apresentação Formal",
-      template: "Prezado(a) {{nome}},\n\nEspero que esta mensagem o(a) encontre bem.\n\nMeu nome é [Seu Nome], da [Sua Empresa], especializada em soluções de {{área de especialidade}} para o setor de {{indústria}}.\n\nAnalisando o perfil da {{empresa}}, percebi que vocês têm feito um excelente trabalho em {{área de destaque}}. Parabéns pelo caso de {{caso de sucesso ou iniciativa recente}}.\n\nTemos trabalhado com empresas como {{empresa similar}} e {{outra empresa}}, ajudando-as a {{benefício principal}} com resultados significativos como {{resultado específico}}.\n\nGostaria de compartilhar alguns insights específicos que desenvolvemos para {{setor específico}} e que poderiam ser valiosos para a {{empresa}}.\n\nVocê teria disponibilidade para uma breve conversa de 15 minutos na próxima semana?\n\nAtenciosamente,\n[Seu Nome]\n[Seu Cargo]\n[Sua Empresa]\n[Seus Contatos]"
-    },
-    {
-      id: "email-direct",
-      name: "Direto ao Ponto",
-      template: "Assunto: Aumento de {{métrica}} para {{empresa}}\n\n{{nome}},\n\nVi que a {{empresa}} está focando em {{objetivo estratégico}}.\n\nAjudamos {{empresa de referência}} a aumentar {{métrica}} em {{percentual}}% em {{período}} através de {{solução}}.\n\nPodemos fazer o mesmo pela {{empresa}}?\n\nQual seria o melhor horário para uma conversa rápida de 10 minutos?\n\nAtenciosamente,\n[Seu Nome]"
+      id: 'email-1',
+      name: 'Email Profissional',
+      template: 'Assunto: Como {{empresa similar}} aumentou {{métrica}} em {{percentual}}\n\nPrezado {{nome}},\n\nComo {{cargo}} da {{empresa}}, você deve conhecer os desafios de {{desafio específico}}.\n\nGostaria de compartilhar como outras clínicas odontológicas estão resolvendo isso.\n\nAguardo seu retorno.\n\nAtenciosamente,\n[Seu Nome]'
     }
   ],
   linkedin: [
     {
-      id: "linkedin-connection",
-      name: "Conexão Inicial",
-      template: "Olá {{nome}}, notei seu papel como {{cargo}} na {{empresa}}. Trabalho com {{sua especialidade}} e tenho ajudado empresas do setor de {{indústria}} a {{benefício principal}}. Gostaria de conectar para compartilharmos insights sobre {{tema relevante}}."
-    },
-    {
-      id: "linkedin-followup",
-      name: "Follow-up pós-conexão",
-      template: "Olá {{nome}}, obrigado por aceitar minha conexão! Como mencionei, tenho trabalhado com várias empresas de {{indústria}} ajudando-as a {{principal benefício}}. Recentemente, implementamos uma estratégia para {{empresa similar}} que resultou em {{resultado específico}}. Acredito que poderíamos alcançar resultados semelhantes para a {{empresa}}. Você teria interesse em uma breve conversa sobre isso?"
+      id: 'linkedin-1',
+      name: 'Conexão Profissional',
+      template: 'Olá {{nome}},\n\nVi seu perfil e fiquei impressionado com seu trabalho como {{cargo}} na {{empresa}}.\n\nTrabalho com {{área de especialidade}} para clínicas odontológicas e gostaria de compartilhar algumas insights sobre {{área de interesse}}.\n\nPodemos conectar?'
     }
   ]
 };
 
 const CustomizeApproach = ({ data, onUpdate, onNext, onPrev }: CustomizeApproachProps) => {
   const { toast } = useToast();
-  const [selectedTemplate, setSelectedTemplate] = useState(null);
+  const [selectedDecisionMaker, setSelectedDecisionMaker] = useState<DecisionMaker | null>(null);
+  const [selectedTemplate, setSelectedTemplate] = useState<Template | null>(null);
   const [generatingMessage, setGeneratingMessage] = useState(false);
   const [copied, setCopied] = useState(false);
-  const [selectedDecisionMaker, setSelectedDecisionMaker] = useState(
-    data.selectedDecisionMakers.length > 0 ? data.selectedDecisionMakers[0] : null
-  );
-  
-  // Set default channel if none selected
+
+  // Set default decision maker
   useEffect(() => {
-    if (!data.channel && channels.length > 0) {
-      onUpdate({ channel: channels[0].id });
+    if (data.selectedDecisionMakers.length > 0 && !selectedDecisionMaker) {
+      setSelectedDecisionMaker(data.selectedDecisionMakers[0]);
     }
-  }, []);
-  
+  }, [data.selectedDecisionMakers, selectedDecisionMaker]);
+
   // Select a template when channel changes
   useEffect(() => {
-    if (data.channel && templates[data.channel]?.length > 0) {
-      setSelectedTemplate(templates[data.channel][0]);
+    if (data.channel && templates[data.channel as keyof typeof templates]?.length > 0) {
+      setSelectedTemplate(templates[data.channel as keyof typeof templates][0]);
     } else {
       setSelectedTemplate(null);
     }
   }, [data.channel]);
-  
+
   // Generate personalized message when template or decision maker changes
   useEffect(() => {
     if (selectedTemplate && selectedDecisionMaker) {
       generateMessage();
     }
   }, [selectedTemplate, selectedDecisionMaker]);
-  
-  const handleChannelSelect = (channelId) => {
+
+  const handleChannelSelect = (channelId: string) => {
     onUpdate({ channel: channelId });
   };
-  
-  const handleTemplateSelect = (template) => {
+
+  const handleTemplateSelect = (template: Template) => {
     setSelectedTemplate(template);
   };
-  
-  const handleDecisionMakerSelect = (decisionMaker) => {
+
+  const handleDecisionMakerSelect = (decisionMaker: DecisionMaker) => {
     setSelectedDecisionMaker(decisionMaker);
   };
-  
+
   const generateMessage = () => {
     if (!selectedTemplate || !selectedDecisionMaker) return;
     
@@ -166,7 +174,7 @@ const CustomizeApproach = ({ data, onUpdate, onNext, onPrev }: CustomizeApproach
       setGeneratingMessage(false);
     }, 1500);
   };
-  
+
   const handleRefreshMessage = () => {
     generateMessage();
     toast({
@@ -174,7 +182,7 @@ const CustomizeApproach = ({ data, onUpdate, onNext, onPrev }: CustomizeApproach
       description: "Uma nova versão da mensagem foi gerada."
     });
   };
-  
+
   const handleCopyMessage = () => {
     navigator.clipboard.writeText(data.customMessage);
     setCopied(true);
@@ -184,8 +192,8 @@ const CustomizeApproach = ({ data, onUpdate, onNext, onPrev }: CustomizeApproach
     });
     setTimeout(() => setCopied(false), 2000);
   };
-  
-  const handleMessageChange = (e) => {
+
+  const handleMessageChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     onUpdate({ customMessage: e.target.value });
   };
 
@@ -255,11 +263,11 @@ const CustomizeApproach = ({ data, onUpdate, onNext, onPrev }: CustomizeApproach
           </div>
           
           {/* Template selection */}
-          {data.channel && templates[data.channel] && (
+          {data.channel && templates[data.channel as keyof typeof templates] && (
             <>
               <h3 className="font-medium text-gray-800 mt-6 font-benton">Selecione um template</h3>
               <div className="space-y-3">
-                {templates[data.channel].map((template) => (
+                {templates[data.channel as keyof typeof templates].map((template) => (
                   <Card
                     key={template.id}
                     className={`cursor-pointer transition-all ${
@@ -292,24 +300,23 @@ const CustomizeApproach = ({ data, onUpdate, onNext, onPrev }: CustomizeApproach
                 size="sm"
                 variant="outline"
                 onClick={handleRefreshMessage}
-                disabled={!selectedTemplate || !selectedDecisionMaker || generatingMessage}
+                disabled={generatingMessage}
                 className="font-benton"
               >
                 <RefreshCw className={`h-4 w-4 mr-1 ${generatingMessage ? 'animate-spin' : ''}`} />
-                Regenerar
+                Atualizar
               </Button>
               
               <Button
                 size="sm"
                 variant="outline"
                 onClick={handleCopyMessage}
-                disabled={!data.customMessage || generatingMessage}
                 className="font-benton"
               >
                 {copied ? (
                   <>
                     <Check className="h-4 w-4 mr-1" />
-                    Copiado
+                    Copiado!
                   </>
                 ) : (
                   <>
@@ -321,54 +328,39 @@ const CustomizeApproach = ({ data, onUpdate, onNext, onPrev }: CustomizeApproach
             </div>
           </div>
           
-          <Card className="h-[calc(100%-40px)]">
-            <CardContent className="p-0">
-              {generatingMessage ? (
-                <div className="flex flex-col items-center justify-center h-64 p-4">
-                  <Sparkles className="h-8 w-8 text-rarity-pink mb-3 animate-pulse" />
-                  <p className="text-gray-500 font-benton">Gerando mensagem personalizada...</p>
-                </div>
-              ) : !data.customMessage ? (
-                <div className="flex flex-col items-center justify-center h-64 p-4">
-                  <MessageSquare className="h-8 w-8 text-gray-300 mb-3" />
-                  <p className="text-gray-500 font-benton">
-                    Selecione um canal, um template e um decisor para gerar sua mensagem
-                  </p>
-                </div>
-              ) : (
-                <Textarea
-                  value={data.customMessage}
-                  onChange={handleMessageChange}
-                  className="w-full h-64 p-4 rounded-lg resize-none border-0 focus-visible:ring-0 font-benton"
-                  placeholder="Mensagem personalizada aparecerá aqui..."
-                />
-              )}
-            </CardContent>
+          <div className="relative">
+            <Textarea
+              value={data.customMessage}
+              onChange={handleMessageChange}
+              placeholder="Sua mensagem personalizada aparecerá aqui..."
+              className="min-h-[300px] font-benton"
+            />
             
-            {data.customMessage && (
-              <CardFooter className="p-3 border-t">
-                <div className="text-xs text-gray-500 flex items-center gap-1 font-benton">
-                  <Sparkles className="h-3 w-3 text-rarity-pink" />
-                  <span>Personalizado com base no perfil do decisor</span>
+            {generatingMessage && (
+              <div className="absolute inset-0 bg-white/80 flex items-center justify-center rounded-md">
+                <div className="text-center">
+                  <RefreshCw className="h-6 w-6 animate-spin mx-auto mb-2" />
+                  <p className="text-sm text-gray-600 font-benton">Gerando mensagem...</p>
                 </div>
-              </CardFooter>
+              </div>
             )}
-          </Card>
+          </div>
+          
+          <div className="flex justify-between items-center">
+            <Badge variant="secondary" className="font-benton">
+              {data.customMessage.length} caracteres
+            </Badge>
+            
+            <div className="flex gap-2">
+              <Button variant="outline" onClick={onPrev} className="font-benton">
+                Voltar
+              </Button>
+              <Button onClick={onNext} disabled={!data.customMessage.trim()} className="font-benton">
+                Continuar
+              </Button>
+            </div>
+          </div>
         </div>
-      </div>
-
-      {/* Navigation Buttons */}
-      <div className="flex justify-between">
-        <Button variant="outline" onClick={onPrev} className="font-benton">
-          Voltar
-        </Button>
-        <Button 
-          onClick={onNext} 
-          disabled={!data.customMessage}
-          className="bg-rarity-pink hover:bg-rarity-pink/90 font-benton"
-        >
-          Próximo Passo
-        </Button>
       </div>
     </div>
   );

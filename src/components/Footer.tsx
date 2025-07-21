@@ -1,5 +1,5 @@
 
-import { Link } from "react-router-dom";
+import Link from "next/link";
 
 const Footer = () => {
   return (
@@ -24,17 +24,17 @@ const Footer = () => {
             <h3 className="font-medium text-black mb-4">Quick Links</h3>
             <ul className="space-y-3">
               <li>
-                <Link to="/" className="text-gray-600 hover:text-black transition-colors text-sm">
+                <Link href="/" className="text-gray-600 hover:text-black transition-colors text-sm">
                   Home
                 </Link>
               </li>
               <li>
-                <Link to="/prospecting" className="text-gray-600 hover:text-black transition-colors text-sm">
+                <Link href="/prospecting" className="text-gray-600 hover:text-black transition-colors text-sm">
                   Prospecting
                 </Link>
               </li>
               <li>
-                <Link to="/dashboard" className="text-gray-600 hover:text-black transition-colors text-sm">
+                <Link href="/dashboard" className="text-gray-600 hover:text-black transition-colors text-sm">
                   Dashboard
                 </Link>
               </li>

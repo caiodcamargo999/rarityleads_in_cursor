@@ -1,0 +1,41 @@
+{
+  "name": "whatsapp-service",
+  "version": "1.0.0",
+  "description": "WhatsApp microservice for Rarity Leads SaaS",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js",
+    "test": "jest"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "helmet": "^7.1.0",
+    "dotenv": "^16.3.1",
+    "ws": "^8.14.2",
+    "qrcode": "^1.5.3",
+    "@whiskeysockets/baileys": "^6.6.0",
+    "pino": "^8.17.2",
+    "pino-pretty": "^10.2.3",
+    "node-cron": "^3.0.3",
+    "redis": "^4.6.10",
+    "uuid": "^9.0.1",
+    "fs-extra": "^11.1.1",
+    "path": "^0.12.7"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1",
+    "jest": "^29.7.0"
+  },
+  "keywords": [
+    "whatsapp",
+    "baileys",
+    "microservice",
+    "saas",
+    "messaging"
+  ],
+  "author": "Rarity Leads",
+  "license": "MIT"
+} 

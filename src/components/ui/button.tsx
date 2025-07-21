@@ -1,76 +1,119 @@
 "use client"
 
-import * as React from "react"
-import { Slot } from "@radix-ui/react-slot"
-import { cva, type VariantProps } from "class-variance-authority"
-import { motion } from "framer-motion"
-import { cn } from "@/lib/utils"
+import { motion, HTMLMotionProps } from 'framer-motion'
+import { forwardRef } from 'react'
+import { cn } from '@/lib/utils'
+import { Loader2 } from 'lucide-react'
+import { buttonVariants, motionVariants } from '@/lib/design-system'
 
-const buttonVariants = cva(
-  "inline-flex items-center justify-center whitespace-nowrap rounded-lg text-sm font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
-  {
-    variants: {
-      variant: {
-        default: "bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg hover:shadow-xl hover:shadow-primary/25",
-        destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/90 shadow-lg hover:shadow-xl hover:shadow-destructive/25",
-        outline: "border border-input bg-background hover:bg-accent hover:text-accent-foreground shadow-sm hover:shadow-md",
-        secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80 shadow-sm hover:shadow-md",
-        ghost: "hover:bg-accent hover:text-accent-foreground",
-        link: "text-primary underline-offset-4 hover:underline",
-        premium: "bg-gradient-to-r from-primary to-primary/80 text-primary-foreground hover:from-primary/90 hover:to-primary/70 shadow-lg hover:shadow-xl hover:shadow-primary/25 border border-primary/20",
-      },
-      size: {
-        default: "h-10 px-4 py-2",
-        sm: "h-9 rounded-md px-3",
-        lg: "h-11 rounded-lg px-8",
-        xl: "h-12 rounded-lg px-10 text-base",
-        icon: "h-10 w-10",
-      },
-    },
-    defaultVariants: {
-      variant: "default",
-      size: "default",
-    },
-  }
-)
-
-export interface ButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
-    VariantProps<typeof buttonVariants> {
-  asChild?: boolean
+export interface ButtonProps extends HTMLMotionProps<'button'> {
+  variant?: 'primary' | 'secondary' | 'ghost' | 'danger' | 'glass'
+  size?: 'sm' | 'md' | 'lg' | 'xl'
   loading?: boolean
   children: React.ReactNode
+  className?: string
+  fullWidth?: boolean
+  icon?: React.ReactNode
+  iconPosition?: 'left' | 'right'
 }
 
-const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, asChild = false, loading = false, children, ...props }, ref) => {
-    const Comp = asChild ? Slot : "button"
-    
+const sizeVariants = {
+  sm: "px-3 py-2 text-sm rounded-md font-normal",
+  md: "px-4 py-2 text-base rounded-lg font-normal",
+  lg: "px-6 py-3 text-lg rounded-lg font-normal",
+  xl: "px-8 py-4 text-xl rounded-xl font-normal"
+}
+
+const glassVariants = {
+  primary: "bg-gradient-to-r from-purple-500/20 to-purple-600/20 backdrop-blur-xl border border-purple-500/30 text-white hover:from-purple-500/30 hover:to-purple-600/30 hover:border-purple-400/50",
+  secondary: "bg-gradient-to-r from-gray-500/10 to-gray-600/10 backdrop-blur-xl border border-gray-500/30 text-gray-200 hover:from-gray-500/20 hover:to-gray-600/20 hover:border-gray-400/50",
+  success: "bg-gradient-to-r from-green-500/20 to-green-600/20 backdrop-blur-xl border border-green-500/30 text-green-200 hover:from-green-500/30 hover:to-green-600/30 hover:border-green-400/50",
+  danger: "bg-gradient-to-r from-red-500/20 to-red-600/20 backdrop-blur-xl border border-red-500/30 text-red-200 hover:from-red-500/30 hover:to-red-600/30 hover:border-red-400/50"
+}
+
+export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
+  ({ 
+    variant = 'primary', 
+    size = 'md', 
+    loading = false, 
+    children, 
+    className, 
+    disabled,
+    fullWidth = false,
+    icon,
+    iconPosition = 'left',
+    ...props 
+  }, ref) => {
+    const baseClasses = cn(
+      "inline-flex items-center justify-center transition-all duration-300 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed font-normal relative overflow-hidden",
+      sizeVariants[size],
+      fullWidth && "w-full",
+      className
+    )
+
+    const getVariantClasses = () => {
+      if (variant === 'glass') {
+        return glassVariants.primary
+      }
+      
+      switch (variant) {
+        case 'primary':
+          return "bg-gradient-to-r from-purple-600 to-purple-700 text-white shadow-lg shadow-purple-500/25 hover:shadow-xl hover:shadow-purple-500/30 hover:scale-105 active:scale-95"
+        case 'secondary':
+          return "bg-transparent text-purple-400 border border-purple-500/50 hover:bg-purple-500/10 hover:border-purple-400 hover:text-purple-300"
+        case 'ghost':
+          return "text-gray-400 hover:text-white hover:bg-white/5"
+        case 'danger':
+          return "bg-gradient-to-r from-red-600 to-red-700 text-white shadow-lg shadow-red-500/25 hover:shadow-xl hover:shadow-red-500/30 hover:scale-105 active:scale-95"
+        default:
+          return "bg-gradient-to-r from-purple-600 to-purple-700 text-white shadow-lg shadow-purple-500/25 hover:shadow-xl hover:shadow-purple-500/30 hover:scale-105 active:scale-95"
+      }
+    }
+
+    const buttonClasses = cn(baseClasses, getVariantClasses())
+
     return (
-      <motion.div
-        whileHover={{ scale: 1.02 }}
-        whileTap={{ scale: 0.98 }}
-        transition={{ duration: 0.1 }}
+      <motion.button
+        ref={ref}
+        className={buttonClasses}
+        style={{ fontFamily: 'Inter, system-ui, sans-serif' }}
+        variants={motionVariants.scaleIn}
+        initial="initial"
+        whileHover="animate"
+        whileTap="exit"
+        disabled={disabled || loading}
+        {...props}
       >
-        <Comp
-          className={cn(buttonVariants({ variant, size, className }))}
-          ref={ref}
-          disabled={loading || props.disabled}
-          {...props}
-        >
-          {loading && (
-            <motion.div
-              className="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-            />
-          )}
-          {children}
-        </Comp>
-      </motion.div>
+        {/* Shimmer effect for glass variant */}
+        {variant === 'glass' && (
+          <motion.div
+            className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent"
+            initial={{ x: '-100%' }}
+            whileHover={{ x: '100%' }}
+            transition={{ duration: 0.6 }}
+          />
+        )}
+        
+        {/* Loading spinner */}
+        {loading && (
+          <Loader2 className="w-4 h-4 animate-spin mr-2" />
+        )}
+        
+        {/* Icon */}
+        {icon && iconPosition === 'left' && !loading && (
+          <span className="mr-2">{icon}</span>
+        )}
+        
+        {/* Content */}
+        <span className="relative z-10">{children}</span>
+        
+        {/* Icon */}
+        {icon && iconPosition === 'right' && !loading && (
+          <span className="ml-2">{icon}</span>
+        )}
+      </motion.button>
     )
   }
 )
-Button.displayName = "Button"
 
-export { Button, buttonVariants }
+Button.displayName = 'Button' 

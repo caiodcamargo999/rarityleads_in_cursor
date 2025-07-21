@@ -2,263 +2,214 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-  :root {
-    /* Premium SaaS Color Palette - Inspired by tradesflow.io */
-    --background: 0 0% 4%; /* #0A0A0A */
-    --foreground: 0 0% 98%; /* #FAFAFA */
-    --card: 0 0% 6%; /* #0F0F0F */
-    --card-foreground: 0 0% 98%;
-    --popover: 0 0% 6%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 262 83% 58%; /* #8B5CF6 */
-    --primary-foreground: 0 0% 98%;
-    --secondary: 0 0% 9%; /* #171717 */
-    --secondary-foreground: 0 0% 98%;
-    --muted: 0 0% 9%;
-    --muted-foreground: 0 0% 64%; /* #A3A3A3 */
-    --accent: 0 0% 9%;
-    --accent-foreground: 0 0% 98%;
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 12%; /* #1F1F1F */
-    --input: 0 0% 12%;
-    --ring: 262 83% 58%;
-    --radius: 0.75rem;
-    
-    /* Sidebar Colors */
-    --sidebar-background: 0 0% 3%; /* #080808 */
-    --sidebar-foreground: 0 0% 98%;
-    --sidebar-primary: 262 83% 58%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 0 0% 9%;
-    --sidebar-accent-foreground: 0 0% 98%;
-    --sidebar-border: 0 0% 12%;
-    --sidebar-ring: 262 83% 58%;
-  }
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap');
+@import url('https://fonts.cdnfonts.com/css/bento-sans');
 
-  .dark {
-    --background: 0 0% 4%;
-    --foreground: 0 0% 98%;
-    --card: 0 0% 6%;
-    --card-foreground: 0 0% 98%;
-    --popover: 0 0% 6%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 262 83% 58%;
-    --primary-foreground: 0 0% 98%;
-    --secondary: 0 0% 9%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 0 0% 9%;
-    --muted-foreground: 0 0% 64%;
-    --accent: 0 0% 9%;
-    --accent-foreground: 0 0% 98%;
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 12%;
-    --input: 0 0% 12%;
-    --ring: 262 83% 58%;
-  }
+:root {
+  --background: #0a0a0a;
+  --foreground: #ffffff;
+  --card: #0a0a0a;
+  --card-foreground: #ffffff;
+  --popover: #0a0a0a;
+  --popover-foreground: #ffffff;
+  --primary: #8b5cf6;
+  --primary-foreground: #ffffff;
+  --secondary: #1a1a1a;
+  --secondary-foreground: #ffffff;
+  --muted: #1a1a1a;
+  --muted-foreground: #a1a1aa;
+  --accent: #8b5cf6;
+  --accent-foreground: #ffffff;
+  --destructive: #7f1d1d;
+  --destructive-foreground: #ffffff;
+  --border: #262626;
+  --input: #262626;
+  --ring: #8b5cf6;
+  --radius: 0.5rem;
 }
 
-@layer base {
-  * {
-    @apply border-border;
+* {
+  border-color: hsl(var(--border));
+}
+
+body {
+  color: hsl(var(--foreground));
+  background: hsl(var(--background));
+  font-family: 'Inter', 'Bento Sans Regular', sans-serif;
+  font-weight: 400;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Typography - Exact match from headline image */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 400;
+  line-height: 1.2;
+  letter-spacing: -0.025em;
+  font-family: 'Inter', 'Bento Sans Regular', sans-serif;
+  color: #ffffff;
+}
+
+h1 {
+  font-size: 4rem;
+  font-weight: 400;
+  line-height: 1.1;
+  font-family: 'Inter', 'Bento Sans Regular', sans-serif;
+  letter-spacing: -0.03em;
+}
+
+h2 {
+  font-size: 2.5rem;
+  font-weight: 400;
+  line-height: 1.2;
+  font-family: 'Inter', 'Bento Sans Regular', sans-serif;
+  letter-spacing: -0.025em;
+}
+
+h3 {
+  font-size: 1.875rem;
+  font-weight: 400;
+  line-height: 1.3;
+  font-family: 'Inter', 'Bento Sans Regular', sans-serif;
+  letter-spacing: -0.02em;
+}
+
+h4 {
+  font-size: 1.5rem;
+  font-weight: 400;
+  line-height: 1.4;
+  font-family: 'Inter', 'Bento Sans Regular', sans-serif;
+  letter-spacing: -0.015em;
+}
+
+p {
+  font-weight: 400;
+  line-height: 1.6;
+  font-size: 1.25rem;
+  font-family: 'Inter', 'Bento Sans Regular', sans-serif;
+  color: #ffffff;
+  letter-spacing: -0.01em;
+}
+
+/* Button styles - Purple theme */
+.btn-primary {
+  background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+  color: white;
+  padding: 1rem 2rem;
+  border-radius: 0.5rem;
+  font-weight: 400;
+  transition: all 0.3s ease;
+  border: none;
+  cursor: pointer;
+  font-family: 'Inter', 'Bento Sans Regular', sans-serif;
+}
+
+.btn-primary:hover {
+  box-shadow: 0 10px 25px rgba(139, 92, 246, 0.25);
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  background: transparent;
+  color: white;
+  padding: 1rem 2rem;
+  border-radius: 0.5rem;
+  font-weight: 400;
+  transition: all 0.3s ease;
+  border: 1px solid #8b5cf6;
+  cursor: pointer;
+  font-family: 'Inter', 'Bento Sans Regular', sans-serif;
+}
+
+.btn-secondary:hover {
+  background: rgba(139, 92, 246, 0.1);
+  transform: translateY(-1px);
+}
+
+/* Card styles */
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  border-color: rgba(139, 92, 246, 0.3);
+  transform: translateY(-2px);
+}
+
+/* Smooth transitions */
+* {
+  transition: color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease, transform 0.3s ease;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0a0a0a;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #333;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* Focus styles */
+button:focus,
+input:focus,
+textarea:focus,
+select:focus {
+  outline: 2px solid rgba(139, 92, 246, 0.5);
+  outline-offset: 2px;
+}
+
+/* Loading states */
+.loading {
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+/* Responsive typography */
+@media (max-width: 768px) {
+  h1 {
+    font-size: 2.5rem;
+    font-weight: 400;
+    font-family: 'Inter', 'Bento Sans Regular', sans-serif;
+    line-height: 1.2;
+    letter-spacing: -0.025em;
   }
   
-  body {
-    @apply bg-background text-foreground;
-    font-feature-settings: "rlig" 1, "calt" 1;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+  h2 {
+    font-size: 2rem;
+    font-weight: 400;
+    font-family: 'Inter', 'Bento Sans Regular', sans-serif;
+    line-height: 1.3;
+    letter-spacing: -0.02em;
   }
-
-  html {
-    scroll-behavior: smooth;
+  
+  h3 {
+    font-size: 1.5rem;
+    font-weight: 400;
+    font-family: 'Inter', 'Bento Sans Regular', sans-serif;
+    line-height: 1.4;
+    letter-spacing: -0.015em;
   }
-}
-
-@layer components {
-  /* Premium Sidebar Styles - Inspired by Anthropic Console */
-  .sidebar {
-    @apply fixed left-0 top-0 h-full w-64 bg-sidebar border-r border-sidebar-border z-50;
-    backdrop-filter: blur(20px);
+  
+  p {
+    font-size: 1.125rem;
+    font-weight: 400;
+    font-family: 'Inter', 'Bento Sans Regular', sans-serif;
+    line-height: 1.6;
+    letter-spacing: -0.01em;
   }
-
-  .sidebar-nav {
-    @apply flex flex-col h-full;
-  }
-
-  .sidebar-nav-link {
-    @apply flex items-center gap-3 px-4 py-3 text-sidebar-foreground/70 no-underline font-medium border-l-2 border-transparent transition-all duration-200 relative;
-  }
-
-  .sidebar-nav-link:hover {
-    @apply text-sidebar-foreground bg-sidebar-accent/50 border-l-sidebar-primary;
-  }
-
-  .sidebar-nav-link.active {
-    @apply text-sidebar-foreground bg-sidebar-accent border-l-sidebar-primary;
-  }
-
-  .nav-section-title {
-    @apply text-sidebar-foreground/50 text-xs font-medium px-4 py-2 uppercase tracking-wider;
-  }
-
-  .sidebar-logout {
-    @apply mt-auto p-4 border-t border-sidebar-border bg-sidebar;
-  }
-
-  /* Premium Button System */
-  .btn-primary {
-    @apply bg-primary text-primary-foreground px-4 py-2.5 rounded-lg font-medium transition-all duration-200 border border-primary/20 hover:bg-primary/90 hover:border-primary/40 hover:shadow-lg hover:shadow-primary/25 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:ring-offset-2 focus:ring-offset-background;
-  }
-
-  .btn-secondary {
-    @apply bg-secondary text-secondary-foreground px-4 py-2.5 rounded-lg font-medium transition-all duration-200 border border-border hover:bg-secondary/80 hover:border-border/60 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:ring-offset-2 focus:ring-offset-background;
-  }
-
-  .btn-ghost {
-    @apply bg-transparent text-foreground/70 px-4 py-2.5 rounded-lg font-medium transition-all duration-200 hover:bg-accent hover:text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:ring-offset-2 focus:ring-offset-background;
-  }
-
-  /* Premium Card System */
-  .card {
-    @apply bg-card border border-border rounded-xl p-6 transition-all duration-200 hover:border-border/60 hover:shadow-lg hover:shadow-black/10;
-  }
-
-  .metric-card {
-    @apply bg-card border border-border rounded-xl p-6 transition-all duration-200 hover:border-primary/20 hover:shadow-lg hover:shadow-primary/10;
-  }
-
-  /* Main Layout */
-  .main-content {
-    @apply flex-1 ml-64 p-6 bg-background min-h-screen;
-  }
-
-  .dashboard-container {
-    @apply flex min-h-screen bg-background;
-  }
-
-  /* Premium Animations */
-  .fade-in {
-    @apply animate-in fade-in duration-500;
-  }
-
-  .slide-in-right {
-    @apply animate-in slide-in-from-right duration-500;
-  }
-
-  .slide-in-left {
-    @apply animate-in slide-in-from-left duration-500;
-  }
-
-  .scale-in {
-    @apply animate-in zoom-in duration-300;
-  }
-
-  /* Loading States */
-  .loading-shimmer {
-    @apply relative overflow-hidden bg-muted/20 rounded-lg;
-  }
-
-  .loading-shimmer::after {
-    @apply absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/10 to-transparent;
-    content: '';
-    animation: shimmer 2s infinite;
-  }
-
-  /* Custom Scrollbar */
-  ::-webkit-scrollbar {
-    @apply w-2;
-  }
-
-  ::-webkit-scrollbar-track {
-    @apply bg-muted/20 rounded-full;
-  }
-
-  ::-webkit-scrollbar-thumb {
-    @apply bg-muted-foreground/30 rounded-full hover:bg-muted-foreground/50 transition-colors;
-  }
-
-  /* Focus States */
-  *:focus-visible {
-    @apply outline-none ring-2 ring-primary/50 ring-offset-2 ring-offset-background;
-  }
-
-  /* Selection */
-  ::selection {
-    @apply bg-primary/20 text-primary-foreground;
-  }
-
-  /* Responsive Design */
-  @media (max-width: 1024px) {
-    .sidebar {
-      @apply w-16;
-    }
-    
-    .main-content {
-      @apply ml-16;
-    }
-    
-    .sidebar-nav-link {
-      @apply justify-center px-3;
-    }
-    
-    .nav-section-title {
-      @apply hidden;
-    }
-  }
-
-  @media (max-width: 768px) {
-    .dashboard-container {
-      @apply flex-col;
-    }
-    
-    .sidebar {
-      @apply relative w-full h-auto;
-    }
-    
-    .main-content {
-      @apply ml-0 p-4;
-    }
-    
-    .metrics-grid {
-      @apply grid-cols-1 gap-4;
-    }
-  }
-
-  /* Reduced Motion */
-  @media (prefers-reduced-motion: reduce) {
-    * {
-      @apply animate-none transition-none;
-    }
-  }
-}
-
-@keyframes shimmer {
-  0% {
-    transform: translateX(-100%);
-  }
-  100% {
-    transform: translateX(100%);
-  }
-}
-
-/* Premium Gradient Text */
-.gradient-text {
-  @apply bg-gradient-to-r from-primary via-primary/80 to-primary/60 bg-clip-text text-transparent;
-}
-
-/* Premium Glass Effect */
-.glass {
-  @apply backdrop-blur-xl bg-white/5 border border-white/10;
-}
-
-/* Premium Shadow System */
-.shadow-premium {
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-}
-
-.shadow-premium-lg {
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
 } 
