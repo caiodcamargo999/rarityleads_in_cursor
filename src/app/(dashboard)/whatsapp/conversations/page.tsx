@@ -108,7 +108,7 @@ export default function WhatsAppConversationsPage() {
         <div className="p-4 border-b border-border">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-lg font-semibold">Conversations</h2>
-            <Button variant="ghost" size="icon">
+            <Button variant="ghost" size="sm">
               <MoreVertical className="w-4 h-4" />
             </Button>
           </div>
@@ -195,13 +195,13 @@ export default function WhatsAppConversationsPage() {
               </div>
               
               <div className="flex items-center space-x-2">
-                <Button variant="ghost" size="icon">
+                <Button variant="ghost" size="sm">
                   <Phone className="w-4 h-4" />
                 </Button>
-                <Button variant="ghost" size="icon">
+                <Button variant="ghost" size="sm">
                   <Video className="w-4 h-4" />
                 </Button>
-                <Button variant="ghost" size="icon">
+                <Button variant="ghost" size="sm">
                   <MoreVertical className="w-4 h-4" />
                 </Button>
               </div>
@@ -239,7 +239,7 @@ export default function WhatsAppConversationsPage() {
             {/* Message Input */}
             <div className="p-4 border-t border-border">
               <div className="flex items-center space-x-2">
-                <Button variant="ghost" size="icon">
+                <Button variant="ghost" size="sm">
                   <Paperclip className="w-4 h-4" />
                 </Button>
                 <div className="flex-1 relative">
@@ -253,7 +253,7 @@ export default function WhatsAppConversationsPage() {
                   />
                   <Button
                     variant="ghost"
-                    size="icon"
+                    size="sm"
                     className="absolute right-1 top-1"
                   >
                     <Smile className="w-4 h-4" />
