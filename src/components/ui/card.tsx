@@ -1,11 +1,11 @@
 "use client"
 
 import * as React from "react"
-import { motion } from "framer-motion"
+import { motion, HTMLMotionProps } from "framer-motion"
 import { cardVariants } from "@/lib/motionVariants"
 import { cn } from "@/lib/utils"
 
-export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface CardProps extends HTMLMotionProps<'div'> {
   variant?: 'default' | 'glass' | 'gradient' | 'elevated'
   hover?: boolean
   children: React.ReactNode

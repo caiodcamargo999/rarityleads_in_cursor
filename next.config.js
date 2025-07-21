@@ -2,8 +2,25 @@
 const nextConfig = {
   // Performance optimizations
   experimental: {
-    optimizeCss: true,
     optimizePackageImports: ['lucide-react', 'framer-motion'],
+  },
+  
+  // Exclude Supabase functions from build
+  webpack: (config, { isServer }) => {
+    if (!isServer) {
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+        fs: false,
+      }
+    }
+    
+    // Exclude Supabase functions from client bundle
+    config.module.rules.push({
+      test: /supabase\/functions/,
+      use: 'ignore-loader',
+    })
+    
+    return config
   },
   
   // Image optimization
