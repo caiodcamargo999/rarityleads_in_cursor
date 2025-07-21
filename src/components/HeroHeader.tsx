@@ -82,7 +82,11 @@ export const HeroHeader = () => {
                                     <Button
                                         variant="secondary"
                                         size="sm"
-                                        className={cn(isScrolled && 'lg:hidden')}>
+                                        className={cn(
+                                          isScrolled && 'lg:hidden',
+                                          'transition-transform duration-200 border-white/20 shadow-sm hover:shadow-lg hover:scale-105 hover:-translate-y-0.5 focus-visible:ring-2 focus-visible:ring-[#8b5cf6]/50 underline-offset-4 hover:underline'
+                                        )}
+                                    >
                                         <span>Login</span>
                                     </Button>
                                 </Link>
@@ -90,7 +94,11 @@ export const HeroHeader = () => {
                                     <Button
                                         variant="primary"
                                         size="sm"
-                                        className={cn(isScrolled && 'lg:hidden')}>
+                                        className={cn(
+                                          isScrolled && 'lg:hidden',
+                                          'transition-transform duration-200 border-white/20 shadow-sm hover:shadow-lg hover:scale-105 hover:-translate-y-0.5 focus-visible:ring-2 focus-visible:ring-[#8b5cf6]/50 underline-offset-4 hover:underline'
+                                        )}
+                                    >
                                         <span>Sign Up</span>
                                     </Button>
                                 </Link>

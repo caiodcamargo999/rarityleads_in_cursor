@@ -111,7 +111,7 @@ export function Sidebar({ user, onProfileClick, onLogout }: SidebarProps) {
         </div>
 
         {/* Navigation */}
-        <nav className="flex-1 px-4 py-6 space-y-8">
+        <nav className="flex-1 px-4 py-4 space-y-4">
           {navigationItems.map((section, sectionIndex) => (
             <div key={section.title}>
               {!collapsed && (
@@ -124,7 +124,6 @@ export function Sidebar({ user, onProfileClick, onLogout }: SidebarProps) {
                   {section.title}
                 </motion.h3>
               )}
-              
               <ul className="space-y-2">
                 {section.items.map((item, itemIndex) => {
                   const isActive = pathname === item.href
@@ -153,49 +152,26 @@ export function Sidebar({ user, onProfileClick, onLogout }: SidebarProps) {
           ))}
         </nav>
 
-        {/* Profile & Logout Section */}
-        <div className="sidebar-logout">
-          {!collapsed && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="mb-4"
-            >
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={handleProfileClick}
-                className="w-full justify-start"
-              >
-                <div className="w-8 h-8 bg-gradient-to-r from-primary to-purple-600 rounded-full flex items-center justify-center mr-3">
-                  <span className="text-white text-sm font-medium">
-                    {user.name.charAt(0)}
-                  </span>
-                </div>
-                <div className="text-left">
-                  <p className="text-sm font-medium text-sidebar-foreground">{user.name}</p>
-                  <p className="text-xs text-sidebar-foreground/70">{user.email}</p>
-                </div>
-              </Button>
-            </motion.div>
-          )}
-          
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-          >
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={handleLogout}
-              className="w-full justify-start text-red-400 hover:text-red-300 hover:bg-red-500/10"
-            >
-              <LogOut className="w-4 h-4 mr-3" />
-              {!collapsed && <span>Logout</span>}
-            </Button>
-          </motion.div>
-        </div>
+        {/* Anthropic-style Profile/Settings at the very bottom */}
+        {!collapsed && (
+          <div className="w-full px-3 pb-3 mt-auto">
+            <div className="flex items-center bg-[#232336] rounded-lg px-3 py-2 gap-2">
+              <div className="w-8 h-8 rounded-full bg-[#393552] flex items-center justify-center text-white font-medium text-base">
+                {user.name.charAt(0)}
+              </div>
+              <div className="flex-1 min-w-0">
+                <div className="text-sm text-white truncate leading-tight">{user.name}</div>
+                <div className="text-xs text-[#b0b0b0] truncate leading-tight">{user.email}</div>
+              </div>
+              <button onClick={onProfileClick} aria-label="Profile settings" className="ml-1 text-[#b0b0b0] hover:text-white focus:outline-none">
+                <Settings className="w-5 h-5" />
+              </button>
+              <button onClick={onLogout} aria-label="Logout" className="ml-1 text-red-400 hover:text-red-300 focus:outline-none">
+                <LogOut className="w-5 h-5" />
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </motion.aside>
   )

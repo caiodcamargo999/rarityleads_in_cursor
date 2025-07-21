@@ -88,7 +88,8 @@ export default function DashboardLayout({
 
   const isActive = (href: string) => {
     if (href === '#') return false
-    return pathname === href || pathname.startsWith(href + '/')
+    const safePath = pathname ?? ''
+    return safePath === href || safePath.startsWith(href + '/')
   }
 
   if (loading) {
@@ -151,13 +152,13 @@ export default function DashboardLayout({
                 <Link
                   key={item.name}
                   href={item.href}
-                  className={`flex items-center space-x-3 px-4 py-3 text-sm font-normal rounded-lg transition-all duration-200 ${
+                  className={`flex items-center space-x-3 px-4 py-2 text-sm font-normal rounded-lg transition-all duration-200 ${
                     isActive(item.href)
                       ? 'bg-[#232336] text-white'
                       : 'text-gray-400 hover:text-white hover:bg-[#18181c]'
                   }`}
                 >
-                  <item.icon className="w-5 h-5" />
+                  {item.icon ? <item.icon className="w-5 h-5" /> : null}
                   <span>{item.name}</span>
                 </Link>
               )

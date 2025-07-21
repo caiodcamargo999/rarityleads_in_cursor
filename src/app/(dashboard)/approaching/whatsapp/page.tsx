@@ -50,19 +50,19 @@ export default function WhatsAppPage() {
   ]
 
   return (
-    <div ref={whatsappRef} className="min-h-screen bg-[#0a0a0a] p-8">
+    <div ref={whatsappRef} className="min-h-screen bg-[#0a0a0a] p-4">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={whatsappInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
           transition={{ duration: 0.6 }}
-          className="mb-12"
+          className="mb-4"
         >
-          <h1 className="text-4xl md:text-5xl font-normal text-white mb-4">
+          <h1 className="text-2xl md:text-3xl font-normal text-white mb-2">
             WhatsApp Outreach
           </h1>
-          <p className="text-xl text-gray-400">
+          <p className="text-base text-gray-400">
             Connect with prospects through personalized WhatsApp conversations.
           </p>
         </motion.div>
@@ -72,27 +72,27 @@ export default function WhatsAppPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={whatsappInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
           transition={{ duration: 0.6, delay: 0.1 }}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12"
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 mb-4"
         >
-          <Button variant="primary" size="lg" className="h-20 flex flex-col items-center justify-center space-y-2">
+          <Button variant="primary" size="lg" className="h-20 flex flex-col items-center justify-center gap-2 text-lg font-medium bg-[#8b5cf6] text-white border border-[#8b5cf6]">
             <Plus className="w-6 h-6" />
             <span>New Campaign</span>
             <span className="text-sm opacity-80">Start outreach</span>
           </Button>
           
-          <Button variant="secondary" size="lg" className="h-20 flex flex-col items-center justify-center space-y-2">
+          <Button variant="secondary" size="lg" className="h-20 flex flex-col items-center justify-center gap-2 text-lg font-medium bg-[#232336] text-white border border-[#8b5cf6]">
             <Phone className="w-6 h-6" />
             <span>Connect Number</span>
             <span className="text-sm opacity-80">Add WhatsApp</span>
           </Button>
           
-          <Button variant="secondary" size="lg" className="h-20 flex flex-col items-center justify-center space-y-2">
+          <Button variant="secondary" size="lg" className="h-20 flex flex-col items-center justify-center gap-2 text-lg font-medium bg-[#232336] text-white border border-[#8b5cf6]">
             <Target className="w-6 h-6" />
             <span>Import Contacts</span>
             <span className="text-sm opacity-80">Add prospects</span>
           </Button>
           
-          <Button variant="secondary" size="lg" className="h-20 flex flex-col items-center justify-center space-y-2">
+          <Button variant="secondary" size="lg" className="h-20 flex flex-col items-center justify-center gap-2 text-lg font-medium bg-[#232336] text-white border border-[#8b5cf6]">
             <BarChart3 className="w-6 h-6" />
             <span>View Analytics</span>
             <span className="text-sm opacity-80">Track performance</span>
@@ -148,9 +148,9 @@ export default function WhatsAppPage() {
                     className="w-full pl-10 pr-4 py-3 bg-[#0a0a0a]/50 backdrop-blur-sm border border-gray-800 rounded-lg focus:ring-2 focus:ring-[#8b5cf6]/50 focus:border-transparent transition-all duration-300 text-white placeholder-gray-400"
                   />
                 </div>
-                <Button variant="secondary" size="lg">
-                  <Filter className="w-5 h-5 mr-2" />
-                  Filters
+                <Button variant="secondary" size="lg" className="flex items-center justify-center gap-2 text-base font-medium bg-[#232336] text-white border border-[#8b5cf6]">
+                  <Filter className="w-5 h-5" />
+                  <span>Filters</span>
                 </Button>
               </div>
             </CardContent>
@@ -184,13 +184,13 @@ export default function WhatsAppPage() {
                     }
                   </p>
                   <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                    <Button variant="primary" size="lg">
-                      <Plus className="w-5 h-5 mr-2" />
-                      Create First Campaign
+                    <Button variant="primary" size="lg" className="flex items-center justify-center gap-2 text-base font-medium bg-[#8b5cf6] text-white border border-[#8b5cf6]">
+                      <Plus className="w-5 h-5" />
+                      <span>Create First Campaign</span>
                     </Button>
-                    <Button variant="secondary" size="lg">
-                      <Phone className="w-5 h-5 mr-2" />
-                      Connect WhatsApp
+                    <Button variant="secondary" size="lg" className="flex items-center justify-center gap-2 text-base font-medium bg-[#232336] text-white border border-[#8b5cf6]">
+                      <Phone className="w-5 h-5" />
+                      <span>Connect WhatsApp</span>
                     </Button>
                   </div>
                 </div>
@@ -242,7 +242,7 @@ export default function WhatsAppPage() {
                         </div>
                       </div>
                       
-                      <Button variant="ghost" size="sm">
+                      <Button variant="ghost" size="sm" className="flex items-center justify-center gap-2">
                         <ArrowRight className="w-4 h-4" />
                       </Button>
                     </motion.div>

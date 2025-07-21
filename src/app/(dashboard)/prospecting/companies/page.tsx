@@ -68,25 +68,25 @@ export default function CompaniesPage() {
           transition={{ duration: 0.6, delay: 0.1 }}
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12"
         >
-          <Button variant="primary" size="lg" className="h-20 flex flex-col items-center justify-center space-y-2">
+          <Button variant="primary" size="lg" className="h-20 flex flex-col items-center justify-center gap-2 text-lg font-medium bg-[#8b5cf6] text-white border border-[#8b5cf6]">
             <Plus className="w-6 h-6" />
             <span>Add Company</span>
             <span className="text-sm opacity-80">Manual entry</span>
           </Button>
           
-          <Button variant="secondary" size="lg" className="h-20 flex flex-col items-center justify-center space-y-2">
+          <Button variant="secondary" size="lg" className="h-20 flex flex-col items-center justify-center gap-2 text-lg font-medium bg-[#232336] text-white border border-[#8b5cf6]">
             <Upload className="w-6 h-6" />
             <span>Import List</span>
             <span className="text-sm opacity-80">Bulk import</span>
           </Button>
           
-          <Button variant="secondary" size="lg" className="h-20 flex flex-col items-center justify-center space-y-2">
+          <Button variant="secondary" size="lg" className="h-20 flex flex-col items-center justify-center gap-2 text-lg font-medium bg-[#232336] text-white border border-[#8b5cf6]">
             <Target className="w-6 h-6" />
             <span>Find Companies</span>
             <span className="text-sm opacity-80">AI discovery</span>
           </Button>
           
-          <Button variant="secondary" size="lg" className="h-20 flex flex-col items-center justify-center space-y-2">
+          <Button variant="secondary" size="lg" className="h-20 flex flex-col items-center justify-center gap-2 text-lg font-medium bg-[#232336] text-white border border-[#8b5cf6]">
             <Download className="w-6 h-6" />
             <span>Export Data</span>
             <span className="text-sm opacity-80">Download list</span>
@@ -113,9 +113,9 @@ export default function CompaniesPage() {
                     className="w-full pl-10 pr-4 py-3 bg-[#0a0a0a]/50 backdrop-blur-sm border border-gray-800 rounded-lg focus:ring-2 focus:ring-[#8b5cf6]/50 focus:border-transparent transition-all duration-300 text-white placeholder-gray-400"
                   />
                 </div>
-                <Button variant="secondary" size="lg">
-                  <Filter className="w-5 h-5 mr-2" />
-                  Filters
+                <Button variant="secondary" size="lg" className="flex items-center justify-center gap-2 text-base font-medium bg-[#232336] text-white border border-[#8b5cf6]">
+                  <Filter className="w-5 h-5" />
+                  <span>Filters</span>
                 </Button>
               </div>
             </CardContent>
@@ -149,13 +149,13 @@ export default function CompaniesPage() {
                     }
                   </p>
                   <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                    <Button variant="primary" size="lg">
-                      <Plus className="w-5 h-5 mr-2" />
-                      Add Your First Company
+                    <Button variant="primary" size="lg" className="flex items-center justify-center gap-2 text-base font-medium bg-[#8b5cf6] text-white border border-[#8b5cf6]">
+                      <Plus className="w-5 h-5" />
+                      <span>Add Your First Company</span>
                     </Button>
-                    <Button variant="secondary" size="lg">
-                      <Upload className="w-5 h-5 mr-2" />
-                      Import List
+                    <Button variant="secondary" size="lg" className="flex items-center justify-center gap-2 text-base font-medium bg-[#232336] text-white border border-[#8b5cf6]">
+                      <Upload className="w-5 h-5" />
+                      <span>Import List</span>
                     </Button>
                   </div>
                 </div>

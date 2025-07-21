@@ -36,6 +36,7 @@ export const metadata: Metadata = {
     title: 'Rarity Leads - AI-Powered Lead Generation',
     description: 'Transform your lead generation with AI-powered prospecting and qualification.',
   },
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'),
 }
 
 export default function RootLayout({

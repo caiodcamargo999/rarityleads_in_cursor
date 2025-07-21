@@ -19,22 +19,11 @@ import {
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { supabase } from '@/lib/supabase'
+// No user/session logic here; handled by layout
 
 export default function DashboardPage() {
-  const [user, setUser] = useState<any>(null)
-  const [loading, setLoading] = useState(true)
   const dashboardRef = useRef(null)
   const dashboardInView = useInView(dashboardRef, { once: true })
-
-  useEffect(() => {
-    const getUser = async () => {
-      const { data: { user } } = await supabase.auth.getUser()
-      setUser(user)
-      setLoading(false)
-    }
-    getUser()
-  }, [])
 
   const keyMetrics = [
     {
@@ -111,28 +100,20 @@ export default function DashboardPage() {
     { status: "Lost", count: 0, color: "bg-red-400" }
   ]
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center">
-        <div className="text-white text-xl">Loading...</div>
-      </div>
-    )
-  }
-
   return (
-    <div ref={dashboardRef} className="min-h-screen bg-[#0a0a0a] p-8">
+    <div ref={dashboardRef} className="min-h-screen bg-[#0a0a0a] p-4">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={dashboardInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
           transition={{ duration: 0.6 }}
-          className="mb-12"
+          className="mb-4"
         >
-          <h1 className="text-3xl md:text-4xl font-normal text-white mb-4">
+          <h1 className="text-2xl md:text-3xl font-normal text-white mb-2">
             Analytics Dashboard
           </h1>
-          <p className="text-lg text-gray-400">
+          <p className="text-base text-gray-400">
             Track your lead generation performance and campaign insights
           </p>
         </motion.div>
@@ -142,7 +123,7 @@ export default function DashboardPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={dashboardInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
           transition={{ duration: 0.6, delay: 0.1 }}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12"
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 mb-4"
         >
           {keyMetrics.map((metric, index) => (
             <motion.div
@@ -150,25 +131,25 @@ export default function DashboardPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={dashboardInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
               transition={{ duration: 0.6, delay: 0.2 + index * 0.1 }}
-              whileHover={{ scale: 1.02 }}
+              whileHover={{ scale: 1.01 }}
             >
-              <Card className="bg-[#18181c] border border-gray-800 hover:border-gray-700 transition-all duration-300">
-                <CardContent className="p-6">
-                  <div className="flex items-center justify-between mb-4">
-                    <metric.icon className={`w-8 h-8 ${metric.color}`} />
+              <Card className="bg-[#18181c] border border-gray-800 hover:border-gray-700 transition-all duration-300 p-4">
+                <CardContent className="p-0">
+                  <div className="flex items-center justify-between mb-2">
+                    <metric.icon className={`w-7 h-7 ${metric.color}`} />
                     {metric.trend && (
-                      <span className="text-sm text-green-500 font-normal flex items-center">
+                      <span className="text-xs text-green-500 font-normal flex items-center">
                         <TrendingUp className="w-4 h-4 mr-1" />
                         {metric.change}
                       </span>
                     )}
                   </div>
-                  <div className="mb-2">
-                    <p className="text-3xl font-normal text-white">{metric.value}</p>
-                    <p className="text-lg font-normal text-white">{metric.title}</p>
+                  <div className="mb-1">
+                    <p className="text-2xl font-normal text-white leading-tight">{metric.value}</p>
+                    <p className="text-base font-normal text-white leading-tight">{metric.title}</p>
                   </div>
                   {!metric.trend && (
-                    <p className="text-sm text-gray-400">{metric.change}</p>
+                    <p className="text-xs text-gray-400 leading-tight">{metric.change}</p>
                   )}
                 </CardContent>
               </Card>
@@ -181,7 +162,7 @@ export default function DashboardPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={dashboardInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
           transition={{ duration: 0.6, delay: 0.3 }}
-          className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12"
+          className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4"
         >
           {performanceMetrics.map((metric, index) => (
             <motion.div
@@ -189,22 +170,22 @@ export default function DashboardPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={dashboardInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
               transition={{ duration: 0.6, delay: 0.4 + index * 0.1 }}
-              whileHover={{ scale: 1.02 }}
+              whileHover={{ scale: 1.01 }}
             >
-              <Card className="bg-[#18181c] border border-gray-800 hover:border-gray-700 transition-all duration-300">
-                <CardContent className="p-6">
-                  <div className="flex items-center mb-4">
-                    <metric.icon className={`w-6 h-6 ${metric.color} mr-3`} />
-                    <h3 className="text-lg font-normal text-white">{metric.title}</h3>
+              <Card className="bg-[#18181c] border border-gray-800 hover:border-gray-700 transition-all duration-300 p-4">
+                <CardContent className="p-0">
+                  <div className="flex items-center mb-2">
+                    <metric.icon className={`w-5 h-5 ${metric.color} mr-2`} />
+                    <h3 className="text-base font-normal text-white leading-tight">{metric.title}</h3>
                   </div>
-                  <div className="mb-4">
-                    <p className="text-2xl font-normal text-white">{metric.value}</p>
-                    <p className="text-sm text-gray-400">Target: {metric.target}</p>
+                  <div className="mb-2">
+                    <p className="text-xl font-normal text-white leading-tight">{metric.value}</p>
+                    <p className="text-xs text-gray-400 leading-tight">Target: {metric.target}</p>
                   </div>
                   {metric.progress !== undefined && (
-                    <div className="w-full bg-gray-700 rounded-full h-2">
+                    <div className="w-full bg-gray-700 rounded-full h-1">
                       <div 
-                        className="bg-[#8b5cf6] h-2 rounded-full transition-all duration-300"
+                        className="bg-[#8b5cf6] h-1 rounded-full transition-all duration-300"
                         style={{ width: `${metric.progress}%` }}
                       ></div>
                     </div>
@@ -216,29 +197,29 @@ export default function DashboardPage() {
         </motion.div>
 
         {/* Breakdown and Pipeline */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           {/* Channel Breakdown */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={dashboardInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -20 }}
             transition={{ duration: 0.6, delay: 0.5 }}
           >
-            <Card className="bg-[#18181c] border border-gray-800">
-              <CardHeader>
-                <CardTitle className="text-xl font-normal text-white flex items-center">
+            <Card className="bg-[#18181c] border border-gray-800 p-4">
+              <CardHeader className="p-0 mb-2">
+                <CardTitle className="text-base font-normal text-white flex items-center leading-tight">
                   <RefreshCw className="w-5 h-5 text-purple-400 mr-2" />
                   Channel Breakdown
                 </CardTitle>
               </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
+              <CardContent className="p-0">
+                <div className="space-y-2">
                   {channelBreakdown.map((channel, index) => (
                     <div key={channel.name} className="flex items-center justify-between">
-                      <div className="flex items-center space-x-3">
-                        <div className={`w-3 h-3 rounded-full ${channel.color}`}></div>
-                        <span className="text-white font-normal">{channel.name}</span>
+                      <div className="flex items-center space-x-2">
+                        <div className={`w-2.5 h-2.5 rounded-full ${channel.color}`}></div>
+                        <span className="text-white font-normal text-sm leading-tight">{channel.name}</span>
                       </div>
-                      <span className="text-white font-normal">{channel.leads} leads</span>
+                      <span className="text-white font-normal text-sm leading-tight">{channel.leads} leads</span>
                     </div>
                   ))}
                 </div>
@@ -252,22 +233,22 @@ export default function DashboardPage() {
             animate={dashboardInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 20 }}
             transition={{ duration: 0.6, delay: 0.6 }}
           >
-            <Card className="bg-[#18181c] border border-gray-800">
-              <CardHeader>
-                <CardTitle className="text-xl font-normal text-white flex items-center">
+            <Card className="bg-[#18181c] border border-gray-800 p-4">
+              <CardHeader className="p-0 mb-2">
+                <CardTitle className="text-base font-normal text-white flex items-center leading-tight">
                   <BarChart3 className="w-5 h-5 text-green-400 mr-2" />
                   Lead Status Pipeline
                 </CardTitle>
               </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
+              <CardContent className="p-0">
+                <div className="space-y-2">
                   {leadStatusPipeline.map((status, index) => (
                     <div key={status.status} className="flex items-center justify-between">
-                      <div className="flex items-center space-x-3">
-                        <div className={`w-3 h-3 rounded-full ${status.color}`}></div>
-                        <span className="text-white font-normal">{status.status}</span>
+                      <div className="flex items-center space-x-2">
+                        <div className={`w-2.5 h-2.5 rounded-full ${status.color}`}></div>
+                        <span className="text-white font-normal text-sm leading-tight">{status.status}</span>
                       </div>
-                      <span className="text-white font-normal">{status.count} leads</span>
+                      <span className="text-white font-normal text-sm leading-tight">{status.count} leads</span>
                     </div>
                   ))}
                 </div>

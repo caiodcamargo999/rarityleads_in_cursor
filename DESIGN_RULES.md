@@ -500,3 +500,6 @@ color: var(--primary-text);
 - The panel must use <div id="language-theme-toggle"></div> and be initialized with LanguageThemeToggle.init('language-theme-toggle') after DOMContentLoaded.
 - No legacy or duplicate toggles are allowed.
 - The panel must not interfere with the main navigation or hero section, and must always be accessible. 
+
+## 🚫 Sales Page Change Rule (2024)
+- No changes to the sales page (landing page) are allowed unless specifically requested in a prompt. All other UI/UX changes must not affect the sales page. 

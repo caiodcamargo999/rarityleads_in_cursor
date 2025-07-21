@@ -312,20 +312,20 @@ export default function AnalyticsPage() {
   }
 
   return (
-    <div className="p-8 space-y-8">
+    <div className="p-4 space-y-4">
       {/* Header */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3 }}
-        className="flex flex-col lg:flex-row lg:items-center lg:justify-between"
+        className="flex flex-col lg:flex-row lg:items-center lg:justify-between mb-2"
       >
         <div>
-          <h1 className="text-3xl font-medium text-white mb-2">Analytics Dashboard</h1>
-          <p className="text-gray-400">Track your lead generation performance and campaign insights</p>
+          <h1 className="text-2xl font-medium text-white mb-1">Analytics Dashboard</h1>
+          <p className="text-base text-gray-400">Track your lead generation performance and campaign insights</p>
         </div>
         
-        <div className="flex items-center space-x-4 mt-4 lg:mt-0">
+        <div className="flex items-center space-x-2 mt-2 lg:mt-0">
           <select
             value={timeRange}
             onChange={(e) => setTimeRange(e.target.value)}
@@ -347,7 +347,7 @@ export default function AnalyticsPage() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3, delay: 0.1 }}
-        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
+        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 mb-4"
       >
         <MetricCard
           title="Total Leads"
@@ -388,7 +388,7 @@ export default function AnalyticsPage() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3, delay: 0.2 }}
-        className="grid grid-cols-1 lg:grid-cols-3 gap-6"
+        className="grid grid-cols-1 lg:grid-cols-3 gap-3 mb-4"
       >
         <Card className="p-6 bg-gradient-to-br from-gray-900/50 to-gray-800/50 backdrop-blur-xl border border-gray-700/50">
           <h3 className="text-lg font-medium text-white mb-4 flex items-center">
@@ -441,7 +441,7 @@ export default function AnalyticsPage() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3, delay: 0.3 }}
-        className="grid grid-cols-1 lg:grid-cols-2 gap-6"
+        className="grid grid-cols-1 lg:grid-cols-2 gap-3 mb-4"
       >
         <Card className="p-6 bg-gradient-to-br from-gray-900/50 to-gray-800/50 backdrop-blur-xl border border-gray-700/50">
           <h3 className="text-lg font-medium text-white mb-4 flex items-center">

@@ -240,18 +240,18 @@ export default function ProfilePage() {
                   <Button 
                     onClick={handleSave}
                     disabled={saving}
-                    className="bg-gradient-to-r from-[#7c3aed] to-[#8b5cf6] text-white hover:from-[#6d28d9] hover:to-[#7c3aed] transition-all duration-200"
+                    className="bg-[#8b5cf6] text-white border border-[#8b5cf6] shadow-sm hover:shadow-lg hover:bg-[#7c3aed] hover:border-[#7c3aed] transition-all duration-200 flex items-center justify-center gap-2 px-6 py-3 text-base font-medium rounded-lg"
                   >
                     {saving ? (
-                      <div className="flex items-center">
-                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                        Saving...
-                      </div>
+                      <>
+                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                        <span>Saving...</span>
+                      </>
                     ) : (
-                      <div className="flex items-center">
-                        <Save className="w-4 h-4 mr-2" />
-                        Save Changes
-                      </div>
+                      <>
+                        <Save className="w-5 h-5" />
+                        <span>Save Changes</span>
+                      </>
                     )}
                   </Button>
                 </motion.div>

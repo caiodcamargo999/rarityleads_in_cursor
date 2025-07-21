@@ -116,18 +116,25 @@ export default function HomePage() {
             </div>
 
             {/* Buttons - Right */}
-            <div className="flex items-center space-x-4">
-              <Link href="/auth" className="text-gray-300 hover:text-white transition-colors">
-                Login
+            <div className="flex items-center space-x-2">
+              <Link href="/auth">
+                <motion.span
+                  whileHover={{ scale: 1.05, y: -2 }}
+                  whileTap={{ scale: 0.97 }}
+                  className="inline-block px-4 py-2 rounded-lg font-medium text-white bg-[#232336] border border-[#8b5cf6] shadow-sm hover:shadow-lg hover:border-[#8b5cf6] transition-all duration-200 focus-visible:ring-2 focus-visible:ring-[#8b5cf6]/50"
+                >
+                  Login
+                </motion.span>
               </Link>
-              <motion.div
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <Link href="/auth" className="inline-block bg-gradient-to-r from-[#7c3aed] to-[#8b5cf6] text-white px-4 py-2 rounded-lg font-medium hover:from-[#6d28d9] hover:to-[#7c3aed] transition-all duration-200">
+              <Link href="/auth">
+                <motion.span
+                  whileHover={{ scale: 1.05, y: -2 }}
+                  whileTap={{ scale: 0.97 }}
+                  className="inline-block px-4 py-2 rounded-lg font-medium text-white bg-[#8b5cf6] border border-[#8b5cf6] shadow-sm hover:shadow-lg hover:bg-[#7c3aed] hover:border-[#8b5cf6] transition-all duration-200 focus-visible:ring-2 focus-visible:ring-[#8b5cf6]/50"
+                >
                   Sign Up
-                </Link>
-              </motion.div>
+                </motion.span>
+              </Link>
             </div>
           </div>
         </div>
