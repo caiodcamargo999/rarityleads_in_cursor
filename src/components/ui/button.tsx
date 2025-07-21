@@ -5,6 +5,7 @@ import { forwardRef } from 'react'
 import { cn } from '@/lib/utils'
 import { Loader2 } from 'lucide-react'
 import { buttonVariants, motionVariants } from '@/lib/design-system'
+import { Slot } from '@radix-ui/react-slot'
 
 export interface ButtonProps extends HTMLMotionProps<'button'> {
   variant?: 'primary' | 'secondary' | 'ghost' | 'danger' | 'outline' | 'glass'
@@ -15,6 +16,7 @@ export interface ButtonProps extends HTMLMotionProps<'button'> {
   fullWidth?: boolean
   icon?: React.ReactNode
   iconPosition?: 'left' | 'right'
+  asChild?: boolean
 }
 
 const sizeVariants = {
@@ -43,6 +45,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     fullWidth = false,
     icon,
     iconPosition = 'left',
+    asChild,
     ...props 
   }, ref) => {
     const baseClasses = cn(
@@ -71,36 +74,54 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
 
     const buttonClasses = cn(baseClasses, getVariantClasses())
 
-    return (
-      <motion.button
-        ref={ref}
-        className={buttonClasses}
-        style={{ fontFamily: 'Inter, system-ui, sans-serif', fontWeight: variant === 'ghost' ? 400 : 500 }}
-        disabled={disabled || loading}
-        {...props}
-      >
-        {/* Shimmer effect for glass variant */}
-        {/* Removed: No glass/gradient allowed by design system */}
-        
-        {/* Loading spinner */}
-        {loading && (
-          <Loader2 className="w-4 h-4 animate-spin mr-2" />
-        )}
-        
-        {/* Icon */}
-        {icon && iconPosition === 'left' && !loading && (
-          <span className="mr-2">{icon}</span>
-        )}
-        
-        {/* Content */}
-        <span className="relative z-10">{children}</span>
-        
-        {/* Icon */}
-        {icon && iconPosition === 'right' && !loading && (
-          <span className="ml-2">{icon}</span>
-        )}
-      </motion.button>
-    )
+    if (asChild) {
+      return (
+        <Slot
+          ref={ref}
+          className={buttonClasses}
+        >
+          {/* Loading spinner */}
+          {loading && (
+            <Loader2 className="w-4 h-4 animate-spin mr-2" />
+          )}
+          {/* Icon */}
+          {icon && iconPosition === 'left' && !loading && (
+            <span className="mr-2">{icon}</span>
+          )}
+          {/* Content */}
+          <span className="relative z-10">{children}</span>
+          {/* Icon */}
+          {icon && iconPosition === 'right' && !loading && (
+            <span className="ml-2">{icon}</span>
+          )}
+        </Slot>
+      )
+    } else {
+      return (
+        <motion.button
+          ref={ref}
+          className={buttonClasses}
+          style={{ fontFamily: 'Inter, system-ui, sans-serif', fontWeight: variant === 'ghost' ? 400 : 500 }}
+          disabled={disabled || loading}
+          {...props}
+        >
+          {/* Loading spinner */}
+          {loading && (
+            <Loader2 className="w-4 h-4 animate-spin mr-2" />
+          )}
+          {/* Icon */}
+          {icon && iconPosition === 'left' && !loading && (
+            <span className="mr-2">{icon}</span>
+          )}
+          {/* Content */}
+          <span className="relative z-10">{children}</span>
+          {/* Icon */}
+          {icon && iconPosition === 'right' && !loading && (
+            <span className="ml-2">{icon}</span>
+          )}
+        </motion.button>
+      )
+    }
   }
 )
 

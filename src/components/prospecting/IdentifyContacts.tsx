@@ -246,8 +246,8 @@ const IdentifyContacts = ({ data, onUpdate, onNext, onPrev }: IdentifyContactsPr
                       <Checkbox
                         id={`contact-${decisionMaker.id}`}
                         checked={selectedContacts.includes(decisionMaker.id)}
-                        onCheckedChange={(checked) => 
-                          handleContactSelect(decisionMaker.id, checked as boolean)
+                        onCheckedChange={(checked: boolean) =>
+                          handleContactSelect(decisionMaker.id, checked)
                         }
                         className="mt-1"
                       />
@@ -278,7 +278,7 @@ const IdentifyContacts = ({ data, onUpdate, onNext, onPrev }: IdentifyContactsPr
                       📊 Dados disponíveis:
                     </h4>
                     <div className="flex flex-wrap gap-2">
-                      {decisionMaker.sources.map((source, index) => (
+                      {decisionMaker.sources.map((source: string, index: number) => (
                         <Badge key={index} variant="outline" className="text-xs font-benton">
                           {source}
                         </Badge>
@@ -292,7 +292,7 @@ const IdentifyContacts = ({ data, onUpdate, onNext, onPrev }: IdentifyContactsPr
                         🎯 Desafios do cargo:
                       </h4>
                       <ul className="text-xs text-gray-600 space-y-1">
-                        {decisionMaker.jobChallenges.slice(0, 2).map((challenge, index) => (
+                        {decisionMaker.jobChallenges.slice(0, 2).map((challenge: string, index: number) => (
                           <li key={index} className="font-benton">• {challenge}</li>
                         ))}
                       </ul>
@@ -303,7 +303,7 @@ const IdentifyContacts = ({ data, onUpdate, onNext, onPrev }: IdentifyContactsPr
                         💡 Interesses:
                       </h4>
                       <ul className="text-xs text-gray-600 space-y-1">
-                        {decisionMaker.interests.slice(0, 2).map((interest, index) => (
+                        {decisionMaker.interests.slice(0, 2).map((interest: string, index: number) => (
                           <li key={index} className="font-benton">• {interest}</li>
                         ))}
                       </ul>

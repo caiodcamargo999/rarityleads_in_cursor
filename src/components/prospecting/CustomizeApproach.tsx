@@ -252,7 +252,7 @@ const CustomizeApproach = ({ data, onUpdate, onNext, onPrev }: CustomizeApproach
             {channels.map((channel) => (
               <Button
                 key={channel.id}
-                variant={data.channel === channel.id ? "default" : "outline"}
+                variant={data.channel === channel.id ? "primary" : "outline"}
                 className={`flex-1 ${data.channel === channel.id ? "" : ""} font-benton`}
                 onClick={() => handleChannelSelect(channel.id)}
               >

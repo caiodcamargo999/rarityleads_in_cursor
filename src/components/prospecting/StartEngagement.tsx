@@ -28,7 +28,7 @@ interface StartEngagementProps {
   onPrev: () => void;
 }
 
-const channelIcons = {
+const channelIcons: { [key: string]: React.ReactNode } = {
   whatsapp: <MessageSquare className="h-4 w-4" />,
   email: <Mail className="h-4 w-4" />,
   linkedin: <Linkedin className="h-4 w-4" />
@@ -133,7 +133,7 @@ const StartEngagement = ({ data, onUpdate, onPrev }: StartEngagementProps) => {
   };
 
   const getChannelName = (channel: string) => {
-    const names = {
+    const names: { [key: string]: string } = {
       whatsapp: "WhatsApp",
       email: "Email", 
       linkedin: "LinkedIn"
@@ -169,7 +169,7 @@ const StartEngagement = ({ data, onUpdate, onPrev }: StartEngagementProps) => {
           <Card className="bg-gradient-to-br from-rarity-blue/5 to-rarity-purple/5 border-rarity-blue/20">
             <CardHeader>
               <CardTitle className="flex items-center space-x-2 font-benton">
-                {channelIcons[data.channel]}
+                {channelIcons[data.channel as string]}
                 <span>Preview da Mensagem - {getChannelName(data.channel)}</span>
               </CardTitle>
             </CardHeader>
