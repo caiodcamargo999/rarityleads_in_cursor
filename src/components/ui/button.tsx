@@ -1,128 +1,117 @@
 "use client"
 
-import { motion, HTMLMotionProps } from 'framer-motion'
-import { forwardRef } from 'react'
-import { cn } from '@/lib/utils'
-import { Loader2 } from 'lucide-react'
-import { buttonVariants, motionVariants } from '@/lib/design-system'
-import { Slot } from '@radix-ui/react-slot'
+import * as React from "react"
+import { Slot } from "@radix-ui/react-slot"
+import { cva, type VariantProps } from "class-variance-authority"
+import { motion, HTMLMotionProps } from "framer-motion"
+import { Loader2 } from "lucide-react"
+import { cn } from "@/lib/utils"
+import { buttonTap, buttonHover } from "@/lib/motion"
 
-export interface ButtonProps extends HTMLMotionProps<'button'> {
-  variant?: 'primary' | 'secondary' | 'ghost' | 'danger' | 'outline' | 'glass'
-  size?: 'sm' | 'md' | 'lg' | 'xl'
+const buttonVariants = cva(
+  "inline-flex items-center justify-center whitespace-nowrap rounded-lg text-sm font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rarity-500 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
+  {
+    variants: {
+      variant: {
+        primary: "bg-rarity-600 text-white hover:bg-rarity-700 active:bg-rarity-800 shadow-sm",
+        secondary: "bg-dark-bg-tertiary text-dark-text border border-dark-border hover:bg-dark-bg-secondary hover:border-dark-border-secondary",
+        outline: "border border-dark-border bg-transparent text-dark-text hover:bg-dark-bg-tertiary hover:border-dark-border-secondary",
+        ghost: "text-dark-text hover:bg-dark-bg-tertiary",
+        danger: "bg-error-600 text-white hover:bg-error-700 active:bg-error-800",
+        success: "bg-success-600 text-white hover:bg-success-700 active:bg-success-800",
+      },
+      size: {
+        sm: "h-8 px-3 text-xs",
+        md: "h-10 px-4 text-sm",
+        lg: "h-12 px-6 text-base",
+        xl: "h-14 px-8 text-lg",
+        icon: "h-10 w-10",
+      },
+    },
+    defaultVariants: {
+      variant: "primary",
+      size: "md",
+    },
+  }
+)
+
+export interface ButtonProps
+  extends Omit<HTMLMotionProps<'button'>, 'children'>,
+    VariantProps<typeof buttonVariants> {
+  asChild?: boolean
   loading?: boolean
-  children: React.ReactNode
-  className?: string
   fullWidth?: boolean
   icon?: React.ReactNode
   iconPosition?: 'left' | 'right'
-  asChild?: boolean
+  'aria-label'?: string
+  children: React.ReactNode
 }
 
-const sizeVariants = {
-  sm: "px-3 py-2 text-sm rounded-md font-normal",
-  md: "px-4 py-2 text-base rounded-lg font-normal",
-  lg: "px-6 py-3 text-lg rounded-lg font-normal",
-  xl: "px-8 py-4 text-xl rounded-xl font-normal"
-}
-
-const flatVariants = {
-  primary: "bg-rarity-purple text-white border border-rarity-purple shadow-sm hover:shadow-lg hover:bg-rarity-purple-dark hover:border-rarity-purple-dark transition-all duration-200 font-medium",
-  secondary: "bg-rarity-dark-bg text-white border border-rarity-purple shadow-sm hover:shadow-lg hover:bg-rarity-border hover:border-rarity-purple transition-all duration-200 font-medium",
-  ghost: "bg-rarity-dark-bg-2 text-white border border-rarity-border shadow-sm hover:shadow-lg hover:bg-rarity-dark-bg hover:border-rarity-purple transition-all duration-200 font-normal",
-  danger: "bg-rarity-dark-bg text-rarity-danger border border-rarity-danger shadow-sm hover:bg-rarity-danger hover:text-white hover:border-rarity-danger transition-all duration-200 font-medium",
-  outline: "bg-transparent text-white border border-rarity-purple shadow-sm hover:bg-rarity-purple hover:text-white hover:border-rarity-purple transition-all duration-200 font-medium"
-}
-
-export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
+const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ 
-    variant = 'primary', 
-    size = 'md', 
-    loading = false, 
-    children, 
     className, 
-    disabled,
+    variant, 
+    size, 
+    asChild = false, 
+    loading = false,
     fullWidth = false,
     icon,
     iconPosition = 'left',
-    asChild,
+    disabled,
+    children,
     ...props 
   }, ref) => {
-    const baseClasses = cn(
-      "inline-flex items-center justify-center transition-all duration-300 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed font-normal relative overflow-hidden",
-      sizeVariants[size],
+    const Comp = asChild ? Slot : motion.button
+    
+    const buttonClasses = cn(
+      buttonVariants({ variant, size, className }),
       fullWidth && "w-full",
-      className
+      loading && "cursor-not-allowed"
     )
-
-    const getVariantClasses = () => {
-      switch (variant) {
-        case 'primary':
-          return flatVariants.primary
-        case 'secondary':
-          return flatVariants.secondary
-        case 'ghost':
-          return flatVariants.ghost
-        case 'danger':
-          return flatVariants.danger
-        case 'outline':
-          return flatVariants.outline
-        default:
-          return flatVariants.primary
-      }
-    }
-
-    const buttonClasses = cn(baseClasses, getVariantClasses())
 
     if (asChild) {
       return (
         <Slot
           ref={ref}
           className={buttonClasses}
+          aria-busy={loading ? 'true' : undefined}
         >
-          {/* Loading spinner */}
-          {loading && (
-            <Loader2 className="w-4 h-4 animate-spin mr-2" />
-          )}
-          {/* Icon */}
+          {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
           {icon && iconPosition === 'left' && !loading && (
             <span className="mr-2">{icon}</span>
           )}
-          {/* Content */}
           <span className="relative z-10">{children}</span>
-          {/* Icon */}
           {icon && iconPosition === 'right' && !loading && (
             <span className="ml-2">{icon}</span>
           )}
         </Slot>
       )
-    } else {
-      return (
-        <motion.button
-          ref={ref}
-          className={buttonClasses}
-          style={{ fontFamily: 'Inter, system-ui, sans-serif', fontWeight: variant === 'ghost' ? 400 : 500 }}
-          disabled={disabled || loading}
-          {...props}
-        >
-          {/* Loading spinner */}
-          {loading && (
-            <Loader2 className="w-4 h-4 animate-spin mr-2" />
-          )}
-          {/* Icon */}
-          {icon && iconPosition === 'left' && !loading && (
-            <span className="mr-2">{icon}</span>
-          )}
-          {/* Content */}
-          <span className="relative z-10">{children}</span>
-          {/* Icon */}
-          {icon && iconPosition === 'right' && !loading && (
-            <span className="ml-2">{icon}</span>
-          )}
-        </motion.button>
-      )
     }
+
+    return (
+      <motion.button
+        ref={ref}
+        className={buttonClasses}
+        disabled={disabled || loading}
+        aria-busy={loading ? 'true' : undefined}
+        variants={{ ...buttonTap, ...buttonHover }}
+        whileTap="tap"
+        whileHover="hover"
+        layout
+        {...props}
+      >
+        {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+        {icon && iconPosition === 'left' && !loading && (
+          <span className="mr-2">{icon}</span>
+        )}
+        <span className="relative z-10">{children}</span>
+        {icon && iconPosition === 'right' && !loading && (
+          <span className="ml-2">{icon}</span>
+        )}
+      </motion.button>
+    )
   }
 )
+Button.displayName = "Button"
 
-Button.displayName = 'Button' 
+export { Button, buttonVariants } 

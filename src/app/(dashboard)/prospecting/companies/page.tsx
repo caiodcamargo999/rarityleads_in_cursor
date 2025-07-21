@@ -1,228 +1,352 @@
 "use client"
 
+import { useState } from 'react'
 import { motion, useInView } from 'framer-motion'
-import { useRef, useState } from 'react'
+import { useRef } from 'react'
 import { 
-  Building2, 
-  Plus, 
   Search, 
   Filter, 
+  Plus, 
   Download, 
   Upload,
-  ArrowRight,
+  Building2,
   Users,
-  MapPin,
+  TrendingUp,
   Globe,
-  Target,
-  TrendingUp
+  MapPin,
+  Phone,
+  Mail,
+  ExternalLink,
+  MoreHorizontal,
+  Star
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 
-export default function CompaniesPage() {
-  const companiesRef = useRef(null)
-  const companiesInView = useInView(companiesRef, { once: true })
-  const [searchTerm, setSearchTerm] = useState('')
+interface Company {
+  id: string
+  name: string
+  industry: string
+  size: string
+  location: string
+  website: string
+  phone: string
+  email: string
+  leads: number
+  status: 'prospecting' | 'contacted' | 'qualified' | 'converted' | 'lost'
+  revenue: string
+  lastContact: string
+}
 
-  const companies: Array<{
-    id: string;
-    name: string;
-    industry: string;
-    size: string;
-    location: string;
-    website: string;
-    leads: number;
-    status: string;
-  }> = [
-    // Empty for now - will be populated with real data
+export default function CompaniesPage() {
+  const [searchQuery, setSearchQuery] = useState('')
+  const [industryFilter, setIndustryFilter] = useState<string>('all')
+  const [sizeFilter, setSizeFilter] = useState<string>('all')
+  const [companies, setCompanies] = useState<Company[]>([
+    {
+      id: '1',
+      name: 'TechCorp Solutions',
+      industry: 'Technology',
+      size: '50-200',
+      location: 'San Francisco, CA',
+      website: 'techcorp.com',
+      phone: '+1 (555) 123-4567',
+      email: 'contact@techcorp.com',
+      leads: 12,
+      status: 'qualified',
+      revenue: '$5M - $10M',
+      lastContact: '2 hours ago'
+    },
+    {
+      id: '2',
+      name: 'Innovate Labs',
+      industry: 'SaaS',
+      size: '10-50',
+      location: 'Austin, TX',
+      website: 'innovatelabs.io',
+      phone: '+1 (555) 987-6543',
+      email: 'hello@innovatelabs.io',
+      leads: 8,
+      status: 'contacted',
+      revenue: '$1M - $5M',
+      lastContact: '1 day ago'
+    },
+    {
+      id: '3',
+      name: 'Growth Dynamics',
+      industry: 'Marketing',
+      size: '200-500',
+      location: 'New York, NY',
+      website: 'growthdynamics.com',
+      phone: '+1 (555) 456-7890',
+      email: 'info@growthdynamics.com',
+      leads: 25,
+      status: 'prospecting',
+      revenue: '$10M - $50M',
+      lastContact: 'Never'
+    }
+  ])
+  
+  const pageRef = useRef(null)
+  const pageInView = useInView(pageRef, { once: true })
+
+  const filteredCompanies = companies.filter(company => {
+    const matchesSearch = 
+      company.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      company.industry.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      company.location.toLowerCase().includes(searchQuery.toLowerCase())
+    const matchesIndustry = industryFilter === 'all' || company.industry === industryFilter
+    const matchesSize = sizeFilter === 'all' || company.size === sizeFilter
+    return matchesSearch && matchesIndustry && matchesSize
+  })
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'prospecting': return 'bg-blue-500'
+      case 'contacted': return 'bg-yellow-500'
+      case 'qualified': return 'bg-green-500'
+      case 'converted': return 'bg-purple-500'
+      case 'lost': return 'bg-red-500'
+      default: return 'bg-gray-500'
+    }
+  }
+
+  const getStatusText = (status: string) => {
+    switch (status) {
+      case 'prospecting': return 'Prospecting'
+      case 'contacted': return 'Contacted'
+      case 'qualified': return 'Qualified'
+      case 'converted': return 'Converted'
+      case 'lost': return 'Lost'
+      default: return 'Unknown'
+    }
+  }
+
+  const stats = [
+    { label: 'Total Companies', value: companies.length, icon: Building2, color: 'text-blue-500' },
+    { label: 'Active Prospects', value: companies.filter(c => c.status === 'prospecting').length, icon: Users, color: 'text-green-500' },
+    { label: 'Avg Company Size', value: '150', icon: TrendingUp, color: 'text-purple-500' },
+    { label: 'Total Leads', value: companies.reduce((sum, c) => sum + c.leads, 0), icon: Star, color: 'text-yellow-500' }
   ]
 
-  const filteredCompanies = companies.filter(company =>
-    company.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    company.industry.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    company.location.toLowerCase().includes(searchTerm.toLowerCase())
-  )
+  const industries = ['Technology', 'SaaS', 'Marketing', 'Finance', 'Healthcare', 'Education']
+  const sizes = ['1-10', '10-50', '50-200', '200-500', '500+']
 
   return (
-    <div ref={companiesRef} className="min-h-screen bg-[#0a0a0a] p-8">
+    <div ref={pageRef} className="min-h-screen bg-dark-bg p-4">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
-          animate={companiesInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+          animate={pageInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
           transition={{ duration: 0.6 }}
-          className="mb-12"
+          className="mb-8"
         >
-          <h1 className="text-4xl md:text-5xl font-normal text-white mb-4">
-            Company Prospecting
+          <h1 className="text-2xl md:text-3xl font-normal text-dark-text mb-2">
+            Company Directory
           </h1>
-          <p className="text-xl text-gray-400">
-            Discover and target companies that match your ideal customer profile.
+          <p className="text-base text-dark-text-secondary">
+            Manage your target companies and track engagement
           </p>
         </motion.div>
 
-        {/* Quick Actions */}
+        {/* Stats Grid */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
-          animate={companiesInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+          animate={pageInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
           transition={{ duration: 0.6, delay: 0.1 }}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12"
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8"
         >
-          <Button variant="primary" size="lg" className="h-20 flex flex-col items-center justify-center gap-2 text-lg font-medium">
-            <Plus className="w-6 h-6" />
-            <span>Add Company</span>
-            <span className="text-sm opacity-80">Manual entry</span>
-          </Button>
-          
-          <Button variant="secondary" size="lg" className="h-20 flex flex-col items-center justify-center gap-2 text-lg font-medium">
-            <Upload className="w-6 h-6" />
-            <span>Import CSV</span>
-            <span className="text-sm opacity-80">Bulk import</span>
-          </Button>
-          
-          <Button variant="secondary" size="lg" className="h-20 flex flex-col items-center justify-center gap-2 text-lg font-medium">
-            <Target className="w-6 h-6" />
-            <span>Find Companies</span>
-            <span className="text-sm opacity-80">AI discovery</span>
-          </Button>
-          
-          <Button variant="secondary" size="lg" className="h-20 flex flex-col items-center justify-center gap-2 text-lg font-medium">
-            <Download className="w-6 h-6" />
-            <span>Export Data</span>
-            <span className="text-sm opacity-80">Download companies</span>
-          </Button>
-        </motion.div>
-
-        {/* Search and Filters */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={companiesInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="mb-8"
-        >
-          <Card className="bg-[#1a1a1a]/50 backdrop-blur-xl border border-gray-800">
-            <CardContent className="p-6">
-              <div className="flex flex-col md:flex-row gap-4">
-                <div className="flex-1 relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                  <input
-                    type="text"
-                    placeholder="Search companies by name, industry, or location..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="w-full pl-10 pr-4 py-3 bg-[#0a0a0a]/50 backdrop-blur-sm border border-gray-800 rounded-lg focus:ring-2 focus:ring-[#8b5cf6]/50 focus:border-transparent transition-all duration-300 text-white placeholder-gray-400"
-                  />
+          {stats.map((stat, index) => (
+            <Card key={index} className="bg-dark-bg-secondary border-dark-border">
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-dark-text-muted">{stat.label}</p>
+                    <p className="text-2xl font-medium text-dark-text">{stat.value}</p>
+                  </div>
+                  <stat.icon className={`w-8 h-8 ${stat.color}`} />
                 </div>
-                <Button variant="secondary" size="lg" className="flex items-center justify-center gap-2 text-base font-medium bg-[#232336] text-white border border-[#8b5cf6]">
-                  <Filter className="w-5 h-5" />
-                  <span>Filters</span>
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
+          ))}
         </motion.div>
 
-        {/* Companies List */}
+        {/* Actions Bar */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
-          animate={companiesInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-          transition={{ duration: 0.6, delay: 0.3 }}
+          animate={pageInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="flex flex-col sm:flex-row gap-4 mb-6"
         >
-          <Card className="bg-[#1a1a1a]/50 backdrop-blur-xl border border-gray-800">
-            <CardHeader>
-              <CardTitle className="text-2xl font-normal text-white">All Companies</CardTitle>
-              <CardDescription className="text-gray-400">
-                {filteredCompanies.length} companies found
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              {filteredCompanies.length === 0 ? (
-                <div className="text-center py-16">
-                  <Building2 className="w-16 h-16 text-gray-600 mx-auto mb-6" />
-                  <h3 className="text-xl font-normal text-white mb-4">
-                    {searchTerm ? 'No companies found' : 'No companies yet'}
-                  </h3>
-                  <p className="text-gray-400 mb-8 max-w-md mx-auto">
-                    {searchTerm 
-                      ? 'Try adjusting your search terms or filters.'
-                      : 'Start by adding your first company or importing a list.'
-                    }
-                  </p>
-                  <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                    <Button variant="primary" size="lg" className="flex items-center justify-center gap-2 text-base font-medium">
-                      <Plus className="w-5 h-5" />
-                      <span>Add Your First Company</span>
-                    </Button>
-                    <Button variant="secondary" size="lg" className="flex items-center justify-center gap-2 text-base font-medium">
-                      <Upload className="w-5 h-5" />
-                      <span>Import CSV</span>
+          {/* Search */}
+          <div className="relative flex-1 max-w-md">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-dark-text-muted" />
+            <input
+              type="text"
+              placeholder="Search companies..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full pl-10 pr-4 py-2 bg-dark-bg-secondary border border-dark-border rounded-lg text-dark-text placeholder-dark-text-muted focus:ring-2 focus:ring-rarity-500 focus:border-transparent transition-all duration-200"
+            />
+          </div>
+
+          {/* Filters */}
+          <div className="flex gap-2">
+            <select
+              value={industryFilter}
+              onChange={(e) => setIndustryFilter(e.target.value)}
+              className="px-4 py-2 bg-dark-bg-secondary border border-dark-border rounded-lg text-dark-text focus:ring-2 focus:ring-rarity-500 focus:border-transparent transition-all duration-200"
+            >
+              <option value="all">All Industries</option>
+              {industries.map(industry => (
+                <option key={industry} value={industry}>{industry}</option>
+              ))}
+            </select>
+            
+            <select
+              value={sizeFilter}
+              onChange={(e) => setSizeFilter(e.target.value)}
+              className="px-4 py-2 bg-dark-bg-secondary border border-dark-border rounded-lg text-dark-text focus:ring-2 focus:ring-rarity-500 focus:border-transparent transition-all duration-200"
+            >
+              <option value="all">All Sizes</option>
+              {sizes.map(size => (
+                <option key={size} value={size}>{size} employees</option>
+              ))}
+            </select>
+            
+            <Button variant="outline" size="sm" className="flex items-center gap-2">
+              <Filter className="w-4 h-4" />
+              More Filters
+            </Button>
+          </div>
+
+          {/* Action Buttons */}
+          <div className="flex gap-2">
+            <Button variant="outline" size="sm" className="flex items-center gap-2">
+              <Upload className="w-4 h-4" />
+              Import
+            </Button>
+            <Button variant="outline" size="sm" className="flex items-center gap-2">
+              <Download className="w-4 h-4" />
+              Export
+            </Button>
+            <Button variant="primary" size="sm" className="flex items-center gap-2">
+              <Plus className="w-4 h-4" />
+              Add Company
+            </Button>
+          </div>
+        </motion.div>
+
+        {/* Companies Grid */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={pageInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+          transition={{ duration: 0.6, delay: 0.3 }}
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+        >
+          {filteredCompanies.map((company, index) => (
+            <motion.div
+              key={company.id}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3, delay: 0.4 + index * 0.05 }}
+            >
+              <Card className="bg-dark-bg-secondary border-dark-border hover:border-dark-border-secondary transition-all duration-200">
+                <CardHeader>
+                  <div className="flex items-start justify-between">
+                    <div className="flex-1">
+                      <CardTitle className="text-dark-text text-lg">{company.name}</CardTitle>
+                      <CardDescription className="text-dark-text-secondary">
+                        {company.industry} • {company.size} employees
+                      </CardDescription>
+                    </div>
+                    <Button variant="ghost" size="sm">
+                      <MoreHorizontal className="w-4 h-4" />
                     </Button>
                   </div>
-                </div>
-              ) : (
-                <div className="space-y-4">
-                  {filteredCompanies.map((company) => (
-                    <motion.div
-                      key={company.id}
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.3 }}
-                      className="flex items-center space-x-4 p-6 bg-[#0a0a0a]/50 rounded-lg hover:bg-[#0a0a0a]/70 transition-all duration-300 border border-gray-800/50"
-                    >
-                      <div className="w-12 h-12 bg-[#8b5cf6] rounded-full flex items-center justify-center flex-shrink-0">
-                        <Building2 className="w-6 h-6 text-white" />
-                      </div>
-                      
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center space-x-3 mb-2">
-                          <h3 className="text-lg font-normal text-white truncate">{company.name}</h3>
-                          <span className={`px-2 py-1 rounded-full text-xs font-normal ${
-                            company.status === 'Active' ? 'bg-green-500/20 text-green-400' :
-                            company.status === 'Prospecting' ? 'bg-blue-500/20 text-blue-400' :
-                            'bg-gray-500/20 text-gray-400'
-                          }`}>
-                            {company.status}
-                          </span>
-                        </div>
-                        
-                        <div className="flex items-center space-x-6 text-sm text-gray-400">
-                          <div className="flex items-center space-x-1">
-                            <Target className="w-4 h-4" />
-                            <span className="truncate">{company.industry}</span>
-                          </div>
-                          <div className="flex items-center space-x-1">
-                            <Users className="w-4 h-4" />
-                            <span>{company.size}</span>
-                          </div>
-                          <div className="flex items-center space-x-1">
-                            <MapPin className="w-4 h-4" />
-                            <span className="truncate">{company.location}</span>
-                          </div>
-                          {company.website && (
-                            <div className="flex items-center space-x-1">
-                              <Globe className="w-4 h-4" />
-                              <span className="truncate">{company.website}</span>
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                      
-                      <div className="flex items-center space-x-4">
-                        <div className="text-right">
-                          <div className="text-sm text-gray-400">Leads</div>
-                          <div className="text-lg font-normal text-[#8b5cf6]">{company.leads}</div>
-                        </div>
-                        <Button variant="ghost" size="sm">
-                          <ArrowRight className="w-4 h-4" />
-                        </Button>
-                      </div>
-                    </motion.div>
-                  ))}
-                </div>
-              )}
-            </CardContent>
-          </Card>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  {/* Company Info */}
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2 text-sm text-dark-text-secondary">
+                      <MapPin className="w-4 h-4" />
+                      {company.location}
+                    </div>
+                    <div className="flex items-center gap-2 text-sm text-dark-text-secondary">
+                      <Globe className="w-4 h-4" />
+                      <a 
+                        href={`https://${company.website}`} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="text-rarity-500 hover:text-rarity-400 transition-colors"
+                      >
+                        {company.website}
+                      </a>
+                    </div>
+                    <div className="flex items-center gap-2 text-sm text-dark-text-secondary">
+                      <TrendingUp className="w-4 h-4" />
+                      {company.revenue}
+                    </div>
+                  </div>
+
+                  {/* Status and Metrics */}
+                  <div className="flex items-center justify-between">
+                    <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(company.status)} text-white`}>
+                      {getStatusText(company.status)}
+                    </span>
+                    <div className="text-sm text-dark-text-secondary">
+                      {company.leads} leads
+                    </div>
+                  </div>
+
+                  {/* Contact Actions */}
+                  <div className="flex items-center gap-2 pt-2 border-t border-dark-border">
+                    <Button variant="ghost" size="sm" className="flex-1">
+                      <Phone className="w-4 h-4 mr-2" />
+                      Call
+                    </Button>
+                    <Button variant="ghost" size="sm" className="flex-1">
+                      <Mail className="w-4 h-4 mr-2" />
+                      Email
+                    </Button>
+                    <Button variant="ghost" size="sm">
+                      <ExternalLink className="w-4 h-4" />
+                    </Button>
+                  </div>
+
+                  {/* Last Contact */}
+                  <div className="text-xs text-dark-text-muted">
+                    Last contact: {company.lastContact}
+                  </div>
+                </CardContent>
+              </Card>
+            </motion.div>
+          ))}
         </motion.div>
+
+        {/* Empty State */}
+        {filteredCompanies.length === 0 && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="text-center py-12"
+          >
+            <Building2 className="w-16 h-16 text-dark-text-muted mx-auto mb-4" />
+            <h3 className="text-lg font-medium text-dark-text mb-2">No companies found</h3>
+            <p className="text-dark-text-secondary mb-6">Try adjusting your search terms or filters</p>
+            <Button
+              onClick={() => {
+                setSearchQuery('')
+                setIndustryFilter('all')
+                setSizeFilter('all')
+              }}
+              variant="outline"
+            >
+              Clear Filters
+            </Button>
+          </motion.div>
+        )}
       </div>
     </div>
   )

@@ -1,224 +1,312 @@
 "use client"
 
+import { useState } from 'react'
 import { motion, useInView } from 'framer-motion'
-import { useRef, useState } from 'react'
+import { useRef } from 'react'
 import { 
-  Users, 
-  Plus, 
   Search, 
   Filter, 
+  Plus, 
   Download, 
   Upload,
-  ArrowRight,
-  Building2,
-  Mail,
+  Users,
+  Target,
+  TrendingUp,
+  Clock,
+  CheckCircle,
+  XCircle,
+  MoreHorizontal,
+  Star,
+  MessageSquare,
   Phone,
-  MapPin,
-  Target
+  Mail
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Loading } from '@/components/ui/loading'
+
+interface Lead {
+  id: string
+  name: string
+  company: string
+  email: string
+  phone: string
+  status: 'new' | 'contacted' | 'qualified' | 'converted' | 'lost'
+  score: number
+  source: string
+  lastContact: string
+  notes: string
+}
 
 export default function LeadsPage() {
-  const leadsRef = useRef(null)
-  const leadsInView = useInView(leadsRef, { once: true })
-  const [searchTerm, setSearchTerm] = useState('')
+  const [searchQuery, setSearchQuery] = useState('')
+  const [statusFilter, setStatusFilter] = useState<string>('all')
+  const [loading, setLoading] = useState(false)
+  const [leads, setLeads] = useState<Lead[]>([
+    {
+      id: '1',
+      name: 'Sarah Johnson',
+      company: 'TechCorp Solutions',
+      email: 'sarah.j@techcorp.com',
+      phone: '+1 (555) 123-4567',
+      status: 'qualified',
+      score: 85,
+      source: 'LinkedIn',
+      lastContact: '2 hours ago',
+      notes: 'Interested in AI automation solutions. Budget: $50k-100k'
+    },
+    {
+      id: '2',
+      name: 'Michael Chen',
+      company: 'Innovate Labs',
+      email: 'mchen@innovatelabs.io',
+      phone: '+1 (555) 987-6543',
+      status: 'contacted',
+      score: 72,
+      source: 'Website',
+      lastContact: '1 day ago',
+      notes: 'Looking for lead generation tools. Decision maker.'
+    },
+    {
+      id: '3',
+      name: 'Emily Rodriguez',
+      company: 'Growth Dynamics',
+      email: 'emily@growthdynamics.com',
+      phone: '+1 (555) 456-7890',
+      status: 'new',
+      score: 65,
+      source: 'Cold Outreach',
+      lastContact: 'Never',
+      notes: 'Startup founder. High growth potential.'
+    }
+  ])
+  
+  const pageRef = useRef(null)
+  const pageInView = useInView(pageRef, { once: true })
 
-  const leads: Array<{
-    id: string;
-    name: string;
-    company: string;
-    email: string;
-    phone: string;
-    location: string;
-    status: string;
-    score: number;
-  }> = [
-    // Empty for now - will be populated with real data
+  const filteredLeads = leads.filter(lead => {
+    const matchesSearch = 
+      lead.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      lead.company.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      lead.email.toLowerCase().includes(searchQuery.toLowerCase())
+    const matchesStatus = statusFilter === 'all' || lead.status === statusFilter
+    return matchesSearch && matchesStatus
+  })
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'new': return 'bg-blue-500'
+      case 'contacted': return 'bg-yellow-500'
+      case 'qualified': return 'bg-green-500'
+      case 'converted': return 'bg-purple-500'
+      case 'lost': return 'bg-red-500'
+      default: return 'bg-gray-500'
+    }
+  }
+
+  const getStatusText = (status: string) => {
+    switch (status) {
+      case 'new': return 'New'
+      case 'contacted': return 'Contacted'
+      case 'qualified': return 'Qualified'
+      case 'converted': return 'Converted'
+      case 'lost': return 'Lost'
+      default: return 'Unknown'
+    }
+  }
+
+  const stats = [
+    { label: 'Total Leads', value: leads.length, icon: Users, color: 'text-blue-500' },
+    { label: 'Qualified', value: leads.filter(l => l.status === 'qualified').length, icon: Target, color: 'text-green-500' },
+    { label: 'Conversion Rate', value: '23%', icon: TrendingUp, color: 'text-purple-500' },
+    { label: 'Avg Response Time', value: '2.4h', icon: Clock, color: 'text-yellow-500' }
   ]
 
-  const filteredLeads = leads.filter(lead =>
-    lead.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    lead.company.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    lead.email.toLowerCase().includes(searchTerm.toLowerCase())
-  )
-
   return (
-    <div ref={leadsRef} className="min-h-screen bg-[#0a0a0a] p-4">
+    <div ref={pageRef} className="min-h-screen bg-dark-bg p-4">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
-          animate={leadsInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+          animate={pageInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
           transition={{ duration: 0.6 }}
-          className="mb-4"
+          className="mb-8"
         >
-          <h1 className="text-2xl md:text-3xl font-normal text-white mb-2">
-            Lead Prospecting
+          <h1 className="text-2xl md:text-3xl font-normal text-dark-text mb-2">
+            Lead Management
           </h1>
-          <p className="text-base text-gray-400">
-            Manage and qualify your prospects with AI-powered insights.
+          <p className="text-base text-dark-text-secondary">
+            Manage and track your prospects with AI-powered insights
           </p>
         </motion.div>
 
-        {/* Quick Actions */}
+        {/* Stats Grid */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
-          animate={leadsInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+          animate={pageInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
           transition={{ duration: 0.6, delay: 0.1 }}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 mb-4"
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8"
         >
-          <Button variant="primary" size="lg" className="h-20 flex flex-col items-center justify-center gap-2 text-lg font-medium">
-            <Plus className="w-6 h-6" />
-            <span>Add Lead</span>
-            <span className="text-sm opacity-80">Manual entry</span>
-          </Button>
-          <Button variant="secondary" size="lg" className="h-20 flex flex-col items-center justify-center gap-2 text-lg font-medium">
-            <Upload className="w-6 h-6" />
-            <span>Import CSV</span>
-            <span className="text-sm opacity-80">Bulk import</span>
-          </Button>
-          <Button variant="secondary" size="lg" className="h-20 flex flex-col items-center justify-center gap-2 text-lg font-medium">
-            <Target className="w-6 h-6" />
-            <span>Find Prospects</span>
-            <span className="text-sm opacity-80">AI discovery</span>
-          </Button>
-          <Button variant="secondary" size="lg" className="h-20 flex flex-col items-center justify-center gap-2 text-lg font-medium">
-            <Download className="w-6 h-6" />
-            <span>Export Data</span>
-            <span className="text-sm opacity-80">Download leads</span>
-          </Button>
-        </motion.div>
-
-        {/* Search and Filters */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={leadsInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="mb-8"
-        >
-          <Card className="bg-[#1a1a1a]/50 backdrop-blur-xl border border-gray-800">
-            <CardContent className="p-6">
-              <div className="flex flex-col md:flex-row gap-4">
-                <div className="flex-1 relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                  <input
-                    type="text"
-                    placeholder="Search leads by name, company, or email..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="w-full pl-10 pr-4 py-3 bg-[#0a0a0a]/50 backdrop-blur-sm border border-gray-800 rounded-lg focus:ring-2 focus:ring-[#8b5cf6]/50 focus:border-transparent transition-all duration-300 text-white placeholder-gray-400"
-                  />
+          {stats.map((stat, index) => (
+            <Card key={index} className="bg-dark-bg-secondary border-dark-border">
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-dark-text-muted">{stat.label}</p>
+                    <p className="text-2xl font-medium text-dark-text">{stat.value}</p>
+                  </div>
+                  <stat.icon className={`w-8 h-8 ${stat.color}`} />
                 </div>
-                <Button variant="secondary" size="lg" className="flex items-center justify-center gap-2 text-base font-medium">
-                  <Filter className="w-5 h-5" />
-                  <span>Filters</span>
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
+          ))}
         </motion.div>
 
-        {/* Leads List */}
+        {/* Actions Bar */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
-          animate={leadsInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+          animate={pageInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="flex flex-col sm:flex-row gap-4 mb-6"
+        >
+          {/* Search */}
+          <div className="relative flex-1 max-w-md">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-dark-text-muted" />
+            <input
+              type="text"
+              placeholder="Search leads..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full pl-10 pr-4 py-2 bg-dark-bg-secondary border border-dark-border rounded-lg text-dark-text placeholder-dark-text-muted focus:ring-2 focus:ring-rarity-500 focus:border-transparent transition-all duration-200"
+            />
+          </div>
+
+          {/* Filters */}
+          <div className="flex gap-2">
+            <select
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value)}
+              className="px-4 py-2 bg-dark-bg-secondary border border-dark-border rounded-lg text-dark-text focus:ring-2 focus:ring-rarity-500 focus:border-transparent transition-all duration-200"
+            >
+              <option value="all">All Status</option>
+              <option value="new">New</option>
+              <option value="contacted">Contacted</option>
+              <option value="qualified">Qualified</option>
+              <option value="converted">Converted</option>
+              <option value="lost">Lost</option>
+            </select>
+            
+            <Button variant="outline" size="sm" className="flex items-center gap-2">
+              <Filter className="w-4 h-4" />
+              More Filters
+            </Button>
+          </div>
+
+          {/* Action Buttons */}
+          <div className="flex gap-2">
+            <Button variant="outline" size="sm" className="flex items-center gap-2">
+              <Upload className="w-4 h-4" />
+              Import
+            </Button>
+            <Button variant="outline" size="sm" className="flex items-center gap-2">
+              <Download className="w-4 h-4" />
+              Export
+            </Button>
+            <Button variant="primary" size="sm" className="flex items-center gap-2">
+              <Plus className="w-4 h-4" />
+              Add Lead
+            </Button>
+          </div>
+        </motion.div>
+
+        {/* Leads Table */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={pageInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
           transition={{ duration: 0.6, delay: 0.3 }}
         >
-          <Card className="bg-[#1a1a1a]/50 backdrop-blur-xl border border-gray-800">
+          <Card className="bg-dark-bg-secondary border-dark-border">
             <CardHeader>
-              <CardTitle className="text-2xl font-normal text-white">All Leads</CardTitle>
-              <CardDescription className="text-gray-400">
-                {filteredLeads.length} leads found
+              <CardTitle className="text-dark-text">Leads ({filteredLeads.length})</CardTitle>
+              <CardDescription className="text-dark-text-secondary">
+                Manage your prospect pipeline with AI-powered insights
               </CardDescription>
             </CardHeader>
             <CardContent>
-              {filteredLeads.length === 0 ? (
-                <div className="text-center py-16">
-                  <Users className="w-16 h-16 text-gray-600 mx-auto mb-6" />
-                  <h3 className="text-xl font-normal text-white mb-4">
-                    {searchTerm ? 'No leads found' : 'No leads yet'}
-                  </h3>
-                  <p className="text-gray-400 mb-8 max-w-md mx-auto">
-                    {searchTerm 
-                      ? 'Try adjusting your search terms or filters.'
-                      : 'Start by adding your first lead or importing a CSV file.'
-                    }
-                  </p>
-                  <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                    <Button variant="primary" size="lg" className="flex items-center justify-center gap-2 text-base font-medium">
-                      <Plus className="w-5 h-5" />
-                      <span>Add Your First Lead</span>
-                    </Button>
-                    <Button variant="secondary" size="lg" className="flex items-center justify-center gap-2 text-base font-medium">
-                      <Upload className="w-5 h-5" />
-                      <span>Import CSV</span>
-                    </Button>
-                  </div>
-                </div>
-              ) : (
-                <div className="space-y-4">
-                  {filteredLeads.map((lead) => (
-                    <motion.div
-                      key={lead.id}
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.3 }}
-                      className="flex items-center space-x-4 p-6 bg-[#0a0a0a]/50 rounded-lg hover:bg-[#0a0a0a]/70 transition-all duration-300 border border-gray-800/50"
-                    >
-                      <div className="w-12 h-12 bg-[#8b5cf6] rounded-full flex items-center justify-center flex-shrink-0">
-                        <span className="text-white font-normal text-lg">{lead.name.charAt(0)}</span>
-                      </div>
-                      
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center space-x-3 mb-2">
-                          <h3 className="text-lg font-normal text-white truncate">{lead.name}</h3>
-                          <span className={`px-2 py-1 rounded-full text-xs font-normal ${
-                            lead.status === 'Qualified' ? 'bg-green-500/20 text-green-400' :
-                            lead.status === 'Contacted' ? 'bg-blue-500/20 text-blue-400' :
-                            'bg-gray-500/20 text-gray-400'
-                          }`}>
-                            {lead.status}
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead>
+                    <tr className="border-b border-dark-border">
+                      <th className="text-left py-3 px-4 text-sm font-medium text-dark-text-secondary">Lead</th>
+                      <th className="text-left py-3 px-4 text-sm font-medium text-dark-text-secondary">Company</th>
+                      <th className="text-left py-3 px-4 text-sm font-medium text-dark-text-secondary">Status</th>
+                      <th className="text-left py-3 px-4 text-sm font-medium text-dark-text-secondary">Score</th>
+                      <th className="text-left py-3 px-4 text-sm font-medium text-dark-text-secondary">Source</th>
+                      <th className="text-left py-3 px-4 text-sm font-medium text-dark-text-secondary">Last Contact</th>
+                      <th className="text-left py-3 px-4 text-sm font-medium text-dark-text-secondary">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {filteredLeads.map((lead, index) => (
+                      <motion.tr
+                        key={lead.id}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.3, delay: 0.4 + index * 0.05 }}
+                        className="border-b border-dark-border hover:bg-dark-bg-tertiary transition-colors"
+                      >
+                        <td className="py-4 px-4">
+                          <div>
+                            <p className="font-medium text-dark-text">{lead.name}</p>
+                            <p className="text-sm text-dark-text-secondary">{lead.email}</p>
+                          </div>
+                        </td>
+                        <td className="py-4 px-4">
+                          <p className="text-dark-text">{lead.company}</p>
+                        </td>
+                        <td className="py-4 px-4">
+                          <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(lead.status)} text-white`}>
+                            {getStatusText(lead.status)}
                           </span>
-                        </div>
-                        
-                        <div className="flex items-center space-x-6 text-sm text-gray-400">
-                          <div className="flex items-center space-x-1">
-                            <Building2 className="w-4 h-4" />
-                            <span className="truncate">{lead.company}</span>
+                        </td>
+                        <td className="py-4 px-4">
+                          <div className="flex items-center gap-2">
+                            <div className="w-12 bg-dark-bg rounded-full h-2">
+                              <div 
+                                className="bg-rarity-500 h-2 rounded-full transition-all duration-300"
+                                style={{ width: `${lead.score}%` }}
+                              />
+                            </div>
+                            <span className="text-sm text-dark-text">{lead.score}</span>
                           </div>
-                          <div className="flex items-center space-x-1">
-                            <Mail className="w-4 h-4" />
-                            <span className="truncate">{lead.email}</span>
-                          </div>
-                          {lead.phone && (
-                            <div className="flex items-center space-x-1">
+                        </td>
+                        <td className="py-4 px-4">
+                          <p className="text-dark-text-secondary">{lead.source}</p>
+                        </td>
+                        <td className="py-4 px-4">
+                          <p className="text-dark-text-secondary">{lead.lastContact}</p>
+                        </td>
+                        <td className="py-4 px-4">
+                          <div className="flex items-center gap-2">
+                            <Button variant="ghost" size="sm">
+                              <MessageSquare className="w-4 h-4" />
+                            </Button>
+                            <Button variant="ghost" size="sm">
                               <Phone className="w-4 h-4" />
-                              <span>{lead.phone}</span>
-                            </div>
-                          )}
-                          {lead.location && (
-                            <div className="flex items-center space-x-1">
-                              <MapPin className="w-4 h-4" />
-                              <span className="truncate">{lead.location}</span>
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                      
-                      <div className="flex items-center space-x-4">
-                        <div className="text-right">
-                          <div className="text-sm text-gray-400">AI Score</div>
-                          <div className="text-lg font-normal text-[#8b5cf6]">{lead.score}%</div>
-                        </div>
-                        <Button variant="ghost" size="sm" className="flex items-center justify-center gap-2">
-                          <ArrowRight className="w-4 h-4" />
-                        </Button>
-                      </div>
-                    </motion.div>
-                  ))}
-                </div>
-              )}
+                            </Button>
+                            <Button variant="ghost" size="sm">
+                              <Mail className="w-4 h-4" />
+                            </Button>
+                            <Button variant="ghost" size="sm">
+                              <MoreHorizontal className="w-4 h-4" />
+                            </Button>
+                          </div>
+                        </td>
+                      </motion.tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </CardContent>
           </Card>
         </motion.div>
