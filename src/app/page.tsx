@@ -2,10 +2,10 @@
 
 import { motion } from 'framer-motion'
 import Link from 'next/link'
-import { Button } from '@/components/ui/button'
 import { 
   ArrowRight
 } from 'lucide-react'
+import Image from 'next/image'
 
 export default function HomePage() {
   const features = [
@@ -141,31 +141,40 @@ export default function HomePage() {
       </nav>
 
       {/* Hero Section */}
-      <section className="pt-32 pb-20 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto text-center">
+      <section className="pt-32 pb-20 px-4 sm:px-6 lg:px-8 relative overflow-x-clip">
+        
+        <div className="max-w-7xl mx-auto text-center relative z-20">
+          {/* Headline */}
+          <motion.h1 
+            className="text-4xl sm:text-5xl lg:text-6xl font-medium text-white mb-6 leading-tight"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+          >
+            AI powered warm lead hunting for faster deals, deeper conversations, and scalable outreach{" "}
+            <span className="text-purple-400">with zero guesswork.</span>
+          </motion.h1>
+          
+          {/* Subheadline */}
+          <motion.p 
+            className="text-xl sm:text-2xl text-gray-300 mb-8 max-w-4xl mx-auto leading-relaxed"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
+          >
+            Rarity Leads is your AI native platform to attract, qualify, and close clients — without the manual grind.
+          </motion.p>
+          
+          {/* CTA Button */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
+            transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
           >
-            <h1 className="text-4xl md:text-6xl font-medium text-white mb-6 leading-tight">
-              AI powered warm lead hunting for faster deals, deeper conversations, and scalable outreach
-              <span className="text-[#8b5cf6]">
-                {" "} with zero guesswork.
-              </span>
-            </h1>
-            <p className="text-lg md:text-xl text-gray-400 mb-8 max-w-3xl mx-auto">
-              Rarity Leads is your AI native platform to attract, qualify, and close clients without the manual grind.
-            </p>
-            <motion.div
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <Link href="/auth" className="inline-block bg-gradient-to-r from-[#7c3aed] to-[#8b5cf6] text-white px-8 py-4 rounded-lg font-medium hover:from-[#6d28d9] hover:to-[#7c3aed] transition-all duration-200 text-lg">
-                Start for Free
-                <ArrowRight className="w-5 h-5 ml-2 inline" />
-              </Link>
-            </motion.div>
+            <Link href="/auth" className="inline-block bg-purple-600 hover:bg-purple-700 text-white px-8 py-4 rounded-lg font-medium transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-purple-500/25 text-lg">
+              Start for Free →
+              <ArrowRight className="ml-2 h-5 w-5 inline" />
+            </Link>
           </motion.div>
         </div>
       </section>

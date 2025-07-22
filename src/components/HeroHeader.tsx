@@ -26,10 +26,20 @@ export const HeroHeader = () => {
     }, [])
     
     return (
-        <header>
+        <header className="relative overflow-x-clip">
+            {/* Decorative abstract image background */}
+            <div className="pointer-events-none select-none absolute top-1/2 right-0 z-0 w-[70vw] max-w-2xl -translate-y-1/2 translate-x-1/4 opacity-70 blur-[2px] brightness-110 saturate-150 drop-shadow-2xl lg:w-[50vw] lg:max-w-3xl lg:-top-32 lg:right-[-10vw] lg:translate-x-0 lg:opacity-80">
+                <img
+                    src="https://ik.imagekit.io/lrigu76hy/tailark/abstract-bg.jpg?updatedAt=1745733473768"
+                    alt="Abstract Diamond Background"
+                    className="w-full h-auto object-contain"
+                    draggable="false"
+                />
+            </div>
+            {/* Navigation and content */}
             <nav
                 data-state={menuState && 'active'}
-                className="fixed z-20 w-full px-2">
+                className="bg-background/50 fixed z-20 w-full border-b backdrop-blur-3xl">
                 <div className={cn('mx-auto mt-2 max-w-6xl px-6 transition-all duration-300 lg:px-12', isScrolled && 'bg-[#0a0a0a]/50 max-w-4xl rounded-2xl border border-gray-800 backdrop-blur-lg lg:px-5')}>
                     <div className="relative flex flex-wrap items-center justify-between gap-6 py-3 lg:gap-0 lg:py-4">
                         <div className="flex w-full justify-between lg:w-auto">
