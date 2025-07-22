@@ -30,6 +30,7 @@ const LanguageSwitcher = () => {
         <Button
           variant="outline"
           size="sm"
+          aria-label="Abrir seletor de idioma"
           className="flex items-center gap-2 bg-white/10 backdrop-blur-sm border-white/20 text-white hover:bg-white/20 hover:text-white hover:border-white/30"
         >
           <Globe className="h-4 w-4" />

@@ -203,8 +203,11 @@ const StartEngagement = ({ data, onUpdate, onPrev }: StartEngagementProps) => {
             <Button
               onClick={handleSendMessages}
               disabled={sendingMessages || !data.customMessage || selectedContacts.length === 0}
-              className="w-full bg-gradient-to-r from-rarity-pink to-rarity-purple text-white font-benton"
+              variant="primary"
               size="lg"
+              aria-label="Enviar mensagem para contatos selecionados"
+              fullWidth
+              loading={sendingMessages}
             >
               {sendingMessages ? (
                 <>
@@ -223,8 +226,10 @@ const StartEngagement = ({ data, onUpdate, onPrev }: StartEngagementProps) => {
               onClick={handleScheduleFollowUps}
               disabled={schedulingFollowUps || selectedContacts.length === 0}
               variant="outline"
-              className="w-full font-benton"
               size="lg"
+              aria-label="Agendar follow-ups para contatos selecionados"
+              fullWidth
+              loading={schedulingFollowUps}
             >
               {schedulingFollowUps ? (
                 <>

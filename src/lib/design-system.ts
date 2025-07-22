@@ -222,102 +222,23 @@ export const zIndex = {
   tooltip: 1800,
 } as const;
 
-// Glass morphism utilities
-export const glassMorphism = {
-  light: {
-    background: 'rgba(255, 255, 255, 0.1)',
-    backdropFilter: 'blur(10px)',
-    border: '1px solid rgba(255, 255, 255, 0.2)',
-  },
-  medium: {
-    background: 'rgba(255, 255, 255, 0.15)',
-    backdropFilter: 'blur(15px)',
-    border: '1px solid rgba(255, 255, 255, 0.25)',
-  },
-  dark: {
-    background: 'rgba(0, 0, 0, 0.1)',
-    backdropFilter: 'blur(10px)',
-    border: '1px solid rgba(255, 255, 255, 0.1)',
-  },
-} as const;
-
-// Gradient utilities
-export const gradients = {
-  primary: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
-  secondary: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
-  success: 'linear-gradient(135deg, #22c55e 0%, #16a34a 100%)',
-  warning: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
-  error: 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)',
-  glass: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%)',
-} as const;
-
-// Component variants
-export const buttonVariants = {
-  primary: {
-    background: gradients.primary,
-    color: 'white',
-    border: 'none',
-    boxShadow: shadows.md,
-    '&:hover': {
-      boxShadow: shadows.lg,
-      transform: 'translateY(-1px)',
-    },
-    '&:active': {
-      transform: 'translateY(0)',
-    },
-  },
-  secondary: {
-    background: 'transparent',
-    color: colors.primary[500],
-    border: `1px solid ${colors.primary[500]}`,
-    '&:hover': {
-      background: colors.primary[500],
-      color: 'white',
-    },
-  },
-  ghost: {
-    background: 'transparent',
-    color: colors.neutral[400],
-    border: 'none',
-    '&:hover': {
-      background: colors.glass.light,
-      color: colors.neutral[200],
-    },
-  },
-  danger: {
-    background: gradients.error,
-    color: 'white',
-    border: 'none',
-    '&:hover': {
-      boxShadow: shadows.lg,
-      transform: 'translateY(-1px)',
-    },
-  },
-} as const;
-
+// Remove glass morphism and semi-transparent backgrounds
+// Only export solid, allowed dark backgrounds
 export const cardVariants = {
   default: {
-    background: colors.glass.light,
-    backdropFilter: 'blur(10px)',
-    border: `1px solid ${colors.glass.light}`,
+    background: colors.neutral[950], // #0a0a0a
+    border: `1px solid ${colors.neutral[800]}`,
     borderRadius: borderRadius.lg,
     boxShadow: shadows.md,
   },
   elevated: {
-    background: colors.glass.medium,
-    backdropFilter: 'blur(15px)',
-    border: `1px solid ${colors.glass.medium}`,
+    background: colors.neutral[900], // #171717
+    border: `1px solid ${colors.neutral[800]}`,
     borderRadius: borderRadius.lg,
     boxShadow: shadows.lg,
   },
-  glass: {
-    background: 'rgba(255, 255, 255, 0.05)',
-    backdropFilter: 'blur(20px)',
-    border: `1px solid rgba(255, 255, 255, 0.1)`,
-    borderRadius: borderRadius.xl,
-    boxShadow: shadows.xl,
-  },
-} as const;
+  // Remove glass variant entirely
+};
 
 // Motion variants for Framer Motion
 export const motionVariants = {
@@ -386,9 +307,6 @@ export default {
   animations,
   breakpoints,
   zIndex,
-  glassMorphism,
-  gradients,
-  buttonVariants,
   cardVariants,
   motionVariants,
   responsive,

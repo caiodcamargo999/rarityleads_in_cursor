@@ -352,10 +352,10 @@ const CustomizeApproach = ({ data, onUpdate, onNext, onPrev }: CustomizeApproach
             </Badge>
             
             <div className="flex gap-2">
-              <Button variant="outline" onClick={onPrev} className="font-benton">
+              <Button variant="outline" onClick={onPrev} aria-label="Voltar para etapa anterior">
                 Voltar
               </Button>
-              <Button onClick={onNext} disabled={!data.customMessage.trim()} className="font-benton">
+              <Button onClick={onNext} disabled={!data.customMessage.trim()} aria-label="Continuar para próxima etapa">
                 Continuar
               </Button>
             </div>

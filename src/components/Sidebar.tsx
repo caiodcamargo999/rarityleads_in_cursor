@@ -103,6 +103,7 @@ export function Sidebar({ user, onProfileClick, onLogout }: SidebarProps) {
               variant="ghost"
               size="sm"
               onClick={handleToggleCollapse}
+              aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
               className="p-1 h-8 w-8"
             >
               {collapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
@@ -163,12 +164,24 @@ export function Sidebar({ user, onProfileClick, onLogout }: SidebarProps) {
                 <div className="text-sm text-white truncate leading-tight">{user.name}</div>
                 <div className="text-xs text-[#b0b0b0] truncate leading-tight">{user.email}</div>
               </div>
-              <button onClick={onProfileClick} aria-label="Profile settings" className="ml-1 text-[#b0b0b0] hover:text-white focus:outline-none">
+              <Button
+                onClick={onProfileClick}
+                aria-label="Profile settings"
+                variant="ghost"
+                size="icon"
+                className="ml-1 text-[#b0b0b0] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+              >
                 <Settings className="w-5 h-5" />
-              </button>
-              <button onClick={onLogout} aria-label="Logout" className="ml-1 text-red-400 hover:text-red-300 focus:outline-none">
+              </Button>
+              <Button
+                onClick={onLogout}
+                aria-label="Logout"
+                variant="ghost"
+                size="icon"
+                className="ml-1 text-red-400 hover:text-red-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-error"
+              >
                 <LogOut className="w-5 h-5" />
-              </button>
+              </Button>
             </div>
           </div>
         )}

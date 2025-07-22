@@ -180,7 +180,9 @@ const IdentifyContacts = ({ data, onUpdate, onNext, onPrev }: IdentifyContactsPr
             <Button 
               onClick={handleCompanySearch}
               disabled={searching || !data.targetCompany.trim()}
-              className="bg-gradient-to-r from-rarity-pink to-rarity-purple text-white font-benton"
+              variant="primary"
+              aria-label="Buscar decisores da empresa"
+              loading={searching}
             >
               {searching ? (
                 <>

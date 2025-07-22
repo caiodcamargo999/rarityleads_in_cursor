@@ -45,34 +45,14 @@ export default function AnalyticsPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={pageInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
           transition={{ duration: 0.6 }}
-          className="mb-8"
+          className="mb-4"
         >
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-2xl md:text-3xl font-normal text-dark-text mb-2">
-                Analytics Dashboard
-              </h1>
-              <p className="text-base text-dark-text-secondary">
-                Track your lead generation performance and insights
-              </p>
-            </div>
-            <div className="flex gap-2">
-              <select
-                value={timeRange}
-                onChange={(e) => setTimeRange(e.target.value)}
-                className="px-4 py-2 bg-dark-bg-secondary border border-dark-border rounded-lg text-dark-text focus:ring-2 focus:ring-rarity-500 focus:border-transparent transition-all duration-200"
-              >
-                <option value="7d">Last 7 days</option>
-                <option value="30d">Last 30 days</option>
-                <option value="90d">Last 90 days</option>
-                <option value="1y">Last year</option>
-              </select>
-              <Button variant="outline" size="sm" className="flex items-center gap-2">
-                <Download className="w-4 h-4" />
-                Export
-              </Button>
-            </div>
-          </div>
+          <h1 className="text-2xl md:text-3xl font-normal text-white mb-2">
+            Analytics
+          </h1>
+          <p className="text-base text-gray-400">
+            Track your analytics and campaign insights
+          </p>
         </motion.div>
 
         {/* Stats Grid */}

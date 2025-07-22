@@ -6,7 +6,7 @@ import { cardVariants } from "@/lib/motionVariants"
 import { cn } from "@/lib/utils"
 
 export interface CardProps extends HTMLMotionProps<'div'> {
-  variant?: 'default' | 'glass' | 'gradient' | 'elevated'
+  variant?: 'default' | 'elevated'
   hover?: boolean
   children: React.ReactNode
 }
@@ -15,8 +15,6 @@ const Card = React.forwardRef<HTMLDivElement, CardProps>(
   ({ className, variant = 'default', hover = true, children, ...props }, ref) => {
     const variantClasses = {
       default: "bg-card border border-border",
-      glass: "glass-card",
-      gradient: "bg-gradient-to-br from-primary/10 to-purple-500/10 border border-primary/20",
       elevated: "bg-card border border-border shadow-premium-lg"
     }
 

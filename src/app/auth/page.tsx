@@ -16,6 +16,7 @@ export default function AuthPage() {
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
   const [googleLoading, setGoogleLoading] = useState(false)
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
   
   const formRef = useRef(null)
   const formInView = useInView(formRef, { once: true })
@@ -23,6 +24,7 @@ export default function AuthPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
+    setErrorMsg(null)
     
     try {
       if (isLogin) {
@@ -41,9 +43,8 @@ export default function AuthPage() {
       
       // Redirect to dashboard on success
       window.location.href = '/dashboard'
-    } catch (error) {
-      console.error('Auth error:', error)
-      alert('Authentication failed. Please try again.')
+    } catch (error: any) {
+      setErrorMsg(error?.message || 'Authentication failed. Please try again.')
     } finally {
       setLoading(false)
     }
@@ -51,6 +52,7 @@ export default function AuthPage() {
 
   const handleGoogleSignIn = async () => {
     setGoogleLoading(true)
+    setErrorMsg(null)
     
     try {
       const { error } = await supabase.auth.signInWithOAuth({
@@ -63,9 +65,8 @@ export default function AuthPage() {
       if (error) throw error
       
       // The redirect will happen automatically
-    } catch (error) {
-      console.error('Google OAuth error:', error)
-      alert('Google sign-in failed. Please try again.')
+    } catch (error: any) {
+      setErrorMsg(error?.message || 'Google sign-in failed. Please try again.')
       setGoogleLoading(false)
     }
   }
@@ -107,6 +108,15 @@ export default function AuthPage() {
               </CardHeader>
 
               <CardContent>
+                {errorMsg && (
+                  <div
+                    role="alert"
+                    aria-live="assertive"
+                    className="mb-4 p-3 rounded bg-red-900/80 text-red-200 border border-red-700 text-sm text-center"
+                  >
+                    {errorMsg}
+                  </div>
+                )}
                 <form onSubmit={handleSubmit} className="space-y-6">
                   <div>
                     <label htmlFor="email" className="block text-sm font-normal text-white mb-2">
@@ -198,6 +208,7 @@ export default function AuthPage() {
                     <button
                       onClick={() => setIsLogin(!isLogin)}
                       className="text-[#8b5cf6] hover:text-[#8b5cf6]/80 transition-colors font-normal"
+                      aria-label={isLogin ? 'Switch to sign up form' : 'Switch to sign in form'}
                     >
                       {isLogin ? 'Sign up' : 'Sign in'}
                     </button>

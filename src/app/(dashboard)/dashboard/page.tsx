@@ -111,7 +111,7 @@ export default function DashboardPage() {
           className="mb-4"
         >
           <h1 className="text-2xl md:text-3xl font-normal text-white mb-2">
-            Analytics Dashboard
+            Dashboard
           </h1>
           <p className="text-base text-gray-400">
             Track your lead generation performance and campaign insights
@@ -136,20 +136,18 @@ export default function DashboardPage() {
               <Card className="bg-[#18181c] border border-gray-800 hover:border-gray-700 transition-all duration-300 p-4">
                 <CardContent className="p-0">
                   <div className="flex items-center justify-between mb-2">
-                    <metric.icon className={`w-7 h-7 ${metric.color}`} />
+                    <metric.icon className={`w-6 h-6 ${metric.color}`} />
                     {metric.trend && (
-                      <span className="text-xs text-green-500 font-normal flex items-center">
-                        <TrendingUp className="w-4 h-4 mr-1" />
+                      <div className="flex items-center text-green-400 text-xs">
+                        <TrendingUp className="w-3 h-3 mr-1" />
                         {metric.change}
-                      </span>
+                      </div>
                     )}
                   </div>
-                  <div className="mb-1">
-                    <p className="text-2xl font-normal text-white leading-tight">{metric.value}</p>
-                    <p className="text-base font-normal text-white leading-tight">{metric.title}</p>
-                  </div>
+                  <p className="text-sm text-gray-400 mb-1">{metric.title}</p>
+                  <p className="text-2xl font-normal text-white leading-tight">{metric.value}</p>
                   {!metric.trend && (
-                    <p className="text-xs text-gray-400 leading-tight">{metric.change}</p>
+                    <p className="text-xs text-gray-500 mt-1">{metric.change}</p>
                   )}
                 </CardContent>
               </Card>
@@ -197,17 +195,22 @@ export default function DashboardPage() {
         </motion.div>
 
         {/* Breakdown and Pipeline */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={dashboardInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+          transition={{ duration: 0.6, delay: 0.5 }}
+          className="grid grid-cols-1 lg:grid-cols-2 gap-4"
+        >
           {/* Channel Breakdown */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={dashboardInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -20 }}
-            transition={{ duration: 0.6, delay: 0.5 }}
+            transition={{ duration: 0.6, delay: 0.6 }}
           >
             <Card className="bg-[#18181c] border border-gray-800 p-4">
               <CardHeader className="p-0 mb-2">
                 <CardTitle className="text-base font-normal text-white flex items-center leading-tight">
-                  <RefreshCw className="w-5 h-5 text-purple-400 mr-2" />
+                  <BarChart3 className="w-5 h-5 text-green-400 mr-2" />
                   Channel Breakdown
                 </CardTitle>
               </CardHeader>
@@ -255,7 +258,7 @@ export default function DashboardPage() {
               </CardContent>
             </Card>
           </motion.div>
-        </div>
+        </motion.div>
       </div>
     </div>
   )

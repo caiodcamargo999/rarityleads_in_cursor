@@ -1,5 +1,41 @@
 # 🚀 Rarity Leads - Complete Deployment Guide
 
+## ✅ Final Deploy Checklist (Quick Reference)
+
+1. **QA & Accessibility**
+   - [x] All pages/routes are present and accessible
+   - [x] No forbidden styles (gradients, glass, non-Inter fonts)
+   - [x] All interactive elements are accessible (focus, aria-labels, keyboard)
+   - [x] All async states use animated Loading component
+   - [x] All overlays/menus/modals use animated transitions
+   - [x] No console errors or warnings
+   - [x] Internationalization and language switcher work
+   - [x] Route protection and redirects are in place
+   - [x] Build passes with no errors
+
+2. **Build**
+   - [x] Run `npm run build` and ensure it completes successfully
+
+3. **Push to GitHub**
+   - [x] Commit and push all changes to your main branch
+
+4. **Deploy**
+   - [x] Connect your repository to Netlify (or Vercel)
+   - [x] Set build command: `npm run build`
+   - [x] Set publish directory: `.next` (Vercel auto-detects, Netlify may need config)
+   - [x] Add all required environment variables in the deploy platform dashboard
+   - [x] Trigger a deploy
+
+5. **Post-Deploy**
+   - [x] Verify all pages load and are functional
+   - [x] No console errors in production
+   - [x] All interactive elements and animations work
+   - [x] Test on both desktop and mobile
+   - [x] Set up custom domain and SSL (optional)
+   - [x] Monitor analytics and error tracking (Netlify/Vercel dashboards)
+
+---
+
 This guide covers the complete deployment process for Rarity Leads, from local development to production.
 
 ## 📋 Table of Contents
@@ -32,8 +68,8 @@ This guide covers the complete deployment process for Rarity Leads, from local d
 
 ### 1. Clone Repository
 ```bash
-git clone https://github.com/your-username/rarity-leads.git
-cd rarity-leads
+git clone https://github.com/caiodcamargo999/rarityleads_in_cursor.git
+cd rarityleads_in_cursor
 ```
 
 ### 2. Install Dependencies
@@ -51,9 +87,9 @@ cd ..
 Create `.env.local` in the root directory:
 ```bash
 # Supabase Configuration
-NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
-SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key
+NEXT_PUBLIC_SUPABASE_URL=https://yejheyrdsucgzpzwxuxs.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InllamhleXJkc3VjZ3pwend4dXhzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg4MDg2NzQsImV4cCI6MjA2NDM4NDY3NH0.NzCJ8i3SKpABO6ykWRX3nHDYmjVB82KL1wfgaY3trM4
+SUPABASE_SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InllamhleXJkc3VjZ3pwend4dXhzIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc0ODgwODY3NCwiZXhwIjoyMDY0Mzg0Njc0fQ.5s0WmC8H4QonZXrdvfiWeJy_aPitvpxakyX-hWAl0UA
 
 # Redis Configuration
 REDIS_URL=redis://localhost:6379
@@ -119,7 +155,7 @@ npm run dev
 3. Set up Google OAuth provider
 4. Configure redirect URLs:
    - Local: `http://localhost:3000/auth/callback`
-   - Production: `https://yourdomain.com/auth/callback`
+   - Production: `https://rarityleads.netlify.app/auth/callback`
 
 ### 4. Edge Functions Deployment
 ```bash
@@ -189,8 +225,8 @@ systemctl start nginx
 ### 2. Deploy Microservices
 ```bash
 # Clone your repository
-git clone https://github.com/your-username/rarity-leads.git
-cd rarity-leads/services
+git clone https://github.com/caiodcamargo999/rarityleads_in_cursor.git
+cd rarityleads_in_cursor/services
 
 # Install dependencies
 npm install

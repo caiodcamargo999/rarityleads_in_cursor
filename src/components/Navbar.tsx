@@ -68,7 +68,12 @@ const Navbar = () => {
             {user ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="sm" className="flex items-center gap-2 text-gray-300 hover:text-white hover:bg-white/10">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    aria-label="Open user menu"
+                    className="flex items-center gap-2 text-gray-300 hover:text-white hover:bg-white/10"
+                  >
                     <User className="h-4 w-4" />
                     <span className="hidden sm:inline text-sm">{user.email}</span>
                   </Button>
@@ -86,7 +91,13 @@ const Navbar = () => {
                 </DropdownMenuContent>
               </DropdownMenu>
             ) : (
-              <Button asChild className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white text-sm px-6 rounded-full">
+              <Button
+                asChild
+                variant="primary"
+                size="sm"
+                aria-label="Sign In"
+                className="text-white text-sm px-6 rounded-full"
+              >
                 <Link href="/auth">{t('auth.signIn')}</Link>
               </Button>
             )}

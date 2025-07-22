@@ -82,6 +82,7 @@ export const HeroHeader = () => {
                                     <Button
                                         variant="secondary"
                                         size="sm"
+                                        aria-label="Login"
                                         className={cn(
                                           isScrolled && 'lg:hidden',
                                           'transition-transform duration-200 border-white/20 shadow-sm hover:shadow-lg hover:scale-105 hover:-translate-y-0.5 focus-visible:ring-2 focus-visible:ring-[#8b5cf6]/50 underline-offset-4 hover:underline'
@@ -94,6 +95,7 @@ export const HeroHeader = () => {
                                     <Button
                                         variant="primary"
                                         size="sm"
+                                        aria-label="Sign Up"
                                         className={cn(
                                           isScrolled && 'lg:hidden',
                                           'transition-transform duration-200 border-white/20 shadow-sm hover:shadow-lg hover:scale-105 hover:-translate-y-0.5 focus-visible:ring-2 focus-visible:ring-[#8b5cf6]/50 underline-offset-4 hover:underline'
@@ -106,7 +108,9 @@ export const HeroHeader = () => {
                                     <Button
                                         variant="primary"
                                         size="sm"
-                                        className={cn(isScrolled ? 'lg:inline-flex' : 'hidden')}>
+                                        aria-label="Get Started"
+                                        className={cn(isScrolled ? 'lg:inline-flex' : 'hidden')}
+                                    >
                                         <span>Get Started</span>
                                     </Button>
                                 </Link>

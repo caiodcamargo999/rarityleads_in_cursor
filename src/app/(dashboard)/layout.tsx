@@ -1,5 +1,4 @@
 "use client"
-
 import { useState, useEffect } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
 import Link from 'next/link'
@@ -27,17 +26,17 @@ import { Loading } from '@/components/ui/loading'
 import { sidebarSlide, fadeInUp } from '@/lib/motion'
 
 const navigation = [
-  { name: 'Overview', href: '/dashboard', icon: Home },
-  { name: 'Leads', href: '/dashboard/prospecting/leads', icon: Users },
-  { name: 'Companies', href: '/dashboard/prospecting/companies', icon: Building2 },
+  { name: 'Dashboard', href: '/dashboard', icon: Home },
+  { name: 'Leads', href: '/leads', icon: Users },
+  { name: 'Companies', href: '/companies', icon: Building2 },
   { name: 'OUTREACH', href: '#', icon: null, isSection: true, children: [
-    { name: 'WhatsApp', href: '/dashboard/outreach/whatsapp', icon: MessageSquare },
-    { name: 'Instagram', href: '/dashboard/outreach/instagram', icon: Instagram },
-    { name: 'LinkedIn', href: '/dashboard/outreach/linkedin', icon: Linkedin },
-    { name: 'Facebook', href: '/dashboard/outreach/facebook', icon: Facebook },
-    { name: 'X (Twitter)', href: '/dashboard/outreach/x', icon: Twitter }
+    { name: 'WhatsApp', href: '/outreach/whatsapp', icon: MessageSquare },
+    { name: 'Instagram', href: '/outreach/instagram', icon: Instagram },
+    { name: 'LinkedIn', href: '/outreach/linkedin', icon: Linkedin },
+    { name: 'Facebook', href: '/outreach/facebook', icon: Facebook },
+    { name: 'X (Twitter)', href: '/outreach/x', icon: Twitter }
   ]},
-  { name: 'Analytics', href: '/dashboard/analytics', icon: BarChart3 },
+  { name: 'Analytics', href: '/analytics', icon: BarChart3 },
   { name: 'Support', href: '/support', icon: HelpCircle }
 ]
 
