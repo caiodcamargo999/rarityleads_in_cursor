@@ -133,8 +133,8 @@ export default function CompaniesPage() {
   const sizes = ['1-10', '10-50', '50-200', '200-500', '500+']
 
   return (
-    <div ref={pageRef} className="min-h-screen bg-dark-bg p-0 flex flex-col">
-      <div className="w-full px-6 pt-8 pb-2">
+    <div ref={pageRef} className="min-h-screen bg-dark-bg flex flex-col">
+      <div className="w-full max-w-5xl mx-auto px-8 pt-8 pb-2">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -149,7 +149,6 @@ export default function CompaniesPage() {
             Manage your target companies and track engagement
           </p>
         </motion.div>
-
         {/* Stats Grid */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -171,7 +170,6 @@ export default function CompaniesPage() {
             </Card>
           ))}
         </motion.div>
-
         {/* Actions Bar */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -190,7 +188,6 @@ export default function CompaniesPage() {
               className="w-full pl-10 pr-4 py-2 bg-dark-bg-secondary border border-dark-border rounded-lg text-dark-text placeholder-dark-text-muted focus:ring-2 focus:ring-rarity-500 focus:border-transparent transition-all duration-200"
             />
           </div>
-
           {/* Filters */}
           <div className="flex gap-2">
             <select
@@ -203,7 +200,6 @@ export default function CompaniesPage() {
                 <option key={industry} value={industry}>{industry}</option>
               ))}
             </select>
-            
             <select
               value={sizeFilter}
               onChange={(e) => setSizeFilter(e.target.value)}
@@ -214,13 +210,11 @@ export default function CompaniesPage() {
                 <option key={size} value={size}>{size} employees</option>
               ))}
             </select>
-            
             <Button variant="outline" size="sm" className="flex items-center gap-2">
               <Filter className="w-4 h-4" />
               More Filters
             </Button>
           </div>
-
           {/* Action Buttons */}
           <div className="flex gap-2">
             <Button variant="outline" size="sm" className="flex items-center gap-2">
@@ -238,9 +232,8 @@ export default function CompaniesPage() {
           </div>
         </motion.div>
       </div>
-
       {/* Companies Grid */}
-      <div className="w-full px-6 pb-8">
+      <div className="w-full max-w-5xl mx-auto px-8 pb-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={pageInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
@@ -291,7 +284,6 @@ export default function CompaniesPage() {
                       {company.revenue}
                     </div>
                   </div>
-
                   {/* Status and Metrics */}
                   <div className="flex items-center justify-between">
                     <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(company.status)} text-white`}>
@@ -301,7 +293,6 @@ export default function CompaniesPage() {
                       {company.leads} leads
                     </div>
                   </div>
-
                   {/* Contact Actions */}
                   <div className="flex items-center gap-2 pt-2 border-t border-dark-border">
                     <Button variant="ghost" size="sm" className="flex-1">
@@ -316,7 +307,6 @@ export default function CompaniesPage() {
                       <ExternalLink className="w-4 h-4" />
                     </Button>
                   </div>
-
                   {/* Last Contact */}
                   <div className="text-xs text-dark-text-muted">
                     Last contact: {company.lastContact}
