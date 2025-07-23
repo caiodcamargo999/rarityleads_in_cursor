@@ -91,6 +91,11 @@ export default function DashboardLayout({
     return safePath === href || safePath.startsWith(href + '/')
   }
 
+  // Always close sidebar on route change (mobile)
+  useEffect(() => {
+    setSidebarOpen(false);
+  }, [pathname]);
+
   if (loading) {
     return (
       <div className="min-h-screen bg-dark-bg flex items-center justify-center">
@@ -217,27 +222,109 @@ export default function DashboardLayout({
       </motion.div>
 
       {/* Main content */}
-      <div className="flex-1 flex flex-col lg:ml-64">
+      <div className="flex-1 flex flex-col">
         {/* Mobile header */}
-        <div className="lg:hidden flex items-center justify-between p-4 border-b border-dark-border">
+        <div className="md:hidden flex items-center justify-between px-4 py-3 bg-dark-bg border-b border-sidebar-border">
+          <Link href="/dashboard" className="flex items-center space-x-2">
+            <span className="text-lg font-medium text-white">Rarity Leads</span>
+          </Link>
           <Button
             variant="ghost"
             size="icon"
+            aria-label="Open sidebar menu"
             onClick={() => setSidebarOpen(true)}
+            className="ml-auto"
           >
-            <Menu className="w-5 h-5" />
+            <Menu className="w-6 h-6 text-white" />
           </Button>
-          <h1 className="text-lg font-medium text-dark-text">Rarity Leads</h1>
-          <div className="w-10" />
         </div>
+
+        {/* Sidebar Drawer for mobile */}
+        <AnimatePresence>
+          {sidebarOpen && (
+            <motion.div
+              initial={{ x: '-100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '-100%' }}
+              transition={{ duration: 0.3 }}
+              className="fixed inset-0 z-40 bg-black/70 md:hidden"
+              onClick={() => setSidebarOpen(false)}
+            >
+              <div
+                className="absolute left-0 top-0 h-full w-64 bg-sidebar shadow-lg flex flex-col"
+                onClick={e => e.stopPropagation()}
+              >
+                <div className="flex items-center justify-between px-4 py-3 border-b border-sidebar-border">
+                  <span className="text-lg font-medium text-white">Menu</span>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    aria-label="Close sidebar menu"
+                    onClick={() => setSidebarOpen(false)}
+                  >
+                    <X className="w-6 h-6 text-white" />
+                  </Button>
+                </div>
+                {/* Sidebar navigation here (reuse navigation rendering logic) */}
+                {navigation.map((item) => {
+                  if (item.isSection) {
+                    return (
+                      <div key={item.name} className="mb-4">
+                        <h3 className="px-4 py-2 text-xs font-medium text-dark-text-muted uppercase tracking-wider">
+                          {item.name}
+                        </h3>
+                        <div className="space-y-1">
+                          {item.children?.map((child) => (
+                            <Link
+                              key={child.name}
+                              href={child.href}
+                              className={`flex items-center space-x-3 px-4 py-2 text-sm font-normal rounded-lg transition-all duration-200 ${
+                                isActive(child.href)
+                                  ? 'bg-rarity-600 text-white'
+                                  : 'text-dark-text-secondary hover:text-dark-text hover:bg-dark-bg-tertiary'
+                              }`}
+                              prefetch={true}
+                              onClick={() => setSidebarOpen(false)}
+                            >
+                              <child.icon className="w-5 h-5" />
+                              <span>{child.name}</span>
+                            </Link>
+                          ))}
+                        </div>
+                      </div>
+                    )
+                  }
+
+                  return (
+                    <Link
+                      key={item.name}
+                      href={item.href}
+                      className={`flex items-center space-x-3 px-4 py-2 text-sm font-normal rounded-lg transition-all duration-200 ${
+                        isActive(item.href)
+                          ? 'bg-rarity-600 text-white'
+                          : 'text-dark-text-secondary hover:text-dark-text hover:bg-dark-bg-tertiary'
+                      }`}
+                      prefetch={true}
+                      onClick={() => setSidebarOpen(false)}
+                    >
+                      {typeof item.icon === 'function' ? <item.icon className="w-5 h-5" /> : null}
+                      <span>{item.name}</span>
+                    </Link>
+                  )
+                })}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {/* Page content */}
         <motion.main
           variants={fadeInUp}
           initial="hidden"
           animate="visible"
-          className="flex-1 p-4 lg:p-6"
+          className="flex-1 w-full pt-4 pr-4 pb-4 lg:pt-6 lg:pr-8 lg:pb-6"
         >
+          {/* Remove mx-auto or centering from children if present */}
           {children}
         </motion.main>
       </div>

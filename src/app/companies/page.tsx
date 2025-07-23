@@ -142,7 +142,7 @@ export default function CompaniesPage() {
           transition={{ duration: 0.6 }}
           className="mb-4"
         >
-          <h1 className="text-2xl md:text-3xl font-normal text-dark-text mb-1">
+          <h1 className="text-2xl font-medium text-dark-text mb-1">
             Company Directory
           </h1>
           <p className="text-base text-dark-text-secondary mb-2">
@@ -251,7 +251,7 @@ export default function CompaniesPage() {
                 <CardHeader>
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
-                      <CardTitle className="text-dark-text text-lg">{company.name}</CardTitle>
+                      <CardTitle className="text-dark-text">{company.name}</CardTitle>
                       <CardDescription className="text-dark-text-secondary">
                         {company.industry} • {company.size} employees
                       </CardDescription>

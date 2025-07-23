@@ -106,7 +106,7 @@ export default function WhatsAppAccountsPage() {
 
   return (
     <div ref={pageRef} className="min-h-screen bg-[#0a0a0a] p-4">
-      <div className="max-w-7xl mx-auto">
+      <div className="w-full pl-4">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}

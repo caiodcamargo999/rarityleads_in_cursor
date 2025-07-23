@@ -202,12 +202,19 @@ export default function HomePage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
                 viewport={{ once: true }}
-                className="p-6 bg-[#18181c] border border-gray-800 rounded-lg"
+                className={
+                  `p-6 rounded-2xl shadow-lg text-white ` +
+                  (index === 0
+                    ? 'bg-gradient-to-br from-[#8b5cf6] via-[#232136] to-[#0a0a23]'
+                    : index === 1
+                    ? 'bg-gradient-to-br from-[#232136] via-[#6d28d9] to-[#8b5cf6]'
+                    : 'bg-gradient-to-br from-[#0a0a23] via-[#232136] to-[#6d28d9]')
+                }
               >
                 <h3 className="text-lg font-medium text-white mb-3">
                   {feature.title}
                 </h3>
-                <p className="text-gray-400 text-sm">
+                <p className="text-gray-200 text-sm">
                   {feature.description}
                 </p>
               </motion.div>
@@ -242,14 +249,19 @@ export default function HomePage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
                 viewport={{ once: true }}
-                className="p-6 bg-[#0a0a0a] border border-gray-800 rounded-lg"
+                className={
+                  `p-6 rounded-2xl shadow-lg text-white ` +
+                  (index === 0
+                    ? 'bg-gradient-to-br from-[#8b5cf6] via-[#232136] to-[#0a0a23]'
+                    : 'bg-gradient-to-br from-[#232136] via-[#6d28d9] to-[#8b5cf6]')
+                }
               >
                 <h3 className="text-lg font-medium text-white mb-4">
                   {solution.title}
                 </h3>
                 <ul className="space-y-2">
                   {solution.features.map((feature, featureIndex) => (
-                    <li key={featureIndex} className="text-gray-300 text-sm">
+                    <li key={featureIndex} className="text-gray-200 text-sm">
                       {feature}
                     </li>
                   ))}
@@ -283,11 +295,14 @@ export default function HomePage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
                 viewport={{ once: true }}
-                className={`relative p-6 bg-[#18181c] border rounded-lg ${
-                  plan.popular 
-                    ? 'border-[#8b5cf6]' 
-                    : 'border-gray-800'
-                }`}
+                className={
+                  `relative p-6 rounded-2xl shadow-lg text-white ` +
+                  (index === 0
+                    ? 'bg-gradient-to-br from-[#8b5cf6] via-[#232136] to-[#0a0a23]'
+                    : index === 1
+                    ? 'bg-gradient-to-br from-[#232136] via-[#6d28d9] to-[#8b5cf6] border-2 border-[#8b5cf6]'
+                    : 'bg-gradient-to-br from-[#0a0a23] via-[#232136] to-[#6d28d9]')
+                }
               >
                 {plan.popular && (
                   <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">

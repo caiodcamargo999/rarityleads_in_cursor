@@ -39,7 +39,7 @@ export default function AnalyticsPage() {
 
   return (
     <div ref={pageRef} className="min-h-screen bg-dark-bg p-4">
-      <div className="max-w-7xl mx-auto">
+      <div className="w-full pl-4">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}

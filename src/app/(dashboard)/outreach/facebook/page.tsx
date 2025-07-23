@@ -19,14 +19,14 @@ export default function FacebookPage() {
 
   return (
     <div ref={pageRef} className="min-h-screen bg-dark-bg p-4">
-      <div className="max-w-7xl mx-auto">
+      <div className="w-full pl-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={pageInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
           transition={{ duration: 0.6 }}
           className="mb-8"
         >
-          <h1 className="text-2xl md:text-3xl font-normal text-dark-text mb-2">
+          <h1 className="text-2xl font-medium text-dark-text mb-2">
             Facebook Outreach
           </h1>
           <p className="text-base text-dark-text-secondary">
@@ -46,7 +46,7 @@ export default function FacebookPage() {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm text-dark-text-muted">{stat.label}</p>
-                    <p className="text-2xl font-medium text-dark-text">{stat.value}</p>
+                    <p className="text-lg font-medium text-dark-text">{stat.value}</p>
                   </div>
                   <stat.icon className={`w-8 h-8 ${stat.color}`} />
                 </div>

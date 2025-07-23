@@ -132,7 +132,7 @@ export default function LeadsPage() {
           transition={{ duration: 0.6 }}
           className="mb-4"
         >
-          <h1 className="text-2xl md:text-3xl font-normal text-dark-text mb-1">
+          <h1 className="text-2xl font-medium text-dark-text mb-1">
             Lead Management
           </h1>
           <p className="text-base text-dark-text-secondary mb-2">
@@ -152,7 +152,7 @@ export default function LeadsPage() {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-xs text-dark-text-muted">{stat.label}</p>
-                    <p className="text-xl font-medium text-dark-text">{stat.value}</p>
+                    <p className="text-lg font-medium text-dark-text">{stat.value}</p>
                   </div>
                   <stat.icon className={`w-6 h-6 ${stat.color}`} />
                 </div>

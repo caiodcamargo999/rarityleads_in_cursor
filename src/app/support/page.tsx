@@ -100,7 +100,7 @@ export default function SupportPage() {
 
   return (
     <div ref={pageRef} className="min-h-screen bg-[#0a0a0a] p-4">
-      <div className="max-w-7xl mx-auto">
+      <div className="w-full pl-4">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -232,7 +232,7 @@ export default function SupportPage() {
                         onClick={() => toggleFAQ(index)}
                         className="w-full p-4 text-left flex items-center justify-between hover:bg-[#232336] transition-colors"
                       >
-                        <h3 className="text-white font-normal pr-4">{faq.question}</h3>
+                        <h3 className="text-lg font-medium text-white pr-4">{faq.question}</h3>
                         {expandedFAQ === index ? (
                           <ChevronUp className="w-5 h-5 text-gray-400 flex-shrink-0" />
                         ) : (
