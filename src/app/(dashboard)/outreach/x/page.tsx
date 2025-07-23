@@ -11,10 +11,10 @@ export default function XPage() {
   const pageInView = useInView(pageRef, { once: true })
 
   const stats = [
-    { label: 'Followers', value: '1,892', icon: Users, color: 'text-blue-500' },
-    { label: 'DMs Sent', value: '67', icon: MessageSquare, color: 'text-green-500' },
-    { label: 'Response Rate', value: '6.2%', icon: BarChart3, color: 'text-purple-500' },
-    { label: 'Leads Generated', value: '9', icon: Twitter, color: 'text-blue-400' }
+    { label: 'Followers', value: 0, icon: Users, color: 'text-blue-500' },
+    { label: 'DMs Sent', value: 0, icon: MessageSquare, color: 'text-green-500' },
+    { label: 'Response Rate', value: '0%', icon: BarChart3, color: 'text-purple-500' },
+    { label: 'Leads Generated', value: 0, icon: Twitter, color: 'text-blue-400' }
   ]
 
   return (

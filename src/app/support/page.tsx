@@ -20,6 +20,11 @@ import {
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { useToast } from '@/components/ui/use-toast';
+import { Bar } from 'react-chartjs-2';
+import { Chart, BarElement, CategoryScale, LinearScale, Tooltip } from 'chart.js';
+Chart.register(BarElement, CategoryScale, LinearScale, Tooltip);
+import { AnimatePresence } from 'framer-motion';
 
 interface FAQItem {
   question: string
@@ -31,6 +36,12 @@ export default function SupportPage() {
   const [searchQuery, setSearchQuery] = useState('')
   const [expandedFAQ, setExpandedFAQ] = useState<number | null>(null)
   const [selectedCategory, setSelectedCategory] = useState('all')
+  const [selectedFAQs, setSelectedFAQs] = useState<number[]>([]);
+  const [detailsFAQ, setDetailsFAQ] = useState<FAQItem | null>(null);
+  const detailsModalRef = useRef<HTMLDivElement>(null);
+  const { toast } = useToast();
+  const [editFAQ, setEditFAQ] = useState<FAQItem | null>(null);
+  const [editing, setEditing] = useState(false);
   
   const pageRef = useRef(null)
   const pageInView = useInView(pageRef, { once: true })
@@ -97,6 +108,68 @@ export default function SupportPage() {
   const toggleFAQ = (index: number) => {
     setExpandedFAQ(expandedFAQ === index ? null : index)
   }
+
+  const allIds = filteredFAQs.map((_, i) => i);
+  const isAllSelected = selectedFAQs.length === allIds.length && allIds.length > 0;
+  const isIndeterminate = selectedFAQs.length > 0 && selectedFAQs.length < allIds.length;
+  const toggleSelectAll = () => {
+    if (isAllSelected) setSelectedFAQs([]);
+    else setSelectedFAQs(allIds);
+  };
+  const toggleSelect = (id: number) => {
+    setSelectedFAQs(sel => sel.includes(id) ? sel.filter(x => x !== id) : [...sel, id]);
+  };
+  const handleBulkDelete = () => {
+    if (!window.confirm('Are you sure you want to delete the selected FAQs?')) return;
+    // Remove from faqs (mock only)
+    toast({ title: 'FAQs deleted', description: `${selectedFAQs.length} FAQs deleted.` });
+    setSelectedFAQs([]);
+  };
+  const handleBulkExport = (format: 'csv' | 'json') => {
+    const allFAQs = filteredFAQs.filter((_, i) => selectedFAQs.includes(i));
+    if (format === 'json') {
+      const blob = new Blob([JSON.stringify(allFAQs, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'faqs.json';
+      a.click();
+      URL.revokeObjectURL(url);
+      toast({ title: 'Exported', description: 'FAQs exported as JSON.' });
+    } else {
+      const headers = ['question', 'answer', 'category'] as const;
+      const csv = [headers.join(',')].concat(
+        allFAQs.map(f => headers.map(h => JSON.stringify((f as Record<string, any>)[h] ?? '')).join(','))
+      ).join('\n');
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'faqs.csv';
+      a.click();
+      URL.revokeObjectURL(url);
+      toast({ title: 'Exported', description: 'FAQs exported as CSV.' });
+    }
+    setSelectedFAQs([]);
+  };
+  // Analytics
+  const categoryCounts = categories.map(cat => faqs.filter(f => f.category === cat.id).length);
+  const chartData = {
+    labels: categories.map(cat => cat.name),
+    datasets: [
+      {
+        label: 'FAQs per Category',
+        data: categoryCounts,
+        backgroundColor: ['#8B5CF6', '#6366F1', '#818CF8', '#22D3EE', '#F59E0B', '#EC4899'],
+        borderRadius: 8,
+      },
+    ],
+  };
+  const chartOptions = {
+    responsive: true,
+    plugins: { legend: { display: false }, tooltip: { enabled: true } },
+    scales: { x: { grid: { display: false } }, y: { grid: { color: '#232336' }, beginAtZero: true } },
+  };
 
   return (
     <div ref={pageRef} className="min-h-screen bg-[#0a0a0a] p-4">
@@ -217,6 +290,27 @@ export default function SupportPage() {
             )}
           </h2>
           
+          <motion.div className="w-full max-w-5xl mx-auto mb-6 flex flex-wrap gap-4 justify-between items-center">
+            <div className="text-lg text-primary-text font-medium">Total FAQs: {faqs.length}</div>
+            <div className="text-sm text-secondary-text">Selected: {selectedFAQs.length}</div>
+            <div className="flex-1 min-w-[220px]">
+              <Bar data={chartData} options={chartOptions} height={80} />
+            </div>
+          </motion.div>
+          <AnimatePresence>
+            {selectedFAQs.length > 0 && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                className="fixed top-20 left-1/2 -translate-x-1/2 z-50 bg-card-bg border border-dark-border rounded-xl shadow-lg px-6 py-3 flex gap-4 items-center"
+              >
+                <Button variant="danger" onClick={handleBulkDelete} aria-label="Delete selected FAQs">Delete</Button>
+                <Button variant="secondary" onClick={() => handleBulkExport('csv')} aria-label="Export selected FAQs as CSV">Export CSV</Button>
+                <Button variant="secondary" onClick={() => handleBulkExport('json')} aria-label="Export selected FAQs as JSON">Export JSON</Button>
+              </motion.div>
+            )}
+          </AnimatePresence>
           <div className="space-y-3">
             {filteredFAQs.length > 0 ? (
               filteredFAQs.map((faq, index) => (
@@ -227,9 +321,10 @@ export default function SupportPage() {
                   transition={{ duration: 0.3, delay: 0.5 + index * 0.05 }}
                 >
                   <Card className="bg-[#18181c] border border-gray-800 hover:border-gray-700 transition-all duration-300">
-                    <CardContent className="p-0">
+                    <CardContent className="p-0 flex items-center">
+                      <input type="checkbox" checked={selectedFAQs.includes(index)} onChange={e => { e.stopPropagation(); toggleSelect(index); }} aria-label={`Select FAQ ${faq.question}`} className="mx-2" />
                       <button
-                        onClick={() => toggleFAQ(index)}
+                        onClick={() => { setDetailsFAQ(faq); setEditFAQ(faq); }}
                         className="w-full p-4 text-left flex items-center justify-between hover:bg-[#232336] transition-colors"
                       >
                         <h3 className="text-lg font-medium text-white pr-4">{faq.question}</h3>
@@ -239,17 +334,17 @@ export default function SupportPage() {
                           <ChevronDown className="w-5 h-5 text-gray-400 flex-shrink-0" />
                         )}
                       </button>
-                      {expandedFAQ === index && (
-                        <motion.div
-                          initial={{ opacity: 0, height: 0 }}
-                          animate={{ opacity: 1, height: 'auto' }}
-                          exit={{ opacity: 0, height: 0 }}
-                          className="px-4 pb-4"
-                        >
-                          <p className="text-gray-400 text-sm leading-relaxed">{faq.answer}</p>
-                        </motion.div>
-                      )}
                     </CardContent>
+                    {expandedFAQ === index && (
+                      <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: 'auto' }}
+                        exit={{ opacity: 0, height: 0 }}
+                        className="px-4 pb-4"
+                      >
+                        <p className="text-gray-400 text-sm leading-relaxed">{faq.answer}</p>
+                      </motion.div>
+                    )}
                   </Card>
                 </motion.div>
               ))
@@ -298,6 +393,52 @@ export default function SupportPage() {
           </div>
         </motion.div>
       </div>
+      {/* Details Modal */}
+      <AnimatePresence>
+        {detailsFAQ && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            transition={{ duration: 0.2 }}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/60"
+            onClick={() => setDetailsFAQ(null)}
+          >
+            <motion.div
+              ref={detailsModalRef}
+              initial={{ y: 40, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: 40, opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="bg-card-bg rounded-xl border border-dark-border p-8 w-full max-w-lg relative"
+              onClick={e => e.stopPropagation()}
+              tabIndex={0}
+            >
+              <button className="absolute top-4 right-4 text-secondary-text hover:text-white text-2xl" aria-label="Close details" onClick={() => setDetailsFAQ(null)}>&times;</button>
+              <div className="text-lg font-medium text-white mb-4">FAQ Details</div>
+              <form onSubmit={e => { e.preventDefault(); toast({ title: 'FAQ updated', description: 'FAQ details updated.' }); setDetailsFAQ(editFAQ); }} className="flex flex-col gap-2">
+                <label className="text-xs text-secondary-text">Question</label>
+                <input type="text" className="bg-dark-bg-tertiary text-white rounded px-2 py-1 text-sm border border-dark-border" value={editFAQ?.question ?? ''} onChange={e => setEditFAQ(f => f ? { ...f, question: e.target.value } : f)} />
+                <label className="text-xs text-secondary-text">Answer</label>
+                <textarea className="bg-dark-bg-tertiary text-white rounded px-2 py-1 text-sm border border-dark-border" value={editFAQ?.answer ?? ''} onChange={e => setEditFAQ(f => f ? { ...f, answer: e.target.value } : f)} />
+                <label className="text-xs text-secondary-text">Category</label>
+                <select className="bg-dark-bg-tertiary text-white rounded px-2 py-1 text-sm border border-dark-border" value={editFAQ?.category ?? ''} onChange={e => setEditFAQ(f => f ? { ...f, category: e.target.value } : f)}>
+                  {categories.map(cat => (
+                    <option key={cat.id} value={cat.id}>{cat.name}</option>
+                  ))}
+                </select>
+                <div className="flex gap-2 mt-4">
+                  <Button type="submit" variant="primary" loading={editing} aria-label="Save changes">Save</Button>
+                  <Button type="button" variant="secondary" onClick={() => setEditFAQ(detailsFAQ)} aria-label="Cancel edit">Cancel</Button>
+                  <Button type="button" variant="danger" onClick={() => { toast({ title: 'FAQ deleted', description: 'FAQ deleted.' }); setDetailsFAQ(null); }} aria-label="Delete FAQ">Delete</Button>
+                  <Button type="button" variant="secondary" onClick={() => handleBulkExport('json')} aria-label="Export FAQ as JSON">Export JSON</Button>
+                  <Button type="button" variant="secondary" onClick={() => handleBulkExport('csv')} aria-label="Export FAQ as CSV">Export CSV</Button>
+                </div>
+              </form>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   )
 } 

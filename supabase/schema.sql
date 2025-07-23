@@ -411,3 +411,52 @@ $$ LANGUAGE plpgsql SECURITY DEFINER;
 CREATE TRIGGER on_auth_user_created
     AFTER INSERT ON auth.users
     FOR EACH ROW EXECUTE FUNCTION public.handle_new_user(); 
+
+-- Leads Feature Tables for Rarity Leads
+
+-- 1. Table: lead_requests
+CREATE TABLE IF NOT EXISTS lead_requests (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id uuid REFERENCES auth.users(id) ON DELETE CASCADE,
+  description_text text NOT NULL,
+  filters jsonb,
+  status text DEFAULT 'pending',
+  created_at timestamp with time zone DEFAULT now()
+);
+
+-- 2. Table: leads
+CREATE TABLE IF NOT EXISTS leads (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id uuid REFERENCES auth.users(id) ON DELETE CASCADE,
+  full_name text NOT NULL,
+  company_name text,
+  job_title text,
+  location text,
+  timezone text,
+  contact_channels jsonb,
+  source text,
+  tags text[],
+  suggested_services text[],
+  best_contact_time text,
+  created_at timestamp with time zone DEFAULT now()
+);
+
+-- 3. Table: crm_pipelines
+CREATE TABLE IF NOT EXISTS crm_pipelines (
+  pipeline_id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id uuid REFERENCES auth.users(id) ON DELETE CASCADE,
+  lead_id uuid REFERENCES leads(id) ON DELETE CASCADE,
+  stage text DEFAULT 'To Contact', -- To Contact, Contacted, In Conversation, Closed
+  notes text,
+  status text,
+  created_at timestamp with time zone DEFAULT now(),
+  updated_at timestamp with time zone DEFAULT now()
+);
+
+-- Indexes for performance
+CREATE INDEX IF NOT EXISTS idx_lead_requests_user_id ON lead_requests(user_id);
+CREATE INDEX IF NOT EXISTS idx_leads_user_id ON leads(user_id);
+CREATE INDEX IF NOT EXISTS idx_crm_pipelines_user_id ON crm_pipelines(user_id);
+CREATE INDEX IF NOT EXISTS idx_crm_pipelines_lead_id ON crm_pipelines(lead_id);
+
+-- (Optional) Add RLS policies for user isolation after table creation. 

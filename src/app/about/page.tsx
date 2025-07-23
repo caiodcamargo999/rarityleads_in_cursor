@@ -26,10 +26,10 @@ export default function AboutPage() {
   const pageInView = useInView(pageRef, { once: true })
 
   const stats = [
-    { number: "500+", label: "Agencies Trust Us", icon: Shield },
-    { number: "10,000+", label: "Leads Generated", icon: Users },
-    { number: "85%", label: "Conversion Rate", icon: TrendingUp },
-    { number: "24/7", label: "AI Automation", icon: Zap }
+    { number: "0", label: "Agencies Trust Us", icon: Shield },
+    { number: "0", label: "Leads Generated", icon: Users },
+    { number: "0%", label: "Conversion Rate", icon: TrendingUp },
+    { number: "0", label: "AI Automation", icon: Zap }
   ]
 
   const values = [

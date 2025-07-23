@@ -405,3 +405,84 @@ Services → StatsD → Grafana Dashboard
 
 This architecture is designed to support millions of users while maintaining full control and cost efficiency. Each component can be scaled independently based on demand, ensuring optimal resource utilization and performance.
 >>>>>>> d7cb607cb02a9fa7b02a947c07e6d752835d0cdf
+
+---
+
+# 🚀 Leads Feature Spec (2024)
+
+## Feature Objective
+Design a smart and scalable /dashboard/leads page where users describe their target persona, and the system returns an enriched, AI-prioritized list of leads and their best contact strategies. These leads are saved automatically to a CRM-style pipeline.
+
+### 🧱 FRONTEND (Next.js + TailwindCSS + Framer Motion)
+- **Lead Input Form (top of page):**
+  - Large text area with floating label: "Describe your ideal client (industry, role, location, budget, contact method, etc.)"
+  - Optional filters (pill toggles/dropdowns):
+    - Annual Revenue
+    - Company Size
+    - Country or City
+    - Lead Role (e.g., CEO, Head of Marketing)
+    - Preferred Contact Channel (WhatsApp, LinkedIn, Instagram, Facebook, X)
+    - Business Needs (e.g. Paid Ads, Funnel, CRM, Outreach)
+  - CTA Button: "Generate Leads" — with animated state (Framer Motion)
+
+- **Results Grid (middle of page, after submission):**
+  - Cards or rows showing:
+    - Lead Full Name
+    - Company + Role
+    - Location + Timezone
+    - Main Contact Channel (with icon)
+    - Recommended Time + Day to Contact
+    - Tags: “Needs Paid Ads”, “Ideal for SEO”
+    - Option to “Save to Pipeline”
+
+### 📁 BACKEND + SUPABASE
+- **Tables to create:**
+  - `lead_requests`: user_id, description_text, filters, status, created_at
+  - `leads`: id, user_id, full_name, company_name, job_title, location, timezone, contact_channels, source, tags, suggested_services, best_contact_time, created_at
+  - `crm_pipelines`: pipeline_id, user_id, lead_id, stage (To Contact, Contacted, In Conversation, Closed), notes, status, timestamps
+
+- **Enrichment Logic:**
+  - Use a Supabase Edge Function (`generate_leads.ts`) to:
+    - Parse the user’s description input
+    - Query the 4 data sources:
+      - Apollo.io API
+      - LinkedIn Sales Navigator API
+      - Clearbit API
+      - Crunchbase API
+    - Rank results with LLM-enhanced scoring (e.g., GPT-4, Claude 4 Opus/Sonnet, Gemini 2.5 PRO)
+    - Return top 20–30 enriched leads to the frontend
+
+### 🧠 AI Role (LLM Prompt Logic)
+- Analyze the user input + filters
+- Score lead match based on ICP relevance
+- Estimate the best time to contact based on time zone and role
+- Suggest services the user’s company likely offers that solve their pain points
+
+### ➕ Leads → CRM Flow
+- When clicking “Save to Pipeline”, the lead is stored in:
+  - `/dashboard/crm` under a new or existing pipeline
+  - Pipeline board: columns = lead stages, cards = leads
+  - Each lead retains full data, tags, contact channel and source
+
+### 🧭 ROUTES STRUCTURE
+| Route            | Description                  |
+|------------------|-----------------------------|
+| /leads           | Lead generation UI/results   |
+| /dashboard/crm   | Pipeline/CRM board          |
+
+### 🎨 UI Guidelines
+- Visual design inspired by tradesflow.io and sounext.xyz
+- Cards, toggles, dropdowns: animated with Framer Motion
+- Minimalist, dark-themed interface
+- Optimized for mobile + desktop responsiveness
+- SEO-optimized with fast loading via App Router best practices
+
+### ✅ Final Behavior Recap
+1. User describes lead
+2. Clicks “Generate Leads”
+3. LLM + APIs return best matches
+4. Leads display in frontend
+5. User adds them to pipeline → CRM auto-populates
+6. All data stored in Supabase + structured for messaging and analytics
+
+---

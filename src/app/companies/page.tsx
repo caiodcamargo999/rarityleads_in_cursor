@@ -22,6 +22,11 @@ import {
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { useToast } from '@/components/ui/use-toast';
+import { Bar } from 'react-chartjs-2';
+import { Chart, BarElement, CategoryScale, LinearScale, Tooltip } from 'chart.js';
+Chart.register(BarElement, CategoryScale, LinearScale, Tooltip);
+import { AnimatePresence } from 'framer-motion';
 
 interface Company {
   id: string
@@ -123,14 +128,83 @@ export default function CompaniesPage() {
   }
 
   const stats = [
-    { label: 'Total Companies', value: companies.length, icon: Building2, color: 'text-blue-500' },
-    { label: 'Active Prospects', value: companies.filter(c => c.status === 'prospecting').length, icon: Users, color: 'text-green-500' },
-    { label: 'Avg Company Size', value: '150', icon: TrendingUp, color: 'text-purple-500' },
-    { label: 'Total Leads', value: companies.reduce((sum, c) => sum + c.leads, 0), icon: Star, color: 'text-yellow-500' }
+    { label: 'Total Companies', value: 0, icon: Building2, color: 'text-blue-500' },
+    { label: 'Active Prospects', value: 0, icon: Users, color: 'text-green-500' },
+    { label: 'Avg Company Size', value: '0', icon: TrendingUp, color: 'text-purple-500' },
+    { label: 'Total Leads', value: 0, icon: Star, color: 'text-yellow-500' }
   ]
 
   const industries = ['Technology', 'SaaS', 'Marketing', 'Finance', 'Healthcare', 'Education']
   const sizes = ['1-10', '10-50', '50-200', '200-500', '500+']
+
+  const [selectedCompanies, setSelectedCompanies] = useState<string[]>([]);
+  const [detailsCompany, setDetailsCompany] = useState<Company | null>(null);
+  const detailsModalRef = useRef<HTMLDivElement>(null);
+  const { toast } = useToast();
+  const [editCompany, setEditCompany] = useState<Company | null>(null);
+  const [editing, setEditing] = useState(false);
+
+  const allIds = filteredCompanies.map(c => c.id);
+  const isAllSelected = selectedCompanies.length === allIds.length && allIds.length > 0;
+  const isIndeterminate = selectedCompanies.length > 0 && selectedCompanies.length < allIds.length;
+  const toggleSelectAll = () => {
+    if (isAllSelected) setSelectedCompanies([]);
+    else setSelectedCompanies(allIds);
+  };
+  const toggleSelect = (id: string) => {
+    setSelectedCompanies(sel => sel.includes(id) ? sel.filter(x => x !== id) : [...sel, id]);
+  };
+  const handleBulkDelete = async () => {
+    if (!window.confirm('Are you sure you want to delete the selected companies?')) return;
+    setCompanies(prev => prev.filter(c => !selectedCompanies.includes(c.id)));
+    toast({ title: 'Companies deleted', description: `${selectedCompanies.length} companies deleted.` });
+    setSelectedCompanies([]);
+  };
+  const handleBulkExport = (format: 'csv' | 'json') => {
+    const allCompanies = companies.filter(c => selectedCompanies.includes(c.id));
+    if (format === 'json') {
+      const blob = new Blob([JSON.stringify(allCompanies, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'companies.json';
+      a.click();
+      URL.revokeObjectURL(url);
+      toast({ title: 'Exported', description: 'Companies exported as JSON.' });
+    } else {
+      const headers = ['id', 'name', 'industry', 'size', 'location', 'website', 'phone', 'email', 'leads', 'status', 'revenue', 'lastContact'] as const;
+      const csv = [headers.join(',')].concat(
+        allCompanies.map(c => headers.map(h => JSON.stringify((c as Record<string, any>)[h] ?? '')).join(','))
+      ).join('\n');
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'companies.csv';
+      a.click();
+      URL.revokeObjectURL(url);
+      toast({ title: 'Exported', description: 'Companies exported as CSV.' });
+    }
+    setSelectedCompanies([]);
+  };
+  // Analytics
+  const industryCounts = industries.map(ind => companies.filter(c => c.industry === ind).length);
+  const chartData = {
+    labels: industries,
+    datasets: [
+      {
+        label: 'Companies per Industry',
+        data: industryCounts,
+        backgroundColor: ['#8B5CF6', '#6366F1', '#818CF8', '#22D3EE', '#F59E0B', '#EC4899'],
+        borderRadius: 8,
+      },
+    ],
+  };
+  const chartOptions = {
+    responsive: true,
+    plugins: { legend: { display: false }, tooltip: { enabled: true } },
+    scales: { x: { grid: { display: false } }, y: { grid: { color: '#232336' }, beginAtZero: true } },
+  };
 
   return (
     <div ref={pageRef} className="min-h-screen bg-dark-bg flex flex-col">
@@ -234,6 +308,27 @@ export default function CompaniesPage() {
       </div>
       {/* Companies Grid */}
       <div className="w-full max-w-5xl mx-auto px-8 pb-8">
+        <motion.div className="w-full max-w-5xl mx-auto mb-6 flex flex-wrap gap-4 justify-between items-center">
+          <div className="text-lg text-primary-text font-medium">Total Companies: {companies.length}</div>
+          <div className="text-sm text-secondary-text">Selected: {selectedCompanies.length}</div>
+          <div className="flex-1 min-w-[220px]">
+            <Bar data={chartData} options={chartOptions} height={80} />
+          </div>
+        </motion.div>
+        <AnimatePresence>
+          {selectedCompanies.length > 0 && (
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              className="fixed top-20 left-1/2 -translate-x-1/2 z-50 bg-card-bg border border-dark-border rounded-xl shadow-lg px-6 py-3 flex gap-4 items-center"
+            >
+              <Button variant="danger" onClick={handleBulkDelete} aria-label="Delete selected companies">Delete</Button>
+              <Button variant="secondary" onClick={() => handleBulkExport('csv')} aria-label="Export selected companies as CSV">Export CSV</Button>
+              <Button variant="secondary" onClick={() => handleBulkExport('json')} aria-label="Export selected companies as JSON">Export JSON</Button>
+            </motion.div>
+          )}
+        </AnimatePresence>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={pageInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
@@ -340,6 +435,60 @@ export default function CompaniesPage() {
           </motion.div>
         )}
       </div>
+      {/* Company Details Modal */}
+      <AnimatePresence>
+        {detailsCompany && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            transition={{ duration: 0.2 }}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/60"
+            onClick={() => setDetailsCompany(null)}
+          >
+            <motion.div
+              ref={detailsModalRef}
+              initial={{ y: 40, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: 40, opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="bg-card-bg rounded-xl border border-dark-border p-8 w-full max-w-lg relative"
+              onClick={e => e.stopPropagation()}
+              tabIndex={0}
+            >
+              <button className="absolute top-4 right-4 text-secondary-text hover:text-white text-2xl" aria-label="Close details" onClick={() => setDetailsCompany(null)}>&times;</button>
+              <div className="text-lg font-medium text-white mb-4">Company Details</div>
+              <form onSubmit={e => { e.preventDefault(); setCompanies(prev => prev.map(c => c.id === editCompany.id ? { ...editCompany } : c)); setDetailsCompany(editCompany); toast({ title: 'Company updated', description: 'Company details updated.' }); }} className="flex flex-col gap-2">
+                <label className="text-xs text-secondary-text">Name</label>
+                <input type="text" className="bg-dark-bg-tertiary text-white rounded px-2 py-1 text-sm border border-dark-border" value={editCompany?.name ?? ''} onChange={e => setEditCompany(c => c ? { ...c, name: e.target.value } : c)} />
+                <label className="text-xs text-secondary-text">Industry</label>
+                <input type="text" className="bg-dark-bg-tertiary text-white rounded px-2 py-1 text-sm border border-dark-border" value={editCompany?.industry ?? ''} onChange={e => setEditCompany(c => c ? { ...c, industry: e.target.value } : c)} />
+                <label className="text-xs text-secondary-text">Size</label>
+                <input type="text" className="bg-dark-bg-tertiary text-white rounded px-2 py-1 text-sm border border-dark-border" value={editCompany?.size ?? ''} onChange={e => setEditCompany(c => c ? { ...c, size: e.target.value } : c)} />
+                <label className="text-xs text-secondary-text">Location</label>
+                <input type="text" className="bg-dark-bg-tertiary text-white rounded px-2 py-1 text-sm border border-dark-border" value={editCompany?.location ?? ''} onChange={e => setEditCompany(c => c ? { ...c, location: e.target.value } : c)} />
+                <label className="text-xs text-secondary-text">Website</label>
+                <input type="text" className="bg-dark-bg-tertiary text-white rounded px-2 py-1 text-sm border border-dark-border" value={editCompany?.website ?? ''} onChange={e => setEditCompany(c => c ? { ...c, website: e.target.value } : c)} />
+                <label className="text-xs text-secondary-text">Phone</label>
+                <input type="text" className="bg-dark-bg-tertiary text-white rounded px-2 py-1 text-sm border border-dark-border" value={editCompany?.phone ?? ''} onChange={e => setEditCompany(c => c ? { ...c, phone: e.target.value } : c)} />
+                <label className="text-xs text-secondary-text">Email</label>
+                <input type="text" className="bg-dark-bg-tertiary text-white rounded px-2 py-1 text-sm border border-dark-border" value={editCompany?.email ?? ''} onChange={e => setEditCompany(c => c ? { ...c, email: e.target.value } : c)} />
+                <label className="text-xs text-secondary-text">Revenue</label>
+                <input type="text" className="bg-dark-bg-tertiary text-white rounded px-2 py-1 text-sm border border-dark-border" value={editCompany?.revenue ?? ''} onChange={e => setEditCompany(c => c ? { ...c, revenue: e.target.value } : c)} />
+                <label className="text-xs text-secondary-text">Last Contact</label>
+                <input type="text" className="bg-dark-bg-tertiary text-white rounded px-2 py-1 text-sm border border-dark-border" value={editCompany?.lastContact ?? ''} onChange={e => setEditCompany(c => c ? { ...c, lastContact: e.target.value } : c)} />
+                <div className="flex gap-2 mt-4">
+                  <Button type="submit" variant="primary" loading={editing} aria-label="Save changes">Save</Button>
+                  <Button type="button" variant="secondary" onClick={() => setEditCompany(detailsCompany)} aria-label="Cancel edit">Cancel</Button>
+                  <Button type="button" variant="danger" onClick={() => { setCompanies(prev => prev.filter(c => c.id !== detailsCompany.id)); setDetailsCompany(null); toast({ title: 'Company deleted', description: 'Company deleted.' }); }} aria-label="Delete company">Delete</Button>
+                  <Button type="button" variant="secondary" onClick={() => handleBulkExport('json')} aria-label="Export company as JSON">Export JSON</Button>
+                  <Button type="button" variant="secondary" onClick={() => handleBulkExport('csv')} aria-label="Export company as CSV">Export CSV</Button>
+                </div>
+              </form>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   )
 } 

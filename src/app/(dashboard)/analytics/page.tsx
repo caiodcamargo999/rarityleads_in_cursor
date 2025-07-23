@@ -22,19 +22,19 @@ export default function AnalyticsPage() {
   const pageInView = useInView(pageRef, { once: true })
 
   const stats = [
-    { label: 'Total Leads', value: '1,247', change: '+12.5%', icon: Users, color: 'text-blue-500' },
-    { label: 'Conversion Rate', value: '23.4%', change: '+2.1%', icon: Target, color: 'text-green-500' },
-    { label: 'Messages Sent', value: '8,934', change: '+18.2%', icon: MessageSquare, color: 'text-purple-500' },
-    { label: 'Revenue Generated', value: '$47,892', change: '+15.7%', icon: TrendingUp, color: 'text-yellow-500' }
+    { label: 'Total Leads', value: '0', change: '0%', icon: Users, color: 'text-blue-500' },
+    { label: 'Conversion Rate', value: '0%', change: '0%', icon: Target, color: 'text-green-500' },
+    { label: 'Messages Sent', value: '0', change: '0%', icon: MessageSquare, color: 'text-purple-500' },
+    { label: 'Revenue Generated', value: '$0', change: '0%', icon: TrendingUp, color: 'text-yellow-500' }
   ]
 
   const chartData = [
-    { month: 'Jan', leads: 120, conversions: 28, revenue: 8500 },
-    { month: 'Feb', leads: 145, conversions: 34, revenue: 10200 },
-    { month: 'Mar', leads: 180, conversions: 42, revenue: 12800 },
-    { month: 'Apr', leads: 210, conversions: 49, revenue: 15200 },
-    { month: 'May', leads: 195, conversions: 46, revenue: 14100 },
-    { month: 'Jun', leads: 230, conversions: 54, revenue: 16800 }
+    { month: 'Jan', leads: 0, conversions: 0, revenue: 0 },
+    { month: 'Feb', leads: 0, conversions: 0, revenue: 0 },
+    { month: 'Mar', leads: 0, conversions: 0, revenue: 0 },
+    { month: 'Apr', leads: 0, conversions: 0, revenue: 0 },
+    { month: 'May', leads: 0, conversions: 0, revenue: 0 },
+    { month: 'Jun', leads: 0, conversions: 0, revenue: 0 }
   ]
 
   return (
@@ -136,10 +136,10 @@ export default function AnalyticsPage() {
             <CardContent>
               <div className="space-y-6">
                 {[
-                  { label: 'Lead Response Time', value: '2.4h', target: '4h', status: 'good' },
-                  { label: 'Conversion Rate', value: '23.4%', target: '20%', status: 'good' },
-                  { label: 'Cost per Lead', value: '$47', target: '$50', status: 'good' },
-                  { label: 'Customer Lifetime Value', value: '$2,847', target: '$2,500', status: 'excellent' }
+                  { label: 'Lead Response Time', value: '0h', target: '0h', status: 'good' },
+                  { label: 'Conversion Rate', value: '0%', target: '0%', status: 'good' },
+                  { label: 'Cost per Lead', value: '$0', target: '$0', status: 'good' },
+                  { label: 'Customer Lifetime Value', value: '$0', target: '$0', status: 'excellent' }
                 ].map((metric, index) => (
                   <div key={index} className="flex items-center justify-between">
                     <div>

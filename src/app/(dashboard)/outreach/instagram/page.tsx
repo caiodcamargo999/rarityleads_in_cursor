@@ -21,10 +21,10 @@ export default function InstagramPage() {
   const pageInView = useInView(pageRef, { once: true })
 
   const stats = [
-    { label: 'Connected Accounts', value: '2', icon: Instagram, color: 'text-pink-500' },
-    { label: 'Total Followers', value: '1,247', icon: Users, color: 'text-blue-500' },
-    { label: 'Engagement Rate', value: '4.2%', icon: Heart, color: 'text-red-500' },
-    { label: 'Messages Sent', value: '89', icon: MessageSquare, color: 'text-green-500' }
+    { label: 'Connected Accounts', value: 0, icon: Instagram, color: 'text-pink-500' },
+    { label: 'Total Followers', value: 0, icon: Users, color: 'text-blue-500' },
+    { label: 'Engagement Rate', value: '0%', icon: Heart, color: 'text-red-500' },
+    { label: 'Messages Sent', value: 0, icon: MessageSquare, color: 'text-green-500' }
   ]
 
   return (

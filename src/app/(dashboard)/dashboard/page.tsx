@@ -15,7 +15,14 @@ import {
   MousePointer,
   Clock,
   RefreshCw,
-  BarChart3
+  BarChart3,
+  Activity,
+  Edit,
+  Trash2,
+  UserPlus,
+  Send,
+  Play,
+  Pause
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -29,14 +36,14 @@ export default function DashboardPage() {
     {
       title: "Total Leads",
       value: "0",
-      change: "0",
+      change: "0%",
       icon: Users,
       color: "text-blue-400"
     },
     {
       title: "Qualified Leads",
       value: "0",
-      change: "15.2% from last period",
+      change: "0%",
       icon: Target,
       color: "text-green-400",
       trend: "up"
@@ -44,7 +51,7 @@ export default function DashboardPage() {
     {
       title: "Active Conversations",
       value: "0",
-      change: "8.7% from last period",
+      change: "0%",
       icon: MessageSquare,
       color: "text-purple-400",
       trend: "up"
@@ -52,7 +59,7 @@ export default function DashboardPage() {
     {
       title: "Pipeline Value",
       value: "$0k",
-      change: "0",
+      change: "0%",
       icon: TrendingUp,
       color: "text-orange-400"
     }
@@ -62,7 +69,7 @@ export default function DashboardPage() {
     {
       title: "Conversion Rate",
       value: "0.0%",
-      target: "15%",
+      target: "0%",
       icon: BarChart3,
       color: "text-purple-400",
       progress: 0
@@ -70,7 +77,7 @@ export default function DashboardPage() {
     {
       title: "Response Rate",
       value: "0.0%",
-      target: "45%",
+      target: "0%",
       icon: MousePointer,
       color: "text-blue-400",
       progress: 0
@@ -78,7 +85,7 @@ export default function DashboardPage() {
     {
       title: "Avg Response Time",
       value: "0h",
-      target: "< 4 hours",
+      target: "0h",
       icon: Clock,
       color: "text-orange-400"
     }
@@ -99,6 +106,16 @@ export default function DashboardPage() {
     { status: "Converted", count: 0, color: "bg-purple-400" },
     { status: "Lost", count: 0, color: "bg-red-400" }
   ]
+
+  const activityFeed = [
+    { id: 1, type: 'lead_created', user: 'Alice', time: '2 min ago', desc: 'Created a new lead: John Smith', icon: UserPlus },
+    { id: 2, type: 'lead_edited', user: 'Bob', time: '10 min ago', desc: 'Edited lead: Sarah Johnson', icon: Edit },
+    { id: 3, type: 'campaign_launched', user: 'Alice', time: '30 min ago', desc: 'Launched campaign: Spring SaaS Push', icon: Play },
+    { id: 4, type: 'lead_deleted', user: 'Charlie', time: '1 hour ago', desc: 'Deleted lead: Mike Wilson', icon: Trash2 },
+    { id: 5, type: 'message_sent', user: 'Alice', time: '2 hours ago', desc: 'Sent WhatsApp message to John Smith', icon: Send },
+    { id: 6, type: 'campaign_paused', user: 'Bob', time: '3 hours ago', desc: 'Paused campaign: LinkedIn Outreach Q2', icon: Pause },
+    { id: 7, type: 'lead_converted', user: 'Alice', time: '4 hours ago', desc: 'Converted lead: Sarah Johnson', icon: CheckCircle },
+  ];
 
   return (
     <div ref={dashboardRef} className="min-h-screen bg-[#0a0a0a] p-4 w-full pl-4">
@@ -258,6 +275,41 @@ export default function DashboardPage() {
               </CardContent>
             </Card>
           </motion.div>
+        </motion.div>
+
+        {/* Activity Log */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={dashboardInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+          transition={{ duration: 0.6, delay: 0.7 }}
+          className="w-full max-w-5xl mx-auto mt-8"
+        >
+          <h2 className="text-xl font-normal text-white mb-4">Recent Activity</h2>
+          <div className="bg-[#18181c] border border-gray-800 rounded-xl p-4">
+            {activityFeed.length === 0 ? (
+              <div className="text-gray-400 text-center py-8">No recent activity yet.</div>
+            ) : (
+              <ul className="divide-y divide-gray-800">
+                {activityFeed.map((item, idx) => (
+                  <motion.li
+                    key={item.id}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.3, delay: 0.1 + idx * 0.05 }}
+                    className="flex items-center gap-4 py-3"
+                  >
+                    <span className="flex items-center justify-center w-10 h-10 rounded-full bg-[#232336]">
+                      <item.icon className="w-5 h-5 text-[#8b5cf6]" />
+                    </span>
+                    <div className="flex-1 min-w-0">
+                      <div className="text-sm text-white truncate">{item.desc}</div>
+                      <div className="text-xs text-gray-400">{item.user} • {item.time}</div>
+                    </div>
+                  </motion.li>
+                ))}
+              </ul>
+            )}
+          </div>
         </motion.div>
       </div>
     </div>

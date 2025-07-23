@@ -288,6 +288,18 @@ Rarity Leads is a B2B SaaS lead prospecting platform powered by AI, focused on a
 
 ---
 
+## 🗂️ Notion.com as a Database & UX Reference
+
+- Notion.com is a major reference for all database/list and page creation UX in Rarity Leads.
+- The Leads feature and any list/database UI should follow Notion’s approach to:
+  - Creating new items/pages with a clean modal or inline form
+  - Displaying a list of all previous items/queries (like Notion’s database rows)
+  - Allowing users to click any item to view its details/results
+  - Organizing data in a visually clean, minimalist, and highly interactive way
+- All future database/list features should be inspired by Notion’s best practices for organization, discoverability, and user experience.
+
+---
+
 ## 1. Project Overview
 Rarity Leads is an AI-powered B2B lead generation platform with bulletproof authentication, multi-channel outreach, and a modern, premium SaaS design. Built with Next.js, Tailwind CSS, Framer Motion, and Supabase.
 

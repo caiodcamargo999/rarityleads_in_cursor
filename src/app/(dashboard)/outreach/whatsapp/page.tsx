@@ -36,50 +36,16 @@ interface Campaign {
 }
 
 export default function WhatsAppPage() {
-  const [campaigns, setCampaigns] = useState<Campaign[]>([
-    {
-      id: '1',
-      name: 'Tech Startup Outreach',
-      status: 'active',
-      leads: 150,
-      sent: 120,
-      responses: 18,
-      conversionRate: 15,
-      lastSent: '2 hours ago',
-      template: 'Hi {name}, I noticed {company} is growing fast...'
-    },
-    {
-      id: '2',
-      name: 'SaaS Companies Q1',
-      status: 'paused',
-      leads: 200,
-      sent: 180,
-      responses: 25,
-      conversionRate: 13.9,
-      lastSent: '1 day ago',
-      template: 'Hey {name}, saw {company} on Product Hunt...'
-    },
-    {
-      id: '3',
-      name: 'Agency Partnership',
-      status: 'completed',
-      leads: 75,
-      sent: 75,
-      responses: 12,
-      conversionRate: 16,
-      lastSent: '3 days ago',
-      template: 'Hi {name}, I help agencies scale with AI...'
-    }
-  ])
+  const [campaigns, setCampaigns] = useState<Campaign[]>([])
   
   const pageRef = useRef(null)
   const pageInView = useInView(pageRef, { once: true })
 
   const stats = [
-    { label: 'Active Campaigns', value: campaigns.filter(c => c.status === 'active').length, icon: MessageSquare, color: 'text-green-500' },
-    { label: 'Total Leads', value: campaigns.reduce((sum, c) => sum + c.leads, 0), icon: Users, color: 'text-blue-500' },
-    { label: 'Avg Response Rate', value: '14.6%', icon: Target, color: 'text-purple-500' },
-    { label: 'Messages Sent Today', value: '45', icon: TrendingUp, color: 'text-yellow-500' }
+    { label: 'Active Campaigns', value: 0, icon: MessageSquare, color: 'text-green-500' },
+    { label: 'Total Leads', value: 0, icon: Users, color: 'text-blue-500' },
+    { label: 'Avg Response Rate', value: '0%', icon: Target, color: 'text-purple-500' },
+    { label: 'Messages Sent Today', value: 0, icon: TrendingUp, color: 'text-yellow-500' }
   ]
 
   const getStatusColor = (status: string) => {

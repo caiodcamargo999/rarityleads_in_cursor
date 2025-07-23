@@ -29,6 +29,7 @@ const navigation = [
   { name: 'Dashboard', href: '/dashboard', icon: Home },
   { name: 'Leads', href: '/leads', icon: Users },
   { name: 'Companies', href: '/companies', icon: Building2 },
+  { name: 'CRM', href: '/dashboard/crm', icon: BarChart3 },
   { name: 'OUTREACH', href: '#', icon: null, isSection: true, children: [
     { name: 'WhatsApp', href: '/outreach/whatsapp', icon: MessageSquare },
     { name: 'Instagram', href: '/outreach/instagram', icon: Instagram },

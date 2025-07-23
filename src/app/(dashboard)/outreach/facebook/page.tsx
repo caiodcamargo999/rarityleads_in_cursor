@@ -11,10 +11,10 @@ export default function FacebookPage() {
   const pageInView = useInView(pageRef, { once: true })
 
   const stats = [
-    { label: 'Page Followers', value: '2,341', icon: Users, color: 'text-blue-500' },
-    { label: 'Messages Sent', value: '89', icon: MessageSquare, color: 'text-green-500' },
-    { label: 'Response Rate', value: '8.7%', icon: BarChart3, color: 'text-purple-500' },
-    { label: 'Leads Generated', value: '12', icon: Facebook, color: 'text-blue-600' }
+    { label: 'Page Followers', value: 0, icon: Users, color: 'text-blue-500' },
+    { label: 'Messages Sent', value: 0, icon: MessageSquare, color: 'text-green-500' },
+    { label: 'Response Rate', value: '0%', icon: BarChart3, color: 'text-purple-500' },
+    { label: 'Leads Generated', value: 0, icon: Facebook, color: 'text-blue-600' }
   ]
 
   return (
