@@ -258,17 +258,17 @@ export default function LeadsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-main-bg flex flex-col items-center px-4 py-8">
+    <div className="min-h-screen bg-main-bg w-full overflow-x-hidden">
       <motion.h1
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="text-2xl font-medium text-primary-text mb-6"
+        className="text-xl lg:text-2xl font-medium text-primary-text mb-6 px-4 pt-4"
       >
         Leads
       </motion.h1>
       {/* Analytics summary (placeholder) */}
-      <motion.div className="w-full max-w-5xl mx-auto mb-6 flex flex-wrap gap-4 justify-between items-center">
+      <motion.div className="w-full max-w-5xl mx-auto mb-6 flex flex-wrap gap-4 justify-between items-center px-4">
         <div className="text-lg text-primary-text font-medium">Total Leads: {manualLeads.length + leads.length}</div>
         <div className="text-sm text-secondary-text">Selected: {selectedLeads.length}</div>
         <div className="flex-1 min-w-[220px]">
@@ -297,7 +297,7 @@ export default function LeadsPage() {
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}
-        className="w-full max-w-5xl mx-auto flex flex-col md:flex-row items-center gap-4 mb-8"
+        className="w-full max-w-5xl mx-auto flex flex-col md:flex-row items-center gap-4 mb-6 px-4"
       >
         <input
           type="text"
@@ -307,7 +307,7 @@ export default function LeadsPage() {
           value={search}
           onChange={e => setSearch(e.target.value)}
         />
-        <div className="flex gap-2 flex-wrap">
+        <div className="flex gap-2 flex-wrap justify-center sm:justify-start">
           <button
             className={`px-3 py-1 rounded-full text-xs font-medium transition border ${activePersona === null ? 'bg-rarity-600 text-white border-rarity-600' : 'bg-dark-bg-tertiary text-secondary-text border-dark-border hover:bg-dark-bg-secondary'}`}
             aria-label="Show all personas"
@@ -328,7 +328,7 @@ export default function LeadsPage() {
         </div>
       </motion.div>
       {/* API-enriched lead creation */}
-      <div className="w-full max-w-3xl mb-8">
+      <div className="w-full max-w-3xl mb-6 px-4">
         <LeadInputForm />
       </div>
       {/* Manual lead creation */}
@@ -336,7 +336,7 @@ export default function LeadsPage() {
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="w-full max-w-3xl mb-8 bg-card-bg rounded-xl border border-dark-border p-6"
+        className="w-full max-w-3xl mb-6 mx-4 bg-card-bg rounded-xl border border-dark-border p-4 lg:p-6"
       >
         <div className="font-medium text-primary-text mb-2">Create Lead Manually</div>
         <form className="flex flex-col md:flex-row md:items-center gap-4" onSubmit={handleManualLeadSubmit}>

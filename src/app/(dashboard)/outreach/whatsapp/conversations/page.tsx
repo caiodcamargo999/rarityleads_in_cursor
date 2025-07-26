@@ -65,72 +65,10 @@ export default function WhatsAppConversationsPage() {
   const [editConversation, setEditConversation] = useState<Conversation | null>(null);
   const [editing, setEditing] = useState(false);
 
-  // Mock data for demonstration
+  // Remove mock data for demonstration
   useEffect(() => {
-    setConversations([
-      {
-        id: '1',
-        name: 'John Smith',
-        phone: '+1 (555) 123-4567',
-        lastMessage: 'Thanks for the information!',
-        lastMessageTime: '2 min ago',
-        unreadCount: 2,
-        status: 'online'
-      },
-      {
-        id: '2',
-        name: 'Sarah Johnson',
-        phone: '+1 (555) 987-6543',
-        lastMessage: 'When can we schedule a call?',
-        lastMessageTime: '1 hour ago',
-        unreadCount: 0,
-        status: 'offline'
-      },
-      {
-        id: '3',
-        name: 'Mike Wilson',
-        phone: '+1 (555) 456-7890',
-        lastMessage: 'I\'m interested in your services',
-        lastMessageTime: '3 hours ago',
-        unreadCount: 1,
-        status: 'typing'
-      }
-    ])
-
-    setMessages([
-      {
-        id: '1',
-        text: 'Hi! I saw your company on LinkedIn and I\'m interested in your services.',
-        timestamp: '10:30 AM',
-        isFromMe: false,
-        status: 'read',
-        type: 'text'
-      },
-      {
-        id: '2',
-        text: 'Hello! Thanks for reaching out. I\'d be happy to help you with our services.',
-        timestamp: '10:32 AM',
-        isFromMe: true,
-        status: 'read',
-        type: 'text'
-      },
-      {
-        id: '3',
-        text: 'Could you tell me more about your pricing?',
-        timestamp: '10:35 AM',
-        isFromMe: false,
-        status: 'read',
-        type: 'text'
-      },
-      {
-        id: '4',
-        text: 'Of course! Here\'s our pricing guide with all the details.',
-        timestamp: '10:37 AM',
-        isFromMe: true,
-        status: 'delivered',
-        type: 'text'
-      }
-    ])
+    setConversations([])
+    setMessages([])
   }, [])
 
   const handleSendMessage = () => {

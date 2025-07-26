@@ -102,7 +102,7 @@ export default function LeadInputForm({ onClose, onLeadsGenerated }: Props) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="bg-[#18181c] rounded-2xl shadow-lg p-6 flex flex-col gap-6 relative">
+    <form onSubmit={handleSubmit} className="bg-[#18181c] rounded-2xl shadow-lg p-4 lg:p-6 flex flex-col gap-4 lg:gap-6 relative w-full">
       {onClose && (
         <button
           type="button"
@@ -132,12 +132,12 @@ export default function LeadInputForm({ onClose, onLeadsGenerated }: Props) {
           Describe your ideal client (industry, role, location, budget, contact method, etc.)
         </span>
       </div>
-      <div className="flex flex-wrap gap-2">
+      <div className="flex flex-wrap gap-2 justify-center sm:justify-start">
         {filtersList.map(f => (
           <div key={f.key} className="relative">
             <button
               type="button"
-              className={`px-4 py-2 rounded-full bg-dark-bg border border-dark-border text-gray-300 text-sm hover:bg-dark-bg-tertiary transition-all flex items-center gap-2 ${openDropdown === f.key ? 'ring-2 ring-rarity-600' : ''}`}
+              className={`px-3 lg:px-4 py-2 rounded-full bg-dark-bg border border-dark-border text-gray-300 text-xs lg:text-sm hover:bg-dark-bg-tertiary transition-all flex items-center gap-2 ${openDropdown === f.key ? 'ring-2 ring-rarity-600' : ''}`}
               onClick={() => setOpenDropdown(openDropdown === f.key ? null : f.key)}
             >
               {f.label}

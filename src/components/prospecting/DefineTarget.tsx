@@ -44,22 +44,22 @@ const DefineTarget = ({ data, onUpdate, onNext }: DefineTargetProps) => {
   const handleIndustryChange = (value: string) => {
     onUpdate({ industry: value, subSegment: "" });
     // Simulate real-time company count update
-    setTimeout(() => setEstimatedCompanies(Math.floor(Math.random() * 2000) + 500), 300);
+    // Removed all setTimeout demo code for estimated companies
   };
 
   const handleSubSegmentChange = (value: string) => {
     onUpdate({ subSegment: value });
-    setTimeout(() => setEstimatedCompanies(Math.floor(Math.random() * 800) + 200), 300);
+    // Removed all setTimeout demo code for estimated companies
   };
 
   const handleLocationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     onUpdate({ location: e.target.value });
-    setTimeout(() => setEstimatedCompanies(Math.floor(Math.random() * 1500) + 300), 300);
+    // Removed all setTimeout demo code for estimated companies
   };
 
   const handleCompanySizeChange = (value: string) => {
     onUpdate({ companySize: value });
-    setTimeout(() => setEstimatedCompanies(Math.floor(Math.random() * 1200) + 400), 300);
+    // Removed all setTimeout demo code for estimated companies
   };
 
   const handleBudgetChange = (value: number[]) => {

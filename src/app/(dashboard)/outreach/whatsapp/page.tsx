@@ -69,40 +69,43 @@ export default function WhatsAppPage() {
   }
 
   return (
-    <div ref={pageRef} className="min-h-screen bg-dark-bg p-4">
-      <div className="w-full pl-4">
+    <div ref={pageRef} className="min-h-screen bg-dark-bg w-full overflow-x-hidden">
+      <div className="w-full max-w-full">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={pageInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
           transition={{ duration: 0.6 }}
-          className="mb-8"
+          className="mb-6"
         >
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col space-y-4 lg:flex-row lg:items-center lg:justify-between lg:space-y-0">
             <div>
-              <h1 className="text-2xl font-medium text-dark-text mb-2">
+              <h1 className="text-2xl lg:text-3xl font-medium text-dark-text mb-2">
                 WhatsApp Outreach
               </h1>
               <p className="text-base text-dark-text-secondary">
                 Manage your WhatsApp campaigns and conversations
               </p>
             </div>
-            <div className="flex gap-2">
+            <div className="flex flex-col space-y-2 sm:flex-row sm:space-y-0 sm:space-x-2">
               <Link href="/dashboard/outreach/whatsapp/accounts">
-                <Button variant="outline" size="sm" className="flex items-center gap-2">
+                <Button variant="outline" size="sm" className="flex items-center gap-2 w-full sm:w-auto">
                   <Settings className="w-4 h-4" />
-                  Accounts
+                  <span className="hidden sm:inline">Accounts</span>
+                  <span className="sm:hidden">Settings</span>
                 </Button>
               </Link>
               <Link href="/dashboard/outreach/whatsapp/conversations">
-                <Button variant="outline" size="sm" className="flex items-center gap-2">
+                <Button variant="outline" size="sm" className="flex items-center gap-2 w-full sm:w-auto">
                   <MessageSquare className="w-4 h-4" />
-                  Conversations
+                  <span className="hidden sm:inline">Conversations</span>
+                  <span className="sm:hidden">Chats</span>
                 </Button>
               </Link>
-              <Button variant="primary" size="sm" className="flex items-center gap-2">
+              <Button variant="primary" size="sm" className="flex items-center gap-2 w-full sm:w-auto">
                 <Plus className="w-4 h-4" />
-                New Campaign
+                <span className="hidden sm:inline">New Campaign</span>
+                <span className="sm:hidden">New</span>
               </Button>
             </div>
           </div>
@@ -113,17 +116,17 @@ export default function WhatsAppPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={pageInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
           transition={{ duration: 0.6, delay: 0.1 }}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8"
+          className="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-4 mb-6"
         >
           {stats.map((stat, index) => (
             <Card key={index} className="bg-dark-bg-secondary border-dark-border">
-              <CardContent className="p-6">
+              <CardContent className="p-4 lg:p-6">
                 <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm text-dark-text-muted">{stat.label}</p>
-                    <p className="text-lg font-medium text-dark-text">{stat.value}</p>
+                  <div className="min-w-0 flex-1">
+                    <p className="text-xs lg:text-sm text-dark-text-muted truncate">{stat.label}</p>
+                    <p className="text-base lg:text-lg font-medium text-dark-text truncate">{stat.value}</p>
                   </div>
-                  <stat.icon className={`w-8 h-8 ${stat.color}`} />
+                  <stat.icon className={`w-6 h-6 lg:w-8 lg:h-8 ${stat.color} flex-shrink-0 ml-2`} />
                 </div>
               </CardContent>
             </Card>
@@ -135,36 +138,36 @@ export default function WhatsAppPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={pageInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6"
         >
           <Card className="bg-dark-bg-secondary border-dark-border hover:border-dark-border-secondary transition-all duration-200 cursor-pointer">
-            <CardContent className="p-6">
-              <MessageSquare className="w-8 h-8 text-rarity-500 mb-3" />
-              <h3 className="text-lg font-medium text-dark-text mb-2">Create Campaign</h3>
-              <p className="text-sm text-dark-text-secondary mb-4">Start a new WhatsApp outreach campaign</p>
-              <Button variant="outline" size="sm" className="w-full">
+            <CardContent className="p-4 lg:p-6">
+              <MessageSquare className="w-6 h-6 lg:w-8 lg:h-8 text-rarity-500 mb-3" />
+              <h3 className="text-base lg:text-lg font-medium text-dark-text mb-2">Create Campaign</h3>
+              <p className="text-xs lg:text-sm text-dark-text-secondary mb-4">Start a new WhatsApp outreach campaign</p>
+              <Button variant="outline" size="sm" className="w-full text-xs lg:text-sm">
                 Get Started
               </Button>
             </CardContent>
           </Card>
 
           <Card className="bg-dark-bg-secondary border-dark-border hover:border-dark-border-secondary transition-all duration-200 cursor-pointer">
-            <CardContent className="p-6">
-              <Users className="w-8 h-8 text-rarity-500 mb-3" />
-              <h3 className="text-lg font-medium text-dark-text mb-2">Import Leads</h3>
-              <p className="text-sm text-dark-text-secondary mb-4">Upload your prospect list</p>
-              <Button variant="outline" size="sm" className="w-full">
+            <CardContent className="p-4 lg:p-6">
+              <Users className="w-6 h-6 lg:w-8 lg:h-8 text-rarity-500 mb-3" />
+              <h3 className="text-base lg:text-lg font-medium text-dark-text mb-2">Import Leads</h3>
+              <p className="text-xs lg:text-sm text-dark-text-secondary mb-4">Upload your prospect list</p>
+              <Button variant="outline" size="sm" className="w-full text-xs lg:text-sm">
                 Import CSV
               </Button>
             </CardContent>
           </Card>
 
-          <Card className="bg-dark-bg-secondary border-dark-border hover:border-dark-border-secondary transition-all duration-200 cursor-pointer">
-            <CardContent className="p-6">
-              <BarChart3 className="w-8 h-8 text-rarity-500 mb-3" />
-              <h3 className="text-lg font-medium text-dark-text mb-2">View Analytics</h3>
-              <p className="text-sm text-dark-text-secondary mb-4">Track campaign performance</p>
-              <Button variant="outline" size="sm" className="w-full">
+          <Card className="bg-dark-bg-secondary border-dark-border hover:border-dark-border-secondary transition-all duration-200 cursor-pointer sm:col-span-2 lg:col-span-1">
+            <CardContent className="p-4 lg:p-6">
+              <BarChart3 className="w-6 h-6 lg:w-8 lg:h-8 text-rarity-500 mb-3" />
+              <h3 className="text-base lg:text-lg font-medium text-dark-text mb-2">View Analytics</h3>
+              <p className="text-xs lg:text-sm text-dark-text-secondary mb-4">Track campaign performance</p>
+              <Button variant="outline" size="sm" className="w-full text-xs lg:text-sm">
                 View Reports
               </Button>
             </CardContent>

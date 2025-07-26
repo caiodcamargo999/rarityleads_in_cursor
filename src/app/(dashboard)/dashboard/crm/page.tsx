@@ -284,12 +284,12 @@ export default function CrmPage() {
   };
 
   return (
-    <div className="min-h-screen bg-main-bg px-4 py-8 relative" onKeyDown={handleKeyDown} tabIndex={0}>
+    <div className="min-h-screen bg-main-bg w-full overflow-x-hidden" onKeyDown={handleKeyDown} tabIndex={0}>
       <motion.h1
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="text-2xl font-medium text-primary-text mb-8"
+        className="text-xl lg:text-2xl font-medium text-primary-text mb-6 px-4 pt-4"
       >
         CRM Pipeline
       </motion.h1>
@@ -298,7 +298,7 @@ export default function CrmPage() {
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}
-        className="w-full max-w-5xl mx-auto flex flex-col md:flex-row items-center gap-4 mb-8"
+        className="w-full max-w-5xl mx-auto flex flex-col md:flex-row items-center gap-4 mb-6 px-4"
       >
         <input
           type="text"
@@ -308,7 +308,7 @@ export default function CrmPage() {
           value={search}
           onChange={e => setSearch(e.target.value)}
         />
-        <div className="flex gap-2 flex-wrap">
+        <div className="flex gap-2 flex-wrap justify-center sm:justify-start">
           <button
             className={`px-3 py-1 rounded-full text-xs font-medium transition border ${activeStatus === null ? 'bg-rarity-600 text-white border-rarity-600' : 'bg-dark-bg-tertiary text-secondary-text border-dark-border hover:bg-dark-bg-secondary'}`}
             aria-label="Show all statuses"
@@ -331,7 +331,7 @@ export default function CrmPage() {
       {/* Floating + New Lead button */}
       <button
         aria-label="Add new lead"
-        className="fixed bottom-8 right-8 z-50 bg-rarity-600 hover:bg-rarity-700 text-white rounded-full shadow-lg w-14 h-14 flex items-center justify-center text-3xl focus:outline-none focus:ring-2 focus:ring-rarity-600 transition"
+        className="fixed bottom-20 lg:bottom-8 right-4 lg:right-8 z-50 bg-rarity-600 hover:bg-rarity-700 text-white rounded-full shadow-lg w-12 h-12 lg:w-14 lg:h-14 flex items-center justify-center text-2xl lg:text-3xl focus:outline-none focus:ring-2 focus:ring-rarity-600 transition"
         onClick={() => handleOpenModal(STAGES[0].key)}
       >
         +

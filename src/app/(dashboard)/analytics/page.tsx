@@ -38,19 +38,19 @@ export default function AnalyticsPage() {
   ]
 
   return (
-    <div ref={pageRef} className="min-h-screen bg-dark-bg p-4">
-      <div className="w-full pl-4">
+    <div ref={pageRef} className="min-h-screen bg-dark-bg w-full overflow-x-hidden">
+      <div className="w-full max-w-full">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={pageInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
           transition={{ duration: 0.6 }}
-          className="mb-4"
+          className="mb-6 px-4 pt-4"
         >
-          <h1 className="text-2xl md:text-3xl font-normal text-white mb-2">
+          <h1 className="text-xl lg:text-2xl font-normal text-white mb-2">
             Analytics
           </h1>
-          <p className="text-base text-gray-400">
+          <p className="text-sm lg:text-base text-gray-400">
             Track your analytics and campaign insights
           </p>
         </motion.div>
@@ -60,19 +60,19 @@ export default function AnalyticsPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={pageInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
           transition={{ duration: 0.6, delay: 0.1 }}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8"
+          className="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-4 mb-6 px-4"
         >
           {stats.map((stat, index) => (
             <Card key={index} className="bg-dark-bg-secondary border-dark-border">
-              <CardContent className="p-6">
-                <div className="flex items-center justify-between mb-4">
-                  <stat.icon className={`w-8 h-8 ${stat.color}`} />
-                  <span className={`text-sm font-medium ${stat.change.startsWith('+') ? 'text-green-500' : 'text-red-500'}`}>
+              <CardContent className="p-4 lg:p-6">
+                <div className="flex items-center justify-between mb-3 lg:mb-4">
+                  <stat.icon className={`w-6 h-6 lg:w-8 lg:h-8 ${stat.color}`} />
+                  <span className={`text-xs lg:text-sm font-medium ${stat.change.startsWith('+') ? 'text-green-500' : 'text-red-500'}`}>
                     {stat.change}
                   </span>
                 </div>
-                <p className="text-sm text-dark-text-muted mb-1">{stat.label}</p>
-                <p className="text-2xl font-medium text-dark-text">{stat.value}</p>
+                <p className="text-xs lg:text-sm text-dark-text-muted mb-1">{stat.label}</p>
+                <p className="text-lg lg:text-2xl font-medium text-dark-text">{stat.value}</p>
               </CardContent>
             </Card>
           ))}
@@ -83,7 +83,7 @@ export default function AnalyticsPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={pageInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8"
+          className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6 mb-6 px-4"
         >
           {/* Leads & Conversions Chart */}
           <Card className="bg-dark-bg-secondary border-dark-border">

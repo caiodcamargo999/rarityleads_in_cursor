@@ -36,28 +36,9 @@ export default function WhatsAppAccountsPage() {
   const pageRef = useRef(null)
   const pageInView = useInView(pageRef, { once: true })
 
-  // Mock data for demonstration
+  // Remove mock data for demonstration
   useEffect(() => {
-    setAccounts([
-      {
-        id: '1',
-        name: 'Business Account',
-        phone: '+1 (555) 123-4567',
-        status: 'connected',
-        lastSeen: '2 minutes ago',
-        messageCount: 156,
-        leadCount: 23
-      },
-      {
-        id: '2',
-        name: 'Personal Account',
-        phone: '+1 (555) 987-6543',
-        status: 'disconnected',
-        lastSeen: '1 hour ago',
-        messageCount: 89,
-        leadCount: 12
-      }
-    ])
+    setAccounts([])
   }, [])
 
   const handleAddAccount = () => {

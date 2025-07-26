@@ -118,8 +118,8 @@ export default function DashboardPage() {
   ];
 
   return (
-    <div ref={dashboardRef} className="min-h-screen bg-[#0a0a0a] p-4 w-full pl-4">
-      <div className="w-full">
+    <div ref={dashboardRef} className="min-h-screen bg-[#0a0a0a] w-full overflow-x-hidden">
+      <div className="w-full max-w-full">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}

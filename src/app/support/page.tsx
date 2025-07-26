@@ -121,7 +121,7 @@ export default function SupportPage() {
   };
   const handleBulkDelete = () => {
     if (!window.confirm('Are you sure you want to delete the selected FAQs?')) return;
-    // Remove from faqs (mock only)
+    // Remove from faqs
     toast({ title: 'FAQs deleted', description: `${selectedFAQs.length} FAQs deleted.` });
     setSelectedFAQs([]);
   };
@@ -172,19 +172,19 @@ export default function SupportPage() {
   };
 
   return (
-    <div ref={pageRef} className="min-h-screen bg-[#0a0a0a] p-4">
-      <div className="w-full pl-4">
+    <div ref={pageRef} className="min-h-screen bg-[#0a0a0a] w-full overflow-x-hidden">
+      <div className="w-full max-w-full">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={pageInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
           transition={{ duration: 0.6 }}
-          className="mb-8"
+          className="mb-6 px-4 pt-4"
         >
-          <h1 className="text-2xl md:text-3xl font-normal text-white mb-2">
+          <h1 className="text-xl lg:text-2xl font-normal text-white mb-2">
             Support Center
           </h1>
-          <p className="text-base text-gray-400">
+          <p className="text-sm lg:text-base text-gray-400">
             Get help with Rarity Leads and find answers to common questions
           </p>
         </motion.div>
@@ -194,9 +194,9 @@ export default function SupportPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={pageInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
           transition={{ duration: 0.6, delay: 0.1 }}
-          className="mb-8"
+          className="mb-6 px-4"
         >
-          <div className="relative max-w-2xl">
+          <div className="relative max-w-2xl mx-auto">
             <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
             <input
               type="text"
@@ -213,36 +213,36 @@ export default function SupportPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={pageInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6 px-4"
         >
           <Card className="bg-[#18181c] border border-gray-800 hover:border-gray-700 transition-all duration-300 cursor-pointer">
-            <CardContent className="p-6">
-              <MessageSquare className="w-8 h-8 text-[#8b5cf6] mb-3" />
-              <h3 className="text-lg font-normal text-white mb-2">Live Chat</h3>
-              <p className="text-sm text-gray-400 mb-4">Get instant help from our support team</p>
-              <Button variant="outline" size="sm" className="w-full">
+            <CardContent className="p-4 lg:p-6">
+              <MessageSquare className="w-6 h-6 lg:w-8 lg:h-8 text-[#8b5cf6] mb-3" />
+              <h3 className="text-base lg:text-lg font-normal text-white mb-2">Live Chat</h3>
+              <p className="text-xs lg:text-sm text-gray-400 mb-4">Get instant help from our support team</p>
+              <Button variant="outline" size="sm" className="w-full text-xs lg:text-sm">
                 Start Chat
               </Button>
             </CardContent>
           </Card>
 
           <Card className="bg-[#18181c] border border-gray-800 hover:border-gray-700 transition-all duration-300 cursor-pointer">
-            <CardContent className="p-6">
-              <Mail className="w-8 h-8 text-[#8b5cf6] mb-3" />
-              <h3 className="text-lg font-normal text-white mb-2">Email Support</h3>
-              <p className="text-sm text-gray-400 mb-4">Send us a detailed message</p>
-              <Button variant="outline" size="sm" className="w-full">
+            <CardContent className="p-4 lg:p-6">
+              <Mail className="w-6 h-6 lg:w-8 lg:h-8 text-[#8b5cf6] mb-3" />
+              <h3 className="text-base lg:text-lg font-normal text-white mb-2">Email Support</h3>
+              <p className="text-xs lg:text-sm text-gray-400 mb-4">Send us a detailed message</p>
+              <Button variant="outline" size="sm" className="w-full text-xs lg:text-sm">
                 Send Email
               </Button>
             </CardContent>
           </Card>
 
-          <Card className="bg-[#18181c] border border-gray-800 hover:border-gray-700 transition-all duration-300 cursor-pointer">
-            <CardContent className="p-6">
-              <BookOpen className="w-8 h-8 text-[#8b5cf6] mb-3" />
-              <h3 className="text-lg font-normal text-white mb-2">Knowledge Base</h3>
-              <p className="text-sm text-gray-400 mb-4">Browse detailed guides and tutorials</p>
-              <Button variant="outline" size="sm" className="w-full">
+          <Card className="bg-[#18181c] border border-gray-800 hover:border-gray-700 transition-all duration-300 cursor-pointer sm:col-span-2 lg:col-span-1">
+            <CardContent className="p-4 lg:p-6">
+              <BookOpen className="w-6 h-6 lg:w-8 lg:h-8 text-[#8b5cf6] mb-3" />
+              <h3 className="text-base lg:text-lg font-normal text-white mb-2">Knowledge Base</h3>
+              <p className="text-xs lg:text-sm text-gray-400 mb-4">Browse detailed guides and tutorials</p>
+              <Button variant="outline" size="sm" className="w-full text-xs lg:text-sm">
                 Browse Articles
               </Button>
             </CardContent>

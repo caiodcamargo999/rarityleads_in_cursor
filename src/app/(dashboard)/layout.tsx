@@ -41,6 +41,13 @@ const navigation = [
   { name: 'Support', href: '/support', icon: HelpCircle }
 ]
 
+// Bottom tab navigation for mobile
+const bottomTabs = [
+  { name: 'Dashboard', href: '/dashboard', icon: Home },
+  { name: 'CRM', href: '/dashboard/crm', icon: BarChart3 },
+  { name: 'Messages', href: '/outreach/whatsapp', icon: MessageSquare }
+]
+
 export default function DashboardLayout({
   children,
 }: {
@@ -120,12 +127,9 @@ export default function DashboardLayout({
         )}
       </AnimatePresence>
 
-      {/* Sidebar */}
-      <motion.div
-        variants={sidebarSlide}
-        initial="hidden"
-        animate="visible"
-        className={`fixed inset-y-0 left-0 z-50 w-64 bg-dark-bg-secondary border-r border-dark-border lg:static lg:inset-0 lg:z-auto lg:translate-x-0 ${
+      {/* Sidebar - Hidden on mobile by default */}
+      <div
+        className={`fixed inset-y-0 left-0 z-50 w-64 bg-dark-bg-secondary border-r border-dark-border lg:static lg:inset-0 lg:z-auto transition-transform duration-300 ease-out ${
           sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
         }`}
       >
@@ -220,12 +224,12 @@ export default function DashboardLayout({
             </div>
           </div>
         </div>
-      </motion.div>
+      </div>
 
       {/* Main content */}
       <div className="flex-1 flex flex-col">
         {/* Mobile header */}
-        <div className="md:hidden flex items-center justify-between px-4 py-3 bg-dark-bg border-b border-sidebar-border">
+        <div className="lg:hidden flex items-center justify-between px-4 py-3 bg-dark-bg border-b border-dark-border">
           <Link href="/dashboard" className="flex items-center space-x-2">
             <span className="text-lg font-medium text-white">Rarity Leads</span>
           </Link>
@@ -240,94 +244,35 @@ export default function DashboardLayout({
           </Button>
         </div>
 
-        {/* Sidebar Drawer for mobile */}
-        <AnimatePresence>
-          {sidebarOpen && (
-            <motion.div
-              initial={{ x: '-100%' }}
-              animate={{ x: 0 }}
-              exit={{ x: '-100%' }}
-              transition={{ duration: 0.3 }}
-              className="fixed inset-0 z-40 bg-black/70 md:hidden"
-              onClick={() => setSidebarOpen(false)}
-            >
-              <div
-                className="absolute left-0 top-0 h-full w-64 bg-sidebar shadow-lg flex flex-col"
-                onClick={e => e.stopPropagation()}
-              >
-                <div className="flex items-center justify-between px-4 py-3 border-b border-sidebar-border">
-                  <span className="text-lg font-medium text-white">Menu</span>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    aria-label="Close sidebar menu"
-                    onClick={() => setSidebarOpen(false)}
-                  >
-                    <X className="w-6 h-6 text-white" />
-                  </Button>
-                </div>
-                {/* Sidebar navigation here (reuse navigation rendering logic) */}
-                {navigation.map((item) => {
-                  if (item.isSection) {
-                    return (
-                      <div key={item.name} className="mb-4">
-                        <h3 className="px-4 py-2 text-xs font-medium text-dark-text-muted uppercase tracking-wider">
-                          {item.name}
-                        </h3>
-                        <div className="space-y-1">
-                          {item.children?.map((child) => (
-                            <Link
-                              key={child.name}
-                              href={child.href}
-                              className={`flex items-center space-x-3 px-4 py-2 text-sm font-normal rounded-lg transition-all duration-200 ${
-                                isActive(child.href)
-                                  ? 'bg-rarity-600 text-white'
-                                  : 'text-dark-text-secondary hover:text-dark-text hover:bg-dark-bg-tertiary'
-                              }`}
-                              prefetch={true}
-                              onClick={() => setSidebarOpen(false)}
-                            >
-                              <child.icon className="w-5 h-5" />
-                              <span>{child.name}</span>
-                            </Link>
-                          ))}
-                        </div>
-                      </div>
-                    )
-                  }
-
-                  return (
-                    <Link
-                      key={item.name}
-                      href={item.href}
-                      className={`flex items-center space-x-3 px-4 py-2 text-sm font-normal rounded-lg transition-all duration-200 ${
-                        isActive(item.href)
-                          ? 'bg-rarity-600 text-white'
-                          : 'text-dark-text-secondary hover:text-dark-text hover:bg-dark-bg-tertiary'
-                      }`}
-                      prefetch={true}
-                      onClick={() => setSidebarOpen(false)}
-                    >
-                      {typeof item.icon === 'function' ? <item.icon className="w-5 h-5" /> : null}
-                      <span>{item.name}</span>
-                    </Link>
-                  )
-                })}
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-
         {/* Page content */}
         <motion.main
           variants={fadeInUp}
           initial="hidden"
           animate="visible"
-          className="flex-1 w-full pt-4 pr-4 pb-4 lg:pt-6 lg:pr-8 lg:pb-6"
+          className="flex-1 w-full pt-4 px-4 pb-20 lg:pt-6 lg:px-8 lg:pb-6 overflow-x-hidden"
         >
-          {/* Remove mx-auto or centering from children if present */}
           {children}
         </motion.main>
+
+        {/* Bottom tab navigation for mobile */}
+        <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-dark-bg-secondary border-t border-dark-border z-30">
+          <div className="flex justify-around">
+            {bottomTabs.map((tab) => (
+              <Link
+                key={tab.name}
+                href={tab.href}
+                className={`flex flex-col items-center py-3 px-4 flex-1 transition-all duration-200 ${
+                  isActive(tab.href)
+                    ? 'text-rarity-500'
+                    : 'text-dark-text-secondary hover:text-dark-text'
+                }`}
+              >
+                <tab.icon className="w-6 h-6 mb-1" />
+                <span className="text-xs font-medium">{tab.name}</span>
+              </Link>
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   )

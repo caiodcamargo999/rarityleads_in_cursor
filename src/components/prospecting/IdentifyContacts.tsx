@@ -22,75 +22,6 @@ interface IdentifyContactsProps {
   onPrev: () => void;
 }
 
-const mockDecisionMakers = [
-  {
-    id: 1,
-    name: "Dr. Carlos Silva",
-    role: "Diretor Clínico",
-    company: "Clínica Odonto Excellence",
-    decisionLevel: "Final",
-    confidence: 92,
-    sources: ["LinkedIn", "Website", "Eventos Públicos"],
-    phone: "+55 11 99999-9999",
-    email: "carlos.silva@example.com",
-    linkedin: "linkedin.com/in/carlossilva",
-    jobChallenges: [
-      "Aumentar número de pacientes",
-      "Melhorar eficiência operacional",
-      "Competir com clínicas maiores"
-    ],
-    interests: [
-      "Tecnologia odontológica",
-      "Gestão clínica",
-      "Marketing médico"
-    ]
-  },
-  {
-    id: 2,
-    name: "Ana Fernandes",
-    role: "Gerente Administrativo",
-    company: "Clínica Odonto Excellence",
-    decisionLevel: "Influenciador",
-    confidence: 85,
-    sources: ["LinkedIn", "Website"],
-    phone: "+55 11 88888-8888",
-    email: "ana.fernandes@example.com",
-    linkedin: "linkedin.com/in/anafernandes",
-    jobChallenges: [
-      "Controlar custos operacionais",
-      "Melhorar agendamento",
-      "Capacitar equipe"
-    ],
-    interests: [
-      "Automação de processos",
-      "Gestão financeira",
-      "Treinamento de equipe"
-    ]
-  },
-  {
-    id: 3,
-    name: "Roberto Santos",
-    role: "Sócio Proprietário",
-    company: "Clínica Odonto Excellence",
-    decisionLevel: "Final",
-    confidence: 88,
-    sources: ["LinkedIn", "Registro CRO"],
-    phone: "+55 11 77777-7777",
-    email: "roberto.santos@example.com",
-    linkedin: "linkedin.com/in/robertosantos",
-    jobChallenges: [
-      "Expandir negócio",
-      "Aumentar lucratividade",
-      "Modernizar clínica"
-    ],
-    interests: [
-      "Investimentos em saúde",
-      "Expansão de negócios",
-      "Novas tecnologias"
-    ]
-  }
-];
-
 const IdentifyContacts = ({ data, onUpdate, onNext, onPrev }: IdentifyContactsProps) => {
   const { toast } = useToast();
   const [searching, setSearching] = useState(false);
@@ -113,11 +44,11 @@ const IdentifyContacts = ({ data, onUpdate, onNext, onPrev }: IdentifyContactsPr
     
     // Simulate API call delay
     setTimeout(() => {
-      setFoundDecisionMakers(mockDecisionMakers);
+      setFoundDecisionMakers([]); // Clear mock data
       setSearching(false);
       toast({
         title: "Busca concluída!",
-        description: `Encontramos ${mockDecisionMakers.length} potenciais decisores usando apenas dados públicos.`
+        description: `Encontramos ${foundDecisionMakers.length} potenciais decisores usando apenas dados públicos.`
       });
     }, 2000);
   };

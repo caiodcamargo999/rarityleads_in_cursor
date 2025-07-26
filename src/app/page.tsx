@@ -173,7 +173,6 @@ export default function HomePage() {
           >
             <Link href="/auth" className="inline-block bg-purple-600 hover:bg-purple-700 text-white px-8 py-4 rounded-lg font-medium transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-purple-500/25 text-lg">
               Start for Free →
-              <ArrowRight className="ml-2 h-5 w-5 inline" />
             </Link>
           </motion.div>
         </div>

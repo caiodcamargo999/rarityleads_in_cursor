@@ -47,50 +47,7 @@ export default function CompaniesPage() {
   const [searchQuery, setSearchQuery] = useState('')
   const [industryFilter, setIndustryFilter] = useState<string>('all')
   const [sizeFilter, setSizeFilter] = useState<string>('all')
-  const [companies, setCompanies] = useState<Company[]>([
-    {
-      id: '1',
-      name: 'TechCorp Solutions',
-      industry: 'Technology',
-      size: '50-200',
-      location: 'San Francisco, CA',
-      website: 'techcorp.com',
-      phone: '+1 (555) 123-4567',
-      email: 'contact@techcorp.com',
-      leads: 12,
-      status: 'qualified',
-      revenue: '$5M - $10M',
-      lastContact: '2 hours ago'
-    },
-    {
-      id: '2',
-      name: 'Innovate Labs',
-      industry: 'SaaS',
-      size: '10-50',
-      location: 'Austin, TX',
-      website: 'innovatelabs.io',
-      phone: '+1 (555) 987-6543',
-      email: 'hello@innovatelabs.io',
-      leads: 8,
-      status: 'contacted',
-      revenue: '$1M - $5M',
-      lastContact: '1 day ago'
-    },
-    {
-      id: '3',
-      name: 'Growth Dynamics',
-      industry: 'Marketing',
-      size: '200-500',
-      location: 'New York, NY',
-      website: 'growthdynamics.com',
-      phone: '+1 (555) 456-7890',
-      email: 'info@growthdynamics.com',
-      leads: 25,
-      status: 'prospecting',
-      revenue: '$10M - $50M',
-      lastContact: 'Never'
-    }
-  ])
+  const [companies, setCompanies] = useState<Company[]>([])
   
   const pageRef = useRef(null)
   const pageInView = useInView(pageRef, { once: true })
@@ -207,8 +164,8 @@ export default function CompaniesPage() {
   };
 
   return (
-    <div ref={pageRef} className="min-h-screen bg-dark-bg flex flex-col">
-      <div className="w-full max-w-5xl mx-auto px-8 pt-8 pb-2">
+    <div ref={pageRef} className="min-h-screen bg-dark-bg w-full overflow-x-hidden">
+      <div className="w-full max-w-5xl mx-auto px-4 lg:px-8 pt-4 lg:pt-8 pb-2">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -216,10 +173,10 @@ export default function CompaniesPage() {
           transition={{ duration: 0.6 }}
           className="mb-4"
         >
-          <h1 className="text-2xl font-medium text-dark-text mb-1">
+          <h1 className="text-xl lg:text-2xl font-medium text-dark-text mb-1">
             Company Directory
           </h1>
-          <p className="text-base text-dark-text-secondary mb-2">
+          <p className="text-sm lg:text-base text-dark-text-secondary mb-2">
             Manage your target companies and track engagement
           </p>
         </motion.div>

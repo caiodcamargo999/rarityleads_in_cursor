@@ -19,38 +19,8 @@ interface Campaign {
   last_run: string;
 }
 
-const mockCampaigns: Campaign[] = [
-  {
-    id: "1",
-    name: "Spring SaaS Push",
-    channel: "Email",
-    status: "active",
-    leads: 120,
-    created_at: "2024-04-01",
-    last_run: "2024-04-10",
-  },
-  {
-    id: "2",
-    name: "LinkedIn Outreach Q2",
-    channel: "LinkedIn",
-    status: "paused",
-    leads: 80,
-    created_at: "2024-03-15",
-    last_run: "2024-04-08",
-  },
-  {
-    id: "3",
-    name: "WhatsApp Blitz",
-    channel: "WhatsApp",
-    status: "completed",
-    leads: 200,
-    created_at: "2024-02-20",
-    last_run: "2024-03-01",
-  },
-];
-
 export default function CampaignsPage() {
-  const [campaigns, setCampaigns] = useState<Campaign[]>(mockCampaigns);
+  const [campaigns, setCampaigns] = useState<Campaign[]>([]);
   const [selectedCampaigns, setSelectedCampaigns] = useState<string[]>([]);
   const [detailsCampaign, setDetailsCampaign] = useState<Campaign | null>(null);
   const detailsModalRef = useRef<HTMLDivElement>(null);
@@ -201,7 +171,7 @@ export default function CampaignsPage() {
               >
                 <button className="absolute top-4 right-4 text-secondary-text hover:text-white text-2xl" aria-label="Close details" onClick={() => setDetailsCampaign(null)}>&times;</button>
                 <div className="text-lg font-medium text-white mb-4">Campaign Details</div>
-                <form onSubmit={e => { e.preventDefault(); setCampaigns(prev => prev.map(c => c.id === editCampaign.id ? { ...editCampaign } : c)); setDetailsCampaign(editCampaign); toast({ title: 'Campaign updated', description: 'Campaign details updated.' }); }} className="flex flex-col gap-2">
+                <form onSubmit={e => { e.preventDefault(); if (editCampaign) { setCampaigns(prev => prev.map(c => c.id === editCampaign.id ? { ...c, ...editCampaign } : c)); setDetailsCampaign(editCampaign); toast({ title: 'Campaign updated', description: 'Campaign details updated.' }); } }} className="flex flex-col gap-2">
                   <label className="text-xs text-secondary-text">Name</label>
                   <input type="text" className="bg-dark-bg-tertiary text-white rounded px-2 py-1 text-sm border border-dark-border" value={editCampaign?.name ?? ''} onChange={e => setEditCampaign(c => c ? { ...c, name: e.target.value } : c)} />
                   <label className="text-xs text-secondary-text">Channel</label>
@@ -222,7 +192,7 @@ export default function CampaignsPage() {
                   <div className="flex gap-2 mt-4">
                     <Button type="submit" variant="primary" loading={editing} aria-label="Save changes">Save</Button>
                     <Button type="button" variant="secondary" onClick={() => setEditCampaign(detailsCampaign)} aria-label="Cancel edit">Cancel</Button>
-                    <Button type="button" variant="danger" onClick={() => { setCampaigns(prev => prev.filter(c => c.id !== detailsCampaign.id)); setDetailsCampaign(null); toast({ title: 'Campaign deleted', description: 'Campaign deleted.' }); }} aria-label="Delete campaign">Delete</Button>
+                    <Button type="button" variant="danger" onClick={() => { if (detailsCampaign) { setCampaigns(prev => prev.filter(c => c.id !== detailsCampaign.id)); setDetailsCampaign(null); toast({ title: 'Campaign deleted', description: 'Campaign deleted.' }); } }} aria-label="Delete campaign">Delete</Button>
                     <Button type="button" variant="secondary" onClick={() => handleBulkExport('json')} aria-label="Export campaign as JSON">Export JSON</Button>
                     <Button type="button" variant="secondary" onClick={() => handleBulkExport('csv')} aria-label="Export campaign as CSV">Export CSV</Button>
                   </div>
