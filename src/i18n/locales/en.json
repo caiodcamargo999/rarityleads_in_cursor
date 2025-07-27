@@ -278,7 +278,10 @@
       "leadRole": "Lead Role",
       "contactChannel": "Contact Channel",
       "businessNeeds": "Business Needs"
-    }
+    },
+    "importLeads": "Import Leads",
+    "uploadProspectList": "Upload your prospect list",
+    "importCsv": "Import CSV"
   },
   "companies": {
     "title": "Companies",

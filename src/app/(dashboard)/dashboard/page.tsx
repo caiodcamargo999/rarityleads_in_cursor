@@ -114,7 +114,7 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="space-y-6 bg-background">
+    <div className="space-y-6 bg-gradient-to-br from-background via-background to-background/95 dark:from-background/90 dark:to-background/70">
       {/* Header */}
       <div className="flex justify-between items-center">
         <div>
@@ -129,7 +129,7 @@ export default function DashboardPage() {
             </ClientOnly>
           </p>
         </div>
-        <Button className="bg-muted hover:bg-muted/80 text-foreground border border-border">
+                 <Button className="bg-gradient-to-r from-muted to-muted/80 hover:from-muted/90 hover:to-muted/70 text-foreground border border-border dark:from-muted/60 dark:to-muted/40 dark:hover:from-muted/70 dark:hover:to-muted/50">
           <Plus className="w-4 h-4 mr-2" />
           <ClientOnly fallback="Add Lead">
             {t('leads.addLead')}
@@ -145,9 +145,11 @@ export default function DashboardPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: index * 0.1 }}
-          >
-            <Card className="bg-card border-border shadow-lg">
-              <CardContent className="p-6 relative z-10">
+                     >
+             <Card className="bg-gradient-to-br from-card via-card to-card/80 border-border shadow-lg overflow-hidden dark:from-card/90 dark:to-card/70">
+               {/* Subtle purple gradient overlay - more prominent in light theme */}
+               <div className="absolute inset-0 bg-gradient-to-br from-purple-500/8 via-purple-400/5 to-transparent pointer-events-none dark:from-purple-500/2 dark:to-transparent"></div>
+               <CardContent className="p-6 relative z-10">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm font-medium text-muted-foreground">
@@ -185,22 +187,24 @@ export default function DashboardPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.4 }}
-          className="lg:col-span-2"
-        >
-          <Card className="bg-card border-border shadow-lg">
-            <CardHeader>
-              <CardTitle className="text-foreground">
-                <ClientOnly fallback="Performance">
-                  {t('dashboard.performance')}
-                </ClientOnly>
-              </CardTitle>
-              <CardDescription className="text-muted-foreground">
-                <ClientOnly fallback="Last 30 days">
-                  {t('dashboard.last30Days')}
-                </ClientOnly>
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
+                     className="lg:col-span-2"
+         >
+           <Card className="bg-gradient-to-br from-card via-card to-card/80 border-border shadow-lg overflow-hidden dark:from-card/90 dark:to-card/70">
+             {/* Subtle purple gradient overlay - more prominent in light theme */}
+             <div className="absolute inset-0 bg-gradient-to-br from-purple-500/8 via-purple-400/5 to-transparent pointer-events-none dark:from-purple-500/2 dark:to-transparent"></div>
+             <CardHeader className="relative z-10">
+               <CardTitle className="text-foreground">
+                 <ClientOnly fallback="Performance">
+                   {t('dashboard.performance')}
+                 </ClientOnly>
+               </CardTitle>
+               <CardDescription className="text-muted-foreground">
+                 <ClientOnly fallback="Last 30 days">
+                   {t('dashboard.last30Days')}
+                 </ClientOnly>
+               </CardDescription>
+             </CardHeader>
+             <CardContent className="relative z-10">
               <div className="h-64 flex items-center justify-center">
                 <div className="text-center">
                   <BarChart3 className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
@@ -220,16 +224,18 @@ export default function DashboardPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.5 }}
-        >
-          <Card className="bg-card border-border shadow-lg">
-            <CardHeader>
-              <CardTitle className="text-foreground">
-                <ClientOnly fallback="Recent Activity">
-                  {t('dashboard.recentActivity')}
-                </ClientOnly>
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
+                 >
+           <Card className="bg-gradient-to-br from-card via-card to-card/80 border-border shadow-lg overflow-hidden dark:from-card/90 dark:to-card/70">
+             {/* Subtle purple gradient overlay - more prominent in light theme */}
+             <div className="absolute inset-0 bg-gradient-to-br from-purple-500/8 via-purple-400/5 to-transparent pointer-events-none dark:from-purple-500/2 dark:to-transparent"></div>
+             <CardHeader className="relative z-10">
+               <CardTitle className="text-foreground">
+                 <ClientOnly fallback="Recent Activity">
+                   {t('dashboard.recentActivity')}
+                 </ClientOnly>
+               </CardTitle>
+             </CardHeader>
+             <CardContent className="relative z-10">
               <div className="space-y-4">
                 {recentActivity.map((activity, index) => (
                   <div key={index} className="flex items-center space-x-3">
@@ -257,66 +263,68 @@ export default function DashboardPage() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.6 }}
-      >
-        <Card className="bg-card border-border shadow-lg">
-          <CardHeader>
-            <CardTitle className="text-foreground">
-              <ClientOnly fallback="Quick Actions">
-                {t('dashboard.quickActions')}
-              </ClientOnly>
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <Button 
-                variant="outline" 
-                className="h-20 flex-col space-y-2 bg-muted border-border text-foreground hover:bg-muted/80 transition-all duration-200 hover:scale-105"
-                onClick={() => handleQuickAction('addLead')}
-              >
-                <Users className="w-6 h-6" />
-                <span className="text-sm">
-                  <ClientOnly fallback="Add Lead">
-                    {t('leads.addLead')}
-                  </ClientOnly>
-                </span>
-              </Button>
-              <Button 
-                variant="outline" 
-                className="h-20 flex-col space-y-2 bg-muted border-border text-foreground hover:bg-muted/80 transition-all duration-200 hover:scale-105"
-                onClick={() => handleQuickAction('sendMessage')}
-              >
-                <MessageSquare className="w-6 h-6" />
-                <span className="text-sm">
-                  <ClientOnly fallback="Send Message">
-                    {t('outreach.sendMessage')}
-                  </ClientOnly>
-                </span>
-              </Button>
-              <Button 
-                variant="outline" 
-                className="h-20 flex-col space-y-2 bg-muted border-border text-foreground hover:bg-muted/80 transition-all duration-200 hover:scale-105"
-                onClick={() => handleQuickAction('viewAnalytics')}
-              >
-                <BarChart3 className="w-6 h-6" />
-                <span className="text-sm">
-                  <ClientOnly fallback="View Analytics">
-                    {t('analytics.title')}
-                  </ClientOnly>
-                </span>
-              </Button>
-              <Button 
-                variant="outline" 
-                className="h-20 flex-col space-y-2 bg-muted border-border text-foreground hover:bg-muted/80 transition-all duration-200 hover:scale-105"
-                onClick={() => handleQuickAction('schedule')}
-              >
-                <Calendar className="w-6 h-6" />
-                <span className="text-sm">
-                  <ClientOnly fallback="Schedule">
-                    {t('dashboard.schedule')}
-                  </ClientOnly>
-                </span>
-              </Button>
-            </div>
+             >
+         <Card className="bg-gradient-to-br from-card via-card to-card/80 border-border shadow-lg overflow-hidden dark:from-card/90 dark:to-card/70">
+           {/* Subtle purple gradient overlay - more prominent in light theme */}
+           <div className="absolute inset-0 bg-gradient-to-br from-purple-500/8 via-purple-400/5 to-transparent pointer-events-none dark:from-purple-500/2 dark:to-transparent"></div>
+           <CardHeader className="relative z-10">
+             <CardTitle className="text-foreground">
+               <ClientOnly fallback="Quick Actions">
+                 {t('dashboard.quickActions')}
+               </ClientOnly>
+             </CardTitle>
+           </CardHeader>
+           <CardContent className="relative z-10">
+                         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+               <Button 
+                 variant="outline" 
+                 className="h-20 flex-col space-y-2 bg-gradient-to-br from-muted to-muted/80 border-border text-foreground hover:from-muted/90 hover:to-muted/70 transition-all duration-200 hover:scale-105 dark:from-muted/60 dark:to-muted/40 dark:hover:from-muted/70 dark:hover:to-muted/50"
+                 onClick={() => handleQuickAction('addLead')}
+               >
+                 <Users className="w-6 h-6" />
+                 <span className="text-sm">
+                   <ClientOnly fallback="Add Lead">
+                     {t('leads.addLead')}
+                   </ClientOnly>
+                 </span>
+               </Button>
+               <Button 
+                 variant="outline" 
+                 className="h-20 flex-col space-y-2 bg-gradient-to-br from-muted to-muted/80 border-border text-foreground hover:from-muted/90 hover:to-muted/70 transition-all duration-200 hover:scale-105 dark:from-muted/60 dark:to-muted/40 dark:hover:from-muted/70 dark:hover:to-muted/50"
+                 onClick={() => handleQuickAction('sendMessage')}
+               >
+                 <MessageSquare className="w-6 h-6" />
+                 <span className="text-sm">
+                   <ClientOnly fallback="Send Message">
+                     {t('outreach.sendMessage')}
+                   </ClientOnly>
+                 </span>
+               </Button>
+               <Button 
+                 variant="outline" 
+                 className="h-20 flex-col space-y-2 bg-gradient-to-br from-muted to-muted/80 border-border text-foreground hover:from-muted/90 hover:to-muted/70 transition-all duration-200 hover:scale-105 dark:from-muted/60 dark:to-muted/40 dark:hover:from-muted/70 dark:hover:to-muted/50"
+                 onClick={() => handleQuickAction('viewAnalytics')}
+               >
+                 <BarChart3 className="w-6 h-6" />
+                 <span className="text-sm">
+                   <ClientOnly fallback="View Analytics">
+                     {t('analytics.title')}
+                   </ClientOnly>
+                 </span>
+               </Button>
+               <Button 
+                 variant="outline" 
+                 className="h-20 flex-col space-y-2 bg-gradient-to-br from-muted to-muted/80 border-border text-foreground hover:from-muted/90 hover:to-muted/70 transition-all duration-200 hover:scale-105 dark:from-muted/60 dark:to-muted/40 dark:hover:from-muted/70 dark:hover:to-muted/50"
+                 onClick={() => handleQuickAction('schedule')}
+               >
+                 <Calendar className="w-6 h-6" />
+                 <span className="text-sm">
+                   <ClientOnly fallback="Schedule">
+                     {t('dashboard.schedule')}
+                   </ClientOnly>
+                 </span>
+               </Button>
+             </div>
           </CardContent>
         </Card>
       </motion.div>

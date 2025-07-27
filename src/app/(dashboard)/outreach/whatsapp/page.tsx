@@ -120,15 +120,23 @@ export default function WhatsAppPage() {
                   </span>
                   <span className="sm:hidden">
                     <ClientOnly fallback="Chat">
-                      Chat
+                      {t('outreach.whatsapp.conversations')}
                     </ClientOnly>
                   </span>
                 </Button>
               </Link>
               <Button variant="primary" size="sm" className="flex items-center gap-2 w-full sm:w-auto">
                 <Plus className="w-4 h-4" />
-                <span className="hidden sm:inline">New Campaign</span>
-                <span className="sm:hidden">New</span>
+                <span className="hidden sm:inline">
+                  <ClientOnly fallback="New Campaign">
+                    {t('outreach.whatsapp.newCampaign')}
+                  </ClientOnly>
+                </span>
+                <span className="sm:hidden">
+                  <ClientOnly fallback="New">
+                    {t('outreach.whatsapp.newCampaign')}
+                  </ClientOnly>
+                </span>
               </Button>
             </div>
           </div>
@@ -167,35 +175,71 @@ export default function WhatsAppPage() {
           transition={{ duration: 0.6, delay: 0.2 }}
           className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6"
         >
-          <Card className="bg-dark-bg-secondary border-dark-border hover:border-dark-border-secondary transition-all duration-200 cursor-pointer">
-            <CardContent className="p-4 lg:p-6">
-              <MessageSquare className="w-6 h-6 lg:w-8 lg:h-8 text-rarity-500 mb-3" />
-              <h3 className="text-base lg:text-lg font-medium text-dark-text mb-2">Create Campaign</h3>
-              <p className="text-xs lg:text-sm text-dark-text-secondary mb-4">Start a new WhatsApp outreach campaign</p>
+          <Card className="bg-gradient-to-br from-card via-card to-card/80 border-border shadow-lg overflow-hidden dark:from-card/90 dark:to-card/70">
+            {/* Subtle purple gradient overlay - more prominent in light theme */}
+            <div className="absolute inset-0 bg-gradient-to-br from-purple-500/8 via-purple-400/5 to-transparent pointer-events-none dark:from-purple-500/2 dark:to-transparent"></div>
+            <CardContent className="p-4 lg:p-6 relative z-10">
+              <MessageSquare className="w-6 h-6 lg:w-8 lg:h-8 text-purple-500 mb-3" />
+              <h3 className="text-base lg:text-lg font-medium text-foreground mb-2">
+                <ClientOnly fallback="Create Campaign">
+                  {t('outreach.whatsapp.newCampaign')}
+                </ClientOnly>
+              </h3>
+              <p className="text-xs lg:text-sm text-muted-foreground mb-4">
+                <ClientOnly fallback="Start a new WhatsApp outreach campaign">
+                  {t('outreach.whatsapp.manageCampaigns')}
+                </ClientOnly>
+              </p>
               <Button variant="outline" size="sm" className="w-full text-xs lg:text-sm">
-                Get Started
+                <ClientOnly fallback="Get Started">
+                  {t('outreach.whatsapp.newCampaign')}
+                </ClientOnly>
               </Button>
             </CardContent>
           </Card>
 
-          <Card className="bg-dark-bg-secondary border-dark-border hover:border-dark-border-secondary transition-all duration-200 cursor-pointer">
-            <CardContent className="p-4 lg:p-6">
-              <Users className="w-6 h-6 lg:w-8 lg:h-8 text-rarity-500 mb-3" />
-              <h3 className="text-base lg:text-lg font-medium text-dark-text mb-2">Import Leads</h3>
-              <p className="text-xs lg:text-sm text-dark-text-secondary mb-4">Upload your prospect list</p>
+          <Card className="bg-gradient-to-br from-card via-card to-card/80 border-border shadow-lg overflow-hidden dark:from-card/90 dark:to-card/70">
+            {/* Subtle purple gradient overlay - more prominent in light theme */}
+            <div className="absolute inset-0 bg-gradient-to-br from-purple-500/8 via-purple-400/5 to-transparent pointer-events-none dark:from-purple-500/2 dark:to-transparent"></div>
+            <CardContent className="p-4 lg:p-6 relative z-10">
+              <Users className="w-6 h-6 lg:w-8 lg:h-8 text-purple-500 mb-3" />
+              <h3 className="text-base lg:text-lg font-medium text-foreground mb-2">
+                <ClientOnly fallback="Import Leads">
+                  {t('leads.importLeads')}
+                </ClientOnly>
+              </h3>
+              <p className="text-xs lg:text-sm text-muted-foreground mb-4">
+                <ClientOnly fallback="Upload your prospect list">
+                  {t('leads.uploadProspectList')}
+                </ClientOnly>
+              </p>
               <Button variant="outline" size="sm" className="w-full text-xs lg:text-sm">
-                Import CSV
+                <ClientOnly fallback="Import CSV">
+                  {t('leads.importCsv')}
+                </ClientOnly>
               </Button>
             </CardContent>
           </Card>
 
-          <Card className="bg-dark-bg-secondary border-dark-border hover:border-dark-border-secondary transition-all duration-200 cursor-pointer sm:col-span-2 lg:col-span-1">
-            <CardContent className="p-4 lg:p-6">
-              <BarChart3 className="w-6 h-6 lg:w-8 lg:h-8 text-rarity-500 mb-3" />
-              <h3 className="text-base lg:text-lg font-medium text-dark-text mb-2">View Analytics</h3>
-              <p className="text-xs lg:text-sm text-dark-text-secondary mb-4">Track campaign performance</p>
+          <Card className="bg-gradient-to-br from-card via-card to-card/80 border-border shadow-lg overflow-hidden dark:from-card/90 dark:to-card/70 sm:col-span-2 lg:col-span-1">
+            {/* Subtle purple gradient overlay - more prominent in light theme */}
+            <div className="absolute inset-0 bg-gradient-to-br from-purple-500/8 via-purple-400/5 to-transparent pointer-events-none dark:from-purple-500/2 dark:to-transparent"></div>
+            <CardContent className="p-4 lg:p-6 relative z-10">
+              <BarChart3 className="w-6 h-6 lg:w-8 lg:h-8 text-purple-500 mb-3" />
+              <h3 className="text-base lg:text-lg font-medium text-foreground mb-2">
+                <ClientOnly fallback="View Analytics">
+                  {t('outreach.whatsapp.analytics')}
+                </ClientOnly>
+              </h3>
+              <p className="text-xs lg:text-sm text-muted-foreground mb-4">
+                <ClientOnly fallback="Track campaign performance">
+                  {t('outreach.whatsapp.manageCampaigns')}
+                </ClientOnly>
+              </p>
               <Button variant="outline" size="sm" className="w-full text-xs lg:text-sm">
-                View Reports
+                <ClientOnly fallback="View Reports">
+                  {t('outreach.whatsapp.analytics')}
+                </ClientOnly>
               </Button>
             </CardContent>
           </Card>
@@ -207,14 +251,22 @@ export default function WhatsAppPage() {
           animate={pageInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
           transition={{ duration: 0.6, delay: 0.3 }}
         >
-          <Card className="bg-dark-bg-secondary border-dark-border">
-            <CardHeader>
-              <CardTitle className="text-dark-text">Active Campaigns</CardTitle>
-              <CardDescription className="text-dark-text-secondary">
-                Manage your WhatsApp outreach campaigns
+          <Card className="bg-gradient-to-br from-card via-card to-card/80 border-border shadow-lg overflow-hidden dark:from-card/90 dark:to-card/70">
+            {/* Subtle purple gradient overlay - more prominent in light theme */}
+            <div className="absolute inset-0 bg-gradient-to-br from-purple-500/8 via-purple-400/5 to-transparent pointer-events-none dark:from-purple-500/2 dark:to-transparent"></div>
+            <CardHeader className="relative z-10">
+              <CardTitle className="text-foreground">
+                <ClientOnly fallback="Active Campaigns">
+                  {t('outreach.whatsapp.campaigns')}
+                </ClientOnly>
+              </CardTitle>
+              <CardDescription className="text-muted-foreground">
+                <ClientOnly fallback="Manage your WhatsApp outreach campaigns">
+                  {t('outreach.whatsapp.manageCampaigns')}
+                </ClientOnly>
               </CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="relative z-10">
               <div className="space-y-4">
                 {campaigns.map((campaign, index) => (
                   <motion.div

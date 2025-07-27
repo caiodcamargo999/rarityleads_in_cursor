@@ -277,7 +277,10 @@
       "leadRole": "Cargo do Lead",
       "contactChannel": "Canal de Contato",
       "businessNeeds": "Necessidades do Negócio"
-    }
+    },
+    "importLeads": "Importar Leads",
+    "uploadProspectList": "Faça upload da sua lista de prospects",
+    "importCsv": "Importar CSV"
   },
   "companies": {
     "title": "Empresas",
