@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { motion, useInView } from 'framer-motion'
 import { useRef } from 'react'
+import { useTranslation } from 'react-i18next'
 import { 
   MessageSquare, 
   Plus, 
@@ -22,6 +23,7 @@ import {
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import Link from 'next/link'
+import { ClientOnly } from '@/components/ClientOnly'
 
 interface Campaign {
   id: string
@@ -36,16 +38,17 @@ interface Campaign {
 }
 
 export default function WhatsAppPage() {
+  const { t } = useTranslation()
   const [campaigns, setCampaigns] = useState<Campaign[]>([])
   
   const pageRef = useRef(null)
   const pageInView = useInView(pageRef, { once: true })
 
   const stats = [
-    { label: 'Active Campaigns', value: 0, icon: MessageSquare, color: 'text-green-500' },
-    { label: 'Total Leads', value: 0, icon: Users, color: 'text-blue-500' },
-    { label: 'Avg Response Rate', value: '0%', icon: Target, color: 'text-purple-500' },
-    { label: 'Messages Sent Today', value: 0, icon: TrendingUp, color: 'text-yellow-500' }
+    { label: t('outreach.whatsapp.status.active'), value: 0, icon: MessageSquare, color: 'text-green-500' },
+    { label: t('dashboard.totalLeads'), value: 0, icon: Users, color: 'text-blue-500' },
+    { label: t('outreach.whatsapp.metrics.responseRate'), value: '0%', icon: Target, color: 'text-purple-500' },
+    { label: t('outreach.whatsapp.metrics.messagesSentToday'), value: 0, icon: TrendingUp, color: 'text-yellow-500' }
   ]
 
   const getStatusColor = (status: string) => {
@@ -60,16 +63,16 @@ export default function WhatsAppPage() {
 
   const getStatusText = (status: string) => {
     switch (status) {
-      case 'active': return 'Active'
-      case 'paused': return 'Paused'
-      case 'completed': return 'Completed'
-      case 'draft': return 'Draft'
+      case 'active': return t('outreach.whatsapp.status.active')
+      case 'paused': return t('outreach.whatsapp.status.paused')
+      case 'completed': return t('outreach.whatsapp.status.completed')
+      case 'draft': return t('outreach.whatsapp.status.draft')
       default: return 'Unknown'
     }
   }
 
   return (
-    <div ref={pageRef} className="min-h-screen bg-dark-bg w-full overflow-x-hidden">
+    <div ref={pageRef} className="min-h-screen bg-gradient-to-br from-background via-background to-background/95 dark:from-background/90 dark:to-background/70 w-full overflow-x-hidden">
       <div className="w-full max-w-full">
         {/* Header */}
         <motion.div
@@ -80,26 +83,46 @@ export default function WhatsAppPage() {
         >
           <div className="flex flex-col space-y-4 lg:flex-row lg:items-center lg:justify-between lg:space-y-0">
             <div>
-              <h1 className="text-2xl lg:text-3xl font-medium text-dark-text mb-2">
-                WhatsApp Outreach
+              <h1 className="text-2xl lg:text-3xl font-medium text-foreground mb-2">
+                <ClientOnly fallback="WhatsApp Outreach">
+                  {t('outreach.whatsapp.outreach')}
+                </ClientOnly>
               </h1>
-              <p className="text-base text-dark-text-secondary">
-                Manage your WhatsApp campaigns and conversations
+              <p className="text-base text-muted-foreground">
+                <ClientOnly fallback="Manage your WhatsApp campaigns and conversations">
+                  {t('outreach.whatsapp.manageCampaigns')}
+                </ClientOnly>
               </p>
             </div>
             <div className="flex flex-col space-y-2 sm:flex-row sm:space-y-0 sm:space-x-2">
               <Link href="/dashboard/outreach/whatsapp/accounts">
-                <Button variant="outline" size="sm" className="flex items-center gap-2 w-full sm:w-auto">
+                <Button variant="outline" size="sm" className="flex items-center gap-2 w-full sm:w-auto bg-gradient-to-br from-muted to-muted/80 dark:from-muted/60 dark:to-muted/40 border-border text-foreground hover:from-muted/90 hover:to-muted/70 dark:hover:from-muted/70 dark:hover:to-muted/50">
                   <Settings className="w-4 h-4" />
-                  <span className="hidden sm:inline">Accounts</span>
-                  <span className="sm:hidden">Settings</span>
+                  <span className="hidden sm:inline">
+                    <ClientOnly fallback="Accounts">
+                      {t('outreach.whatsapp.accounts')}
+                    </ClientOnly>
+                  </span>
+                  <span className="sm:hidden">
+                    <ClientOnly fallback="Settings">
+                      {t('outreach.whatsapp.settings')}
+                    </ClientOnly>
+                  </span>
                 </Button>
               </Link>
               <Link href="/dashboard/outreach/whatsapp/conversations">
-                <Button variant="outline" size="sm" className="flex items-center gap-2 w-full sm:w-auto">
+                <Button variant="outline" size="sm" className="flex items-center gap-2 w-full sm:w-auto bg-gradient-to-br from-muted to-muted/80 dark:from-muted/60 dark:to-muted/40 border-border text-foreground hover:from-muted/90 hover:to-muted/70 dark:hover:from-muted/70 dark:hover:to-muted/50">
                   <MessageSquare className="w-4 h-4" />
-                  <span className="hidden sm:inline">Conversations</span>
-                  <span className="sm:hidden">Chats</span>
+                  <span className="hidden sm:inline">
+                    <ClientOnly fallback="Conversations">
+                      {t('outreach.whatsapp.conversations')}
+                    </ClientOnly>
+                  </span>
+                  <span className="sm:hidden">
+                    <ClientOnly fallback="Chat">
+                      Chat
+                    </ClientOnly>
+                  </span>
                 </Button>
               </Link>
               <Button variant="primary" size="sm" className="flex items-center gap-2 w-full sm:w-auto">
@@ -112,26 +135,30 @@ export default function WhatsAppPage() {
         </motion.div>
 
         {/* Stats Grid */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={pageInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-          transition={{ duration: 0.6, delay: 0.1 }}
-          className="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-4 mb-6"
-        >
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           {stats.map((stat, index) => (
-            <Card key={index} className="bg-dark-bg-secondary border-dark-border">
-              <CardContent className="p-4 lg:p-6">
-                <div className="flex items-center justify-between">
-                  <div className="min-w-0 flex-1">
-                    <p className="text-xs lg:text-sm text-dark-text-muted truncate">{stat.label}</p>
-                    <p className="text-base lg:text-lg font-medium text-dark-text truncate">{stat.value}</p>
-                  </div>
-                  <stat.icon className={`w-6 h-6 lg:w-8 lg:h-8 ${stat.color} flex-shrink-0 ml-2`} />
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, y: 20 }}
+              animate={pageInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+              transition={{ duration: 0.6, delay: index * 0.1 }}
+              className="bg-gradient-to-br from-card via-card to-card/80 dark:from-card/90 dark:to-card/70 border border-border rounded-lg p-6 shadow-lg overflow-hidden"
+            >
+              {/* Purple gradient overlay - more prominent in light theme */}
+              <div className="absolute inset-0 bg-gradient-to-br from-purple-500/8 via-purple-400/5 to-transparent pointer-events-none dark:from-purple-500/3 dark:to-transparent"></div>
+              
+              <div className="relative z-10 flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-muted-foreground">{stat.label}</p>
+                  <p className="text-2xl font-bold text-foreground">{stat.value}</p>
                 </div>
-              </CardContent>
-            </Card>
+                <div className={`p-3 rounded-lg bg-gradient-to-br from-muted to-muted/80 dark:from-muted/60 dark:to-muted/40 ${stat.color}`}>
+                  <stat.icon className="w-6 h-6" />
+                </div>
+              </div>
+            </motion.div>
           ))}
-        </motion.div>
+        </div>
 
         {/* Quick Actions */}
         <motion.div

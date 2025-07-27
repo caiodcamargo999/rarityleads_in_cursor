@@ -23,8 +23,12 @@ import {
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { AnimatePresence } from 'framer-motion'
+import { useTranslation } from 'react-i18next'
+import LanguageSwitcher from '@/components/LanguageSwitcher'
+import ThemeToggle from '@/components/ThemeToggle'
 
 export default function AboutPage() {
+  const { t } = useTranslation();
   const pageRef = useRef(null)
   const pageInView = useInView(pageRef, { once: true })
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
@@ -81,82 +85,71 @@ export default function AboutPage() {
               </Link>
             </div>
 
-            {/* Buttons - Right */}
-            <div className="flex items-center space-x-2">
-              <Link href="/auth">
-                <motion.span
-                  whileHover={{ scale: 1.05, y: -2 }}
-                  whileTap={{ scale: 0.97 }}
-                  className="inline-block px-4 py-2 rounded-lg font-medium text-white bg-[#232336] border border-[#8b5cf6] shadow-sm hover:shadow-lg hover:border-[#8b5cf6] transition-all duration-200 focus-visible:ring-2 focus-visible:ring-[#8b5cf6]/50"
-                >
-                  Login
-                </motion.span>
+            {/* Theme Toggle, Language Switcher and Auth - Right */}
+            <div className="flex items-center space-x-4">
+              <ThemeToggle />
+              <LanguageSwitcher />
+              <Link href="/auth" className="text-white hover:text-gray-300 transition-colors">
+                {t('auth.signIn')}
               </Link>
-              <Link href="/auth">
-                <motion.span
-                  whileHover={{ scale: 1.05, y: -2 }}
-                  whileTap={{ scale: 0.97 }}
-                  className="inline-block px-4 py-2 rounded-lg font-medium text-white bg-[#8b5cf6] border border-[#8b5cf6] shadow-sm hover:shadow-lg hover:bg-[#7c3aed] hover:border-[#8b5cf6] transition-all duration-200 focus-visible:ring-2 focus-visible:ring-[#8b5cf6]/50"
-                >
-                  Sign Up
-                </motion.span>
-              </Link>
-              
-              {/* Mobile menu button */}
+            </div>
+
+            {/* Mobile Menu Button */}
+            <div className="md:hidden">
               <Button
                 variant="ghost"
                 size="icon"
-                className="md:hidden"
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                className="text-white"
               >
-                {mobileMenuOpen ? <X className="w-6 h-6 text-white" /> : <Menu className="w-6 h-6 text-white" />}
+                {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
               </Button>
             </div>
           </div>
-        </div>
 
-        {/* Mobile menu */}
-        <AnimatePresence>
-          {mobileMenuOpen && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
-              exit={{ opacity: 0, height: 0 }}
-              className="md:hidden bg-[#0a0a0a] border-t border-gray-800"
-            >
-              <div className="px-4 py-4 space-y-4">
-                <Link 
-                  href="/#features" 
-                  className="block text-gray-300 hover:text-white transition-colors"
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  Features
-                </Link>
-                <Link 
-                  href="/#solution" 
-                  className="block text-gray-300 hover:text-white transition-colors"
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  Solution
-                </Link>
-                <Link 
-                  href="/#pricing" 
-                  className="block text-gray-300 hover:text-white transition-colors"
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  Pricing
-                </Link>
-                <Link 
-                  href="/about" 
-                  className="block text-white font-medium"
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  About
-                </Link>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+          {/* Mobile Menu */}
+          <AnimatePresence>
+            {mobileMenuOpen && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                exit={{ opacity: 0, height: 0 }}
+                className="md:hidden border-t border-gray-800"
+              >
+                <div className="px-2 pt-2 pb-3 space-y-1">
+                  <Link
+                    href="/#features"
+                    className="block px-3 py-2 text-gray-300 hover:text-white transition-colors"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    Features
+                  </Link>
+                  <Link
+                    href="/#solution"
+                    className="block px-3 py-2 text-gray-300 hover:text-white transition-colors"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    Solution
+                  </Link>
+                  <Link
+                    href="/#pricing"
+                    className="block px-3 py-2 text-gray-300 hover:text-white transition-colors"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    Pricing
+                  </Link>
+                  <Link
+                    href="/about"
+                    className="block px-3 py-2 text-white font-medium"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    About
+                  </Link>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
       </nav>
 
       {/* Hero Section */}

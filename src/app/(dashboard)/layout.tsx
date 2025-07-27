@@ -18,12 +18,14 @@ import {
   ChevronDown,
   User,
   Menu,
-  X
+  X,
+  Settings
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { supabase } from '@/lib/supabase'
 import { Loading } from '@/components/ui/loading'
 import { sidebarSlide, fadeInUp } from '@/lib/motion'
+import AnthropicProfilePanel from '@/components/AnthropicProfilePanel'
 
 const navigation = [
   { name: 'Dashboard', href: '/dashboard', icon: Home },
@@ -57,6 +59,7 @@ export default function DashboardLayout({
   const [loading, setLoading] = useState(true)
   const [showProfileMenu, setShowProfileMenu] = useState(false)
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [isProfilePanelVisible, setIsProfilePanelVisible] = useState(false)
   const router = useRouter()
   const pathname = usePathname()
 
@@ -91,71 +94,52 @@ export default function DashboardLayout({
 
   const handleSignOut = async () => {
     await supabase.auth.signOut()
+    setIsProfilePanelVisible(false)
+  }
+
+  const handleProfileClick = () => {
+    setIsProfilePanelVisible(true)
+  }
+
+  const handleSettingsClick = () => {
+    router.push('/settings')
+    setIsProfilePanelVisible(false)
+  }
+
+  const getUserInitials = (email: string) => {
+    return email ? email.substring(0, 2).toUpperCase() : 'U'
   }
 
   const isActive = (href: string) => {
-    if (href === '#') return false
-    const safePath = pathname ?? ''
-    return safePath === href || safePath.startsWith(href + '/')
+    return pathname === href
   }
 
-  // Always close sidebar on route change (mobile)
-  useEffect(() => {
-    setSidebarOpen(false);
-  }, [pathname]);
-
   if (loading) {
-    return (
-      <div className="min-h-screen bg-dark-bg flex items-center justify-center">
-        <Loading message="Loading your dashboard..." />
-      </div>
-    )
+    return <Loading />
   }
 
   return (
-    <div className="min-h-screen bg-dark-bg flex">
-      {/* Mobile sidebar overlay */}
-      <AnimatePresence>
-        {sidebarOpen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/50 z-40 lg:hidden"
-            onClick={() => setSidebarOpen(false)}
-          />
-        )}
-      </AnimatePresence>
-
-      {/* Sidebar - Hidden on mobile by default */}
-      <div
-        className={`fixed inset-y-0 left-0 z-50 w-64 bg-dark-bg-secondary border-r border-dark-border lg:static lg:inset-0 lg:z-auto transition-transform duration-300 ease-out ${
-          sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
-        }`}
+    <div className="min-h-screen bg-background flex relative">
+      {/* Sidebar */}
+      <motion.aside
+        variants={sidebarSlide}
+        initial="initial"
+        animate="animate"
+        className="fixed inset-y-0 left-0 z-40 w-64 bg-card border-r border-border lg:block hidden"
       >
         <div className="flex flex-col h-full">
           {/* Header */}
-          <div className="flex items-center justify-between p-6 border-b border-dark-border">
-            <Link href="/dashboard" className="text-xl font-medium text-dark-text">
-              Rarity Leads
-            </Link>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="lg:hidden"
-              onClick={() => setSidebarOpen(false)}
-            >
-              <X className="w-5 h-5" />
-            </Button>
+          <div className="p-6 border-b border-border">
+            <h1 className="text-2xl font-bold text-foreground">Rarity Leads</h1>
           </div>
 
           {/* Navigation */}
-          <nav className="flex-1 space-y-1 px-4 py-6 overflow-y-auto scrollbar-thin">
+          <nav className="flex-1 p-4 space-y-2">
             {navigation.map((item) => {
               if (item.isSection) {
                 return (
-                  <div key={item.name} className="mb-4">
-                    <h3 className="px-4 py-2 text-xs font-medium text-dark-text-muted uppercase tracking-wider">
+                  <div key={item.name}>
+                    <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">
                       {item.name}
                     </h3>
                     <div className="space-y-1">
@@ -163,16 +147,14 @@ export default function DashboardLayout({
                         <Link
                           key={child.name}
                           href={child.href}
-                          className={`flex items-center space-x-3 px-4 py-2 text-sm font-normal rounded-lg transition-all duration-200 ${
+                          className={`flex items-center px-3 py-2 text-sm rounded-lg transition-colors ${
                             isActive(child.href)
-                              ? 'bg-rarity-600 text-white'
-                              : 'text-dark-text-secondary hover:text-dark-text hover:bg-dark-bg-tertiary'
+                              ? 'bg-primary text-primary-foreground'
+                              : 'text-muted-foreground hover:text-foreground hover:bg-muted'
                           }`}
-                          prefetch={true}
-                          onClick={() => setSidebarOpen(false)}
                         >
-                          <child.icon className="w-5 h-5" />
-                          <span>{child.name}</span>
+                          {child.icon && <child.icon className="h-4 w-4 mr-3" />}
+                          {child.name}
                         </Link>
                       ))}
                     </div>
@@ -184,96 +166,198 @@ export default function DashboardLayout({
                 <Link
                   key={item.name}
                   href={item.href}
-                  className={`flex items-center space-x-3 px-4 py-2 text-sm font-normal rounded-lg transition-all duration-200 ${
+                  className={`flex items-center px-3 py-2 text-sm rounded-lg transition-colors ${
                     isActive(item.href)
-                      ? 'bg-rarity-600 text-white'
-                      : 'text-dark-text-secondary hover:text-dark-text hover:bg-dark-bg-tertiary'
+                      ? 'bg-primary text-primary-foreground'
+                      : 'text-muted-foreground hover:text-foreground hover:bg-muted'
                   }`}
-                  prefetch={true}
-                  onClick={() => setSidebarOpen(false)}
                 >
-                  {typeof item.icon === 'function' ? <item.icon className="w-5 h-5" /> : null}
-                  <span>{item.name}</span>
+                  {item.icon && <item.icon className="h-4 w-4 mr-3" />}
+                  {item.name}
                 </Link>
               )
             })}
           </nav>
 
-          {/* User section */}
-          <div className="p-4 border-t border-dark-border">
-            <div className="flex items-center space-x-3 p-3 rounded-lg bg-dark-bg-tertiary">
-              <div className="w-8 h-8 bg-rarity-600 rounded-full flex items-center justify-center">
-                <User className="w-4 h-4 text-white" />
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-dark-text truncate">
-                  {user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'User'}
-                </p>
-                <p className="text-xs text-dark-text-muted truncate">
-                  {user?.email}
-                </p>
-              </div>
+          {/* User Profile - Clickable Avatar */}
+          <div className="p-4 border-t border-border">
+            <div className="relative">
               <Button
                 variant="ghost"
-                size="icon"
-                onClick={handleSignOut}
-                className="text-dark-text-secondary hover:text-dark-text"
+                onClick={handleProfileClick}
+                className="w-full flex items-center space-x-3 p-2 hover:bg-muted rounded-lg transition-colors"
               >
-                <LogOut className="w-4 h-4" />
+                <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
+                  <span className="text-primary-foreground font-medium text-xs">
+                    {getUserInitials(user?.email)}
+                  </span>
+                </div>
+                <div className="flex-1 min-w-0 text-left">
+                  <p className="text-sm font-medium text-foreground truncate">
+                    {user?.email?.split('@')[0] || 'User'}
+                  </p>
+                  <p className="text-xs text-muted-foreground truncate">
+                    {user?.email}
+                  </p>
+                </div>
+                <ChevronDown className="h-4 w-4 text-muted-foreground" />
               </Button>
             </div>
           </div>
         </div>
-      </div>
+      </motion.aside>
 
-      {/* Main content */}
-      <div className="flex-1 flex flex-col">
-        {/* Mobile header */}
-        <div className="lg:hidden flex items-center justify-between px-4 py-3 bg-dark-bg border-b border-dark-border">
-          <Link href="/dashboard" className="flex items-center space-x-2">
-            <span className="text-lg font-medium text-white">Rarity Leads</span>
-          </Link>
-          <Button
-            variant="ghost"
-            size="icon"
-            aria-label="Open sidebar menu"
-            onClick={() => setSidebarOpen(true)}
-            className="ml-auto"
-          >
-            <Menu className="w-6 h-6 text-white" />
-          </Button>
-        </div>
+      {/* Mobile Sidebar Overlay */}
+      <AnimatePresence>
+        {sidebarOpen && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 bg-black bg-opacity-50 z-45 lg:hidden"
+              onClick={() => setSidebarOpen(false)}
+            />
+            <motion.aside
+              initial={{ x: -280 }}
+              animate={{ x: 0 }}
+              exit={{ x: -280 }}
+              transition={{ duration: 0.3 }}
+              className="fixed inset-y-0 left-0 z-50 w-64 bg-card border-r border-border lg:hidden"
+            >
+              <div className="flex flex-col h-full">
+                {/* Header */}
+                <div className="p-6 border-b border-border flex items-center justify-between">
+                  <h1 className="text-2xl font-bold text-foreground">Rarity Leads</h1>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setSidebarOpen(false)}
+                    className="text-foreground"
+                  >
+                    <X className="h-6 w-6" />
+                  </Button>
+                </div>
 
-        {/* Page content */}
+                {/* Navigation */}
+                <nav className="flex-1 p-4 space-y-2">
+                  {navigation.map((item) => {
+                    if (item.isSection) {
+                      return (
+                        <div key={item.name}>
+                          <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">
+                            {item.name}
+                          </h3>
+                          <div className="space-y-1">
+                            {item.children?.map((child) => (
+                              <Link
+                                key={child.name}
+                                href={child.href}
+                                className={`flex items-center px-3 py-2 text-sm rounded-lg transition-colors ${
+                                  isActive(child.href)
+                                    ? 'bg-primary text-primary-foreground'
+                                    : 'text-muted-foreground hover:text-foreground hover:bg-muted'
+                                }`}
+                                onClick={() => setSidebarOpen(false)}
+                              >
+                                {child.icon && <child.icon className="h-4 w-4 mr-3" />}
+                                {child.name}
+                              </Link>
+                            ))}
+                          </div>
+                        </div>
+                      )
+                    }
+
+                    return (
+                      <Link
+                        key={item.name}
+                        href={item.href}
+                        className={`flex items-center px-3 py-2 text-sm rounded-lg transition-colors ${
+                          isActive(item.href)
+                            ? 'bg-primary text-primary-foreground'
+                            : 'text-muted-foreground hover:text-foreground hover:bg-muted'
+                        }`}
+                        onClick={() => setSidebarOpen(false)}
+                      >
+                        {item.icon && <item.icon className="h-4 w-4 mr-3" />}
+                        {item.name}
+                      </Link>
+                    )
+                  })}
+                </nav>
+
+                {/* User Profile - Clickable Avatar */}
+                <div className="p-4 border-t border-border">
+                  <div className="relative">
+                    <Button
+                      variant="ghost"
+                      onClick={handleProfileClick}
+                      className="w-full flex items-center space-x-3 p-2 hover:bg-muted rounded-lg transition-colors"
+                    >
+                      <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
+                        <span className="text-primary-foreground font-medium text-xs">
+                          {getUserInitials(user?.email)}
+                        </span>
+                      </div>
+                      <div className="flex-1 min-w-0 text-left">
+                        <p className="text-sm font-medium text-foreground truncate">
+                          {user?.email?.split('@')[0] || 'User'}
+                        </p>
+                        <p className="text-xs text-muted-foreground truncate">
+                          {user?.email}
+                        </p>
+                      </div>
+                      <ChevronDown className="h-4 w-4 text-muted-foreground" />
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </motion.aside>
+          </>
+        )}
+      </AnimatePresence>
+
+      {/* Main Content */}
+      <div className="pl-0 lg:pl-64 flex-1">
         <motion.main
+          className="bg-background pt-20 lg:pt-6 pb-20 lg:pb-6 p-4 lg:p-6 min-h-screen"
           variants={fadeInUp}
-          initial="hidden"
-          animate="visible"
-          className="flex-1 w-full pt-4 px-4 pb-20 lg:pt-6 lg:px-8 lg:pb-6 overflow-x-hidden"
+          initial="initial"
+          animate="animate"
         >
           {children}
         </motion.main>
 
-        {/* Bottom tab navigation for mobile */}
-        <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-dark-bg-secondary border-t border-dark-border z-30">
+        {/* Bottom Tab Navigation - Mobile Only */}
+        <div className="lg:hidden fixed bottom-0 left-0 right-0 z-30 bg-card border-t border-border">
           <div className="flex justify-around">
             {bottomTabs.map((tab) => (
               <Link
                 key={tab.name}
                 href={tab.href}
-                className={`flex flex-col items-center py-3 px-4 flex-1 transition-all duration-200 ${
+                className={`flex flex-col items-center py-3 px-4 flex-1 transition-colors ${
                   isActive(tab.href)
-                    ? 'text-rarity-500'
-                    : 'text-dark-text-secondary hover:text-dark-text'
+                    ? 'text-primary'
+                    : 'text-muted-foreground hover:text-foreground'
                 }`}
               >
-                <tab.icon className="w-6 h-6 mb-1" />
-                <span className="text-xs font-medium">{tab.name}</span>
+                <tab.icon className="h-5 w-5 mb-1" />
+                <span className="text-xs">{tab.name}</span>
               </Link>
             ))}
           </div>
         </div>
       </div>
+
+        {/* Anthropic-style Profile Panel */}
+        <AnthropicProfilePanel
+          user={user}
+          isVisible={isProfilePanelVisible}
+          onClose={() => setIsProfilePanelVisible(false)}
+          onLogout={handleSignOut}
+          onSettingsClick={handleSettingsClick}
+        />
     </div>
   )
 } 

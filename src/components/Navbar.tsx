@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
+import ThemeToggle from '@/components/ThemeToggle';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -63,6 +64,7 @@ const Navbar = () => {
           </div>
 
           <div className="flex items-center space-x-4">
+            <ThemeToggle />
             <LanguageSwitcher />
             
             {user ? (

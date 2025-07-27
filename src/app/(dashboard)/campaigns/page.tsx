@@ -94,10 +94,10 @@ export default function CampaignsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-dark-bg flex flex-col">
+    <div className="min-h-screen bg-background flex flex-col">
       <motion.div className="w-full max-w-5xl mx-auto mb-6 flex flex-wrap gap-4 justify-between items-center pt-8">
-        <div className="text-lg text-primary-text font-medium">Total Campaigns: {campaigns.length}</div>
-        <div className="text-sm text-secondary-text">Selected: {selectedCampaigns.length}</div>
+        <div className="text-lg text-foreground font-medium">Total Campaigns: {campaigns.length}</div>
+        <div className="text-sm text-muted-foreground">Selected: {selectedCampaigns.length}</div>
         <div className="flex-1 min-w-[220px]">
           <Bar data={chartData} options={chartOptions} height={80} />
         </div>

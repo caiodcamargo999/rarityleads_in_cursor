@@ -1,317 +1,325 @@
 "use client"
 
-import { useEffect, useState } from 'react'
-import { motion, useInView } from 'framer-motion'
-import { useRef } from 'react'
+import { useState, useEffect } from 'react'
+import { motion } from 'framer-motion'
+import { useTranslation } from 'react-i18next'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
 import { 
-  TrendingUp, 
   Users, 
+  TrendingUp, 
   MessageSquare, 
   Target,
-  ArrowRight,
-  Plus,
-  Calendar,
-  CheckCircle,
-  MousePointer,
-  Clock,
-  RefreshCw,
   BarChart3,
-  Activity,
-  Edit,
-  Trash2,
-  UserPlus,
-  Send,
-  Play,
-  Pause
+  Calendar,
+  ArrowUpRight,
+  Plus
 } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-// No user/session logic here; handled by layout
+import { ClientOnly } from '@/components/ClientOnly'
+import { useRouter } from 'next/navigation'
 
 export default function DashboardPage() {
-  const dashboardRef = useRef(null)
-  const dashboardInView = useInView(dashboardRef, { once: true })
+  const { t } = useTranslation()
+  const router = useRouter()
+  const [isLoading, setIsLoading] = useState(true)
 
-  const keyMetrics = [
+  useEffect(() => {
+    // Simulate loading
+    const timer = setTimeout(() => setIsLoading(false), 1000)
+    return () => clearTimeout(timer)
+  }, [])
+
+  const metrics = [
     {
-      title: "Total Leads",
-      value: "0",
-      change: "0%",
+      title: t('dashboard.totalLeads'),
+      value: '0',
+      change: '0%',
       icon: Users,
-      color: "text-blue-400"
+      color: 'text-blue-500'
     },
     {
-      title: "Qualified Leads",
-      value: "0",
-      change: "0%",
-      icon: Target,
-      color: "text-green-400",
-      trend: "up"
-    },
-    {
-      title: "Active Conversations",
-      value: "0",
-      change: "0%",
-      icon: MessageSquare,
-      color: "text-purple-400",
-      trend: "up"
-    },
-    {
-      title: "Pipeline Value",
-      value: "$0k",
-      change: "0%",
+      title: t('dashboard.conversionRate'),
+      value: '0%',
+      change: '0%',
       icon: TrendingUp,
-      color: "text-orange-400"
+      color: 'text-green-500'
+    },
+    {
+      title: t('dashboard.activeConversations'),
+      value: '0',
+      change: '0',
+      icon: MessageSquare,
+      color: 'text-purple-500'
+    },
+    {
+      title: t('dashboard.pipelineValue'),
+      value: '$0',
+      change: '0%',
+      icon: Target,
+      color: 'text-orange-500'
     }
   ]
 
-  const performanceMetrics = [
+  const recentActivity = [
     {
-      title: "Conversion Rate",
-      value: "0.0%",
-      target: "0%",
-      icon: BarChart3,
-      color: "text-purple-400",
-      progress: 0
+      type: 'lead',
+      message: t('dashboard.recentLeads'),
+      time: t('common.justNow'),
+      icon: Users
     },
     {
-      title: "Response Rate",
-      value: "0.0%",
-      target: "0%",
-      icon: MousePointer,
-      color: "text-blue-400",
-      progress: 0
+      type: 'conversion',
+      message: t('dashboard.convertedLeads'),
+      time: t('common.justNow'),
+      icon: TrendingUp
     },
     {
-      title: "Avg Response Time",
-      value: "0h",
-      target: "0h",
-      icon: Clock,
-      color: "text-orange-400"
+      type: 'message',
+      message: t('dashboard.activeConversations'),
+      time: t('common.justNow'),
+      icon: MessageSquare
     }
   ]
 
-  const channelBreakdown = [
-    { name: "WhatsApp", leads: 0, color: "bg-green-400" },
-    { name: "Instagram", leads: 0, color: "bg-purple-400" },
-    { name: "LinkedIn", leads: 0, color: "bg-blue-400" },
-    { name: "Facebook", leads: 0, color: "bg-indigo-400" },
-    { name: "X (Twitter)", leads: 0, color: "bg-gray-400" }
-  ]
+  // Quick action handlers - Notion.com style
+  const handleQuickAction = (action: string) => {
+    switch (action) {
+      case 'addLead':
+        // Navigate to leads page with focus on lead creation
+        router.push('/leads')
+        break
+      case 'sendMessage':
+        // Navigate to WhatsApp outreach (most common channel)
+        router.push('/outreach/whatsapp')
+        break
+      case 'viewAnalytics':
+        // Navigate to analytics page
+        router.push('/analytics')
+        break
+      case 'schedule':
+        // Navigate to CRM for scheduling
+        router.push('/dashboard/crm')
+        break
+      default:
+        break
+    }
+  }
 
-  const leadStatusPipeline = [
-    { status: "New", count: 0, color: "bg-gray-400" },
-    { status: "Qualified", count: 0, color: "bg-green-400" },
-    { status: "In Progress", count: 0, color: "bg-blue-400" },
-    { status: "Converted", count: 0, color: "bg-purple-400" },
-    { status: "Lost", count: 0, color: "bg-red-400" }
-  ]
-
-  const activityFeed = [
-    { id: 1, type: 'lead_created', user: 'Alice', time: '2 min ago', desc: 'Created a new lead: John Smith', icon: UserPlus },
-    { id: 2, type: 'lead_edited', user: 'Bob', time: '10 min ago', desc: 'Edited lead: Sarah Johnson', icon: Edit },
-    { id: 3, type: 'campaign_launched', user: 'Alice', time: '30 min ago', desc: 'Launched campaign: Spring SaaS Push', icon: Play },
-    { id: 4, type: 'lead_deleted', user: 'Charlie', time: '1 hour ago', desc: 'Deleted lead: Mike Wilson', icon: Trash2 },
-    { id: 5, type: 'message_sent', user: 'Alice', time: '2 hours ago', desc: 'Sent WhatsApp message to John Smith', icon: Send },
-    { id: 6, type: 'campaign_paused', user: 'Bob', time: '3 hours ago', desc: 'Paused campaign: LinkedIn Outreach Q2', icon: Pause },
-    { id: 7, type: 'lead_converted', user: 'Alice', time: '4 hours ago', desc: 'Converted lead: Sarah Johnson', icon: CheckCircle },
-  ];
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-muted-foreground"></div>
+      </div>
+    )
+  }
 
   return (
-    <div ref={dashboardRef} className="min-h-screen bg-[#0a0a0a] w-full overflow-x-hidden">
-      <div className="w-full max-w-full">
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={dashboardInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-          transition={{ duration: 0.6 }}
-          className="mb-4"
-        >
-          <h1 className="text-2xl md:text-3xl font-normal text-white mb-2">
-            Dashboard
+    <div className="space-y-6 bg-background">
+      {/* Header */}
+      <div className="flex justify-between items-center">
+        <div>
+          <h1 className="text-3xl font-bold text-foreground">
+            <ClientOnly fallback="Dashboard">
+              {t('dashboard.title')}
+            </ClientOnly>
           </h1>
-          <p className="text-base text-gray-400">
-            Track your lead generation performance and campaign insights
+          <p className="text-muted-foreground mt-1">
+            <ClientOnly fallback="Welcome to Rarity Leads">
+              {t('dashboard.welcome')}
+            </ClientOnly>
           </p>
-        </motion.div>
+        </div>
+        <Button className="bg-muted hover:bg-muted/80 text-foreground border border-border">
+          <Plus className="w-4 h-4 mr-2" />
+          <ClientOnly fallback="Add Lead">
+            {t('leads.addLead')}
+          </ClientOnly>
+        </Button>
+      </div>
 
-        {/* Key Metrics */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={dashboardInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-          transition={{ duration: 0.6, delay: 0.1 }}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 mb-4"
-        >
-          {keyMetrics.map((metric, index) => (
-            <motion.div
-              key={metric.title}
-              initial={{ opacity: 0, y: 20 }}
-              animate={dashboardInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-              transition={{ duration: 0.6, delay: 0.2 + index * 0.1 }}
-              whileHover={{ scale: 1.01 }}
-            >
-              <Card className="bg-[#18181c] border border-gray-800 hover:border-gray-700 transition-all duration-300 p-4">
-                <CardContent className="p-0">
-                  <div className="flex items-center justify-between mb-2">
-                    <metric.icon className={`w-6 h-6 ${metric.color}`} />
-                    {metric.trend && (
-                      <div className="flex items-center text-green-400 text-xs">
-                        <TrendingUp className="w-3 h-3 mr-1" />
-                        {metric.change}
-                      </div>
-                    )}
-                  </div>
-                  <p className="text-sm text-gray-400 mb-1">{metric.title}</p>
-                  <p className="text-2xl font-normal text-white leading-tight">{metric.value}</p>
-                  {!metric.trend && (
-                    <p className="text-xs text-gray-500 mt-1">{metric.change}</p>
-                  )}
-                </CardContent>
-              </Card>
-            </motion.div>
-          ))}
-        </motion.div>
-
-        {/* Performance Metrics */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={dashboardInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-          className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4"
-        >
-          {performanceMetrics.map((metric, index) => (
-            <motion.div
-              key={metric.title}
-              initial={{ opacity: 0, y: 20 }}
-              animate={dashboardInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-              transition={{ duration: 0.6, delay: 0.4 + index * 0.1 }}
-              whileHover={{ scale: 1.01 }}
-            >
-              <Card className="bg-[#18181c] border border-gray-800 hover:border-gray-700 transition-all duration-300 p-4">
-                <CardContent className="p-0">
-                  <div className="flex items-center mb-2">
-                    <metric.icon className={`w-5 h-5 ${metric.color} mr-2`} />
-                    <h3 className="text-base font-normal text-white leading-tight">{metric.title}</h3>
-                  </div>
-                  <div className="mb-2">
-                    <p className="text-xl font-normal text-white leading-tight">{metric.value}</p>
-                    <p className="text-xs text-gray-400 leading-tight">Target: {metric.target}</p>
-                  </div>
-                  {metric.progress !== undefined && (
-                    <div className="w-full bg-gray-700 rounded-full h-1">
-                      <div 
-                        className="bg-[#8b5cf6] h-1 rounded-full transition-all duration-300"
-                        style={{ width: `${metric.progress}%` }}
-                      ></div>
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
-            </motion.div>
-          ))}
-        </motion.div>
-
-        {/* Breakdown and Pipeline */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={dashboardInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-          transition={{ duration: 0.6, delay: 0.5 }}
-          className="grid grid-cols-1 lg:grid-cols-2 gap-4"
-        >
-          {/* Channel Breakdown */}
+      {/* Metrics Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {metrics.map((metric, index) => (
           <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={dashboardInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -20 }}
-            transition={{ duration: 0.6, delay: 0.6 }}
+            key={index}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: index * 0.1 }}
           >
-            <Card className="bg-[#18181c] border border-gray-800 p-4">
-              <CardHeader className="p-0 mb-2">
-                <CardTitle className="text-base font-normal text-white flex items-center leading-tight">
-                  <BarChart3 className="w-5 h-5 text-green-400 mr-2" />
-                  Channel Breakdown
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="p-0">
-                <div className="space-y-2">
-                  {channelBreakdown.map((channel, index) => (
-                    <div key={channel.name} className="flex items-center justify-between">
-                      <div className="flex items-center space-x-2">
-                        <div className={`w-2.5 h-2.5 rounded-full ${channel.color}`}></div>
-                        <span className="text-white font-normal text-sm leading-tight">{channel.name}</span>
-                      </div>
-                      <span className="text-white font-normal text-sm leading-tight">{channel.leads} leads</span>
-                    </div>
-                  ))}
+            <Card className="bg-card border-border shadow-lg">
+              <CardContent className="p-6 relative z-10">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-muted-foreground">
+                      {metric.title}
+                    </p>
+                    <p className="text-2xl font-bold text-foreground mt-1">
+                      {metric.value}
+                    </p>
+                  </div>
+                  <div className={`p-3 rounded-lg bg-muted ${metric.color}`}>
+                    <metric.icon className="w-6 h-6" />
+                  </div>
+                </div>
+                <div className="flex items-center mt-4">
+                  <ArrowUpRight className="w-4 h-4 text-green-500 mr-1" />
+                  <span className="text-sm text-green-500 font-medium">
+                    {metric.change}
+                  </span>
+                  <span className="text-sm text-muted-foreground ml-1">
+                    <ClientOnly fallback="from last month">
+                      {t('dashboard.fromLastMonth')}
+                    </ClientOnly>
+                  </span>
                 </div>
               </CardContent>
             </Card>
           </motion.div>
+        ))}
+      </div>
 
-          {/* Lead Status Pipeline */}
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={dashboardInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 20 }}
-            transition={{ duration: 0.6, delay: 0.6 }}
-          >
-            <Card className="bg-[#18181c] border border-gray-800 p-4">
-              <CardHeader className="p-0 mb-2">
-                <CardTitle className="text-base font-normal text-white flex items-center leading-tight">
-                  <BarChart3 className="w-5 h-5 text-green-400 mr-2" />
-                  Lead Status Pipeline
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="p-0">
-                <div className="space-y-2">
-                  {leadStatusPipeline.map((status, index) => (
-                    <div key={status.status} className="flex items-center justify-between">
-                      <div className="flex items-center space-x-2">
-                        <div className={`w-2.5 h-2.5 rounded-full ${status.color}`}></div>
-                        <span className="text-white font-normal text-sm leading-tight">{status.status}</span>
-                      </div>
-                      <span className="text-white font-normal text-sm leading-tight">{status.count} leads</span>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          </motion.div>
-        </motion.div>
-
-        {/* Activity Log */}
+      {/* Charts and Activity */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Performance Chart */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
-          animate={dashboardInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-          transition={{ duration: 0.6, delay: 0.7 }}
-          className="w-full max-w-5xl mx-auto mt-8"
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.4 }}
+          className="lg:col-span-2"
         >
-          <h2 className="text-xl font-normal text-white mb-4">Recent Activity</h2>
-          <div className="bg-[#18181c] border border-gray-800 rounded-xl p-4">
-            {activityFeed.length === 0 ? (
-              <div className="text-gray-400 text-center py-8">No recent activity yet.</div>
-            ) : (
-              <ul className="divide-y divide-gray-800">
-                {activityFeed.map((item, idx) => (
-                  <motion.li
-                    key={item.id}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.3, delay: 0.1 + idx * 0.05 }}
-                    className="flex items-center gap-4 py-3"
-                  >
-                    <span className="flex items-center justify-center w-10 h-10 rounded-full bg-[#232336]">
-                      <item.icon className="w-5 h-5 text-[#8b5cf6]" />
-                    </span>
-                    <div className="flex-1 min-w-0">
-                      <div className="text-sm text-white truncate">{item.desc}</div>
-                      <div className="text-xs text-gray-400">{item.user} • {item.time}</div>
+          <Card className="bg-card border-border shadow-lg">
+            <CardHeader>
+              <CardTitle className="text-foreground">
+                <ClientOnly fallback="Performance">
+                  {t('dashboard.performance')}
+                </ClientOnly>
+              </CardTitle>
+              <CardDescription className="text-muted-foreground">
+                <ClientOnly fallback="Last 30 days">
+                  {t('dashboard.last30Days')}
+                </ClientOnly>
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="h-64 flex items-center justify-center">
+                <div className="text-center">
+                  <BarChart3 className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
+                  <p className="text-muted-foreground">
+                    <ClientOnly fallback="Chart coming soon">
+                      {t('dashboard.chartComingSoon')}
+                    </ClientOnly>
+                  </p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </motion.div>
+
+        {/* Recent Activity */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.5 }}
+        >
+          <Card className="bg-card border-border shadow-lg">
+            <CardHeader>
+              <CardTitle className="text-foreground">
+                <ClientOnly fallback="Recent Activity">
+                  {t('dashboard.recentActivity')}
+                </ClientOnly>
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {recentActivity.map((activity, index) => (
+                  <div key={index} className="flex items-center space-x-3">
+                    <div className="p-2 rounded-lg bg-muted">
+                      <activity.icon className="w-4 h-4 text-muted-foreground" />
                     </div>
-                  </motion.li>
+                    <div className="flex-1">
+                      <p className="text-sm text-foreground">
+                        {activity.message}
+                      </p>
+                      <p className="text-xs text-muted-foreground">
+                        {activity.time}
+                      </p>
+                    </div>
+                  </div>
                 ))}
-              </ul>
-            )}
-          </div>
+              </div>
+            </CardContent>
+          </Card>
         </motion.div>
       </div>
+
+      {/* Quick Actions */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.6 }}
+      >
+        <Card className="bg-card border-border shadow-lg">
+          <CardHeader>
+            <CardTitle className="text-foreground">
+              <ClientOnly fallback="Quick Actions">
+                {t('dashboard.quickActions')}
+              </ClientOnly>
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <Button 
+                variant="outline" 
+                className="h-20 flex-col space-y-2 bg-muted border-border text-foreground hover:bg-muted/80 transition-all duration-200 hover:scale-105"
+                onClick={() => handleQuickAction('addLead')}
+              >
+                <Users className="w-6 h-6" />
+                <span className="text-sm">
+                  <ClientOnly fallback="Add Lead">
+                    {t('leads.addLead')}
+                  </ClientOnly>
+                </span>
+              </Button>
+              <Button 
+                variant="outline" 
+                className="h-20 flex-col space-y-2 bg-muted border-border text-foreground hover:bg-muted/80 transition-all duration-200 hover:scale-105"
+                onClick={() => handleQuickAction('sendMessage')}
+              >
+                <MessageSquare className="w-6 h-6" />
+                <span className="text-sm">
+                  <ClientOnly fallback="Send Message">
+                    {t('outreach.sendMessage')}
+                  </ClientOnly>
+                </span>
+              </Button>
+              <Button 
+                variant="outline" 
+                className="h-20 flex-col space-y-2 bg-muted border-border text-foreground hover:bg-muted/80 transition-all duration-200 hover:scale-105"
+                onClick={() => handleQuickAction('viewAnalytics')}
+              >
+                <BarChart3 className="w-6 h-6" />
+                <span className="text-sm">
+                  <ClientOnly fallback="View Analytics">
+                    {t('analytics.title')}
+                  </ClientOnly>
+                </span>
+              </Button>
+              <Button 
+                variant="outline" 
+                className="h-20 flex-col space-y-2 bg-muted border-border text-foreground hover:bg-muted/80 transition-all duration-200 hover:scale-105"
+                onClick={() => handleQuickAction('schedule')}
+              >
+                <Calendar className="w-6 h-6" />
+                <span className="text-sm">
+                  <ClientOnly fallback="Schedule">
+                    {t('dashboard.schedule')}
+                  </ClientOnly>
+                </span>
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      </motion.div>
     </div>
   )
 } 

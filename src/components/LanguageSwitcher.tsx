@@ -1,64 +1,112 @@
+"use client"
 
-import { useTranslation } from 'react-i18next';
-import { Button } from '@/components/ui/button';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { Globe } from 'lucide-react';
+import { useState, useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
+import { Button } from '@/components/ui/button'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
+import { Globe } from 'lucide-react'
+import { motion, AnimatePresence } from 'framer-motion'
 
 const languages = [
-  { code: 'en', name: 'English', flag: '🇺🇸' },
-  { code: 'es', name: 'Español', flag: '🇪🇸' },
-  { code: 'fr', name: 'Français', flag: '🇫🇷' },
-];
+  { code: 'en', name: 'English', flag: '🇺🇸', nativeName: 'English' },
+  { code: 'es', name: 'Español', flag: '🇪🇸', nativeName: 'Español' },
+  { code: 'fr', name: 'Français', flag: '🇫🇷', nativeName: 'Français' },
+  { code: 'pt', name: 'Português', flag: '🇧🇷', nativeName: 'Português' },
+]
 
 const LanguageSwitcher = () => {
-  const { i18n } = useTranslation();
+  const { i18n } = useTranslation()
+  const [mounted, setMounted] = useState(false)
+  const [currentLanguage, setCurrentLanguage] = useState(languages[0])
+  const [isOpen, setIsOpen] = useState(false)
 
-  const currentLanguage = languages.find(lang => lang.code === i18n.language) || languages[0];
+  useEffect(() => {
+    setMounted(true)
+    const lang = languages.find(lang => lang.code === i18n.language) || languages[0]
+    setCurrentLanguage(lang)
+  }, [i18n.language])
 
   const changeLanguage = (languageCode: string) => {
-    i18n.changeLanguage(languageCode);
-  };
+    i18n.changeLanguage(languageCode)
+    localStorage.setItem('i18nextLng', languageCode)
+    localStorage.setItem('ip-detected-language', languageCode)
+    setIsOpen(false)
+  }
+
+  // Don't render until mounted to prevent hydration mismatch
+  if (!mounted) {
+    return (
+      <Button
+        variant="ghost"
+        size="sm"
+        className="text-muted-foreground hover:text-foreground transition-colors"
+      >
+        <Globe className="h-4 w-4" />
+      </Button>
+    )
+  }
 
   return (
-    <DropdownMenu>
+    <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
       <DropdownMenuTrigger asChild>
-        <Button
-          variant="outline"
-          size="sm"
-          aria-label="Abrir seletor de idioma"
-          className="flex items-center gap-2 bg-white/10 backdrop-blur-sm border-white/20 text-white hover:bg-white/20 hover:text-white hover:border-white/30"
+        <motion.div
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
         >
-          <Globe className="h-4 w-4" />
-          <span className="hidden sm:inline">
-            {currentLanguage.flag} {currentLanguage.name}
-          </span>
-          <span className="sm:hidden">{currentLanguage.flag}</span>
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent
-        align="end"
-        className="bg-slate-900/95 backdrop-blur-xl border-white/20 text-white"
-      >
-        {languages.map((language) => (
-          <DropdownMenuItem
-            key={language.code}
-            onClick={() => changeLanguage(language.code)}
-            className={`hover:bg-white/10 focus:bg-white/10 ${
-              i18n.language === language.code ? 'bg-purple-500/30' : ''
-            }`}
+          <Button
+            variant="ghost"
+            size="sm"
+            className="text-muted-foreground hover:text-foreground transition-colors duration-200"
           >
-            <span className="mr-2">{language.flag}</span>
-            {language.name}
-          </DropdownMenuItem>
-        ))}
+            <Globe className="h-4 w-4" />
+          </Button>
+        </motion.div>
+      </DropdownMenuTrigger>
+                          <DropdownMenuContent
+                      align="start" 
+                      className="bg-slate-900/95 backdrop-blur-xl border-white/20 text-white min-w-[160px] p-1"
+                      sideOffset={2}
+                      side="bottom"
+                      alignOffset={-20}
+                    >
+        <AnimatePresence>
+          {isOpen && (
+            <motion.div
+              initial={{ opacity: 0, y: -10, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -10, scale: 0.95 }}
+              transition={{ duration: 0.2, ease: "easeOut" }}
+            >
+              {languages.map((language, index) => (
+                <motion.div
+                  key={language.code}
+                  initial={{ opacity: 0, y: -5 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.15, delay: index * 0.03 }}
+                >
+                  <DropdownMenuItem
+                    onClick={() => changeLanguage(language.code)}
+                    className={`hover:bg-white/10 focus:bg-white/10 transition-all duration-200 rounded-md cursor-pointer ${
+                      i18n.language === language.code ? 'bg-purple-500/30 text-purple-200' : ''
+                    }`}
+                  >
+                    <motion.div
+                      className="flex items-center w-full"
+                      whileHover={{ scale: 1.05 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      <span className="mr-3 text-base">{language.flag}</span>
+                      <span className="text-sm font-medium">{language.nativeName}</span>
+                    </motion.div>
+                  </DropdownMenuItem>
+                </motion.div>
+              ))}
+            </motion.div>
+          )}
+        </AnimatePresence>
       </DropdownMenuContent>
     </DropdownMenu>
-  );
-};
+  )
+}
 
-export default LanguageSwitcher;
+export default LanguageSwitcher

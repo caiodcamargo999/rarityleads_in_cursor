@@ -80,16 +80,12 @@ export const metadata: Metadata = {
   },
 }
 
-// Performance-optimized viewport
 export const viewport: Viewport = {
+  themeColor: '#0A0A23',
   width: 'device-width',
   initialScale: 1,
   maximumScale: 5,
   userScalable: true,
-  themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#8b5cf6' },
-    { media: '(prefers-color-scheme: dark)', color: '#0a0a0a' },
-  ],
 }
 
 export default function RootLayout({
@@ -98,7 +94,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className={`${inter.variable} antialiased`}>
+    <html className={`${inter.variable} antialiased`}>
       <head>
         {/* Preload critical resources */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -135,7 +131,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className={`${inter.className} bg-dark-bg text-dark-text`}>
+      <body className={`${inter.className} bg-background text-foreground`}>
         <Providers>
           {children}
         </Providers>

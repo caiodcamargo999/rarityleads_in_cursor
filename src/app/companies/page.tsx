@@ -415,7 +415,7 @@ export default function CompaniesPage() {
             >
               <button className="absolute top-4 right-4 text-secondary-text hover:text-white text-2xl" aria-label="Close details" onClick={() => setDetailsCompany(null)}>&times;</button>
               <div className="text-lg font-medium text-white mb-4">Company Details</div>
-              <form onSubmit={e => { e.preventDefault(); setCompanies(prev => prev.map(c => c.id === editCompany.id ? { ...editCompany } : c)); setDetailsCompany(editCompany); toast({ title: 'Company updated', description: 'Company details updated.' }); }} className="flex flex-col gap-2">
+              <form onSubmit={e => { e.preventDefault(); if (editCompany) { setCompanies(prev => prev.map(c => c.id === editCompany.id ? { ...editCompany } : c)); setDetailsCompany(editCompany); toast({ title: 'Company updated', description: 'Company details updated.' }); } }} className="flex flex-col gap-2">
                 <label className="text-xs text-secondary-text">Name</label>
                 <input type="text" className="bg-dark-bg-tertiary text-white rounded px-2 py-1 text-sm border border-dark-border" value={editCompany?.name ?? ''} onChange={e => setEditCompany(c => c ? { ...c, name: e.target.value } : c)} />
                 <label className="text-xs text-secondary-text">Industry</label>

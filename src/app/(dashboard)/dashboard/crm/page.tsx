@@ -304,13 +304,13 @@ export default function CrmPage() {
           type="text"
           placeholder="Search by name, company, or email..."
           aria-label="Search leads"
-          className="flex-1 bg-dark-bg-tertiary text-white rounded px-4 py-2 text-sm border border-dark-border focus:outline-none focus:ring-2 focus:ring-rarity-600 transition"
+          className="flex-1 bg-background text-foreground rounded px-4 py-2 text-sm border border-border focus:outline-none focus:ring-2 focus:ring-primary transition"
           value={search}
           onChange={e => setSearch(e.target.value)}
         />
         <div className="flex gap-2 flex-wrap justify-center sm:justify-start">
           <button
-            className={`px-3 py-1 rounded-full text-xs font-medium transition border ${activeStatus === null ? 'bg-rarity-600 text-white border-rarity-600' : 'bg-dark-bg-tertiary text-secondary-text border-dark-border hover:bg-dark-bg-secondary'}`}
+            className={`px-3 py-1 rounded-full text-xs font-medium transition border ${activeStatus === null ? 'bg-primary text-primary-foreground border-primary' : 'bg-muted text-muted-foreground border-border hover:bg-muted/80'}`}
             aria-label="Show all statuses"
             onClick={() => setActiveStatus(null)}
           >
@@ -319,7 +319,7 @@ export default function CrmPage() {
           {STAGES.map(stage => (
             <button
               key={stage.key}
-              className={`px-3 py-1 rounded-full text-xs font-medium transition border ${activeStatus === stage.key ? 'bg-rarity-600 text-white border-rarity-600' : 'bg-dark-bg-tertiary text-secondary-text border-dark-border hover:bg-dark-bg-secondary'}`}
+              className={`px-3 py-1 rounded-full text-xs font-medium transition border ${activeStatus === stage.key ? 'bg-primary text-primary-foreground border-primary' : 'bg-muted text-muted-foreground border-border hover:bg-muted/80'}`}
               aria-label={`Filter by ${stage.label}`}
               onClick={() => setActiveStatus(stage.key)}
             >
@@ -331,7 +331,7 @@ export default function CrmPage() {
       {/* Floating + New Lead button */}
       <button
         aria-label="Add new lead"
-        className="fixed bottom-20 lg:bottom-8 right-4 lg:right-8 z-50 bg-rarity-600 hover:bg-rarity-700 text-white rounded-full shadow-lg w-12 h-12 lg:w-14 lg:h-14 flex items-center justify-center text-2xl lg:text-3xl focus:outline-none focus:ring-2 focus:ring-rarity-600 transition"
+        className="fixed bottom-20 lg:bottom-8 right-4 lg:right-8 z-50 bg-primary hover:bg-primary/90 text-primary-foreground rounded-full shadow-lg w-12 h-12 lg:w-14 lg:h-14 flex items-center justify-center text-2xl lg:text-3xl focus:outline-none focus:ring-2 focus:ring-primary transition"
         onClick={() => handleOpenModal(STAGES[0].key)}
       >
         +
@@ -349,11 +349,11 @@ export default function CrmPage() {
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.95, opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className="bg-card-bg rounded-xl border border-dark-border p-8 w-full max-w-md focus:outline-none"
+            className="bg-card border border-border rounded-xl p-8 w-full max-w-md focus:outline-none"
             onClick={e => e.stopPropagation()}
             tabIndex={0}
           >
-            <div className="text-lg font-medium text-white mb-4">Create New Lead</div>
+            <div className="text-lg font-medium text-foreground mb-4">Create New Lead</div>
             <form
               className="flex flex-col gap-3"
               onSubmit={e => {
@@ -366,7 +366,7 @@ export default function CrmPage() {
                 type="text"
                 placeholder="Full Name"
                 aria-label="Full Name"
-                className="bg-dark-bg-tertiary text-white rounded px-2 py-1 text-sm border border-dark-border"
+                className="bg-background text-foreground rounded px-2 py-1 text-sm border border-border"
                 value={newLead[modalStage!]?.full_name || ""}
                 onChange={e => setNewLead(prev => ({ ...prev, [modalStage!]: { ...prev[modalStage!], full_name: e.target.value } }))}
                 required
@@ -375,7 +375,7 @@ export default function CrmPage() {
                 type="text"
                 placeholder="Company Name"
                 aria-label="Company Name"
-                className="bg-dark-bg-tertiary text-white rounded px-2 py-1 text-sm border border-dark-border"
+                className="bg-background text-foreground rounded px-2 py-1 text-sm border border-border"
                 value={newLead[modalStage!]?.company_name || ""}
                 onChange={e => setNewLead(prev => ({ ...prev, [modalStage!]: { ...prev[modalStage!], company_name: e.target.value } }))}
                 required
@@ -384,7 +384,7 @@ export default function CrmPage() {
                 type="email"
                 placeholder="Email"
                 aria-label="Email"
-                className="bg-dark-bg-tertiary text-white rounded px-2 py-1 text-sm border border-dark-border"
+                className="bg-background text-foreground rounded px-2 py-1 text-sm border border-border"
                 value={newLead[modalStage!]?.email || ""}
                 onChange={e => setNewLead(prev => ({ ...prev, [modalStage!]: { ...prev[modalStage!], email: e.target.value } }))}
                 required

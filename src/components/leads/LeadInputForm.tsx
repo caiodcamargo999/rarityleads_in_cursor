@@ -6,35 +6,37 @@ import { Button } from "@/components/ui/button"
 import { supabase } from '@/integrations/supabase/client'
 import { useEffect } from 'react'
 import { useSession } from '@supabase/auth-helpers-react'
+import { useTranslation } from 'react-i18next'
+import { ClientOnly } from '@/components/ClientOnly'
 
 const filtersList = [
   {
-    label: "Annual Revenue",
+    label: "leads.filters.annualRevenue",
     key: "revenue",
     options: ["$0-1M", "$1-5M", "$5-10M", "$10-50M", "$50M+"]
   },
   {
-    label: "Company Size",
+    label: "leads.filters.companySize",
     key: "size",
     options: ["1-10", "11-50", "51-200", "201-1000", "1000+"]
   },
   {
-    label: "Country/City",
+    label: "leads.filters.countryCity",
     key: "location",
     options: ["USA", "UK", "Germany", "Brazil", "Singapore"]
   },
   {
-    label: "Lead Role",
+    label: "leads.filters.leadRole",
     key: "role",
     options: ["CEO", "Head of Marketing", "CTO", "Founder", "Sales Director"]
   },
   {
-    label: "Contact Channel",
+    label: "leads.filters.contactChannel",
     key: "channel",
     options: ["WhatsApp", "LinkedIn", "Instagram", "Facebook", "X (Twitter)"]
   },
   {
-    label: "Business Needs",
+    label: "leads.filters.businessNeeds",
     key: "needs",
     options: ["Paid Ads", "Funnel", "CRM", "Outreach", "SEO"]
   },
@@ -43,6 +45,7 @@ const filtersList = [
 type Props = { onClose?: () => void; onLeadsGenerated?: (leads: any[], description: string) => void }
 
 export default function LeadInputForm({ onClose, onLeadsGenerated }: Props) {
+  const { t } = useTranslation()
   const [description, setDescription] = useState("")
   const [filters, setFilters] = useState<any>({})
   const [loading, setLoading] = useState(false)
@@ -102,90 +105,125 @@ export default function LeadInputForm({ onClose, onLeadsGenerated }: Props) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="bg-[#18181c] rounded-2xl shadow-lg p-4 lg:p-6 flex flex-col gap-4 lg:gap-6 relative w-full">
-      {onClose && (
-        <button
-          type="button"
-          onClick={onClose}
-          className="absolute top-4 right-4 text-gray-400 hover:text-white text-xl focus:outline-none"
-          aria-label="Close"
-        >
-          &times;
-        </button>
-      )}
-      {error && <div className="text-red-400 text-sm mb-2">{error}</div>}
-      <div className="relative mt-2">
-        <textarea
-          id="lead-description"
-          value={description}
-          onChange={e => setDescription(e.target.value)}
-          rows={4}
-          className="w-full bg-dark-bg-secondary text-white rounded-lg border border-dark-border p-4 pt-8 resize-none focus:outline-none focus:ring-2 focus:ring-rarity-500 transition-all peer"
-          placeholder=" "
-        />
-        <span
-          className={
-            `absolute left-4 top-4 text-gray-400 text-base pointer-events-none transition-all duration-200 ` +
-            ((description && description.length > 0) ? 'text-xs -top-2 bg-[#18181c] px-1' : 'peer-focus:text-xs peer-focus:-top-2 peer-focus:bg-[#18181c] peer-focus:px-1')
-          }
-        >
-          Describe your ideal client (industry, role, location, budget, contact method, etc.)
-        </span>
-      </div>
-      <div className="flex flex-wrap gap-2 justify-center sm:justify-start">
-        {filtersList.map(f => (
-          <div key={f.key} className="relative">
-            <button
-              type="button"
-              className={`px-3 lg:px-4 py-2 rounded-full bg-dark-bg border border-dark-border text-gray-300 text-xs lg:text-sm hover:bg-dark-bg-tertiary transition-all flex items-center gap-2 ${openDropdown === f.key ? 'ring-2 ring-rarity-600' : ''}`}
-              onClick={() => setOpenDropdown(openDropdown === f.key ? null : f.key)}
-            >
-              {f.label}
-              {filters[f.key] && filters[f.key].length > 0 && (
-                <span className="ml-2 text-xs text-rarity-600">({filters[f.key].length})</span>
-              )}
-            </button>
-            <AnimatePresence>
-              {openDropdown === f.key && (
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: 10 }}
-                  transition={{ duration: 0.2 }}
-                  className="absolute z-20 mt-2 left-0 min-w-[180px] bg-[#232336] border border-dark-border rounded-lg shadow-lg p-2 flex flex-col gap-1"
-                >
-                  {f.options.map(option => (
-                    <button
-                      key={option}
-                      type="button"
-                      className={`w-full text-left px-3 py-2 rounded text-sm transition-all ${filters[f.key]?.includes(option) ? 'bg-rarity-600 text-white' : 'text-gray-200 hover:bg-dark-bg-tertiary'}`}
-                      onClick={() => handleSelectOption(f.key, option)}
-                    >
-                      {option}
-                    </button>
-                  ))}
-                </motion.div>
-              )}
-            </AnimatePresence>
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -20 }}
+      className="bg-gradient-to-br from-card via-card to-card/80 dark:from-card/90 dark:to-card/70 border border-border rounded-lg shadow-lg p-6 mb-8 overflow-hidden"
+    >
+      {/* Purple gradient overlay - more prominent in light theme */}
+      <div className="absolute inset-0 bg-gradient-to-br from-purple-500/8 via-purple-400/5 to-transparent pointer-events-none dark:from-purple-500/3 dark:to-transparent"></div>
+      
+      <div className="relative z-10">
+        <h2 className="text-xl font-semibold text-foreground mb-4">
+          <ClientOnly fallback="Generate AI-Powered Leads">
+            {t('leads.createLeadManually')}
+          </ClientOnly>
+        </h2>
+        
+        <form onSubmit={handleSubmit} className="space-y-6">
+          {/* Description Input */}
+          <div>
+            <label className="block text-sm font-medium text-foreground mb-2">
+              <ClientOnly fallback="Describe your ideal client">
+                {t('leads.idealClientDescription')}
+              </ClientOnly>
+            </label>
+            <textarea
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              className="w-full h-32 p-3 border border-border rounded-lg bg-background text-foreground placeholder-muted-foreground focus:ring-2 focus:ring-purple-500 focus:border-transparent resize-none"
+              placeholder={t('leads.idealClientDescription')}
+              required
+            />
           </div>
-        ))}
+
+          {/* Filters */}
+          <div className="space-y-4">
+            <h3 className="text-lg font-medium text-foreground">
+              <ClientOnly fallback="Optional Filters">
+                Optional Filters
+              </ClientOnly>
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {filtersList.map((filter) => (
+                <div key={filter.key} className="relative">
+                  <label className="block text-sm font-medium text-foreground mb-2">
+                    <ClientOnly fallback={filter.label}>
+                      {t(filter.label)}
+                    </ClientOnly>
+                  </label>
+                  <div className="relative">
+                    <button
+                      type="button"
+                      onClick={() => setOpenDropdown(openDropdown === filter.key ? null : filter.key)}
+                      className="w-full p-3 border border-border rounded-lg bg-background text-foreground text-left focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                    >
+                      <span className="text-muted-foreground">
+                        {filters[filter.key]?.length > 0 
+                          ? `${filters[filter.key].length} selected`
+                          : 'Select options'
+                        }
+                      </span>
+                    </button>
+                    
+                    <AnimatePresence>
+                      {openDropdown === filter.key && (
+                        <motion.div
+                          initial={{ opacity: 0, y: -10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: -10 }}
+                          className="absolute z-50 w-full mt-1 bg-gradient-to-br from-card via-card to-card/90 dark:from-card/95 dark:to-card/85 border border-border rounded-lg shadow-lg max-h-48 overflow-y-auto"
+                        >
+                          {filter.options.map((option) => (
+                            <button
+                              key={option}
+                              type="button"
+                              onClick={() => handleSelectOption(filter.key, option)}
+                              className={`w-full p-2 text-left hover:bg-muted dark:hover:bg-muted/60 transition-colors ${
+                                filters[filter.key]?.includes(option) 
+                                  ? 'bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300' 
+                                  : 'text-foreground'
+                              }`}
+                            >
+                              {option}
+                            </button>
+                          ))}
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Submit Button */}
+          <div className="flex justify-end">
+            <Button
+              type="submit"
+              disabled={loading || !description.trim()}
+              className="bg-gradient-to-r from-purple-600 to-purple-500 hover:from-purple-700 hover:to-purple-600 text-white shadow-lg hover:shadow-purple-500/25 dark:from-purple-500/40 dark:to-purple-400/40 dark:hover:from-purple-500/50 dark:hover:to-purple-400/50"
+            >
+              {loading ? (
+                <ClientOnly fallback="Generating...">
+                  {t('common.loading')}
+                </ClientOnly>
+              ) : (
+                <ClientOnly fallback="Generate Leads">
+                  {t('leads.generateLeads')}
+                </ClientOnly>
+              )}
+            </Button>
+          </div>
+
+          {error && (
+            <div className="text-red-500 text-sm bg-red-50 dark:bg-red-900/20 p-3 rounded-lg">
+              {error}
+            </div>
+          )}
+        </form>
       </div>
-      <motion.div
-        whileHover={{ scale: 1.03 }}
-        whileTap={{ scale: 0.97 }}
-        className="flex justify-end"
-      >
-        <Button
-          type="submit"
-          variant="primary"
-          size="lg"
-          loading={loading}
-          className="px-8 text-base font-medium"
-          disabled={loading || !description.trim()}
-        >
-          Generate Leads
-        </Button>
-      </motion.div>
-    </form>
+    </motion.div>
   )
 } 

@@ -1,6 +1,8 @@
 "use client"
 
 import { motion } from "framer-motion"
+import { useTranslation } from 'react-i18next'
+import { ClientOnly } from '@/components/ClientOnly'
 
 type Lead = {
   id?: string;
@@ -20,52 +22,68 @@ type Lead = {
 }
 
 export default function LeadsResultsGrid({ leads = [] }: { leads?: Lead[] }) {
+  const { t } = useTranslation()
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-      className="w-full flex flex-col items-center justify-center min-h-[200px]"
+      className="bg-gradient-to-br from-card via-card to-card/80 dark:from-card/90 dark:to-card/70 border border-border rounded-lg shadow-lg p-6 mb-8 overflow-hidden"
     >
-      {leads.length === 0 ? (
-        <div className="text-gray-500 text-base">No leads generated yet. Fill the form and click Generate Leads.</div>
-      ) : (
-        <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {leads.map((lead, i) => (
-            <motion.div
-              key={lead.full_name + lead.company_name + i}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, delay: i * 0.05 }}
-              className="bg-[#18181c] rounded-xl shadow-lg p-6 border border-dark-border flex flex-col gap-2"
-            >
-              <div className="text-lg font-medium text-white mb-1">{lead.full_name}</div>
-              <div className="text-sm text-gray-300 mb-1">{lead.company_name} — {lead.job_title}</div>
-              <div className="text-sm text-gray-400 mb-1">{lead.location} ({lead.timezone})</div>
-              <div className="flex gap-2 items-center mb-1">
-                <span className="text-xs text-gray-400">Main Channel:</span>
-                {lead.contact_channels?.map((ch, idx) => (
-                  <span key={ch + idx} className="px-2 py-1 rounded bg-dark-bg-tertiary text-xs text-gray-200">{ch}</span>
-                ))}
-              </div>
-              <div className="text-xs text-gray-400 mb-1">Best time: {lead.best_contact_time}</div>
-              <div className="flex flex-wrap gap-1 mb-1">
-                {lead.tags?.map(tag => (
-                  <span key={tag} className="bg-rarity-600 text-white text-xs px-2 py-1 rounded-full">{tag}</span>
-                ))}
-              </div>
-              <div className="flex flex-wrap gap-1 mb-2">
-                {lead.suggested_services?.map(svc => (
-                  <span key={svc} className="bg-dark-bg-tertiary text-xs text-gray-300 px-2 py-1 rounded-full">{svc}</span>
-                ))}
-              </div>
-              <div className="flex justify-end">
-                <button className="px-4 py-2 rounded bg-rarity-600 text-white text-sm font-medium hover:bg-rarity-700 transition">Save to Pipeline</button>
-              </div>
-            </motion.div>
-          ))}
-        </div>
-      )}
+      {/* Purple gradient overlay - more prominent in light theme */}
+      <div className="absolute inset-0 bg-gradient-to-br from-purple-500/8 via-purple-400/5 to-transparent pointer-events-none dark:from-purple-500/3 dark:to-transparent"></div>
+      
+      <div className="relative z-10">
+        <h2 className="text-xl font-semibold text-foreground mb-4">
+          <ClientOnly fallback="Generated Leads">
+            Generated Leads
+          </ClientOnly>
+        </h2>
+        
+        {leads.length === 0 ? (
+          <div className="text-muted-foreground text-base text-center py-8">
+            <ClientOnly fallback="No leads generated yet. Fill the form and click Generate Leads.">
+              {t('leads.noLeadsGenerated')}
+            </ClientOnly>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {leads.map((lead, index) => (
+              <motion.div
+                key={lead.id || index}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                className="bg-gradient-to-br from-background via-background to-background/80 dark:from-background/90 dark:to-background/70 border border-border rounded-lg p-4 hover:shadow-md transition-all duration-200"
+              >
+                <div className="space-y-2">
+                  <h3 className="font-medium text-foreground">{lead.full_name}</h3>
+                  <p className="text-sm text-muted-foreground">{lead.company_name}</p>
+                  <p className="text-sm text-muted-foreground">{lead.email}</p>
+                  {lead.job_title && (
+                    <p className="text-sm text-muted-foreground">{lead.job_title}</p>
+                  )}
+                  {lead.location && (
+                    <p className="text-sm text-muted-foreground">{lead.location}</p>
+                  )}
+                  {lead.tags && lead.tags.length > 0 && (
+                    <div className="flex flex-wrap gap-1 mt-2">
+                      {lead.tags.map((tag, tagIndex) => (
+                        <span
+                          key={tagIndex}
+                          className="px-2 py-1 text-xs bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 rounded-full"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        )}
+      </div>
     </motion.div>
   )
 } 

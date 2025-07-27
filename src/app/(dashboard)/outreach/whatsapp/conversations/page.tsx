@@ -394,7 +394,7 @@ export default function WhatsAppConversationsPage() {
             >
               <button className="absolute top-4 right-4 text-secondary-text hover:text-white text-2xl" aria-label="Close details" onClick={() => setDetailsConversation(null)}>&times;</button>
               <div className="text-lg font-medium text-white mb-4">Conversation Details</div>
-              <form onSubmit={e => { e.preventDefault(); setConversations(prev => prev.map(c => c.id === editConversation.id ? { ...editConversation } : c)); setDetailsConversation(editConversation); toast({ title: 'Conversation updated', description: 'Conversation details updated.' }); }} className="flex flex-col gap-2">
+              <form onSubmit={e => { e.preventDefault(); if (editConversation) { setConversations(prev => prev.map(c => c.id === editConversation.id ? { ...editConversation } : c)); setDetailsConversation(editConversation); toast({ title: 'Conversation updated', description: 'Conversation details updated.' }); } }} className="flex flex-col gap-2">
                 <label className="text-xs text-secondary-text">Name</label>
                 <input type="text" className="bg-dark-bg-tertiary text-white rounded px-2 py-1 text-sm border border-dark-border" value={editConversation?.name ?? ''} onChange={e => setEditConversation(c => c ? { ...c, name: e.target.value } : c)} />
                 <label className="text-xs text-secondary-text">Phone</label>
