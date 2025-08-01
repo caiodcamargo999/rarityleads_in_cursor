@@ -249,7 +249,9 @@ export default function SettingsPage() {
                     {t('settings.appearance.language')}
                   </ClientOnly>
                 </Label>
-                <LanguageSwitcher />
+                <div className="relative">
+                  <LanguageSwitcher />
+                </div>
               </div>
 
               {/* Additional Appearance Options */}

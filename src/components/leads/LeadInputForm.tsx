@@ -109,13 +109,11 @@ export default function LeadInputForm({ onClose, onLeadsGenerated }: Props) {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
-      className="bg-gradient-to-br from-card via-card to-card/80 dark:from-card/90 dark:to-card/70 border border-border rounded-lg shadow-lg p-6 mb-8 overflow-hidden"
+      className="bg-card border border-border rounded-lg shadow-sm p-6 mb-8"
     >
-      {/* Purple gradient overlay - more prominent in light theme */}
-      <div className="absolute inset-0 bg-gradient-to-br from-purple-500/8 via-purple-400/5 to-transparent pointer-events-none dark:from-purple-500/3 dark:to-transparent"></div>
       
-      <div className="relative z-10">
-        <h2 className="text-xl font-semibold text-foreground mb-4">
+      <div>
+        <h2 className="text-xl font-medium text-foreground mb-4">
           <ClientOnly fallback="Generate AI-Powered Leads">
             {t('leads.createLeadManually')}
           </ClientOnly>
@@ -145,7 +143,7 @@ export default function LeadInputForm({ onClose, onLeadsGenerated }: Props) {
                 Optional Filters
               </ClientOnly>
             </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {filtersList.map((filter) => (
                 <div key={filter.key} className="relative">
                   <label className="block text-sm font-medium text-foreground mb-2">
@@ -161,8 +159,8 @@ export default function LeadInputForm({ onClose, onLeadsGenerated }: Props) {
                     >
                       <span className="text-muted-foreground">
                         {filters[filter.key]?.length > 0 
-                          ? `${filters[filter.key].length} selected`
-                          : 'Select options'
+                          ? `${filters[filter.key].length} ${t('leads.selected')}`
+                          : t('leads.selectOptions')
                         }
                       </span>
                     </button>
@@ -173,7 +171,7 @@ export default function LeadInputForm({ onClose, onLeadsGenerated }: Props) {
                           initial={{ opacity: 0, y: -10 }}
                           animate={{ opacity: 1, y: 0 }}
                           exit={{ opacity: 0, y: -10 }}
-                          className="absolute z-50 w-full mt-1 bg-gradient-to-br from-card via-card to-card/90 dark:from-card/95 dark:to-card/85 border border-border rounded-lg shadow-lg max-h-48 overflow-y-auto"
+                          className="absolute z-50 w-full mt-1 bg-card border border-border rounded-lg shadow-lg max-h-48 overflow-y-auto"
                         >
                           {filter.options.map((option) => (
                             <button
@@ -198,13 +196,14 @@ export default function LeadInputForm({ onClose, onLeadsGenerated }: Props) {
             </div>
           </div>
 
-          {/* Submit Button */}
-          <div className="flex justify-end">
-            <Button
-              type="submit"
-              disabled={loading || !description.trim()}
-              className="bg-gradient-to-r from-purple-600 to-purple-500 hover:from-purple-700 hover:to-purple-600 text-white shadow-lg hover:shadow-purple-500/25 dark:from-purple-500/40 dark:to-purple-400/40 dark:hover:from-purple-500/50 dark:hover:to-purple-400/50"
-            >
+                     {/* Submit Button */}
+           <div className="flex justify-end">
+             <Button
+               type="submit"
+               disabled={loading || !description.trim()}
+               variant="primary"
+               className="w-full sm:w-auto"
+             >
               {loading ? (
                 <ClientOnly fallback="Generating...">
                   {t('common.loading')}

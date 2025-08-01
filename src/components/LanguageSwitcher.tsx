@@ -62,13 +62,12 @@ const LanguageSwitcher = () => {
           </Button>
         </motion.div>
       </DropdownMenuTrigger>
-                          <DropdownMenuContent
-                      align="start" 
-                      className="bg-slate-900/95 backdrop-blur-xl border-white/20 text-white min-w-[160px] p-1"
-                      sideOffset={2}
-                      side="bottom"
-                      alignOffset={-20}
-                    >
+      <DropdownMenuContent
+        align="start"
+        className="bg-card border border-border text-foreground min-w-[160px] p-1 shadow-lg"
+        sideOffset={4}
+        side="bottom"
+      >
         <AnimatePresence>
           {isOpen && (
             <motion.div
@@ -86,8 +85,8 @@ const LanguageSwitcher = () => {
                 >
                   <DropdownMenuItem
                     onClick={() => changeLanguage(language.code)}
-                    className={`hover:bg-white/10 focus:bg-white/10 transition-all duration-200 rounded-md cursor-pointer ${
-                      i18n.language === language.code ? 'bg-purple-500/30 text-purple-200' : ''
+                    className={`hover:bg-muted focus:bg-muted transition-all duration-200 rounded-md cursor-pointer ${
+                      i18n.language === language.code ? 'bg-rarity-600/20 text-rarity-600' : ''
                     }`}
                   >
                     <motion.div

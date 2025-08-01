@@ -96,6 +96,34 @@ export default function RootLayout({
   return (
     <html className={`${inter.variable} antialiased`}>
       <head>
+        {/* Prevent theme flashing and set language immediately */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  // Set dark theme immediately
+                  var theme = localStorage.getItem('theme') || 'dark';
+                  document.documentElement.classList.add(theme);
+                  if (theme === 'dark') {
+                    document.documentElement.classList.add('dark');
+                  }
+                  
+                  // Set language immediately
+                  var savedLang = localStorage.getItem('i18nextLng');
+                  var ipLang = localStorage.getItem('ip-detected-language');
+                  var browserLang = navigator.language.split('-')[0];
+                  
+                  // Priority: saved language > IP detected > browser > default
+                  var lang = savedLang || ipLang || (['en', 'es', 'fr', 'pt'].includes(browserLang) ? browserLang : 'en');
+                  document.documentElement.lang = lang;
+                  document.documentElement.setAttribute('data-lang', lang);
+                } catch (e) {}
+              })();
+            `,
+          }}
+        />
+        
         {/* Preload critical resources */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />

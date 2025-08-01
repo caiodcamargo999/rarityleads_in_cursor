@@ -46,38 +46,35 @@
 
 ## 🎨 Color System
 
-### Primary Colors
+### Current Implementation Colors (Tailwind CSS)
 ```css
---sidebar-bg: #101014;          /* Sidebar background */
---main-bg: #18181c;             /* Main background */
---card-bg: #18181c;             /* Card backgrounds */
---button-bg: #232336;           /* Button backgrounds */
---button-hover-bg: #232136;     /* Button hover state */
-```
+/* Primary Brand Colors */
+--rarity-500: #8b5cf6;  /* Main purple */
+--rarity-600: #7c3aed;  /* Primary button */
+--rarity-700: #6d28d9;  /* Hover state */
 
-### Text Colors
-```css
---primary-text: #e0e0e0;        /* Primary text */
---secondary-text: #b0b0b0;      /* Secondary text */
---sidebar-text: #e0e0e0;        /* Sidebar text */
---sidebar-text-secondary: #b0b0b0; /* Sidebar secondary text */
---button-text: #fff;            /* Button text */
-```
+/* Dark Theme Colors */
+--dark-bg: #0a0a0a;           /* Main background */
+--dark-bg-secondary: #18181c; /* Secondary background */
+--dark-bg-tertiary: #232336;  /* Button backgrounds */
+--dark-border: #232336;       /* Borders */
+--dark-border-secondary: #404040;
+--dark-text: #ffffff;         /* Primary text */
+--dark-text-secondary: #a3a3a3; /* Secondary text */
+--dark-text-muted: #737373;   /* Muted text */
 
-### Borders & Accents
-```css
---border: #232336;              /* Borders and separators */
---sidebar-link-active: #232336; /* Active sidebar link */
---sidebar-link-hover: #232336;  /* Sidebar link hover */
---logout-separator: #232336;    /* Logout section separator */
+/* Semantic Colors */
+--success-600: #16a34a;
+--warning-600: #d97706;
+--error-600: #dc2626;
 ```
 
 ### **FORBIDDEN:**
-- ❌ Gradients (linear-gradient, radial-gradient)
 - ❌ Glass morphism (backdrop-filter: blur)
 - ❌ Colorful backgrounds (white, light colors)
 - ❌ Excessive shadows or glows
 - ❌ Bright accent colors
+- ❌ Gradients or complex color transitions
 
 ---
 
@@ -114,10 +111,10 @@ small: 0.875em, font-weight: 400
 
 ---
 
-## 🔘 Button Component (NEW)
+## 🔘 Button Component
 
 ### Motion-Enabled Button System
-All buttons throughout the app must use the new `<Button />` component located at `src/components/ui/Button.tsx`.
+All buttons throughout the app must use the `<Button />` component located at `src/components/ui/button.tsx`.
 
 ### Button Variants
 ```tsx
@@ -136,8 +133,18 @@ All buttons throughout the app must use the new `<Button />` component located a
   Action Text
 </Button>
 
+// Ghost button (subtle actions)
+<Button variant="ghost" aria-label="Action description">
+  Action Text
+</Button>
+
 // Danger button (destructive actions)
 <Button variant="danger" aria-label="Action description">
+  Action Text
+</Button>
+
+// Success button (positive actions)
+<Button variant="success" aria-label="Action description">
   Action Text
 </Button>
 ```
@@ -146,8 +153,10 @@ All buttons throughout the app must use the new `<Button />` component located a
 - **Motion-enabled:** Smooth hover and tap animations using Framer Motion
 - **Accessible:** All buttons must have descriptive `aria-label` props
 - **Loading states:** Built-in loading spinner for async actions
-- **Consistent styling:** Pill-shaped, premium design with proper spacing
+- **Consistent styling:** Rounded corners, premium design with proper spacing
 - **Responsive:** Touch-friendly on all devices
+- **Icon support:** Left/right icon positioning
+- **Size variants:** sm, md, lg, xl, icon
 
 ### **REQUIRED:**
 - ✅ Always use `<Button />` component, never raw `<button>` elements
@@ -160,16 +169,19 @@ All buttons throughout the app must use the new `<Button />` component located a
 
 ## 🧭 Sidebar Design
 
+### Current Implementation
+The sidebar uses the `Sidebar` component from `src/components/ui/sidebar.tsx` with the following features:
+
 ### Structure
 ```css
 .sidebar {
-  background: var(--sidebar-bg);
-  width: 220px;
+  background: var(--dark-bg-secondary);
+  width: 16rem; /* 256px */
   height: 100vh;
   position: fixed;
   left: 0;
   top: 0;
-  border-right: 1px solid var(--border);
+  border-right: 1px solid var(--dark-border);
 }
 ```
 
@@ -180,7 +192,7 @@ All buttons throughout the app must use the new `<Button />` component located a
   align-items: center;
   gap: 0.75em;
   padding: 0.85em 2em;
-  color: var(--sidebar-text);
+  color: var(--dark-text);
   text-decoration: none;
   font-weight: 400;
   border-left: 3px solid transparent;
@@ -189,9 +201,9 @@ All buttons throughout the app must use the new `<Button />` component located a
 
 .sidebar-nav a.active,
 .sidebar-nav a:hover {
-  background: var(--sidebar-link-hover);
-  color: var(--primary-text);
-  border-left: 3px solid var(--primary-text);
+  background: var(--dark-bg-tertiary);
+  color: var(--dark-text);
+  border-left: 3px solid var(--dark-text);
 }
 ```
 
@@ -200,15 +212,15 @@ All buttons throughout the app must use the new `<Button />` component located a
 .sidebar-logout {
   margin-top: auto;
   padding: 1.5em 2em 2em 2em;
-  border-top: 1px solid var(--logout-separator);
-  background: var(--sidebar-bg);
+  border-top: 1px solid var(--dark-border);
+  background: var(--dark-bg-secondary);
   text-align: center;
 }
 
 .sidebar-logout-btn {
   width: 100%;
-  background: var(--button-bg);
-  color: var(--button-text);
+  background: var(--dark-bg-tertiary);
+  color: var(--dark-text);
   border: none;
   border-radius: 6px;
   padding: 0.85em 0;
@@ -219,16 +231,15 @@ All buttons throughout the app must use the new `<Button />` component located a
 }
 
 .sidebar-logout-btn:hover {
-  background: var(--button-hover-bg);
+  background: var(--dark-border);
   color: #fff;
-  text-decoration: underline;
 }
 ```
 
 ### Sidebar Sections
 ```css
 .nav-section-title {
-  color: var(--sidebar-text-secondary);
+  color: var(--dark-text-secondary);
   font-size: 0.95em;
   padding: 1.2em 2em 0.5em 2em;
   text-transform: uppercase;
@@ -245,14 +256,14 @@ All buttons throughout the app must use the new `<Button />` component located a
 ```css
 /* Desktop: Full layout */
 @media (min-width: 901px) {
-  .sidebar { width: 220px; }
-  .main-content { margin-left: 220px; }
+  .sidebar { width: 16rem; }
+  .main-content { margin-left: 16rem; }
 }
 
 /* Tablet: Collapsed sidebar */
 @media (max-width: 900px) {
-  .sidebar { width: 60px; min-width: 60px; }
-  .main-content { margin-left: 60px; padding: 1.5rem 1rem; }
+  .sidebar { width: 3rem; min-width: 3rem; }
+  .main-content { margin-left: 3rem; padding: 1.5rem 1rem; }
   .sidebar-nav a, .nav-section-title { padding-left: 1em; padding-right: 1em; }
 }
 
@@ -309,10 +320,10 @@ transform: translateY(-1px);
 ### Metric Cards
 ```css
 .metric-card {
-  background: var(--card-bg);
-  color: var(--primary-text);
+  background: var(--dark-bg-secondary);
+  color: var(--dark-text);
   border-radius: 10px;
-  border: 1px solid var(--border);
+  border: 1px solid var(--dark-border);
   padding: 2em 1.5em;
   margin-bottom: 2em;
   box-shadow: none;
@@ -322,8 +333,8 @@ transform: translateY(-1px);
 ### Charts & Analytics
 ```css
 .chart-card {
-  background: var(--card-bg);
-  border: 1px solid var(--border);
+  background: var(--dark-bg-secondary);
+  border: 1px solid var(--dark-border);
   border-radius: 10px;
   padding: 2em 1.5em;
   margin-bottom: 2em;
@@ -350,7 +361,7 @@ transform: translateY(-1px);
   flex: 1 1 auto;
   margin-left: var(--sidebar-width);
   padding: 2.5rem;
-  background: var(--main-bg);
+  background: var(--dark-bg);
   min-height: 100vh;
 }
 ```
@@ -369,7 +380,6 @@ transform: translateY(-1px);
 ## 🚫 Strictly Forbidden
 
 ### Design Elements
-- ❌ Gradients (linear-gradient, radial-gradient)
 - ❌ Glass morphism (backdrop-filter: blur)
 - ❌ Bright or colorful backgrounds
 - ❌ Excessive shadows or glows
@@ -378,6 +388,7 @@ transform: translateY(-1px);
 - ❌ Decorative fonts
 - ❌ Emojis in UI text
 - ❌ Example numbers in metrics
+- ❌ Gradients or complex color transitions
 
 ### Layout Issues
 - ❌ Broken buttons or links
@@ -392,8 +403,8 @@ transform: translateY(-1px);
 
 ### Before Deployment
 - [ ] All pages use the new Button component
-- [ ] No gradients or glass morphism
-- [ ] Only font-weight 400 and 500 used
+- [ ] No gradients or glass morphism (bg-gradient, backdrop-filter, blur)
+- [ ] Only font-weight 400 and 500 used (no font-semibold, font-bold, etc.)
 - [ ] Sidebar has logout button at bottom
 - [ ] All buttons are functional and accessible
 - [ ] Mobile responsive design
@@ -402,6 +413,8 @@ transform: translateY(-1px);
 - [ ] Smooth transitions and animations
 - [ ] Touch-friendly on mobile
 - [ ] All interactive elements have aria-labels
+- [ ] No excessive shadows or glows
+- [ ] No colorful backgrounds (only dark theme colors)
 
 ### Testing
 - [ ] Desktop layout (1200px+)
@@ -417,7 +430,7 @@ transform: translateY(-1px);
 
 ### 1. Use the Button Component
 ```tsx
-import Button from '@/components/ui/Button';
+import Button from '@/components/ui/button';
 
 // Always use the Button component
 <Button variant="primary" aria-label="Action description">
@@ -425,16 +438,19 @@ import Button from '@/components/ui/Button';
 </Button>
 ```
 
-### 2. Use CSS Variables
+### 2. Use Tailwind CSS Classes
 ```css
-background: var(--main-bg);
-color: var(--primary-text);
+/* Use Tailwind classes instead of CSS variables */
+bg-dark-bg          /* Main background */
+text-dark-text      /* Primary text */
+border-dark-border  /* Borders */
+bg-rarity-600       /* Primary brand color */
 ```
 
 ### 3. Follow Component Structure
 ```tsx
 // Page structure
-<div className="min-h-screen bg-main-bg flex">
+<div className="min-h-screen bg-dark-bg flex">
   <Sidebar user={user} onProfileClick={handleProfileClick} />
   <main className="flex-1 lg:ml-64 p-6">
     {/* Page content */}
@@ -509,9 +525,13 @@ color: var(--primary-text);
 ## 🗂️ Notion.com as a Database & UX Reference
 
 - Notion.com is a major reference for all database/list and page creation UX in Rarity Leads.
-- The Leads feature and any list/database UI should follow Notion’s approach to:
+- The Leads feature and any list/database UI should follow Notion's approach to:
   - Creating new items/pages with a clean modal or inline form
-  - Displaying a list of all previous items/queries (like Notion’s database rows)
+  - Displaying a list of all previous items/queries (like Notion's database rows)
   - Allowing users to click any item to view its details/results
   - Organizing data in a visually clean, minimalist, and highly interactive way
-- All future database/list features should be inspired by Notion’s best practices for organization, discoverability, and user experience. 
+- All future database/list features should be inspired by Notion's best practices for organization, discoverability, and user experience.
+
+---
+
+**This document is the single source of truth for Rarity Leads design. All developers must follow these rules without exception.** 

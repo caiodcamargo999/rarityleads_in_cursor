@@ -10,7 +10,7 @@ import {
   MoreVertical, 
   Phone, 
   Video, 
-  Image, 
+  Image as ImageIcon, 
   File,
   Smile,
   Paperclip,
@@ -327,7 +327,7 @@ export default function WhatsAppConversationsPage() {
                   <Paperclip className="w-4 h-4" />
                 </Button>
                 <Button variant="outline" size="sm">
-                  <Image className="w-4 h-4" />
+                  <ImageIcon className="w-4 h-4" />
                 </Button>
                 <Button variant="outline" size="sm">
                   <File className="w-4 h-4" />

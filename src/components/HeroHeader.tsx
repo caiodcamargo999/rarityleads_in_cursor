@@ -1,5 +1,6 @@
 'use client'
 import Link from 'next/link'
+import Image from 'next/image'
 import { Logo } from '@/components/Logo'
 import { Menu, X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -29,9 +30,11 @@ export const HeroHeader = () => {
         <header className="relative overflow-x-clip">
             {/* Decorative abstract image background */}
             <div className="pointer-events-none select-none absolute top-1/2 right-0 z-0 w-[70vw] max-w-2xl -translate-y-1/2 translate-x-1/4 opacity-70 blur-[2px] brightness-110 saturate-150 drop-shadow-2xl lg:w-[50vw] lg:max-w-3xl lg:-top-32 lg:right-[-10vw] lg:translate-x-0 lg:opacity-80">
-                <img
+                <Image
                     src="https://ik.imagekit.io/lrigu76hy/tailark/abstract-bg.jpg?updatedAt=1745733473768"
                     alt="Abstract Diamond Background"
+                    width={800}
+                    height={600}
                     className="w-full h-auto object-contain"
                     draggable="false"
                 />

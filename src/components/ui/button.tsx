@@ -14,9 +14,9 @@ const buttonVariants = cva(
     variants: {
       variant: {
         primary: "bg-rarity-600 text-white hover:bg-rarity-700 active:bg-rarity-800 shadow-sm",
-        secondary: "bg-dark-bg-tertiary text-dark-text border border-dark-border hover:bg-dark-bg-secondary hover:border-dark-border-secondary",
-        outline: "border border-dark-border bg-transparent text-dark-text hover:bg-dark-bg-tertiary hover:border-dark-border-secondary",
-        ghost: "text-dark-text hover:bg-dark-bg-tertiary",
+        secondary: "bg-muted text-foreground border border-border hover:bg-muted/80 hover:border-border/80 dark:bg-dark-bg-tertiary dark:text-dark-text dark:border-dark-border dark:hover:bg-dark-bg-secondary dark:hover:border-dark-border-secondary",
+        outline: "border border-border bg-transparent text-foreground hover:bg-muted hover:border-border/80 dark:border-dark-border dark:text-dark-text dark:hover:bg-dark-bg-tertiary dark:hover:border-dark-border-secondary",
+        ghost: "text-foreground hover:bg-muted dark:text-dark-text dark:hover:bg-dark-bg-tertiary",
         danger: "bg-error-600 text-white hover:bg-error-700 active:bg-error-800",
         success: "bg-success-600 text-white hover:bg-success-700 active:bg-success-800",
       },

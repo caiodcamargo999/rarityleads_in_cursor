@@ -72,7 +72,7 @@ export default function WhatsAppPage() {
   }
 
   return (
-    <div ref={pageRef} className="min-h-screen bg-gradient-to-br from-background via-background to-background/95 dark:from-background/90 dark:to-background/70 w-full overflow-x-hidden">
+    <div ref={pageRef} className="min-h-screen bg-background w-full overflow-x-hidden">
       <div className="w-full max-w-full">
         {/* Header */}
         <motion.div
@@ -96,7 +96,7 @@ export default function WhatsAppPage() {
             </div>
             <div className="flex flex-col space-y-2 sm:flex-row sm:space-y-0 sm:space-x-2">
               <Link href="/dashboard/outreach/whatsapp/accounts">
-                <Button variant="outline" size="sm" className="flex items-center gap-2 w-full sm:w-auto bg-gradient-to-br from-muted to-muted/80 dark:from-muted/60 dark:to-muted/40 border-border text-foreground hover:from-muted/90 hover:to-muted/70 dark:hover:from-muted/70 dark:hover:to-muted/50">
+                <Button variant="outline" size="sm" className="flex items-center gap-2 w-full sm:w-auto bg-muted border-border text-foreground hover:bg-muted/80">
                   <Settings className="w-4 h-4" />
                   <span className="hidden sm:inline">
                     <ClientOnly fallback="Accounts">
@@ -111,7 +111,7 @@ export default function WhatsAppPage() {
                 </Button>
               </Link>
               <Link href="/dashboard/outreach/whatsapp/conversations">
-                <Button variant="outline" size="sm" className="flex items-center gap-2 w-full sm:w-auto bg-gradient-to-br from-muted to-muted/80 dark:from-muted/60 dark:to-muted/40 border-border text-foreground hover:from-muted/90 hover:to-muted/70 dark:hover:from-muted/70 dark:hover:to-muted/50">
+                <Button variant="outline" size="sm" className="flex items-center gap-2 w-full sm:w-auto bg-muted border-border text-foreground hover:bg-muted/80">
                   <MessageSquare className="w-4 h-4" />
                   <span className="hidden sm:inline">
                     <ClientOnly fallback="Conversations">
@@ -150,17 +150,15 @@ export default function WhatsAppPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={pageInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
               transition={{ duration: 0.6, delay: index * 0.1 }}
-              className="bg-gradient-to-br from-card via-card to-card/80 dark:from-card/90 dark:to-card/70 border border-border rounded-lg p-6 shadow-lg overflow-hidden"
+              className="bg-card border border-border rounded-lg p-6 shadow-sm overflow-hidden"
             >
-              {/* Purple gradient overlay - more prominent in light theme */}
-              <div className="absolute inset-0 bg-gradient-to-br from-purple-500/8 via-purple-400/5 to-transparent pointer-events-none dark:from-purple-500/3 dark:to-transparent"></div>
               
               <div className="relative z-10 flex items-center justify-between">
                 <div>
                   <p className="text-sm font-medium text-muted-foreground">{stat.label}</p>
                   <p className="text-2xl font-bold text-foreground">{stat.value}</p>
                 </div>
-                <div className={`p-3 rounded-lg bg-gradient-to-br from-muted to-muted/80 dark:from-muted/60 dark:to-muted/40 ${stat.color}`}>
+                <div className={`p-3 rounded-lg bg-muted ${stat.color}`}>
                   <stat.icon className="w-6 h-6" />
                 </div>
               </div>
@@ -175,9 +173,7 @@ export default function WhatsAppPage() {
           transition={{ duration: 0.6, delay: 0.2 }}
           className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6"
         >
-          <Card className="bg-gradient-to-br from-card via-card to-card/80 border-border shadow-lg overflow-hidden dark:from-card/90 dark:to-card/70">
-            {/* Subtle purple gradient overlay - more prominent in light theme */}
-            <div className="absolute inset-0 bg-gradient-to-br from-purple-500/8 via-purple-400/5 to-transparent pointer-events-none dark:from-purple-500/2 dark:to-transparent"></div>
+          <Card className="bg-card border border-border shadow-sm overflow-hidden">
             <CardContent className="p-4 lg:p-6 relative z-10">
               <MessageSquare className="w-6 h-6 lg:w-8 lg:h-8 text-purple-500 mb-3" />
               <h3 className="text-base lg:text-lg font-medium text-foreground mb-2">
@@ -198,10 +194,8 @@ export default function WhatsAppPage() {
             </CardContent>
           </Card>
 
-          <Card className="bg-gradient-to-br from-card via-card to-card/80 border-border shadow-lg overflow-hidden dark:from-card/90 dark:to-card/70">
-            {/* Subtle purple gradient overlay - more prominent in light theme */}
-            <div className="absolute inset-0 bg-gradient-to-br from-purple-500/8 via-purple-400/5 to-transparent pointer-events-none dark:from-purple-500/2 dark:to-transparent"></div>
-            <CardContent className="p-4 lg:p-6 relative z-10">
+          <Card className="bg-card border border-border shadow-sm overflow-hidden">
+            <CardContent className="p-4 lg:p-6">
               <Users className="w-6 h-6 lg:w-8 lg:h-8 text-purple-500 mb-3" />
               <h3 className="text-base lg:text-lg font-medium text-foreground mb-2">
                 <ClientOnly fallback="Import Leads">
@@ -221,10 +215,8 @@ export default function WhatsAppPage() {
             </CardContent>
           </Card>
 
-          <Card className="bg-gradient-to-br from-card via-card to-card/80 border-border shadow-lg overflow-hidden dark:from-card/90 dark:to-card/70 sm:col-span-2 lg:col-span-1">
-            {/* Subtle purple gradient overlay - more prominent in light theme */}
-            <div className="absolute inset-0 bg-gradient-to-br from-purple-500/8 via-purple-400/5 to-transparent pointer-events-none dark:from-purple-500/2 dark:to-transparent"></div>
-            <CardContent className="p-4 lg:p-6 relative z-10">
+          <Card className="bg-card border border-border shadow-sm overflow-hidden sm:col-span-2 lg:col-span-1">
+            <CardContent className="p-4 lg:p-6">
               <BarChart3 className="w-6 h-6 lg:w-8 lg:h-8 text-purple-500 mb-3" />
               <h3 className="text-base lg:text-lg font-medium text-foreground mb-2">
                 <ClientOnly fallback="View Analytics">
@@ -251,10 +243,8 @@ export default function WhatsAppPage() {
           animate={pageInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
           transition={{ duration: 0.6, delay: 0.3 }}
         >
-          <Card className="bg-gradient-to-br from-card via-card to-card/80 border-border shadow-lg overflow-hidden dark:from-card/90 dark:to-card/70">
-            {/* Subtle purple gradient overlay - more prominent in light theme */}
-            <div className="absolute inset-0 bg-gradient-to-br from-purple-500/8 via-purple-400/5 to-transparent pointer-events-none dark:from-purple-500/2 dark:to-transparent"></div>
-            <CardHeader className="relative z-10">
+          <Card className="bg-card border border-border shadow-sm overflow-hidden">
+            <CardHeader>
               <CardTitle className="text-foreground">
                 <ClientOnly fallback="Active Campaigns">
                   {t('outreach.whatsapp.campaigns')}
@@ -266,7 +256,7 @@ export default function WhatsAppPage() {
                 </ClientOnly>
               </CardDescription>
             </CardHeader>
-            <CardContent className="relative z-10">
+            <CardContent>
               <div className="space-y-4">
                 {campaigns.map((campaign, index) => (
                   <motion.div

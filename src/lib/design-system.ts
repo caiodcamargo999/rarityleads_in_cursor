@@ -298,7 +298,7 @@ export const responsive = {
   },
 } as const;
 
-export default {
+const designSystem = {
   colors,
   spacing,
   borderRadius,
@@ -310,4 +310,6 @@ export default {
   cardVariants,
   motionVariants,
   responsive,
-}; 
+};
+
+export default designSystem; 

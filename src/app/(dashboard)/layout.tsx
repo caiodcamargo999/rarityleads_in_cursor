@@ -26,28 +26,29 @@ import { supabase } from '@/lib/supabase'
 import { Loading } from '@/components/ui/loading'
 import { sidebarSlide, fadeInUp } from '@/lib/motion'
 import AnthropicProfilePanel from '@/components/AnthropicProfilePanel'
+import { useTranslation } from 'react-i18next'
 
-const navigation = [
-  { name: 'Dashboard', href: '/dashboard', icon: Home },
-  { name: 'Leads', href: '/leads', icon: Users },
-  { name: 'Companies', href: '/companies', icon: Building2 },
-  { name: 'CRM', href: '/dashboard/crm', icon: BarChart3 },
-  { name: 'OUTREACH', href: '#', icon: null, isSection: true, children: [
-    { name: 'WhatsApp', href: '/outreach/whatsapp', icon: MessageSquare },
-    { name: 'Instagram', href: '/outreach/instagram', icon: Instagram },
-    { name: 'LinkedIn', href: '/outreach/linkedin', icon: Linkedin },
-    { name: 'Facebook', href: '/outreach/facebook', icon: Facebook },
-    { name: 'X (Twitter)', href: '/outreach/x', icon: Twitter }
+const getNavigation = (t: any) => [
+  { name: t('navigation.dashboard'), href: '/dashboard', icon: Home },
+  { name: t('navigation.leads'), href: '/leads', icon: Users },
+  { name: t('navigation.companies'), href: '/companies', icon: Building2 },
+  { name: t('navigation.crm'), href: '/dashboard/crm', icon: BarChart3 },
+  { name: t('navigation.outreach'), href: '#', icon: null, isSection: true, children: [
+    { name: t('navigation.whatsapp'), href: '/outreach/whatsapp', icon: MessageSquare },
+    { name: t('navigation.instagram'), href: '/outreach/instagram', icon: Instagram },
+    { name: t('navigation.linkedin'), href: '/outreach/linkedin', icon: Linkedin },
+    { name: t('navigation.facebook'), href: '/outreach/facebook', icon: Facebook },
+    { name: t('navigation.twitter'), href: '/outreach/x', icon: Twitter }
   ]},
-  { name: 'Analytics', href: '/analytics', icon: BarChart3 },
-  { name: 'Support', href: '/support', icon: HelpCircle }
+  { name: t('navigation.analytics'), href: '/analytics', icon: BarChart3 },
+  { name: t('navigation.support'), href: '/support', icon: HelpCircle }
 ]
 
 // Bottom tab navigation for mobile
-const bottomTabs = [
-  { name: 'Dashboard', href: '/dashboard', icon: Home },
-  { name: 'CRM', href: '/dashboard/crm', icon: BarChart3 },
-  { name: 'Messages', href: '/outreach/whatsapp', icon: MessageSquare }
+const getBottomTabs = (t: any) => [
+  { name: t('navigation.dashboard'), href: '/dashboard', icon: Home },
+  { name: t('navigation.crm'), href: '/dashboard/crm', icon: BarChart3 },
+  { name: t('navigation.whatsapp'), href: '/outreach/whatsapp', icon: MessageSquare }
 ]
 
 export default function DashboardLayout({
@@ -55,6 +56,7 @@ export default function DashboardLayout({
 }: {
   children: React.ReactNode
 }) {
+  const { t } = useTranslation()
   const [user, setUser] = useState<any>(null)
   const [loading, setLoading] = useState(true)
   const [showProfileMenu, setShowProfileMenu] = useState(false)
@@ -135,7 +137,7 @@ export default function DashboardLayout({
 
           {/* Navigation */}
           <nav className="flex-1 p-4 space-y-2">
-            {navigation.map((item) => {
+            {getNavigation(t).map((item) => {
               if (item.isSection) {
                 return (
                   <div key={item.name}>
@@ -203,6 +205,7 @@ export default function DashboardLayout({
                 <ChevronDown className="h-4 w-4 text-muted-foreground" />
               </Button>
             </div>
+
           </div>
         </div>
       </motion.aside>
@@ -241,7 +244,7 @@ export default function DashboardLayout({
 
                 {/* Navigation */}
                 <nav className="flex-1 p-4 space-y-2">
-                  {navigation.map((item) => {
+                  {getNavigation(t).map((item) => {
                     if (item.isSection) {
                       return (
                         <div key={item.name}>
@@ -311,6 +314,7 @@ export default function DashboardLayout({
                       <ChevronDown className="h-4 w-4 text-muted-foreground" />
                     </Button>
                   </div>
+
                 </div>
               </div>
             </motion.aside>
@@ -320,8 +324,33 @@ export default function DashboardLayout({
 
       {/* Main Content */}
       <div className="pl-0 lg:pl-64 flex-1">
+        {/* Mobile Header */}
+        <div className="lg:hidden fixed top-0 left-0 right-0 z-30 bg-card border-b border-border px-4 py-3 flex items-center justify-between">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => setSidebarOpen(true)}
+            className="text-foreground"
+          >
+            <Menu className="h-5 w-5" />
+          </Button>
+          <h1 className="text-lg font-medium text-foreground">Rarity Leads</h1>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={handleProfileClick}
+            className="text-foreground"
+          >
+            <div className="w-6 h-6 bg-primary rounded-full flex items-center justify-center">
+              <span className="text-primary-foreground font-medium text-xs">
+                {getUserInitials(user?.email)}
+              </span>
+            </div>
+          </Button>
+        </div>
+
         <motion.main
-          className="bg-background pt-20 lg:pt-6 pb-20 lg:pb-6 p-4 lg:p-6 min-h-screen"
+          className="bg-background pt-16 lg:pt-6 pb-20 lg:pb-6 p-4 lg:p-6 min-h-screen"
           variants={fadeInUp}
           initial="initial"
           animate="animate"
@@ -330,20 +359,20 @@ export default function DashboardLayout({
         </motion.main>
 
         {/* Bottom Tab Navigation - Mobile Only */}
-        <div className="lg:hidden fixed bottom-0 left-0 right-0 z-30 bg-card border-t border-border">
+        <div className="lg:hidden fixed bottom-0 left-0 right-0 z-30 bg-card border-t border-border pb-safe">
           <div className="flex justify-around">
-            {bottomTabs.map((tab) => (
+            {getBottomTabs(t).map((tab) => (
               <Link
                 key={tab.name}
                 href={tab.href}
-                className={`flex flex-col items-center py-3 px-4 flex-1 transition-colors ${
+                className={`flex flex-col items-center py-3 px-2 flex-1 transition-colors min-h-[60px] justify-center ${
                   isActive(tab.href)
                     ? 'text-primary'
                     : 'text-muted-foreground hover:text-foreground'
                 }`}
               >
                 <tab.icon className="h-5 w-5 mb-1" />
-                <span className="text-xs">{tab.name}</span>
+                <span className="text-xs font-medium">{tab.name}</span>
               </Link>
             ))}
           </div>

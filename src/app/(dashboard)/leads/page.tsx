@@ -265,7 +265,7 @@ export default function LeadsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-background/95 dark:from-background/90 dark:to-background/70 w-full overflow-x-hidden">
+    <div className="min-h-screen bg-background w-full overflow-x-hidden">
       <motion.h1
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
@@ -309,7 +309,7 @@ export default function LeadsPage() {
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            className="fixed top-20 left-1/2 -translate-x-1/2 z-50 bg-gradient-to-br from-card via-card to-card/80 dark:from-card/90 dark:to-card/70 border border-border rounded-xl shadow-lg px-6 py-3 flex gap-4 items-center"
+            className="fixed top-20 left-1/2 -translate-x-1/2 z-50 bg-card border border-border rounded-xl shadow-sm px-6 py-3 flex gap-4 items-center"
           >
             <Button variant="danger" onClick={handleBulkDelete} aria-label={t('leads.deleteSelected')}>
               <ClientOnly fallback="Delete">

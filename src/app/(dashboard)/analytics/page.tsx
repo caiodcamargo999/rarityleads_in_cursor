@@ -16,6 +16,7 @@ import {
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { ClientOnly } from '@/components/ClientOnly'
 
 export default function AnalyticsPage() {
   const { t } = useTranslation()
@@ -53,7 +54,9 @@ export default function AnalyticsPage() {
             {t('analytics.title')}
           </h1>
           <p className="text-sm lg:text-base text-muted-foreground">
-            Track your analytics and campaign insights
+            <ClientOnly fallback="Track your analytics and campaign insights">
+              {t('analytics.description')}
+            </ClientOnly>
           </p>
         </motion.div>
 

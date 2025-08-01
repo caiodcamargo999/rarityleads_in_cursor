@@ -49,7 +49,7 @@ export const LanguageSelector = ({
   if (variant === 'buttons') {
     return (
       <div className={`space-y-3 ${className}`}>
-        <label className="text-sm font-medium text-dark-text">
+        <label className="text-sm font-medium text-foreground">
           {t('settings.language')}
         </label>
         <div className="grid grid-cols-2 gap-3">
@@ -58,11 +58,7 @@ export const LanguageSelector = ({
               key={language.code}
               variant={i18n.language === language.code ? "primary" : "outline"}
               onClick={() => changeLanguage(language.code)}
-              className={`flex items-center justify-start gap-3 h-auto p-4 transition-all duration-200 ${
-                i18n.language === language.code 
-                  ? 'bg-purple-600 text-white border-purple-600' 
-                  : 'bg-dark-bg-secondary border-dark-border hover:bg-dark-bg-tertiary'
-              }`}
+              className="flex items-center justify-start gap-3 h-auto p-4 transition-all duration-200"
             >
               <span className="text-lg">{language.flag}</span>
               <div className="flex flex-col items-start">
@@ -81,28 +77,28 @@ export const LanguageSelector = ({
 
   return (
     <div className={`space-y-3 ${className}`}>
-      <label className="text-sm font-medium text-dark-text">
+      <label className="text-sm font-medium text-foreground">
         {t('settings.language')}
       </label>
       <Select value={i18n.language} onValueChange={changeLanguage}>
-        <SelectTrigger className="w-full bg-dark-bg-secondary border-dark-border text-dark-text">
+        <SelectTrigger className="w-full bg-background border-border text-foreground">
           <div className="flex items-center gap-2">
             <Globe className="w-4 h-4" />
             <SelectValue placeholder={t('settings.language')} />
           </div>
         </SelectTrigger>
-        <SelectContent className="bg-dark-bg-secondary border-dark-border">
+        <SelectContent className="bg-background border-border">
           {languages.map((language) => (
             <SelectItem
               key={language.code}
               value={language.code}
-              className="text-dark-text hover:bg-dark-bg-tertiary focus:bg-dark-bg-tertiary"
+              className="text-foreground hover:bg-muted focus:bg-muted"
             >
               <div className="flex items-center gap-3">
                 <span className="text-lg">{language.flag}</span>
                 <div className="flex flex-col">
                   <span className="font-medium">{language.nativeName}</span>
-                  <span className="text-xs text-gray-400">{language.name}</span>
+                  <span className="text-xs text-muted-foreground">{language.name}</span>
                 </div>
               </div>
             </SelectItem>

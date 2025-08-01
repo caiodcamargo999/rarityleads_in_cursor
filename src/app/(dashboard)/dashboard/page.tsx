@@ -114,9 +114,9 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="space-y-6 bg-gradient-to-br from-background via-background to-background/95 dark:from-background/90 dark:to-background/70">
+    <div className="space-y-6">
       {/* Header */}
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
           <h1 className="text-3xl font-bold text-foreground">
             <ClientOnly fallback="Dashboard">
@@ -129,16 +129,16 @@ export default function DashboardPage() {
             </ClientOnly>
           </p>
         </div>
-                 <Button className="bg-gradient-to-r from-muted to-muted/80 hover:from-muted/90 hover:to-muted/70 text-foreground border border-border dark:from-muted/60 dark:to-muted/40 dark:hover:from-muted/70 dark:hover:to-muted/50">
+                 <Button variant="secondary" className="w-full sm:w-auto">
           <Plus className="w-4 h-4 mr-2" />
           <ClientOnly fallback="Add Lead">
-            {t('leads.addLead')}
+            {t('crm.addLead')}
           </ClientOnly>
         </Button>
       </div>
 
       {/* Metrics Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
         {metrics.map((metric, index) => (
           <motion.div
             key={index}
@@ -146,10 +146,8 @@ export default function DashboardPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: index * 0.1 }}
                      >
-             <Card className="bg-gradient-to-br from-card via-card to-card/80 border-border shadow-lg overflow-hidden dark:from-card/90 dark:to-card/70">
-               {/* Subtle purple gradient overlay - more prominent in light theme */}
-               <div className="absolute inset-0 bg-gradient-to-br from-purple-500/8 via-purple-400/5 to-transparent pointer-events-none dark:from-purple-500/2 dark:to-transparent"></div>
-               <CardContent className="p-6 relative z-10">
+             <Card className="border-border shadow-sm">
+               <CardContent className="p-4 sm:p-6">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm font-medium text-muted-foreground">
@@ -181,7 +179,7 @@ export default function DashboardPage() {
       </div>
 
       {/* Charts and Activity */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
         {/* Performance Chart */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -189,10 +187,8 @@ export default function DashboardPage() {
           transition={{ duration: 0.5, delay: 0.4 }}
                      className="lg:col-span-2"
          >
-           <Card className="bg-gradient-to-br from-card via-card to-card/80 border-border shadow-lg overflow-hidden dark:from-card/90 dark:to-card/70">
-             {/* Subtle purple gradient overlay - more prominent in light theme */}
-             <div className="absolute inset-0 bg-gradient-to-br from-purple-500/8 via-purple-400/5 to-transparent pointer-events-none dark:from-purple-500/2 dark:to-transparent"></div>
-             <CardHeader className="relative z-10">
+           <Card className="border-border shadow-sm">
+             <CardHeader>
                <CardTitle className="text-foreground">
                  <ClientOnly fallback="Performance">
                    {t('dashboard.performance')}
@@ -225,9 +221,7 @@ export default function DashboardPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.5 }}
                  >
-           <Card className="bg-gradient-to-br from-card via-card to-card/80 border-border shadow-lg overflow-hidden dark:from-card/90 dark:to-card/70">
-             {/* Subtle purple gradient overlay - more prominent in light theme */}
-             <div className="absolute inset-0 bg-gradient-to-br from-purple-500/8 via-purple-400/5 to-transparent pointer-events-none dark:from-purple-500/2 dark:to-transparent"></div>
+           <Card className="bg-card border border-border shadow-sm overflow-hidden">
              <CardHeader className="relative z-10">
                <CardTitle className="text-foreground">
                  <ClientOnly fallback="Recent Activity">
@@ -264,9 +258,7 @@ export default function DashboardPage() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.6 }}
              >
-         <Card className="bg-gradient-to-br from-card via-card to-card/80 border-border shadow-lg overflow-hidden dark:from-card/90 dark:to-card/70">
-           {/* Subtle purple gradient overlay - more prominent in light theme */}
-           <div className="absolute inset-0 bg-gradient-to-br from-purple-500/8 via-purple-400/5 to-transparent pointer-events-none dark:from-purple-500/2 dark:to-transparent"></div>
+         <Card className="bg-card border border-border shadow-sm overflow-hidden">
            <CardHeader className="relative z-10">
              <CardTitle className="text-foreground">
                <ClientOnly fallback="Quick Actions">
@@ -278,19 +270,19 @@ export default function DashboardPage() {
                          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                <Button 
                  variant="outline" 
-                 className="h-20 flex-col space-y-2 bg-gradient-to-br from-muted to-muted/80 border-border text-foreground hover:from-muted/90 hover:to-muted/70 transition-all duration-200 hover:scale-105 dark:from-muted/60 dark:to-muted/40 dark:hover:from-muted/70 dark:hover:to-muted/50"
+                 className="h-20 flex-col space-y-2 bg-muted border-border text-foreground hover:bg-muted/80 transition-all duration-200 hover:scale-105"
                  onClick={() => handleQuickAction('addLead')}
                >
                  <Users className="w-6 h-6" />
                  <span className="text-sm">
                    <ClientOnly fallback="Add Lead">
-                     {t('leads.addLead')}
+                     {t('crm.addLead')}
                    </ClientOnly>
                  </span>
                </Button>
                <Button 
                  variant="outline" 
-                 className="h-20 flex-col space-y-2 bg-gradient-to-br from-muted to-muted/80 border-border text-foreground hover:from-muted/90 hover:to-muted/70 transition-all duration-200 hover:scale-105 dark:from-muted/60 dark:to-muted/40 dark:hover:from-muted/70 dark:hover:to-muted/50"
+                 className="h-20 flex-col space-y-2 bg-muted border-border text-foreground hover:bg-muted/80 transition-all duration-200 hover:scale-105"
                  onClick={() => handleQuickAction('sendMessage')}
                >
                  <MessageSquare className="w-6 h-6" />
@@ -302,7 +294,7 @@ export default function DashboardPage() {
                </Button>
                <Button 
                  variant="outline" 
-                 className="h-20 flex-col space-y-2 bg-gradient-to-br from-muted to-muted/80 border-border text-foreground hover:from-muted/90 hover:to-muted/70 transition-all duration-200 hover:scale-105 dark:from-muted/60 dark:to-muted/40 dark:hover:from-muted/70 dark:hover:to-muted/50"
+                 className="h-20 flex-col space-y-2 bg-muted border-border text-foreground hover:bg-muted/80 transition-all duration-200 hover:scale-105"
                  onClick={() => handleQuickAction('viewAnalytics')}
                >
                  <BarChart3 className="w-6 h-6" />
@@ -314,7 +306,7 @@ export default function DashboardPage() {
                </Button>
                <Button 
                  variant="outline" 
-                 className="h-20 flex-col space-y-2 bg-gradient-to-br from-muted to-muted/80 border-border text-foreground hover:from-muted/90 hover:to-muted/70 transition-all duration-200 hover:scale-105 dark:from-muted/60 dark:to-muted/40 dark:hover:from-muted/70 dark:hover:to-muted/50"
+                 className="h-20 flex-col space-y-2 bg-muted border-border text-foreground hover:bg-muted/80 transition-all duration-200 hover:scale-105"
                  onClick={() => handleQuickAction('schedule')}
                >
                  <Calendar className="w-6 h-6" />

@@ -26,6 +26,7 @@ import { AnimatePresence } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
 import LanguageSwitcher from '@/components/LanguageSwitcher'
 import ThemeToggle from '@/components/ThemeToggle'
+import { ClientOnly } from '@/components/ClientOnly'
 
 export default function AboutPage() {
   const { t } = useTranslation();
@@ -35,120 +36,168 @@ export default function AboutPage() {
 
   const values = [
     {
-      title: "AI-First Innovation",
-      description: "We believe in leveraging cutting-edge AI to solve real business problems, not just add complexity.",
+      title: t('about.values.aiFirst.title'),
+      description: t('about.values.aiFirst.description'),
       icon: Zap
     },
     {
-      title: "Human-Centric Results",
-      description: "Technology should enhance human relationships, not replace them. Our AI works alongside your team.",
+      title: t('about.values.humanCentric.title'),
+      description: t('about.values.humanCentric.description'),
       icon: Users
     },
     {
-      title: "Transparent ROI",
-      description: "Every feature, every metric, every decision is designed to deliver measurable business impact.",
+      title: t('about.values.transparentROI.title'),
+      description: t('about.values.transparentROI.description'),
       icon: BarChart3
     },
     {
-      title: "Continuous Evolution",
-      description: "We're constantly learning from our users and improving our platform to stay ahead of the curve.",
+      title: t('about.values.continuousEvolution.title'),
+      description: t('about.values.continuousEvolution.description'),
       icon: Rocket
     }
   ]
 
   return (
-    <div ref={pageRef} className="min-h-screen bg-[#0a0a0a]">
+    <div ref={pageRef} className="min-h-screen bg-background">
       {/* Navigation */}
-      <nav className="fixed top-0 w-full z-50 bg-[#0a0a0a]/80 backdrop-blur-xl border-b border-gray-800">
+      <nav className="fixed top-0 w-full z-50 bg-background/95 border-b border-border">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             {/* Logo - Left */}
             <div className="flex items-center">
-              <Link href="/" className="text-2xl font-medium text-white">
-                Rarity Leads
+              <Link href="/" className="text-2xl font-medium text-foreground">
+                <ClientOnly fallback="Rarity Leads">
+                  {t('company.name')}
+                </ClientOnly>
               </Link>
             </div>
-
-            {/* Navigation Links - Center (Desktop) */}
+            
+            {/* Navigation Links - Center */}
             <div className="hidden md:flex items-center space-x-8">
-              <Link href="/#features" className="text-gray-300 hover:text-white transition-colors">
-                Features
+              <Link href="/#features" className="text-muted-foreground hover:text-foreground transition-colors">
+                {t('navigation.features')}
               </Link>
-              <Link href="/#solution" className="text-gray-300 hover:text-white transition-colors">
-                Solution
+              <Link href="/#solution" className="text-muted-foreground hover:text-foreground transition-colors">
+                {t('navigation.solution')}
               </Link>
-              <Link href="/#pricing" className="text-gray-300 hover:text-white transition-colors">
-                Pricing
+              <Link href="/#pricing" className="text-muted-foreground hover:text-foreground transition-colors">
+                {t('navigation.pricing')}
               </Link>
-              <Link href="/about" className="text-white font-medium">
-                About
-              </Link>
-            </div>
-
-            {/* Theme Toggle, Language Switcher and Auth - Right */}
-            <div className="flex items-center space-x-4">
-              <ThemeToggle />
-              <LanguageSwitcher />
-              <Link href="/auth" className="text-white hover:text-gray-300 transition-colors">
-                {t('auth.signIn')}
+              <Link href="/about" className="text-foreground font-medium">
+                {t('navigation.about')}
               </Link>
             </div>
 
-            {/* Mobile Menu Button */}
+            {/* Mobile menu button */}
             <div className="md:hidden">
-              <Button
-                variant="ghost"
-                size="icon"
+              <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="text-white"
+                className="text-muted-foreground hover:text-foreground transition-colors"
               >
                 {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-              </Button>
+              </button>
+            </div>
+            
+            {/* Auth Buttons, Theme Toggle and Language Switcher - Right */}
+            <div className="flex items-center space-x-2 sm:space-x-4">
+              <Link href="/auth" className="hidden sm:block text-foreground hover:text-muted-foreground transition-colors text-sm">
+                <ClientOnly fallback="Login">
+                  {t('auth.login')}
+                </ClientOnly>
+              </Link>
+              <Link 
+                href="/auth" 
+                className="hidden sm:block bg-rarity-600 hover:bg-rarity-700 text-white px-3 sm:px-4 py-2 rounded-lg font-medium transition-all duration-300 text-sm shadow-sm"
+              >
+                <ClientOnly fallback="Sign Up">
+                  {t('auth.signUp')}
+                </ClientOnly>
+              </Link>
+              <ClientOnly fallback={
+                <div className="w-8 h-8 bg-muted rounded animate-pulse"></div>
+              }>
+                <ThemeToggle />
+              </ClientOnly>
+              <ClientOnly fallback={
+                <div className="w-8 h-8 bg-muted rounded animate-pulse"></div>
+              }>
+                <LanguageSwitcher />
+              </ClientOnly>
             </div>
           </div>
 
-          {/* Mobile Menu */}
-          <AnimatePresence>
-            {mobileMenuOpen && (
-              <motion.div
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: 'auto' }}
-                exit={{ opacity: 0, height: 0 }}
-                className="md:hidden border-t border-gray-800"
+      {/* Mobile Menu */}
+      {mobileMenuOpen && (
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -10 }}
+          className="md:hidden fixed top-16 left-0 right-0 z-40 bg-background/95 border-b border-border"
+        >
+          <div className="px-4 py-4 space-y-4">
+            <Link 
+              href="/#features" 
+              className="block text-muted-foreground hover:text-foreground transition-colors py-2"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              {t('navigation.features')}
+            </Link>
+            <Link 
+              href="/#solution" 
+              className="block text-muted-foreground hover:text-foreground transition-colors py-2"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              {t('navigation.solution')}
+            </Link>
+            <Link 
+              href="/#pricing" 
+              className="block text-muted-foreground hover:text-foreground transition-colors py-2"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              {t('navigation.pricing')}
+            </Link>
+            <Link 
+              href="/about" 
+              className="block text-foreground font-medium py-2"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              {t('navigation.about')}
+            </Link>
+            <div className="pt-4 border-t border-border space-y-3">
+              <Link 
+                href="/auth" 
+                className="block text-foreground hover:text-muted-foreground transition-colors py-2"
+                onClick={() => setMobileMenuOpen(false)}
               >
-                <div className="px-2 pt-2 pb-3 space-y-1">
-                  <Link
-                    href="/#features"
-                    className="block px-3 py-2 text-gray-300 hover:text-white transition-colors"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    Features
-                  </Link>
-                  <Link
-                    href="/#solution"
-                    className="block px-3 py-2 text-gray-300 hover:text-white transition-colors"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    Solution
-                  </Link>
-                  <Link
-                    href="/#pricing"
-                    className="block px-3 py-2 text-gray-300 hover:text-white transition-colors"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    Pricing
-                  </Link>
-                  <Link
-                    href="/about"
-                    className="block px-3 py-2 text-white font-medium"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    About
-                  </Link>
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
+                <ClientOnly fallback="Sign Up">
+                  {t('auth.signUp')}
+                </ClientOnly>
+              </Link>
+              <Link 
+                href="/auth" 
+                className="block text-foreground hover:text-muted-foreground transition-colors py-2"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                <ClientOnly fallback="Login">
+                  {t('auth.login')}
+                </ClientOnly>
+              </Link>
+              <div className="flex items-center gap-4 pt-2">
+                <ClientOnly fallback={
+                  <div className="w-8 h-8 bg-muted rounded animate-pulse"></div>
+                }>
+                  <ThemeToggle />
+                </ClientOnly>
+                <ClientOnly fallback={
+                  <div className="w-8 h-8 bg-muted rounded animate-pulse"></div>
+                }>
+                  <LanguageSwitcher />
+                </ClientOnly>
+              </div>
+            </div>
+          </div>
+        </motion.div>
+      )}
         </div>
       </nav>
 
@@ -160,23 +209,22 @@ export default function AboutPage() {
             animate={pageInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
             transition={{ duration: 0.6 }}
           >
-            <h1 className="text-4xl md:text-6xl font-medium text-white mb-6 leading-tight">
-              We're Building the Future of
-              <span className="text-[#8b5cf6]"> Lead Generation</span>
+            <h1 className="text-4xl md:text-6xl font-medium text-foreground mb-6 leading-tight">
+              {t('about.hero.title')}
+              <span className="text-rarity-600"> {t('about.hero.titleHighlight')}</span>
             </h1>
-            <p className="text-lg md:text-xl text-gray-400 mb-8 max-w-4xl mx-auto">
-              Rarity Leads was born from a simple frustration: why is lead generation still so manual, 
-              unpredictable, and expensive? We're changing that with AI that actually works.
+            <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-4xl mx-auto">
+              {t('about.hero.subtitle')}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link href="/auth">
                 <Button variant="primary" size="lg" className="whitespace-nowrap">
-                  Start Your Free Trial →
+                  {t('about.hero.startTrial')}
                 </Button>
               </Link>
               <Link href="#mission">
                 <Button variant="outline" size="lg">
-                  Learn Our Mission
+                  {t('about.hero.learnMission')}
                 </Button>
               </Link>
             </div>
@@ -194,13 +242,11 @@ export default function AboutPage() {
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <h2 className="text-3xl md:text-4xl font-medium text-white mb-6">
-              The Problem We're Solving
+            <h2 className="text-3xl md:text-4xl font-medium text-foreground mb-6">
+              {t('about.problemSection.title')}
             </h2>
-            <p className="text-lg text-gray-400 max-w-3xl mx-auto">
-              Traditional lead generation is broken. Agencies waste countless hours on manual prospecting, 
-              only to end up with low-quality leads and unpredictable results. We're fixing this with 
-              intelligent automation that actually delivers qualified prospects.
+            <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
+              {t('about.problemSection.description')}
             </p>
           </motion.div>
 
@@ -211,34 +257,34 @@ export default function AboutPage() {
               transition={{ duration: 0.6 }}
               viewport={{ once: true }}
             >
-              <h3 className="text-2xl font-medium text-white mb-4">Why Manual Prospecting Fails</h3>
+              <h3 className="text-2xl font-medium text-foreground mb-4">{t('about.problemSection.manualFails')}</h3>
               <div className="space-y-4">
                 <div className="flex items-start gap-3">
                   <XCircle className="w-5 h-5 text-red-400 mt-1 flex-shrink-0" />
                   <div>
-                    <h4 className="text-white font-medium mb-1">80% of your SDR's time is wasted</h4>
-                    <p className="text-gray-400 text-sm">Research, cold calling, and manual follow-ups leave little time for actual selling.</p>
+                                      <h4 className="text-foreground font-medium mb-1">{t('about.problemSection.issues.timeWasted.title')}</h4>
+                  <p className="text-muted-foreground text-sm">{t('about.problemSection.issues.timeWasted.description')}</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
                   <XCircle className="w-5 h-5 text-red-400 mt-1 flex-shrink-0" />
                   <div>
-                    <h4 className="text-white font-medium mb-1">Poor lead quality kills conversions</h4>
-                    <p className="text-gray-400 text-sm">Most prospects aren't qualified, leading to wasted demos and sales calls.</p>
+                                      <h4 className="text-foreground font-medium mb-1">{t('about.problemSection.issues.poorQuality.title')}</h4>
+                  <p className="text-muted-foreground text-sm">{t('about.problemSection.issues.poorQuality.description')}</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
                   <XCircle className="w-5 h-5 text-red-400 mt-1 flex-shrink-0" />
                   <div>
-                    <h4 className="text-white font-medium mb-1">Inconsistent follow-up loses deals</h4>
-                    <p className="text-gray-400 text-sm">Manual processes mean prospects fall through the cracks and deals are lost.</p>
+                                      <h4 className="text-foreground font-medium mb-1">{t('about.problemSection.issues.inconsistentFollowup.title')}</h4>
+                  <p className="text-muted-foreground text-sm">{t('about.problemSection.issues.inconsistentFollowup.description')}</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
                   <XCircle className="w-5 h-5 text-red-400 mt-1 flex-shrink-0" />
                   <div>
-                    <h4 className="text-white font-medium mb-1">Scaling requires more headcount</h4>
-                    <p className="text-gray-400 text-sm">Growing your pipeline means hiring more SDRs, not improving efficiency.</p>
+                                      <h4 className="text-foreground font-medium mb-1">{t('about.problemSection.issues.scalingRequiresHeadcount.title')}</h4>
+                  <p className="text-muted-foreground text-sm">{t('about.problemSection.issues.scalingRequiresHeadcount.description')}</p>
                   </div>
                 </div>
               </div>
@@ -250,34 +296,34 @@ export default function AboutPage() {
               transition={{ duration: 0.6 }}
               viewport={{ once: true }}
             >
-              <h3 className="text-2xl font-medium text-white mb-4">How Our AI Solves It</h3>
+              <h3 className="text-2xl font-medium text-foreground mb-4">{t('about.problemSection.aiSolves')}</h3>
               <div className="space-y-4">
                 <div className="flex items-start gap-3">
                   <CheckCircle className="w-5 h-5 text-green-400 mt-1 flex-shrink-0" />
                   <div>
-                    <h4 className="text-white font-medium mb-1">AI-powered lead qualification</h4>
-                    <p className="text-gray-400 text-sm">Our AI identifies and qualifies prospects before they reach your sales team, ensuring only interested leads get through.</p>
+                                      <h4 className="text-foreground font-medium mb-1">{t('about.problemSection.solutions.aiQualification.title')}</h4>
+                  <p className="text-muted-foreground text-sm">{t('about.problemSection.solutions.aiQualification.description')}</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
                   <CheckCircle className="w-5 h-5 text-green-400 mt-1 flex-shrink-0" />
                   <div>
-                    <h4 className="text-white font-medium mb-1">Intelligent multi-channel outreach</h4>
-                    <p className="text-gray-400 text-sm">Engage prospects across WhatsApp, LinkedIn, and email with personalized messages that actually get responses.</p>
+                                      <h4 className="text-foreground font-medium mb-1">{t('about.problemSection.solutions.multiChannelOutreach.title')}</h4>
+                  <p className="text-muted-foreground text-sm">{t('about.problemSection.solutions.multiChannelOutreach.description')}</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
                   <CheckCircle className="w-5 h-5 text-green-400 mt-1 flex-shrink-0" />
                   <div>
-                    <h4 className="text-white font-medium mb-1">Predictable pipeline growth</h4>
-                    <p className="text-gray-400 text-sm">Scale your lead generation without proportionally increasing headcount or costs.</p>
+                                      <h4 className="text-foreground font-medium mb-1">{t('about.problemSection.solutions.predictableGrowth.title')}</h4>
+                  <p className="text-muted-foreground text-sm">{t('about.problemSection.solutions.predictableGrowth.description')}</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
                   <CheckCircle className="w-5 h-5 text-green-400 mt-1 flex-shrink-0" />
                   <div>
-                    <h4 className="text-white font-medium mb-1">Human handoff at the right moment</h4>
-                    <p className="text-gray-400 text-sm">AI handles the grunt work, your team focuses on closing deals with qualified prospects.</p>
+                                      <h4 className="text-foreground font-medium mb-1">{t('about.problemSection.solutions.humanHandoff.title')}</h4>
+                  <p className="text-muted-foreground text-sm">{t('about.problemSection.solutions.humanHandoff.description')}</p>
                   </div>
                 </div>
               </div>
@@ -287,7 +333,7 @@ export default function AboutPage() {
       </section>
 
       {/* Values Section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-[#18181c]">
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-muted/50">
         <div className="max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -296,11 +342,11 @@ export default function AboutPage() {
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <h2 className="text-3xl md:text-4xl font-medium text-white mb-6">
-              Our Core Values
+            <h2 className="text-3xl md:text-4xl font-medium text-foreground mb-6">
+              {t('about.values.title')}
             </h2>
-            <p className="text-lg text-gray-400 max-w-3xl mx-auto">
-              These principles guide everything we build and every decision we make.
+            <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
+              {t('about.values.description')}
             </p>
           </motion.div>
 
@@ -314,11 +360,11 @@ export default function AboutPage() {
                 viewport={{ once: true }}
                 whileHover={{ scale: 1.02 }}
               >
-                <Card className="bg-[#0a0a0a] border border-gray-800 hover:border-gray-700 transition-all duration-300 h-full">
+                <Card className="bg-card border border-border hover:border-border/50 transition-all duration-300 h-full">
                   <CardContent className="p-6">
-                    <value.icon className="w-8 h-8 text-[#8b5cf6] mb-4" />
-                    <h3 className="text-lg font-medium text-white mb-3">{value.title}</h3>
-                    <p className="text-gray-400 text-sm">{value.description}</p>
+                    <value.icon className="w-8 h-8 text-rarity-600 mb-4" />
+                    <h3 className="text-lg font-medium text-foreground mb-3">{value.title}</h3>
+                    <p className="text-muted-foreground text-sm">{value.description}</p>
                   </CardContent>
                 </Card>
               </motion.div>
@@ -328,7 +374,7 @@ export default function AboutPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-[#18181c]">
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-muted/50">
         <div className="max-w-4xl mx-auto text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -336,22 +382,21 @@ export default function AboutPage() {
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-3xl md:text-4xl font-medium text-white mb-6">
-              Ready to End Manual Prospecting?
+            <h2 className="text-3xl md:text-4xl font-medium text-foreground mb-6">
+              {t('about.ctaSection.title')}
             </h2>
-            <p className="text-lg text-gray-400 mb-8 max-w-2xl mx-auto">
-              Join agencies who've already automated their lead generation and are seeing 
-              predictable, scalable growth without the manual grind.
+            <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
+              {t('about.ctaSection.description')}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link href="/auth">
                 <Button variant="primary" size="lg" className="whitespace-nowrap">
-                  Start Your Free Trial →
+                  {t('about.ctaSection.startTrial')}
                 </Button>
               </Link>
               <Link href="/dashboard">
                 <Button variant="outline" size="lg">
-                  See Demo
+                  {t('about.ctaSection.seeDemo')}
                 </Button>
               </Link>
             </div>

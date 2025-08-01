@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
@@ -111,13 +111,6 @@ const CustomizeApproach = ({ data, onUpdate, onNext, onPrev }: CustomizeApproach
     }
   }, [data.channel]);
 
-  // Generate personalized message when template or decision maker changes
-  useEffect(() => {
-    if (selectedTemplate && selectedDecisionMaker) {
-      generateMessage();
-    }
-  }, [selectedTemplate, selectedDecisionMaker]);
-
   const handleChannelSelect = (channelId: string) => {
     onUpdate({ channel: channelId });
   };
@@ -130,7 +123,7 @@ const CustomizeApproach = ({ data, onUpdate, onNext, onPrev }: CustomizeApproach
     setSelectedDecisionMaker(decisionMaker);
   };
 
-  const generateMessage = () => {
+  const generateMessage = useCallback(() => {
     if (!selectedTemplate || !selectedDecisionMaker) return;
     
     setGeneratingMessage(true);
@@ -173,7 +166,14 @@ const CustomizeApproach = ({ data, onUpdate, onNext, onPrev }: CustomizeApproach
       onUpdate({ customMessage: personalizedMessage });
       setGeneratingMessage(false);
     }, 1500);
-  };
+  }, [selectedTemplate, selectedDecisionMaker, onUpdate]);
+
+  // Generate personalized message when template or decision maker changes
+  useEffect(() => {
+    if (selectedTemplate && selectedDecisionMaker) {
+      generateMessage();
+    }
+  }, [selectedTemplate, selectedDecisionMaker, generateMessage]);
 
   const handleRefreshMessage = () => {
     generateMessage();

@@ -279,6 +279,7 @@
       "contactChannel": "Contact Channel",
       "businessNeeds": "Business Needs"
     },
+    "selectOptions": "Select options",
     "importLeads": "Import Leads",
     "uploadProspectList": "Upload your prospect list",
     "importCsv": "Import CSV"
@@ -390,7 +391,16 @@
       "templates": "Templates",
       "analytics": "Analytics",
       "accounts": "Accounts",
-      "conversations": "Conversations"
+      "conversations": "Conversations",
+      "comingSoon": "LinkedIn Integration Coming Soon",
+      "comingSoonDescription": "We're working on bringing LinkedIn outreach capabilities to Rarity Leads.",
+      "getNotified": "Get Notified",
+      "metrics": {
+        "connections": "Connections",
+        "messagesSent": "Messages Sent",
+        "responseRate": "Response Rate",
+        "meetingsBooked": "Meetings Booked"
+      }
     },
     "facebook": {
       "title": "Facebook",
@@ -405,7 +415,16 @@
       "templates": "Templates",
       "analytics": "Analytics",
       "accounts": "Accounts",
-      "conversations": "Conversations"
+      "conversations": "Conversations",
+      "comingSoon": "Facebook Integration Coming Soon",
+      "comingSoonDescription": "We're working on bringing Facebook outreach capabilities to Rarity Leads.",
+      "getNotified": "Get Notified",
+      "metrics": {
+        "pageFollowers": "Page Followers",
+        "messagesSent": "Messages Sent",
+        "responseRate": "Response Rate",
+        "leadsGenerated": "Leads Generated"
+      }
     },
     "x": {
       "title": "X (Twitter)",
@@ -420,11 +439,21 @@
       "templates": "Templates",
       "analytics": "Analytics",
       "accounts": "Accounts",
-      "conversations": "Conversations"
+      "conversations": "Conversations",
+      "comingSoon": "X (Twitter) Integration Coming Soon",
+      "comingSoonDescription": "We're working on bringing X (Twitter) outreach capabilities to Rarity Leads.",
+      "getNotified": "Get Notified",
+      "metrics": {
+        "followers": "Followers",
+        "dmsSent": "DMs Sent",
+        "responseRate": "Response Rate",
+        "leadsGenerated": "Leads Generated"
+      }
     }
   },
   "analytics": {
     "title": "Analytics & Reports",
+    "description": "Track your analytics and campaign insights",
     "overview": "Overview",
     "performance": "Performance",
     "conversions": "Conversions",
@@ -481,7 +510,90 @@
     "submitTicket": "Submit Ticket",
     "searchHelp": "Search help articles",
     "popularTopics": "Popular Topics",
-    "contactSupport": "Contact Support"
+    "contactSupport": "Contact Support",
+    "supportCenter": "Support Center",
+    "getHelp": "Get help with Rarity Leads and find answers to common questions",
+    "findAnswers": "Find answers to common questions",
+    "searchForHelp": "Search for help articles, FAQs, or contact support...",
+    "liveChat": "Live Chat",
+    "getInstantHelp": "Get instant help from our support team",
+    "startChat": "Start Chat",
+    "emailSupport": "Email Support",
+    "sendDetailedMessage": "Send us a detailed message",
+    "sendEmail": "Send Email",
+    "knowledgeBase": "Knowledge Base",
+    "browseGuides": "Browse detailed guides and tutorials",
+    "browseArticles": "Browse Articles",
+    "browseByCategory": "Browse by Category",
+    "allQuestions": "All Questions",
+    "whatsapp": "WhatsApp",
+    "leadManagement": "Lead Management",
+    "aiFeatures": "AI Features",
+    "outreach": "Outreach",
+    "security": "Security",
+    "frequentlyAskedQuestions": "Frequently Asked Questions",
+    "results": "results",
+    "totalFaqs": "Total FAQs",
+    "selected": "Selected",
+    "faqsPerCategory": "FAQs per Category",
+    "noResultsFound": "No results found",
+    "tryAdjustingSearch": "Try adjusting your search terms or browse by category",
+    "clearFilters": "Clear Filters",
+    "stillNeedHelp": "Still Need Help?",
+    "supportTeamHere": "Our support team is here to help you succeed with Rarity Leads. We typically respond within 2 hours during business hours.",
+    "scheduleDemo": "Schedule Demo",
+    "faqDetails": "FAQ Details",
+    "question": "Question",
+    "answer": "Answer",
+    "category": "Category",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "exportJson": "Export JSON",
+    "exportCsv": "Export CSV",
+    "faqUpdated": "FAQ updated",
+    "faqDeleted": "FAQ deleted",
+    "faqsDeleted": "FAQs deleted",
+    "faqsExported": "FAQs exported",
+    "confirmDeleteFaqs": "Are you sure you want to delete the selected FAQs?",
+    "bulkActions": "Bulk Actions",
+    "deleteSelected": "Delete Selected",
+    "exportSelectedCsv": "Export Selected CSV",
+    "exportSelectedJson": "Export Selected JSON",
+    "faqs": {
+      "whatsappConnection": {
+        "question": "How do I connect my WhatsApp account?",
+        "answer": "Go to Dashboard > Outreach > WhatsApp > Accounts, click 'Add Account', and scan the QR code with your WhatsApp mobile app. Make sure your phone has an active internet connection."
+      },
+      "qualifiedLeads": {
+        "question": "What's the difference between qualified and unqualified leads?",
+        "answer": "Qualified leads have shown genuine interest through engagement, meet your target criteria, and are ready for sales conversations. Unqualified leads need more nurturing or don't fit your ideal customer profile."
+      },
+      "aiQualification": {
+        "question": "How does the AI lead qualification work?",
+        "answer": "Our AI analyzes prospect behavior, engagement patterns, and responses to determine their buying intent and fit for your services. It uses machine learning to improve accuracy over time."
+      },
+      "multipleWhatsapp": {
+        "question": "Can I use multiple WhatsApp accounts?",
+        "answer": "Yes! You can connect multiple WhatsApp accounts for different campaigns or team members. Each account operates independently with its own conversations and analytics."
+      },
+      "exportData": {
+        "question": "How do I export my lead data?",
+        "answer": "Go to Dashboard > Leads, use the filters to select your data, then click the 'Export' button. You can export as CSV, Excel, or PDF formats."
+      },
+      "supportedChannels": {
+        "question": "What channels do you support for outreach?",
+        "answer": "We currently support WhatsApp, Instagram, LinkedIn, Facebook, and X (Twitter). More channels are being added regularly based on user demand."
+      },
+      "dataSecurity": {
+        "question": "How secure is my data?",
+        "answer": "We use enterprise-grade security with end-to-end encryption, SOC 2 compliance, and regular security audits. Your data is never shared with third parties without explicit consent."
+      },
+      "messageTemplates": {
+        "question": "Can I customize message templates?",
+        "answer": "Absolutely! Create personalized templates with variables like {name}, {company}, and {custom_fields}. Save templates for different campaigns and use cases."
+      }
+    }
   },
   "profile": {
     "title": "Profile",
@@ -597,7 +709,82 @@
     "mission": "Our Mission",
     "problem": "The Problem We're Solving",
     "solution": "How Our AI Solves It",
-    "cta": "Ready to End Manual Prospecting?"
+    "cta": "Ready to End Manual Prospecting?",
+    "hero": {
+      "title": "We're Building the Future of",
+      "titleHighlight": "Lead Generation",
+      "subtitle": "Rarity Leads was born from a simple frustration: why is lead generation still so manual, unpredictable, and expensive? We're changing that with AI that actually works.",
+      "startTrial": "Start Your Free Trial →",
+      "learnMission": "Learn Our Mission"
+    },
+    "problemSection": {
+      "title": "The Problem We're Solving",
+      "description": "Traditional lead generation is broken. Agencies waste countless hours on manual prospecting, only to end up with low-quality leads and unpredictable results. We're fixing this with intelligent automation that actually delivers qualified prospects.",
+      "manualFails": "Why Manual Prospecting Fails",
+      "aiSolves": "How Our AI Solves It",
+      "issues": {
+        "timeWasted": {
+          "title": "80% of your SDR's time is wasted",
+          "description": "Research, cold calling, and manual follow-ups leave little time for actual selling."
+        },
+        "poorQuality": {
+          "title": "Poor lead quality kills conversions",
+          "description": "Most prospects aren't qualified, leading to wasted demos and sales calls."
+        },
+        "inconsistentFollowup": {
+          "title": "Inconsistent follow-up loses deals",
+          "description": "Manual processes mean prospects fall through the cracks and deals are lost."
+        },
+        "scalingRequiresHeadcount": {
+          "title": "Scaling requires more headcount",
+          "description": "Growing your pipeline means hiring more SDRs, not improving efficiency."
+        }
+      },
+      "solutions": {
+        "aiQualification": {
+          "title": "AI-powered lead qualification",
+          "description": "Our AI identifies and qualifies prospects before they reach your sales team, ensuring only interested leads get through."
+        },
+        "multiChannelOutreach": {
+          "title": "Intelligent multi-channel outreach",
+          "description": "Engage prospects across WhatsApp, LinkedIn, and email with personalized messages that actually get responses."
+        },
+        "predictableGrowth": {
+          "title": "Predictable pipeline growth",
+          "description": "Scale your lead generation without proportionally increasing headcount or costs."
+        },
+        "humanHandoff": {
+          "title": "Human handoff at the right moment",
+          "description": "AI handles the grunt work, your team focuses on closing deals with qualified prospects."
+        }
+      }
+    },
+    "values": {
+      "title": "Our Core Values",
+      "description": "These principles guide everything we build and every decision we make.",
+      "aiFirst": {
+        "title": "AI-First Innovation",
+        "description": "We believe in leveraging cutting-edge AI to solve real business problems, not just add complexity."
+      },
+      "humanCentric": {
+        "title": "Human-Centric Results",
+        "description": "Technology should enhance human relationships, not replace them. Our AI works alongside your team."
+      },
+      "transparentROI": {
+        "title": "Transparent ROI",
+        "description": "Every feature, every metric, every decision is designed to deliver measurable business impact."
+      },
+      "continuousEvolution": {
+        "title": "Continuous Evolution",
+        "description": "We're constantly learning from our users and improving our platform to stay ahead of the curve."
+      }
+    },
+    "ctaSection": {
+      "title": "Ready to End Manual Prospecting?",
+      "description": "Join agencies who've already automated their lead generation and are seeing predictable, scalable growth without the manual grind.",
+      "startTrial": "Start Your Free Trial →",
+      "seeDemo": "See Demo"
+    }
   },
   "footer": {
     "copyright": "© 2024 Rarity Leads. All rights reserved."

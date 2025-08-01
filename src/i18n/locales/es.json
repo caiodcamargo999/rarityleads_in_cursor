@@ -279,6 +279,7 @@
       "contactChannel": "Canal de Contacto",
       "businessNeeds": "Necesidades del Negocio"
     },
+    "selectOptions": "Seleccionar opciones",
     "importLeads": "Importar Leads",
     "uploadProspectList": "Sube tu lista de prospects",
     "importCsv": "Importar CSV"
@@ -381,7 +382,16 @@
       "templates": "Plantillas",
       "analytics": "Analytics",
       "accounts": "Cuentas",
-      "conversations": "Conversaciones"
+      "conversations": "Conversaciones",
+      "comingSoon": "Integración de LinkedIn Próximamente",
+      "comingSoonDescription": "Estamos trabajando para traer capacidades de alcance de LinkedIn a Rarity Leads.",
+      "getNotified": "Ser Notificado",
+      "metrics": {
+        "connections": "Conexiones",
+        "messagesSent": "Mensajes Enviados",
+        "responseRate": "Tasa de Respuesta",
+        "meetingsBooked": "Reuniones Programadas"
+      }
     },
     "facebook": {
       "title": "Facebook",
@@ -396,7 +406,16 @@
       "templates": "Plantillas",
       "analytics": "Analytics",
       "accounts": "Cuentas",
-      "conversations": "Conversaciones"
+      "conversations": "Conversaciones",
+      "comingSoon": "Integración de Facebook Próximamente",
+      "comingSoonDescription": "Estamos trabajando para traer capacidades de alcance de Facebook a Rarity Leads.",
+      "getNotified": "Ser Notificado",
+      "metrics": {
+        "pageFollowers": "Seguidores de Página",
+        "messagesSent": "Mensajes Enviados",
+        "responseRate": "Tasa de Respuesta",
+        "leadsGenerated": "Leads Generados"
+      }
     },
     "x": {
       "title": "X (Twitter)",
@@ -411,11 +430,21 @@
       "templates": "Plantillas",
       "analytics": "Analytics",
       "accounts": "Cuentas",
-      "conversations": "Conversaciones"
+      "conversations": "Conversaciones",
+      "comingSoon": "Integración de X (Twitter) Próximamente",
+      "comingSoonDescription": "Estamos trabajando para traer capacidades de alcance de X (Twitter) a Rarity Leads.",
+      "getNotified": "Ser Notificado",
+      "metrics": {
+        "followers": "Seguidores",
+        "dmsSent": "DMs Enviados",
+        "responseRate": "Tasa de Respuesta",
+        "leadsGenerated": "Leads Generados"
+      }
     }
   },
   "analytics": {
     "title": "Analíticas y Reportes",
+    "description": "Rastrea tus analíticas e insights de campaña",
     "overview": "Resumen",
     "performance": "Rendimiento",
     "conversions": "Conversiones",
@@ -472,7 +501,90 @@
     "submitTicket": "Enviar Ticket",
     "searchHelp": "Buscar artículos de ayuda",
     "popularTopics": "Temas Populares",
-    "contactSupport": "Contactar Soporte"
+    "contactSupport": "Contactar Soporte",
+    "supportCenter": "Centro de Soporte",
+    "getHelp": "Obtén ayuda con Rarity Leads y encuentra respuestas a preguntas comunes",
+    "findAnswers": "Encuentra respuestas a preguntas comunes",
+    "searchForHelp": "Busca artículos de ayuda, FAQs o contacta soporte...",
+    "liveChat": "Chat en Vivo",
+    "getInstantHelp": "Obtén ayuda instantánea de nuestro equipo de soporte",
+    "startChat": "Iniciar Chat",
+    "emailSupport": "Soporte por Email",
+    "sendDetailedMessage": "Envíanos un mensaje detallado",
+    "sendEmail": "Enviar Email",
+    "knowledgeBase": "Base de Conocimiento",
+    "browseGuides": "Navega por guías detalladas y tutoriales",
+    "browseArticles": "Navegar Artículos",
+    "browseByCategory": "Navegar por Categoría",
+    "allQuestions": "Todas las Preguntas",
+    "whatsapp": "WhatsApp",
+    "leadManagement": "Gestión de Leads",
+    "aiFeatures": "Características de IA",
+    "outreach": "Contacto",
+    "security": "Seguridad",
+    "frequentlyAskedQuestions": "Preguntas Frecuentes",
+    "results": "resultados",
+    "totalFaqs": "Total de FAQs",
+    "selected": "Seleccionados",
+    "faqsPerCategory": "FAQs por Categoría",
+    "noResultsFound": "No se encontraron resultados",
+    "tryAdjustingSearch": "Intenta ajustar tus términos de búsqueda o navega por categoría",
+    "clearFilters": "Limpiar Filtros",
+    "stillNeedHelp": "¿Aún Necesitas Ayuda?",
+    "supportTeamHere": "Nuestro equipo de soporte está aquí para ayudarte a tener éxito con Rarity Leads. Normalmente respondemos en menos de 2 horas durante el horario laboral.",
+    "scheduleDemo": "Programar Demo",
+    "faqDetails": "Detalles de FAQ",
+    "question": "Pregunta",
+    "answer": "Respuesta",
+    "category": "Categoría",
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "delete": "Eliminar",
+    "exportJson": "Exportar JSON",
+    "exportCsv": "Exportar CSV",
+    "faqUpdated": "FAQ actualizada",
+    "faqDeleted": "FAQ eliminada",
+    "faqsDeleted": "FAQs eliminadas",
+    "faqsExported": "FAQs exportadas",
+    "confirmDeleteFaqs": "¿Estás seguro de que quieres eliminar las FAQs seleccionadas?",
+    "bulkActions": "Acciones en Lote",
+    "deleteSelected": "Eliminar Seleccionados",
+    "exportSelectedCsv": "Exportar CSV de Seleccionados",
+    "exportSelectedJson": "Exportar JSON de Seleccionados",
+    "faqs": {
+      "whatsappConnection": {
+        "question": "¿Cómo conecto mi cuenta de WhatsApp?",
+        "answer": "Ve a Dashboard > Contacto > WhatsApp > Cuentas, haz clic en 'Agregar Cuenta' y escanea el código QR con tu aplicación móvil de WhatsApp. Asegúrate de que tu teléfono tenga una conexión activa a internet."
+      },
+      "qualifiedLeads": {
+        "question": "¿Cuál es la diferencia entre leads calificados y no calificados?",
+        "answer": "Los leads calificados han mostrado interés genuino a través del compromiso, cumplen con tus criterios objetivo y están listos para conversaciones de ventas. Los leads no calificados necesitan más nutrición o no se ajustan al perfil de tu cliente ideal."
+      },
+      "aiQualification": {
+        "question": "¿Cómo funciona la calificación de leads con IA?",
+        "answer": "Nuestra IA analiza el comportamiento del prospecto, patrones de compromiso y respuestas para determinar su intención de compra y adecuación a tus servicios. Utiliza machine learning para mejorar la precisión con el tiempo."
+      },
+      "multipleWhatsapp": {
+        "question": "¿Puedo usar múltiples cuentas de WhatsApp?",
+        "answer": "¡Sí! Puedes conectar múltiples cuentas de WhatsApp para diferentes campañas o miembros del equipo. Cada cuenta opera independientemente con sus propias conversaciones y analytics."
+      },
+      "exportData": {
+        "question": "¿Cómo exporto mis datos de leads?",
+        "answer": "Ve a Dashboard > Leads, usa los filtros para seleccionar tus datos, luego haz clic en el botón 'Exportar'. Puedes exportar en formatos CSV, Excel o PDF."
+      },
+      "supportedChannels": {
+        "question": "¿Qué canales soportan para outreach?",
+        "answer": "Actualmente soportamos WhatsApp, Instagram, LinkedIn, Facebook y X (Twitter). Se están agregando más canales regularmente basándose en la demanda de los usuarios."
+      },
+      "dataSecurity": {
+        "question": "¿Qué tan seguros son mis datos?",
+        "answer": "Utilizamos seguridad de nivel empresarial con cifrado de extremo a extremo, cumplimiento SOC 2 y auditorías de seguridad regulares. Tus datos nunca se comparten con terceros sin consentimiento explícito."
+      },
+      "messageTemplates": {
+        "question": "¿Puedo personalizar plantillas de mensaje?",
+        "answer": "¡Absolutamente! Crea plantillas personalizadas con variables como {name}, {company} y {custom_fields}. Guarda plantillas para diferentes campañas y casos de uso."
+      }
+    }
   },
   "profile": {
     "title": "Perfil",
@@ -588,7 +700,82 @@
     "mission": "Nuestra Misión",
     "problem": "El Problema que Resolvemos",
     "solution": "Cómo Nuestra IA lo Resuelve",
-    "cta": "¿Listo para Terminar con la Prospección Manual?"
+    "cta": "¿Listo para Terminar con la Prospección Manual?",
+    "hero": {
+      "title": "Estamos Construyendo el Futuro de la",
+      "titleHighlight": "Generación de Leads",
+      "subtitle": "Rarity Leads nació de una simple frustración: ¿por qué la generación de leads sigue siendo tan manual, impredecible y costosa? Estamos cambiando eso con IA que realmente funciona.",
+      "startTrial": "Comienza Tu Prueba Gratuita →",
+      "learnMission": "Conoce Nuestra Misión"
+    },
+    "problemSection": {
+      "title": "El Problema que Estamos Resolviendo",
+      "description": "La generación de leads tradicional está rota. Las agencias desperdician incontables horas en prospección manual, solo para terminar con leads de baja calidad y resultados impredecibles. Estamos arreglando esto con automatización inteligente que realmente entrega prospects calificados.",
+      "manualFails": "Por Qué Falla la Prospección Manual",
+      "aiSolves": "Cómo Nuestra IA lo Resuelve",
+      "issues": {
+        "timeWasted": {
+          "title": "80% del tiempo de tu SDR se desperdicia",
+          "description": "Investigación, llamadas frías y seguimientos manuales dejan poco tiempo para vender realmente."
+        },
+        "poorQuality": {
+          "title": "La baja calidad de leads mata las conversiones",
+          "description": "La mayoría de los prospects no están calificados, llevando a demos y llamadas de ventas desperdiciadas."
+        },
+        "inconsistentFollowup": {
+          "title": "Seguimiento inconsistente pierde negocios",
+          "description": "Los procesos manuales significan que los prospects se caen por las grietas y se pierden negocios."
+        },
+        "scalingRequiresHeadcount": {
+          "title": "Escalar requiere más personal",
+          "description": "Crecer tu pipeline significa contratar más SDRs, no mejorar la eficiencia."
+        }
+      },
+      "solutions": {
+        "aiQualification": {
+          "title": "Calificación de leads con IA",
+          "description": "Nuestra IA identifica y califica prospects antes de que lleguen a tu equipo de ventas, asegurando que solo leads interesados pasen."
+        },
+        "multiChannelOutreach": {
+          "title": "Contacto multicanal inteligente",
+          "description": "Engage prospects a través de WhatsApp, LinkedIn y correo electrónico con mensajes personalizados que realmente reciben respuestas."
+        },
+        "predictableGrowth": {
+          "title": "Crecimiento de pipeline predecible",
+          "description": "Escala tu generación de leads sin aumentar proporcionalmente el personal o costos."
+        },
+        "humanHandoff": {
+          "title": "Transferencia humana en el momento correcto",
+          "description": "La IA maneja el trabajo pesado, tu equipo se enfoca en cerrar negocios con prospects calificados."
+        }
+      }
+    },
+    "values": {
+      "title": "Nuestros Valores Fundamentales",
+      "description": "Estos principios guían todo lo que construimos y cada decisión que tomamos.",
+      "aiFirst": {
+        "title": "Innovación IA-Primero",
+        "description": "Creemos en aprovechar la IA de vanguardia para resolver problemas reales de negocio, no solo agregar complejidad."
+      },
+      "humanCentric": {
+        "title": "Resultados Centrados en Humanos",
+        "description": "La tecnología debe mejorar las relaciones humanas, no reemplazarlas. Nuestra IA trabaja junto con tu equipo."
+      },
+      "transparentROI": {
+        "title": "ROI Transparente",
+        "description": "Cada característica, cada métrica, cada decisión está diseñada para entregar impacto mensurable en el negocio."
+      },
+      "continuousEvolution": {
+        "title": "Evolución Continua",
+        "description": "Estamos constantemente aprendiendo de nuestros usuarios y mejorando nuestra plataforma para estar a la vanguardia."
+      }
+    },
+    "ctaSection": {
+      "title": "¿Listo para Terminar con la Prospección Manual?",
+      "description": "Únete a agencias que ya han automatizado su generación de leads y están viendo crecimiento predecible y escalable sin el trabajo manual.",
+      "startTrial": "Comienza Tu Prueba Gratuita →",
+      "seeDemo": "Ver Demo"
+    }
   },
   "footer": {
     "copyright": "© 2024 Rarity Leads. Todos los derechos reservados."

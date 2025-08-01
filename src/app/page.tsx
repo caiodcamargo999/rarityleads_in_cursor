@@ -7,11 +7,67 @@ import { useTranslation } from 'react-i18next'
 import LanguageSwitcher from '@/components/LanguageSwitcher'
 import ThemeToggle from '@/components/ThemeToggle'
 import { ClientOnly } from '@/components/ClientOnly'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
+import { supabase } from '@/lib/supabase'
 
 export default function HomePage() {
   const { t } = useTranslation()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
+  const router = useRouter()
+
+  // Check authentication status on component mount
+  useEffect(() => {
+    const checkAuthStatus = async () => {
+      try {
+        const { data: { user } } = await supabase.auth.getUser()
+        
+        if (user) {
+          // User is logged in, redirect to dashboard
+          router.push('/dashboard')
+          return
+        }
+        
+        // User is not logged in, show sales page
+        setIsLoading(false)
+      } catch (error) {
+        console.error('Error checking auth status:', error)
+        // Even if there's an error, we should show the sales page
+        setIsLoading(false)
+      }
+    }
+
+    // Add a timeout to prevent infinite loading on slow connections
+    const timeoutId = setTimeout(() => {
+      setIsLoading(false)
+    }, 3000) // 3 second timeout
+
+    checkAuthStatus()
+
+    // Listen for auth state changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      async (event, session) => {
+        if (event === 'SIGNED_IN' && session?.user) {
+          router.push('/dashboard')
+        }
+      }
+    )
+
+    return () => {
+      clearTimeout(timeoutId)
+      subscription.unsubscribe()
+    }
+  }, [router])
+
+  // Show loading while checking auth status
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-muted-foreground"></div>
+      </div>
+    )
+  }
 
   const features = [
     {
@@ -94,7 +150,7 @@ export default function HomePage() {
   return (
     <div className="min-h-screen bg-background">
       {/* Navigation */}
-      <nav className="fixed top-0 w-full z-50 bg-background/80 backdrop-blur-xl border-b border-border">
+      <nav className="fixed top-0 w-full z-50 bg-background/95 border-b border-border">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             {/* Logo - Left */}
@@ -122,7 +178,7 @@ export default function HomePage() {
               </Link>
             </div>
 
-            {/* Mobile menu button */}
+            {/* Mobile menu button - Left */}
             <div className="md:hidden">
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -141,7 +197,7 @@ export default function HomePage() {
               </Link>
               <Link 
                 href="/auth" 
-                className="bg-gradient-to-r from-purple-600 to-purple-500 hover:from-purple-700 hover:to-purple-600 text-white px-3 sm:px-4 py-2 rounded-lg font-medium transition-all duration-300 text-sm shadow-lg hover:shadow-purple-500/25"
+                className="hidden sm:block bg-rarity-600 hover:bg-rarity-700 text-white px-3 sm:px-4 py-2 rounded-lg font-medium transition-all duration-300 text-sm shadow-sm"
               >
                 <ClientOnly fallback="Sign Up">
                   {t('auth.signUp')}
@@ -168,7 +224,7 @@ export default function HomePage() {
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -10 }}
-          className="md:hidden fixed top-16 left-0 right-0 z-40 bg-background/95 backdrop-blur-xl border-b border-border"
+          className="md:hidden fixed top-16 left-0 right-0 z-40 bg-background/95 border-b border-border"
         >
           <div className="px-4 py-4 space-y-4">
             <Link 
@@ -199,7 +255,16 @@ export default function HomePage() {
             >
               {t('navigation.about')}
             </Link>
-            <div className="pt-4 border-t border-border">
+            <div className="pt-4 border-t border-border space-y-3">
+              <Link 
+                href="/auth" 
+                className="block text-foreground hover:text-muted-foreground transition-colors py-2"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                <ClientOnly fallback="Sign Up">
+                  {t('auth.signUp')}
+                </ClientOnly>
+              </Link>
               <Link 
                 href="/auth" 
                 className="block text-foreground hover:text-muted-foreground transition-colors py-2"
@@ -209,6 +274,18 @@ export default function HomePage() {
                   {t('auth.login')}
                 </ClientOnly>
               </Link>
+              <div className="flex items-center gap-4 pt-2">
+                <ClientOnly fallback={
+                  <div className="w-8 h-8 bg-muted rounded animate-pulse"></div>
+                }>
+                  <ThemeToggle />
+                </ClientOnly>
+                <ClientOnly fallback={
+                  <div className="w-8 h-8 bg-muted rounded animate-pulse"></div>
+                }>
+                  <LanguageSwitcher />
+                </ClientOnly>
+              </div>
             </div>
           </div>
         </motion.div>
@@ -282,7 +359,7 @@ export default function HomePage() {
                 className="relative bg-gradient-to-br from-background via-background to-background/50 p-8 rounded-lg border border-border overflow-hidden shadow-lg dark:from-background/90 dark:to-background/70"
               >
                 {/* Purple gradient overlay - more prominent in light theme */}
-                <div className="absolute inset-0 bg-gradient-to-br from-purple-500/15 via-purple-400/10 to-transparent pointer-events-none dark:from-purple-500/5 dark:to-transparent"></div>
+                <div className="absolute inset-0 bg-gradient-to-br from-purple-500/20 via-purple-400/15 to-transparent pointer-events-none dark:from-purple-500/8 dark:to-transparent"></div>
                 
                 <div className="relative z-10">
                   <div className="w-12 h-12 bg-gradient-to-r from-purple-600 to-purple-500 rounded-lg flex items-center justify-center mb-6 shadow-lg dark:from-purple-500/30 dark:to-purple-400/30">
@@ -336,7 +413,7 @@ export default function HomePage() {
                 className="relative bg-gradient-to-br from-background via-background to-background/50 p-8 rounded-lg border border-border overflow-hidden shadow-lg dark:from-background/90 dark:to-background/70"
               >
                 {/* Purple gradient overlay - more prominent in light theme */}
-                <div className="absolute inset-0 bg-gradient-to-br from-purple-500/15 via-purple-400/10 to-transparent pointer-events-none dark:from-purple-500/5 dark:to-transparent"></div>
+                <div className="absolute inset-0 bg-gradient-to-br from-purple-500/20 via-purple-400/15 to-transparent pointer-events-none dark:from-purple-500/8 dark:to-transparent"></div>
                 
                 <div className="relative z-10">
                   <h3 className="text-xl font-semibold text-foreground mb-6">
@@ -399,8 +476,8 @@ export default function HomePage() {
                   {/* Purple gradient overlay - more prominent for popular plan and in light theme */}
                   <div className={`absolute inset-0 pointer-events-none ${
                     plan.popular 
-                      ? 'bg-gradient-to-br from-purple-500/20 via-purple-400/15 to-transparent dark:from-purple-500/8 dark:to-transparent' 
-                      : 'bg-gradient-to-br from-purple-500/12 to-transparent dark:from-purple-500/4 dark:to-transparent'
+                      ? 'bg-gradient-to-br from-purple-500/25 via-purple-400/20 to-transparent dark:from-purple-500/10 dark:to-transparent' 
+                      : 'bg-gradient-to-br from-purple-500/20 via-purple-400/15 to-transparent dark:from-purple-500/8 dark:to-transparent'
                   }`}></div>
                   
                   <div className="relative z-10">
@@ -446,7 +523,7 @@ export default function HomePage() {
       <section className="relative py-20 px-4 sm:px-6 lg:px-8 overflow-hidden">
         {/* Purple gradient background - more prominent in light theme */}
         <div className="absolute inset-0 bg-gradient-to-br from-background via-background to-background/95 dark:from-background/90 dark:to-background/70"></div>
-        <div className="absolute inset-0 bg-gradient-to-br from-purple-500/15 via-purple-400/10 to-transparent dark:from-purple-500/5 dark:to-transparent"></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-purple-500/20 via-purple-400/15 to-transparent dark:from-purple-500/8 dark:to-transparent"></div>
         
         <div className="relative z-10 max-w-4xl mx-auto text-center">
           <motion.div

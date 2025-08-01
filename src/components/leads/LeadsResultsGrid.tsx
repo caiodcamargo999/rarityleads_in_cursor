@@ -28,13 +28,10 @@ export default function LeadsResultsGrid({ leads = [] }: { leads?: Lead[] }) {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="bg-gradient-to-br from-card via-card to-card/80 dark:from-card/90 dark:to-card/70 border border-border rounded-lg shadow-lg p-6 mb-8 overflow-hidden"
+      className="bg-card border border-border rounded-lg shadow-sm p-4 sm:p-6 mb-8"
     >
-      {/* Purple gradient overlay - more prominent in light theme */}
-      <div className="absolute inset-0 bg-gradient-to-br from-purple-500/8 via-purple-400/5 to-transparent pointer-events-none dark:from-purple-500/3 dark:to-transparent"></div>
-      
-      <div className="relative z-10">
-        <h2 className="text-xl font-semibold text-foreground mb-4">
+      <div>
+        <h2 className="text-xl font-medium text-foreground mb-4">
           <ClientOnly fallback="Generated Leads">
             Generated Leads
           </ClientOnly>
@@ -47,14 +44,14 @@ export default function LeadsResultsGrid({ leads = [] }: { leads?: Lead[] }) {
             </ClientOnly>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {leads.map((lead, index) => (
               <motion.div
                 key={lead.id || index}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="bg-gradient-to-br from-background via-background to-background/80 dark:from-background/90 dark:to-background/70 border border-border rounded-lg p-4 hover:shadow-md transition-all duration-200"
+                className="bg-background border border-border rounded-lg p-4 hover:shadow-sm transition-all duration-200"
               >
                 <div className="space-y-2">
                   <h3 className="font-medium text-foreground">{lead.full_name}</h3>

@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
 import { useRouter } from 'next/navigation'
+import Image from 'next/image'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -244,7 +245,7 @@ export default function TwoFactorPage() {
             <CardContent className="space-y-4">
               <div className="flex justify-center">
                 <div className="bg-white p-4 rounded-lg">
-                  <img src={qrCode} alt="QR Code" className="w-48 h-48" />
+                  <Image src={qrCode} alt="QR Code" width={192} height={192} className="w-48 h-48" />
                 </div>
               </div>
               
