@@ -1,9 +1,11 @@
 "use client"
 
 import { useEffect, useState, Suspense, useMemo, useRef } from "react"
+import { useRouter, useSearchParams } from "next/navigation"
 import { supabase } from "@/lib/supabase"
 import LeadsResultsGrid from "@/components/leads/LeadsResultsGrid"
 import LeadInputForm from "@/components/leads/LeadInputForm"
+import LeadModal from "@/components/leads/LeadModal"
 import { Button } from "@/components/ui/button"
 import { motion } from "framer-motion"
 import { AnimatePresence } from "framer-motion";
@@ -12,6 +14,10 @@ import { Bar } from 'react-chartjs-2';
 import { Chart, BarElement, CategoryScale, LinearScale, Tooltip } from 'chart.js';
 import { useTranslation } from 'react-i18next'
 import { ClientOnly } from '@/components/ClientOnly'
+import { User, Building, Mail, Phone, MapPin, Calendar, ExternalLink, MessageSquare } from 'lucide-react'
+import { Badge } from '@/components/ui/badge'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Input } from '@/components/ui/input'
 Chart.register(BarElement, CategoryScale, LinearScale, Tooltip);
 
 // Types for lead requests and leads (adjust as needed)
@@ -39,6 +45,17 @@ type Lead = {
   suggested_services?: string[];
   best_contact_time?: string | undefined;
   status?: string; // Added for inline editing
+  ai_score?: number;
+  phone?: string;
+  website?: string;
+  linkedin_url?: string;
+  company_size?: string;
+  annual_revenue?: string;
+  industry?: string;
+  priority?: 'low' | 'medium' | 'high';
+  notes?: string;
+  whatsapp?: string;
+  social?: string;
 }
 
 // Disable static generation for this page
@@ -47,10 +64,14 @@ export const runtime = 'edge'
 
 export default function LeadsPage() {
   const { t } = useTranslation()
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  const { toast } = useToast()
   const [leadRequests, setLeadRequests] = useState<LeadRequest[]>([])
   const [selectedRequest, setSelectedRequest] = useState<LeadRequest | null>(null)
   const [leads, setLeads] = useState<Lead[]>([])
   const [manualLeads, setManualLeads] = useState<Lead[]>([])
+  const [aiGeneratedLeads, setAiGeneratedLeads] = useState<Lead[]>([])
   const [loading, setLoading] = useState(false)
   const [userId, setUserId] = useState<string | null>(null)
   const [manualLeadForm, setManualLeadForm] = useState({ full_name: '', company_name: '', email: '', whatsapp: '', website: '', social: '' });
@@ -58,11 +79,21 @@ export default function LeadsPage() {
   const [search, setSearch] = useState('');
   const [activePersona, setActivePersona] = useState<string | null>(null);
   const [selectedLeads, setSelectedLeads] = useState<string[]>([]);
-  const [detailsLead, setDetailsLead] = useState<Lead | null>(null);
-  const detailsModalRef = useRef<HTMLDivElement>(null);
-  const { toast } = useToast();
-  const [editLead, setEditLead] = useState<Lead | null>(null);
-  const [editing, setEditing] = useState(false);
+  const [selectedLead, setSelectedLead] = useState<Lead | null>(null)
+  const [isModalOpen, setIsModalOpen] = useState(false)
+
+  // Handle deep linking - open modal if lead ID is in URL
+  useEffect(() => {
+    const leadId = searchParams?.get('id')
+    if (leadId && (leads.length > 0 || manualLeads.length > 0 || aiGeneratedLeads.length > 0)) {
+      const allLeads = [...leads, ...manualLeads, ...aiGeneratedLeads]
+      const lead = allLeads.find(l => l.id === leadId)
+      if (lead) {
+        setSelectedLead(lead)
+        setIsModalOpen(true)
+      }
+    }
+  }, [searchParams, leads, manualLeads, aiGeneratedLeads])
 
   // Filtered manual leads
   const filteredManualLeads = useMemo(() => {
@@ -87,70 +118,137 @@ export default function LeadsPage() {
   // Bulk select logic
   const allManualIds = filteredManualLeads.map(l => l.id);
   const allApiIds = leads.map(l => l.id);
-  const allIds = [...allManualIds, ...allApiIds];
-  const isAllSelected = selectedLeads.length === allIds.length && allIds.length > 0;
+  const allAiIds = aiGeneratedLeads.map(l => l.id);
+  const allIds = [...allManualIds, ...allApiIds, ...allAiIds];
+
+  const isAllSelected = allIds.length > 0 && selectedLeads.length === allIds.length;
   const isIndeterminate = selectedLeads.length > 0 && selectedLeads.length < allIds.length;
 
   const toggleSelectAll = () => {
-    if (isAllSelected) setSelectedLeads([]);
-    else setSelectedLeads(allIds);
-  };
-  const toggleSelect = (id: string) => {
-    setSelectedLeads(sel => sel.includes(id) ? sel.filter(x => x !== id) : [...sel, id]);
+    if (isAllSelected) {
+      setSelectedLeads([]);
+    } else {
+      setSelectedLeads(allIds);
+    }
   };
 
-  // Bulk actions
-  const handleBulkDelete = async () => {
-    if (!window.confirm(t('leads.confirmDelete'))) return;
-    try {
-      await supabase.from('leads').delete().in('id', selectedLeads);
-      setManualLeads(prev => prev.filter(l => !selectedLeads.includes(l.id)));
-      setLeads(prev => prev.filter(l => !selectedLeads.includes(l.id)));
-      toast({ title: t('leads.leadsDeleted'), description: `${selectedLeads.length} ${t('leads.leadsDeleted').toLowerCase()}.` });
-    } catch {
-      toast({ title: t('common.error'), description: t('leads.errorDeleting'), variant: 'destructive' });
-    }
-    setSelectedLeads([]);
+  const toggleSelect = (id: string) => {
+    setSelectedLeads(prev => 
+      prev.includes(id) ? prev.filter(l => l !== id) : [...prev, id]
+    );
   };
+
+  const handleBulkDelete = async () => {
+    if (selectedLeads.length === 0) return;
+    
+    if (confirm(t('leads.confirmDelete'))) {
+      try {
+        // Remove from all lead arrays
+        setManualLeads(prev => prev.filter(l => !selectedLeads.includes(l.id)));
+        setLeads(prev => prev.filter(l => !selectedLeads.includes(l.id)));
+        setAiGeneratedLeads(prev => prev.filter(l => !selectedLeads.includes(l.id)));
+        
+        setSelectedLeads([]);
+        toast({ title: t('leads.leadsDeleted'), description: t('leads.leadsDeletedSuccessfully') });
+      } catch (error) {
+        toast({ title: t('leads.errorDeleting'), description: t('leads.errorDeleting'), variant: 'destructive' });
+      }
+    }
+  };
+
   const handleBulkMove = async (stage: string) => {
+    if (selectedLeads.length === 0) return;
+    
     try {
-      await supabase.from('leads').update({ status: stage }).in('id', selectedLeads);
+      // Update all lead arrays
       setManualLeads(prev => prev.map(l => selectedLeads.includes(l.id) ? { ...l, status: stage } : l));
       setLeads(prev => prev.map(l => selectedLeads.includes(l.id) ? { ...l, status: stage } : l));
-      toast({ title: t('leads.leadsMoved'), description: `${selectedLeads.length} ${t('leads.leadsMoved').toLowerCase()}.` });
-    } catch {
-      toast({ title: t('common.error'), description: t('leads.errorMoving'), variant: 'destructive' });
+      setAiGeneratedLeads(prev => prev.map(l => selectedLeads.includes(l.id) ? { ...l, status: stage } : l));
+      
+      setSelectedLeads([]);
+      toast({ title: t('leads.leadsMoved'), description: t('leads.leadsMovedSuccessfully') });
+    } catch (error) {
+      toast({ title: t('leads.errorMoving'), description: t('leads.errorMoving'), variant: 'destructive' });
     }
-    setSelectedLeads([]);
   };
+
   const handleBulkExport = (format: 'csv' | 'json') => {
-    const allLeads = [...manualLeads, ...leads].filter(l => selectedLeads.includes(l.id));
+    if (selectedLeads.length === 0) {
+      toast({ title: t('leads.noLeadsSelected'), description: t('leads.selectLeadsFirst') });
+      return;
+    }
+    
+    const allLeads = [...leads, ...manualLeads, ...aiGeneratedLeads];
+    const selectedLeadData = allLeads.filter(l => selectedLeads.includes(l.id));
+    
     if (format === 'json') {
-      const blob = new Blob([JSON.stringify(allLeads, null, 2)], { type: 'application/json' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'leads.json';
-      a.click();
+      const dataStr = JSON.stringify(selectedLeadData, null, 2);
+      const dataBlob = new Blob([dataStr], { type: 'application/json' });
+      const url = URL.createObjectURL(dataBlob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `leads-${new Date().toISOString().split('T')[0]}.json`;
+      link.click();
       URL.revokeObjectURL(url);
       toast({ title: t('leads.leadsExported'), description: t('leads.exportJson') });
     } else {
-      // CSV export
-      const headers = ['id', 'full_name', 'company_name', 'email', 'created_at', 'status'] as const;
-      const csv = [headers.join(',')].concat(
-        allLeads.map(l => headers.map(h => JSON.stringify((l as Record<string, any>)[h] ?? '')).join(','))
-      ).join('\n');
-      const blob = new Blob([csv], { type: 'text/csv' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'leads.csv';
-      a.click();
+      const csvContent = [
+        ['Name', 'Company', 'Email', 'Phone', 'Status', 'AI Score'],
+        ...selectedLeadData.map(lead => [
+          lead.full_name,
+          lead.company_name,
+          lead.email,
+          lead.phone || '',
+          lead.status || '',
+          lead.ai_score?.toString() || ''
+        ])
+      ].map(row => row.map(field => `"${field}"`).join(',')).join('\n');
+      
+      const dataBlob = new Blob([csvContent], { type: 'text/csv' });
+      const url = URL.createObjectURL(dataBlob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `leads-${new Date().toISOString().split('T')[0]}.csv`;
+      link.click();
       URL.revokeObjectURL(url);
       toast({ title: t('leads.leadsExported'), description: t('leads.exportCsv') });
     }
     setSelectedLeads([]);
   };
+
+  // Handle lead card click
+  const handleLeadClick = (lead: Lead) => {
+    setSelectedLead(lead)
+    setIsModalOpen(true)
+  };
+
+  // Handle contact button click (prevent card click)
+  const handleContactClick = (e: React.MouseEvent, lead: Lead) => {
+    e.stopPropagation();
+    // TODO: Implement contact action
+  };
+
+  // Handle modal close
+  const handleModalClose = () => {
+    setIsModalOpen(false)
+    setSelectedLead(null)
+  }
+
+  // Handle lead save
+  const handleLeadSave = (updatedLead: Lead) => {
+    // Update in all lead arrays
+    setManualLeads(prev => prev.map(l => l.id === updatedLead.id ? updatedLead : l))
+    setLeads(prev => prev.map(l => l.id === updatedLead.id ? updatedLead : l))
+    setAiGeneratedLeads(prev => prev.map(l => l.id === updatedLead.id ? updatedLead : l))
+    setSelectedLead(updatedLead)
+  }
+
+  // Handle lead delete
+  const handleLeadDelete = (leadId: string) => {
+    setManualLeads(prev => prev.filter(l => l.id !== leadId))
+    setLeads(prev => prev.filter(l => l.id !== leadId))
+    setAiGeneratedLeads(prev => prev.filter(l => l.id !== leadId))
+  }
 
   // Fetch user session and lead requests
   useEffect(() => {
@@ -207,23 +305,13 @@ export default function LeadsPage() {
     fetchLeads()
   }, [selectedRequest])
 
-  // Handle new lead request submission
-  const handleNewLeadRequest = async (persona: string, filters: any) => {
-    if (!userId) return
-    setLoading(true)
-    // Insert new lead request
-    const { data: newRequest, error } = await supabase
-      .from("lead_requests")
-      .insert([{ user_id: userId, persona, filters }])
-      .select()
-      .single()
-    if (!error && newRequest) {
-      setLeadRequests(prev => [newRequest, ...prev])
-      setSelectedRequest(newRequest)
-      // Optionally: trigger Edge Function for enrichment here
-      // await fetch("/api/whatsapp/generate-leads", { method: "POST", body: JSON.stringify({ requestId: newRequest.id }) })
-    }
-    setLoading(false)
+  // Handle AI lead generation
+  const handleAiLeadGeneration = async (leads: Lead[], description: string) => {
+    setAiGeneratedLeads(leads)
+    toast({
+      title: t('leads.aiGeneration.success'),
+      description: `${leads.length} leads generated successfully`,
+    })
   }
 
   // Handle manual lead creation
@@ -244,7 +332,7 @@ export default function LeadsPage() {
   }
 
   const stageCounts = ['to_contact', 'contacted', 'in_conversation', 'closed'].map(stage =>
-    [...manualLeads, ...leads].filter(l => l.status === stage).length
+    [...manualLeads, ...leads, ...aiGeneratedLeads].filter(l => l.status === stage).length
   );
   const conversionRate = stageCounts[3] / (stageCounts[0] + stageCounts[1] + stageCounts[2] + stageCounts[3] || 1);
   const chartData = {
@@ -283,7 +371,7 @@ export default function LeadsPage() {
           <ClientOnly fallback="Total Leads">
             {t('leads.totalLeads')}
           </ClientOnly>
-          : {manualLeads.length + leads.length}
+          : {manualLeads.length + leads.length + aiGeneratedLeads.length}
         </div>
         <div className="text-sm text-muted-foreground">
           <ClientOnly fallback="Selected">
@@ -311,365 +399,438 @@ export default function LeadsPage() {
             exit={{ opacity: 0, y: -10 }}
             className="fixed top-20 left-1/2 -translate-x-1/2 z-50 bg-card border border-border rounded-xl shadow-sm px-6 py-3 flex gap-4 items-center"
           >
-            <Button variant="danger" onClick={handleBulkDelete} aria-label={t('leads.deleteSelected')}>
+            <Button variant="destructive" onClick={handleBulkDelete} aria-label={t('leads.deleteSelected')}>
               <ClientOnly fallback="Delete">
                 {t('leads.delete')}
               </ClientOnly>
             </Button>
-            <Button variant="secondary" onClick={() => handleBulkExport('csv')} aria-label={t('leads.exportSelectedCsv')}>
-              <ClientOnly fallback="Export CSV">
-                {t('leads.exportCsv')}
-              </ClientOnly>
-            </Button>
-            <Button variant="secondary" onClick={() => handleBulkExport('json')} aria-label={t('leads.exportSelectedJson')}>
-              <ClientOnly fallback="Export JSON">
-                {t('leads.exportJson')}
-              </ClientOnly>
-            </Button>
-            <Button variant="primary" onClick={() => handleBulkMove('to_contact')} aria-label={t('leads.moveToContact')}>
-              <ClientOnly fallback="Move to To Contact">
+            <Button variant="outline" onClick={() => handleBulkMove('contacted')} aria-label={t('leads.moveToContact')}>
+              <ClientOnly fallback="Move to Contacted">
                 {t('leads.moveToContact')}
               </ClientOnly>
             </Button>
+            <Button variant="outline" onClick={() => handleBulkExport('csv')} aria-label={t('leads.exportSelectedCsv')}>
+              <ClientOnly fallback="Export CSV">
+                {t('leads.exportSelectedCsv')}
+              </ClientOnly>
+            </Button>
+            <Button variant="outline" onClick={() => handleBulkExport('json')} aria-label={t('leads.exportSelectedJson')}>
+              <ClientOnly fallback="Export JSON">
+                {t('leads.exportSelectedJson')}
+              </ClientOnly>
+            </Button>
           </motion.div>
         )}
       </AnimatePresence>
-      
-      {/* Advanced Filtering/Search */}
-      <motion.div
-        initial={{ opacity: 0, y: -10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4 }}
-        className="w-full max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-4 mb-6 px-4"
-      >
-        <input
-          type="text"
-          placeholder={t('leads.searchPlaceholder')}
-          aria-label={t('leads.searchPlaceholder')}
-          className="flex-1 bg-background text-foreground rounded px-4 py-2 text-sm border border-border focus:outline-none focus:ring-2 focus:ring-primary transition"
-          value={search}
-          onChange={e => setSearch(e.target.value)}
-        />
-        <div className="flex gap-2 flex-wrap justify-center sm:justify-start">
-          <button
-            className={`px-3 py-1 rounded-full text-xs font-medium transition border ${activePersona === null ? 'bg-purple-600 text-white border-purple-600' : 'bg-neutral-800 text-neutral-400 border-neutral-700 hover:bg-neutral-700'}`}
-            aria-label={t('leads.allPersonas')}
-            onClick={() => setActivePersona(null)}
-          >
-            <ClientOnly fallback="All Personas">
-              {t('leads.allPersonas')}
-            </ClientOnly>
-          </button>
-          {Array.from(new Set(leadRequests.map(req => req.persona))).map(persona => (
-            <button
-              key={persona}
-              className={`px-3 py-1 rounded-full text-xs font-medium transition border ${activePersona === persona ? 'bg-purple-600 text-white border-purple-600' : 'bg-neutral-800 text-neutral-400 border-neutral-700 hover:bg-neutral-700'}`}
-              aria-label={`Filter by persona: ${persona}`}
-              onClick={() => setActivePersona(persona)}
-            >
-              {persona}
-            </button>
-          ))}
-        </div>
-      </motion.div>
-      
-      {/* API-enriched lead creation */}
-      <div className="w-full max-w-7xl mx-auto mb-6 px-4">
-        <LeadInputForm />
-      </div>
-      
-      {/* Manual lead creation */}
-      <motion.div
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="w-full max-w-7xl mx-auto mb-6 px-4 bg-neutral-900 rounded-xl border border-neutral-800 p-4 lg:p-6"
-      >
-        <div className="font-medium text-white mb-4">
-          <ClientOnly fallback="Create Lead Manually">
-            {t('leads.createLeadManually')}
-          </ClientOnly>
-        </div>
-        <form className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4" onSubmit={handleManualLeadSubmit}>
-          <input
-            type="text"
-            placeholder={t('leads.fullName')}
-            aria-label={t('leads.fullName')}
-            className="bg-neutral-800 text-white rounded px-3 py-2 text-sm border border-neutral-700 focus:outline-none focus:ring-2 focus:ring-purple-600 transition"
-            value={manualLeadForm.full_name}
-            onChange={e => setManualLeadForm(f => ({ ...f, full_name: e.target.value }))}
-            required
-          />
-          <input
-            type="text"
-            placeholder={t('leads.companyName')}
-            aria-label={t('leads.companyName')}
-            className="bg-neutral-800 text-white rounded px-3 py-2 text-sm border border-neutral-700 focus:outline-none focus:ring-2 focus:ring-purple-600 transition"
-            value={manualLeadForm.company_name}
-            onChange={e => setManualLeadForm(f => ({ ...f, company_name: e.target.value }))}
-            required
-          />
-          <input
-            type="email"
-            placeholder={t('leads.email')}
-            aria-label={t('leads.email')}
-            className="bg-neutral-800 text-white rounded px-3 py-2 text-sm border border-neutral-700 focus:outline-none focus:ring-2 focus:ring-purple-600 transition"
-            value={manualLeadForm.email}
-            onChange={e => setManualLeadForm(f => ({ ...f, email: e.target.value }))}
-            required
-          />
-          <input
-            type="text"
-            placeholder={t('leads.whatsappNumber')}
-            aria-label={t('leads.whatsappNumber')}
-            className="bg-neutral-800 text-white rounded px-3 py-2 text-sm border border-neutral-700 focus:outline-none focus:ring-2 focus:ring-purple-600 transition"
-            value={manualLeadForm.whatsapp || ''}
-            onChange={e => setManualLeadForm(f => ({ ...f, whatsapp: e.target.value }))}
-          />
-          <input
-            type="text"
-            placeholder={t('leads.companyWebsite')}
-            aria-label={t('leads.companyWebsite')}
-            className="bg-neutral-800 text-white rounded px-3 py-2 text-sm border border-neutral-700 focus:outline-none focus:ring-2 focus:ring-purple-600 transition"
-            value={manualLeadForm.website || ''}
-            onChange={e => setManualLeadForm(f => ({ ...f, website: e.target.value }))}
-          />
-          <Button
-            type="submit"
-            variant="primary"
-            aria-label={t('leads.createLead')}
-            disabled={manualLeadLoading}
-            className="w-full"
-          >
-            {manualLeadLoading ? t('leads.creating') : t('leads.createLead')}
-          </Button>
-        </form>
-      </motion.div>
-      
-      {/* Main content grid */}
-      <div className="w-full max-w-7xl mx-auto px-4">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Previous Lead Searches (API-enriched) */}
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5 }}
-            className="lg:col-span-1 bg-neutral-900 rounded-xl border border-neutral-800 p-4 min-h-[400px]"
-          >
-            <div className="font-medium text-white mb-4">
-              <ClientOnly fallback="Previous Lead Searches">
-                {t('leads.previousLeadSearches')}
+
+      {/* AI Lead Generation Form */}
+      <LeadInputForm onLeadsGenerated={handleAiLeadGeneration} />
+
+      {/* AI Generated Leads */}
+      {aiGeneratedLeads.length > 0 && (
+        <LeadsResultsGrid leads={aiGeneratedLeads} />
+      )}
+
+      {/* Manual Lead Creation Form */}
+      <div className="w-full max-w-7xl mx-auto px-4 mb-8">
+        <Card className="bg-card border border-border">
+          <CardHeader>
+            <CardTitle className="text-lg font-medium text-foreground">
+              <ClientOnly fallback="Create Lead Manually">
+                {t('leads.createLeadManually')}
               </ClientOnly>
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleManualLeadSubmit} className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="text-sm font-medium text-muted-foreground">
+                    <ClientOnly fallback="Full Name">
+                      {t('leads.fullName')}
+                    </ClientOnly>
+                  </label>
+                  <Input
+                    type="text"
+                    value={manualLeadForm.full_name}
+                    onChange={(e) => setManualLeadForm({ ...manualLeadForm, full_name: e.target.value })}
+                    className="mt-1"
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-muted-foreground">
+                    <ClientOnly fallback="Company Name">
+                      {t('leads.companyName')}
+                    </ClientOnly>
+                  </label>
+                  <Input
+                    type="text"
+                    value={manualLeadForm.company_name}
+                    onChange={(e) => setManualLeadForm({ ...manualLeadForm, company_name: e.target.value })}
+                    className="mt-1"
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-muted-foreground">
+                    <ClientOnly fallback="Email">
+                      {t('leads.email')}
+                    </ClientOnly>
+                  </label>
+                  <Input
+                    type="email"
+                    value={manualLeadForm.email}
+                    onChange={(e) => setManualLeadForm({ ...manualLeadForm, email: e.target.value })}
+                    className="mt-1"
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-muted-foreground">
+                    <ClientOnly fallback="WhatsApp">
+                      {t('leads.whatsapp')}
+                    </ClientOnly>
+                  </label>
+                  <Input
+                    type="text"
+                    value={manualLeadForm.whatsapp}
+                    onChange={(e) => setManualLeadForm({ ...manualLeadForm, whatsapp: e.target.value })}
+                    className="mt-1"
+                  />
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-muted-foreground">
+                    <ClientOnly fallback="Website">
+                      {t('leads.website')}
+                    </ClientOnly>
+                  </label>
+                  <Input
+                    type="url"
+                    value={manualLeadForm.website}
+                    onChange={(e) => setManualLeadForm({ ...manualLeadForm, website: e.target.value })}
+                    className="mt-1"
+                  />
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-muted-foreground">
+                    <ClientOnly fallback="Social Media">
+                      {t('leads.social')}
+                    </ClientOnly>
+                  </label>
+                  <Input
+                    type="text"
+                    value={manualLeadForm.social}
+                    onChange={(e) => setManualLeadForm({ ...manualLeadForm, social: e.target.value })}
+                    className="mt-1"
+                  />
+                </div>
+              </div>
+              <Button 
+                type="submit" 
+                disabled={manualLeadLoading}
+                className="w-full md:w-auto"
+              >
+                {manualLeadLoading ? (
+                  <ClientOnly fallback="Creating...">
+                    {t('leads.creating')}
+                  </ClientOnly>
+                ) : (
+                  <ClientOnly fallback="Create Lead">
+                    {t('leads.createLead')}
+                  </ClientOnly>
+                )}
+              </Button>
+            </form>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Previous Lead Searches */}
+      {leadRequests.length > 0 && (
+        <div className="w-full max-w-7xl mx-auto px-4 mb-8">
+          <Card className="bg-card border border-border">
+            <CardHeader>
+              <CardTitle className="text-lg font-medium text-foreground">
+                <ClientOnly fallback="Previous Lead Searches">
+                  {t('leads.previousLeadSearches')}
+                </ClientOnly>
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              {loading ? (
+                <div className="text-muted-foreground text-center py-8">
+                  <ClientOnly fallback="Loading...">
+                    {t('leads.loading')}
+                  </ClientOnly>
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  {filteredLeadRequests.map((request) => (
+                    <div
+                      key={request.id}
+                      className={`p-4 border border-border rounded-lg cursor-pointer transition-colors ${
+                        selectedRequest?.id === request.id
+                          ? 'bg-primary/10 border-primary'
+                          : 'hover:bg-muted/50'
+                      }`}
+                      onClick={() => setSelectedRequest(request)}
+                    >
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="font-medium text-foreground">{request.persona}</p>
+                          <p className="text-sm text-muted-foreground">
+                            {new Date(request.created_at).toLocaleDateString()}
+                          </p>
+                        </div>
+                        <Button variant="outline" size="sm">
+                          <ClientOnly fallback="View">
+                            {t('leads.view')}
+                          </ClientOnly>
+                        </Button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </div>
+      )}
+
+      {/* Results */}
+      {leads.length > 0 && (
+        <div className="w-full max-w-7xl mx-auto px-4 mb-8">
+          <Card className="bg-card border border-border">
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <CardTitle className="text-lg font-medium text-foreground">
+                  <ClientOnly fallback="Results">
+                    {t('leads.results')}
+                  </ClientOnly>
+                </CardTitle>
+                <div className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    checked={isAllSelected}
+                    ref={(el) => {
+                      if (el) el.indeterminate = isIndeterminate;
+                    }}
+                    onChange={toggleSelectAll}
+                    className="rounded border-border"
+                  />
+                  <span className="text-sm text-muted-foreground">
+                    <ClientOnly fallback="Select All">
+                      {t('leads.selectAll')}
+                    </ClientOnly>
+                  </span>
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent>
+              {loading ? (
+                <div className="text-muted-foreground text-center py-8">
+                  <ClientOnly fallback="Loading leads...">
+                    {t('leads.loadingLeads')}
+                  </ClientOnly>
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  {leads.map((lead) => (
+                    <motion.div
+                      key={lead.id}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="p-4 border border-border rounded-lg hover:shadow-sm transition-all duration-200 cursor-pointer group"
+                      onClick={() => handleLeadClick(lead)}
+                    >
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-4">
+                          <input
+                            type="checkbox"
+                            checked={selectedLeads.includes(lead.id)}
+                            onChange={(e) => {
+                              e.stopPropagation();
+                              toggleSelect(lead.id);
+                            }}
+                            className="rounded border-border"
+                          />
+                          <div>
+                            <p className="font-medium text-foreground group-hover:text-rarity-500 transition-colors">
+                              {lead.full_name}
+                            </p>
+                            <p className="text-sm text-muted-foreground">{lead.company_name}</p>
+                            <div className="flex items-center gap-2 mt-1">
+                              {lead.ai_score && (
+                                <Badge variant="outline" className="text-xs">
+                                  AI: {lead.ai_score}
+                                </Badge>
+                              )}
+                              {lead.status && (
+                                <Badge variant="secondary" className="text-xs">
+                                  {t(`leads.${lead.status}`)}
+                                </Badge>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          {lead.email && (
+                            <Button
+                              size="sm"
+                              variant="ghost"
+                              onClick={(e) => handleContactClick(e, lead)}
+                              className="h-8 w-8 p-0"
+                            >
+                              <Mail className="w-4 h-4" />
+                            </Button>
+                          )}
+                          {lead.phone && (
+                            <Button
+                              size="sm"
+                              variant="ghost"
+                              onClick={(e) => handleContactClick(e, lead)}
+                              className="h-8 w-8 p-0"
+                            >
+                              <Phone className="w-4 h-4" />
+                            </Button>
+                          )}
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            onClick={(e) => handleContactClick(e, lead)}
+                            className="h-8 w-8 p-0"
+                          >
+                            <MessageSquare className="w-4 h-4" />
+                          </Button>
+                        </div>
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </div>
+      )}
+
+      {/* Manually Created Leads */}
+      <div className="w-full max-w-7xl mx-auto px-4 mb-8">
+        <Card className="bg-card border border-border">
+          <CardHeader>
+            <div className="flex items-center justify-between">
+              <CardTitle className="text-lg font-medium text-foreground">
+                <ClientOnly fallback="Manually Created Leads">
+                  {t('leads.manuallyCreatedLeads')}
+                </ClientOnly>
+              </CardTitle>
+              <div className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  checked={isAllSelected}
+                  ref={(el) => {
+                    if (el) el.indeterminate = isIndeterminate;
+                  }}
+                  onChange={toggleSelectAll}
+                  className="rounded border-border"
+                />
+                <span className="text-sm text-muted-foreground">
+                  <ClientOnly fallback="Select All">
+                    {t('leads.selectAll')}
+                  </ClientOnly>
+                </span>
+              </div>
             </div>
-            {loading ? (
-              <div className="text-neutral-400">{t('leads.loading')}</div>
-            ) : filteredLeadRequests.length === 0 ? (
-              <div className="text-neutral-400">
-                <ClientOnly fallback="No previous lead searches yet.">
-                  {t('leads.noPreviousSearches')}
+          </CardHeader>
+          <CardContent>
+            {filteredManualLeads.length === 0 ? (
+              <div className="text-muted-foreground text-center py-8">
+                <ClientOnly fallback="No manually created leads yet.">
+                  {t('leads.noManualLeads')}
                 </ClientOnly>
               </div>
             ) : (
-              <ul className="space-y-2">
-                {filteredLeadRequests.map(req => (
-                  <li key={req.id}>
-                    <Button
-                      variant={selectedRequest?.id === req.id ? "primary" : "secondary"}
-                      aria-label={`View lead search from ${new Date(req.created_at).toLocaleString()}`}
-                      className="w-full text-left"
-                      onClick={() => setSelectedRequest(req)}
-                    >
-                      <span className="truncate">{req.persona}</span>
-                      <span className="ml-2 text-xs text-neutral-400">{new Date(req.created_at).toLocaleDateString()}</span>
-                    </Button>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </motion.div>
-          
-          {/* Results (API-enriched) */}
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5 }}
-            className="lg:col-span-2 bg-neutral-900 rounded-xl border border-neutral-800 p-4 min-h-[400px]"
-          >
-            <div className="font-medium text-white mb-4">
-              <ClientOnly fallback="Results">
-                {t('leads.results')}
-              </ClientOnly>
-            </div>
-            <Suspense fallback={<div className="text-neutral-400">{t('leads.loadingLeads')}</div>}>
-              <LeadsResultsGrid leads={leads} />
-            </Suspense>
-          </motion.div>
-        </div>
-      </div>
-      
-      {/* Manual Leads List with checkboxes and details modal */}
-      <motion.div
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="w-full max-w-7xl mx-auto mt-8 px-4 bg-neutral-900 rounded-xl border border-neutral-800 p-6"
-      >
-        <div className="flex items-center mb-4">
-          <input 
-            type="checkbox" 
-            checked={isAllSelected} 
-            ref={el => { if (el) el.indeterminate = isIndeterminate; }} 
-            onChange={toggleSelectAll} 
-            aria-label={t('leads.selectAll')} 
-            className="mr-3" 
-          />
-          <div className="font-medium text-white">
-            <ClientOnly fallback="Manually Created Leads">
-              {t('leads.manuallyCreatedLeads')}
-            </ClientOnly>
-          </div>
-        </div>
-        {filteredManualLeads.length === 0 ? (
-          <div className="text-neutral-400">
-            <ClientOnly fallback="No manually created leads yet.">
-              {t('leads.noManualLeads')}
-            </ClientOnly>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {filteredManualLeads.map(lead => (
-              <div 
-                key={lead.id} 
-                className={`bg-neutral-800 rounded-lg p-4 border transition-all ${
-                  selectedLeads.includes(lead.id) ? 'border-purple-600 ring-2 ring-purple-600/20' : 'border-neutral-700 hover:border-neutral-600'
-                }`}
-              > 
-                <div className="flex items-start gap-3">
-                  <input 
-                    type="checkbox" 
-                    checked={selectedLeads.includes(lead.id)} 
-                    onChange={() => toggleSelect(lead.id)} 
-                    aria-label={`Select lead ${lead.full_name}`} 
-                    className="mt-1"
-                  />
-                  <div className="flex-1 cursor-pointer" onClick={() => setDetailsLead(lead)}>
-                    <div className="font-medium text-white mb-1">{lead.full_name}</div>
-                    <div className="text-sm text-neutral-400 mb-1">{lead.company_name}</div>
-                    <div className="text-sm text-neutral-400 mb-2">{lead.email}</div>
-                    <div className="text-xs text-neutral-500">
-                      <ClientOnly fallback="Created">
-                        {t('leads.created')}
-                      </ClientOnly>
-                      {' '}{new Date(lead.created_at).toLocaleDateString()}
+              <div className="space-y-3">
+                {filteredManualLeads.map((lead) => (
+                  <motion.div
+                    key={lead.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="p-4 border border-border rounded-lg hover:shadow-sm transition-all duration-200 cursor-pointer group"
+                    onClick={() => handleLeadClick(lead)}
+                  >
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-4">
+                        <input
+                          type="checkbox"
+                          checked={selectedLeads.includes(lead.id)}
+                          onChange={(e) => {
+                            e.stopPropagation();
+                            toggleSelect(lead.id);
+                          }}
+                          className="rounded border-border"
+                        />
+                        <div>
+                          <p className="font-medium text-foreground group-hover:text-rarity-500 transition-colors">
+                            {lead.full_name}
+                          </p>
+                          <p className="text-sm text-muted-foreground">{lead.company_name}</p>
+                          <div className="flex items-center gap-2 mt-1">
+                            {lead.status && (
+                              <Badge variant="secondary" className="text-xs">
+                                {t(`leads.${lead.status}`)}
+                              </Badge>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        {lead.email && (
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            onClick={(e) => handleContactClick(e, lead)}
+                            className="h-8 w-8 p-0"
+                          >
+                            <Mail className="w-4 h-4" />
+                          </Button>
+                        )}
+                        {lead.phone && (
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            onClick={(e) => handleContactClick(e, lead)}
+                            className="h-8 w-8 p-0"
+                          >
+                            <Phone className="w-4 h-4" />
+                          </Button>
+                        )}
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          onClick={(e) => handleContactClick(e, lead)}
+                          className="h-8 w-8 p-0"
+                        >
+                          <MessageSquare className="w-4 h-4" />
+                        </Button>
+                      </div>
                     </div>
-                  </div>
-                </div>
+                  </motion.div>
+                ))}
               </div>
-            ))}
-          </div>
-        )}
-      </motion.div>
-      
-      {/* Lead Details Modal */}
-      <AnimatePresence>
-        {detailsLead && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.95 }}
-            transition={{ duration: 0.2 }}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/60"
-            onClick={() => setDetailsLead(null)}
-          >
-            <motion.div
-              ref={detailsModalRef}
-              initial={{ y: 40, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              exit={{ y: 40, opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              className="bg-neutral-900 rounded-xl border border-neutral-800 p-8 w-full max-w-lg relative"
-              onClick={e => e.stopPropagation()}
-              tabIndex={0}
-            >
-              <button className="absolute top-4 right-4 text-neutral-400 hover:text-white text-2xl" aria-label="Close details" onClick={() => setDetailsLead(null)}>&times;</button>
-              <div className="text-lg font-medium text-white mb-4">
-                <ClientOnly fallback="Lead Details">
-                  {t('leads.leadDetails')}
-                </ClientOnly>
-              </div>
-              <form onSubmit={async e => {
-                e.preventDefault();
-                if (!editLead) return;
-                setEditing(true);
-                try {
-                  await supabase.from('leads').update({
-                    full_name: editLead.full_name,
-                    company_name: editLead.company_name,
-                    email: editLead.email,
-                    status: editLead.status
-                  }).eq('id', editLead.id);
-                  setManualLeads(prev => prev.map(l => l.id === editLead.id ? { ...l, ...editLead } : l));
-                  setLeads(prev => prev.map(l => l.id === editLead.id ? { ...l, ...editLead } : l));
-                  toast({ title: t('leads.leadUpdated'), description: t('leads.leadUpdated') });
-                  setDetailsLead(editLead);
-                } catch {
-                  toast({ title: t('common.error'), description: t('leads.errorUpdating'), variant: 'destructive' });
-                }
-                setEditing(false);
-              }} className="flex flex-col gap-3">
-                <label className="text-xs text-neutral-400">{t('leads.fullName')}</label>
-                <input type="text" className="bg-neutral-800 text-white rounded px-3 py-2 text-sm border border-neutral-700 focus:outline-none focus:ring-2 focus:ring-purple-600 transition" value={editLead?.full_name ?? ''} onChange={e => setEditLead(l => l ? { ...l, full_name: e.target.value } : l)} />
-                <label className="text-xs text-neutral-400">{t('leads.companyName')}</label>
-                <input type="text" className="bg-neutral-800 text-white rounded px-3 py-2 text-sm border border-neutral-700 focus:outline-none focus:ring-2 focus:ring-purple-600 transition" value={editLead?.company_name ?? ''} onChange={e => setEditLead(l => l ? { ...l, company_name: e.target.value } : l)} />
-                <label className="text-xs text-neutral-400">{t('leads.email')}</label>
-                <input type="text" className="bg-neutral-800 text-white rounded px-3 py-2 text-sm border border-neutral-700 focus:outline-none focus:ring-2 focus:ring-purple-600 transition" value={editLead?.email ?? ''} onChange={e => setEditLead(l => l ? { ...l, email: e.target.value } : l)} />
-                <label className="text-xs text-neutral-400">{t('leads.status')}</label>
-                <select className="bg-neutral-800 text-white rounded px-3 py-2 text-sm border border-neutral-700 focus:outline-none focus:ring-2 focus:ring-purple-600 transition" value={editLead?.status ?? ''} onChange={e => setEditLead(l => l ? { ...l, status: e.target.value } : l)}>
-                  <option value="to_contact">{t('leads.toContact')}</option>
-                  <option value="contacted">{t('leads.contacted')}</option>
-                  <option value="in_conversation">{t('leads.inConversation')}</option>
-                  <option value="closed">{t('leads.closed')}</option>
-                </select>
-                <div className="flex gap-2 mt-4 flex-wrap">
-                  <Button type="submit" variant="primary" loading={editing} aria-label={t('leads.save')}>
-                    <ClientOnly fallback="Save">
-                      {t('leads.save')}
-                    </ClientOnly>
-                  </Button>
-                  <Button type="button" variant="secondary" onClick={() => setEditLead(detailsLead)} aria-label={t('leads.cancel')}>
-                    <ClientOnly fallback="Cancel">
-                      {t('leads.cancel')}
-                    </ClientOnly>
-                  </Button>
-                  <Button type="button" variant="danger" onClick={async () => { 
-                    if (window.confirm(t('leads.confirmDeleteSingle'))) { 
-                      await supabase.from('leads').delete().eq('id', detailsLead.id); 
-                      setManualLeads(prev => prev.filter(l => l.id !== detailsLead.id)); 
-                      setLeads(prev => prev.filter(l => l.id !== detailsLead.id)); 
-                      setDetailsLead(null); 
-                      toast({ title: t('leads.leadDeleted'), description: t('leads.leadDeleted') }); 
-                    }
-                  }} aria-label={t('leads.delete')}>
-                    <ClientOnly fallback="Delete">
-                      {t('leads.delete')}
-                    </ClientOnly>
-                  </Button>
-                  <Button type="button" variant="secondary" onClick={() => handleBulkExport('json')} aria-label={t('leads.exportJson')}>
-                    <ClientOnly fallback="Export JSON">
-                      {t('leads.exportJson')}
-                    </ClientOnly>
-                  </Button>
-                  <Button type="button" variant="secondary" onClick={() => handleBulkExport('csv')} aria-label={t('leads.exportCsv')}>
-                    <ClientOnly fallback="Export CSV">
-                      {t('leads.exportCsv')}
-                    </ClientOnly>
-                  </Button>
-                </div>
-              </form>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Lead Modal */}
+      <LeadModal
+        lead={selectedLead}
+        isOpen={isModalOpen}
+        onClose={handleModalClose}
+        onSave={handleLeadSave}
+        onDelete={handleLeadDelete}
+      />
     </div>
   )
 } 

@@ -114,10 +114,15 @@ export default function LeadInputForm({ onClose, onLeadsGenerated }: Props) {
       
       <div>
         <h2 className="text-xl font-medium text-foreground mb-4">
-          <ClientOnly fallback="Generate AI-Powered Leads">
-            {t('leads.createLeadManually')}
+          <ClientOnly fallback="AI-Powered Lead Generation">
+            {t('leads.aiGeneration.title')}
           </ClientOnly>
         </h2>
+        <p className="text-muted-foreground mb-6">
+          <ClientOnly fallback="Describe your ideal client and let our AI find the perfect leads for you">
+            {t('leads.aiGeneration.description')}
+          </ClientOnly>
+        </p>
         
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Description Input */}
@@ -140,7 +145,7 @@ export default function LeadInputForm({ onClose, onLeadsGenerated }: Props) {
           <div className="space-y-4">
             <h3 className="text-lg font-medium text-foreground">
               <ClientOnly fallback="Optional Filters">
-                Optional Filters
+                {t('leads.optionalFilters')}
               </ClientOnly>
             </h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -205,8 +210,8 @@ export default function LeadInputForm({ onClose, onLeadsGenerated }: Props) {
                className="w-full sm:w-auto"
              >
               {loading ? (
-                <ClientOnly fallback="Generating...">
-                  {t('common.loading')}
+                <ClientOnly fallback="Generating leads with AI...">
+                  {t('leads.aiGeneration.generating')}
                 </ClientOnly>
               ) : (
                 <ClientOnly fallback="Generate Leads">

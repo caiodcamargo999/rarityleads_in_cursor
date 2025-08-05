@@ -254,6 +254,12 @@ GET    /api/conversations/:id    Get conversation
 
 POST   /api/campaigns            Create campaign
 GET    /api/analytics/pipeline   Pipeline analytics
+
+POST   /api/companies            Create company
+GET    /api/companies            List companies
+GET    /api/companies/:id        Get company details
+PATCH  /api/companies/:id        Update company
+DELETE /api/companies/:id        Delete company
 ```
 
 ### WebSocket Events
@@ -266,6 +272,7 @@ Server → Client:
 - message_sent: { messageId: '...', status: 'delivered' }
 - message_received: { from: '...', content: '...' }
 - lead_updated: { leadId: '...', changes: {...} }
+- company_updated: { companyId: '...', changes: {...} }
 ```
 
 ### Error Handling
@@ -281,6 +288,53 @@ Server → Client:
   }
 }
 ```
+
+---
+
+## 🎯 Frontend Interaction Models (Universal)
+
+### Modal-Based Detail Views - ALL INTERNAL PAGES
+- **Universal Pattern**: ALL internal pages use modal overlays instead of nested routes for detailed views
+- **Modal Structure**: Dynamic import of modal components for performance
+- **State Management**: Local editing state with optimistic UI updates
+- **URL Synchronization**: Modal state syncs with URL parameters for deep linking
+- **Route Awareness**: Modals are route-aware and handle browser navigation
+
+### Universal Routing Strategy
+- **Main Routes**: `/dashboard/[entity]` - List view with modal support
+- **Deep Linking**: `/dashboard/[entity]?id=123` - Opens specific item modal
+- **NO Nested Routes**: Avoid `/dashboard/[entity]/[id]` for better UX
+- **URL Management**: Update URL parameters when modals open/close
+- **Browser Navigation**: Handle back/forward buttons with modal state
+
+### Universal Database Sync
+- **Real-time Updates**: Supabase Realtime for live data synchronization
+- **Optimistic UI**: Show changes immediately, revert on error
+- **RLS Integration**: Proper Row Level Security for data access
+- **Caching Strategy**: Client-side caching with invalidation
+- **Error Handling**: Graceful degradation with user feedback
+
+### Universal Component Architecture
+```
+[Entity]Page
+├── [Entity]Grid (List View)
+├── [Entity]Modal (Detail/Edit View)
+│   ├── [Entity]Header
+│   ├── [Entity]Form (Edit Mode)
+│   ├── [Entity]Details (View Mode)
+│   └── [Entity]Sidebar
+└── SearchFilters
+```
+
+### Universal Modal Components
+- **CompanyModal**: Company management and editing
+- **LeadModal**: Lead details, editing, and pipeline management
+- **CampaignModal**: Campaign creation and management
+- **AnalyticsModal**: Detailed reports and insights
+- **ArticleModal**: Support content and help articles
+- **SettingsModal**: Various settings management
+- **MessageModal**: Outreach message management
+- **AccountModal**: Channel account management
 
 ## 🚀 Deployment Architecture
 

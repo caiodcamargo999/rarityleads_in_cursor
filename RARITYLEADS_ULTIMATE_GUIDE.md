@@ -830,6 +830,60 @@ See /supabase/README.md for full instructions and best practices.
 
 ---
 
+## 🏢 Universal Modal Interaction - ALL Internal Pages
+
+### Overview
+ALL internal pages in Rarity Leads implement a Notion-style modal interaction pattern where clicking on any item (company, lead, campaign, etc.) opens a detailed modal overlay instead of navigating to a separate page.
+
+### Universal User Experience Flow
+1. **List View**: Users see a grid/list of items with key information
+2. **Item Click**: Clicking any item opens a modal with full details
+3. **Inline Editing**: Users can toggle edit mode to modify information
+4. **Real-time Updates**: Changes are saved and reflected immediately in the list
+5. **Deep Linking**: Direct links to specific items (e.g., `/leads?id=123`) open the modal automatically
+
+### Universal Editable Data Fields
+- **Basic Information**: Name, category, status, location, dates
+- **Contact Information**: Email, phone, website, social media
+- **Key Contacts**: Add/remove contact persons with roles and details
+- **Notes**: Rich text notes and descriptions
+- **Tags**: Add/remove custom tags for categorization
+- **Status**: Various status options (Active, Inactive, Draft, etc.)
+- **Related Data**: Connected items, attachments, activity logs
+
+### Universal Technical Implementation
+- **Modal Components**: `[Entity]Modal` components handle all interactions
+- **State Management**: Local editing state with optimistic UI updates
+- **URL Synchronization**: Modal state syncs with URL parameters
+- **Data Persistence**: Changes saved to Supabase with proper RLS
+- **Performance**: No page reloads, seamless transitions
+
+### Universal UX Features
+- **Smooth Animations**: Framer Motion spring animations for modal entrance/exit
+- **Keyboard Support**: ESC to close, Enter to save, proper focus management
+- **Responsive Design**: Full-width modal on mobile, max-width on desktop
+- **Accessibility**: ARIA labels, keyboard navigation, screen reader support
+- **Error Handling**: Toast notifications for success/error states
+
+### Universal Performance Expectations
+- **Modal Load Time**: < 200ms for modal opening
+- **Save Response**: < 1s for data persistence
+- **List Updates**: Instant reflection of changes
+- **Memory Usage**: Efficient state management, no memory leaks
+- **Mobile Performance**: Smooth 60fps animations on all devices
+
+### Affected Pages & Components
+- **Companies Page**: CompanyModal for company management
+- **Leads Page**: LeadModal for lead details and editing
+- **CRM Page**: LeadModal for pipeline lead management
+- **Campaigns Page**: CampaignModal for campaign details
+- **Analytics Page**: AnalyticsModal for detailed reports
+- **Support Page**: ArticleModal for help content
+- **Settings Pages**: Various modals for settings management
+- **Outreach Pages**: MessageModal, AccountModal for channel management
+
+---
+
 ## 🚫 Sales Page Change Rule (2024)
 - No changes to the sales page (landing page) are allowed unless specifically requested in a prompt. All other UI/UX changes must not affect the sales page.
 

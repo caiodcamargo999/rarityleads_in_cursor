@@ -1,12 +1,16 @@
 "use client";
 
 import { useState, useRef } from "react";
+import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { Bar } from "react-chartjs-2";
 import { Chart, BarElement, CategoryScale, LinearScale, Tooltip } from "chart.js";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
-import { Plus, Download, Trash2, MoreHorizontal } from "lucide-react";
+import { Plus, Download, Trash2, MoreHorizontal, Calendar, Users, Target, Activity } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { useTranslation } from 'react-i18next';
+import { ClientOnly } from '@/components/ClientOnly';
 Chart.register(BarElement, CategoryScale, LinearScale, Tooltip);
 
 interface Campaign {
@@ -17,33 +21,39 @@ interface Campaign {
   leads: number;
   created_at: string;
   last_run: string;
+  description?: string;
+  target_audience?: string;
+  budget?: number;
+  conversion_rate?: number;
 }
 
 export default function CampaignsPage() {
+  const { t } = useTranslation();
+  const router = useRouter();
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
   const [selectedCampaigns, setSelectedCampaigns] = useState<string[]>([]);
-  const [detailsCampaign, setDetailsCampaign] = useState<Campaign | null>(null);
-  const detailsModalRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
-  const [editCampaign, setEditCampaign] = useState<Campaign | null>(null);
-  const [editing, setEditing] = useState(false);
 
   const allIds = campaigns.map((c) => c.id);
   const isAllSelected = selectedCampaigns.length === allIds.length && allIds.length > 0;
   const isIndeterminate = selectedCampaigns.length > 0 && selectedCampaigns.length < allIds.length;
+  
   const toggleSelectAll = () => {
     if (isAllSelected) setSelectedCampaigns([]);
     else setSelectedCampaigns(allIds);
   };
+  
   const toggleSelect = (id: string) => {
     setSelectedCampaigns((sel) => (sel.includes(id) ? sel.filter((x) => x !== id) : [...sel, id]));
   };
+  
   const handleBulkDelete = async () => {
-    if (!window.confirm("Are you sure you want to delete the selected campaigns?")) return;
+    if (!window.confirm(t('campaigns.confirmDelete'))) return;
     setCampaigns((prev) => prev.filter((c) => !selectedCampaigns.includes(c.id)));
-    toast({ title: "Campaigns deleted", description: `${selectedCampaigns.length} campaigns deleted.` });
+    toast({ title: t('campaigns.campaignsDeleted'), description: `${selectedCampaigns.length} ${t('campaigns.campaignsDeleted').toLowerCase()}.` });
     setSelectedCampaigns([]);
   };
+  
   const handleBulkExport = (format: "csv" | "json") => {
     const allCampaigns = campaigns.filter((c) => selectedCampaigns.includes(c.id));
     if (format === "json") {
@@ -54,7 +64,7 @@ export default function CampaignsPage() {
       a.download = "campaigns.json";
       a.click();
       URL.revokeObjectURL(url);
-      toast({ title: "Exported", description: "Campaigns exported as JSON." });
+      toast({ title: t('campaigns.campaignsExported'), description: t('campaigns.exportJson') });
     } else {
       const headers = ["id", "name", "channel", "status", "leads", "created_at", "last_run"] as const;
       const csv = [headers.join(",")].concat(
@@ -67,9 +77,20 @@ export default function CampaignsPage() {
       a.download = "campaigns.csv";
       a.click();
       URL.revokeObjectURL(url);
-      toast({ title: "Exported", description: "Campaigns exported as CSV." });
+      toast({ title: t('campaigns.campaignsExported'), description: t('campaigns.exportCsv') });
     }
     setSelectedCampaigns([]);
+  };
+
+  // Handle campaign card click
+  const handleCampaignClick = (campaign: Campaign) => {
+    router.push(`/dashboard/campaigns/${campaign.id}`);
+  };
+
+  // Handle action button click (prevent card click)
+  const handleActionClick = (e: React.MouseEvent, campaign: Campaign) => {
+    e.stopPropagation();
+    // TODO: Implement action
   };
 
   // Analytics
@@ -77,7 +98,7 @@ export default function CampaignsPage() {
     (status) => campaigns.filter((c) => c.status === status).length
   );
   const chartData = {
-    labels: ["Draft", "Active", "Paused", "Completed"],
+    labels: [t('campaigns.draft'), t('campaigns.active'), t('campaigns.paused'), t('campaigns.completed')],
     datasets: [
       {
         label: "Campaigns per Status",
@@ -93,114 +114,193 @@ export default function CampaignsPage() {
     scales: { x: { grid: { display: false } }, y: { grid: { color: "#232336" }, beginAtZero: true } },
   };
 
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'draft': return 'bg-gray-500';
+      case 'active': return 'bg-green-500';
+      case 'paused': return 'bg-yellow-500';
+      case 'completed': return 'bg-blue-500';
+      default: return 'bg-gray-500';
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-background flex flex-col">
-      <motion.div className="w-full max-w-5xl mx-auto mb-6 flex flex-wrap gap-4 justify-between items-center pt-8">
-        <div className="text-lg text-foreground font-medium">Total Campaigns: {campaigns.length}</div>
-        <div className="text-sm text-muted-foreground">Selected: {selectedCampaigns.length}</div>
-        <div className="flex-1 min-w-[220px]">
+    <div className="min-h-screen bg-background w-full overflow-x-hidden">
+      <motion.h1
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="text-xl lg:text-2xl font-medium text-foreground mb-6 px-4 pt-4"
+      >
+        <ClientOnly fallback="Campaigns">
+          {t('campaigns.title')}
+        </ClientOnly>
+      </motion.h1>
+
+      {/* Analytics summary */}
+      <motion.div className="w-full max-w-7xl mx-auto mb-6 flex flex-wrap gap-4 justify-between items-center px-4">
+        <div className="text-lg text-foreground font-medium">
+          <ClientOnly fallback="Total Campaigns">
+            {t('campaigns.totalCampaigns')}
+          </ClientOnly>
+          : {campaigns.length}
+        </div>
+        <div className="text-sm text-muted-foreground">
+          <ClientOnly fallback="Selected">
+            {t('campaigns.selected')}
+          </ClientOnly>
+          : {selectedCampaigns.length}
+        </div>
+        <div className="flex-1 min-w-[220px] max-w-md">
           <Bar data={chartData} options={chartOptions} height={80} />
         </div>
       </motion.div>
+
+      {/* Bulk actions bar */}
       <AnimatePresence>
         {selectedCampaigns.length > 0 && (
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            className="fixed top-20 left-1/2 -translate-x-1/2 z-50 bg-card-bg border border-dark-border rounded-xl shadow-lg px-6 py-3 flex gap-4 items-center"
+            className="fixed top-20 left-1/2 -translate-x-1/2 z-50 bg-card border border-border rounded-xl shadow-sm px-6 py-3 flex gap-4 items-center"
           >
-            <Button variant="danger" onClick={handleBulkDelete} aria-label="Delete selected campaigns">Delete</Button>
-            <Button variant="secondary" onClick={() => handleBulkExport("csv")} aria-label="Export selected campaigns as CSV">Export CSV</Button>
-            <Button variant="secondary" onClick={() => handleBulkExport("json")} aria-label="Export selected campaigns as JSON">Export JSON</Button>
+            <Button variant="destructive" onClick={handleBulkDelete} aria-label={t('campaigns.deleteSelected')}>
+              <ClientOnly fallback="Delete">
+                {t('campaigns.delete')}
+              </ClientOnly>
+            </Button>
+            <Button variant="outline" onClick={() => handleBulkExport('csv')} aria-label={t('campaigns.exportSelectedCsv')}>
+              <ClientOnly fallback="Export CSV">
+                {t('campaigns.exportCsv')}
+              </ClientOnly>
+            </Button>
+            <Button variant="outline" onClick={() => handleBulkExport('json')} aria-label={t('campaigns.exportSelectedJson')}>
+              <ClientOnly fallback="Export JSON">
+                {t('campaigns.exportJson')}
+              </ClientOnly>
+            </Button>
           </motion.div>
         )}
       </AnimatePresence>
-      <div className="w-full max-w-5xl mx-auto px-8 pb-8">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-        >
-          {campaigns.map((campaign) => (
-            <motion.div
-              key={campaign.id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3 }}
-            >
-              <div className="bg-dark-bg-secondary border border-dark-border rounded-xl p-4 flex flex-col gap-2 hover:border-rarity-600 transition-all duration-200">
-                <div className="flex items-center mb-2">
-                  <input type="checkbox" checked={selectedCampaigns.includes(campaign.id)} onChange={e => { e.stopPropagation(); toggleSelect(campaign.id); }} aria-label={`Select campaign ${campaign.name}`} />
-                  <div className="flex-1 cursor-pointer" onClick={() => { setDetailsCampaign(campaign); setEditCampaign(campaign); }}>
-                    <div className="text-lg font-medium text-white">{campaign.name}</div>
-                    <div className="text-xs text-secondary-text">{campaign.channel} • {campaign.leads} leads</div>
-                    <div className="text-xs text-secondary-text">Status: {campaign.status}</div>
-                  </div>
-                  <Button variant="ghost" size="icon" aria-label="More actions"><MoreHorizontal className="w-4 h-4" /></Button>
-                </div>
-                <div className="flex justify-between text-xs text-secondary-text">
-                  <span>Created: {campaign.created_at}</span>
-                  <span>Last Run: {campaign.last_run}</span>
-                </div>
-              </div>
-            </motion.div>
-          ))}
-        </motion.div>
-        {/* Details Modal */}
-        <AnimatePresence>
-          {detailsCampaign && (
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              transition={{ duration: 0.2 }}
-              className="fixed inset-0 z-50 flex items-center justify-center bg-black/60"
-              onClick={() => setDetailsCampaign(null)}
-            >
+
+      {/* Campaigns Grid */}
+      <div className="w-full max-w-7xl mx-auto px-4">
+        <div className="flex items-center mb-6">
+          <input 
+            type="checkbox" 
+            checked={isAllSelected} 
+            ref={el => { if (el) el.indeterminate = isIndeterminate; }} 
+            onChange={toggleSelectAll} 
+            aria-label={t('campaigns.selectAll')} 
+            className="mr-3" 
+          />
+          <div className="font-medium text-foreground">
+            <ClientOnly fallback="All Campaigns">
+              {t('campaigns.allCampaigns')}
+            </ClientOnly>
+          </div>
+        </div>
+
+        {campaigns.length === 0 ? (
+          <div className="text-muted-foreground text-center py-8">
+            <ClientOnly fallback="No campaigns yet.">
+              {t('campaigns.noCampaigns')}
+            </ClientOnly>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            {campaigns.map((campaign) => (
               <motion.div
-                ref={detailsModalRef}
-                initial={{ y: 40, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                exit={{ y: 40, opacity: 0 }}
-                transition={{ duration: 0.2 }}
-                className="bg-card-bg rounded-xl border border-dark-border p-8 w-full max-w-lg relative"
-                onClick={e => e.stopPropagation()}
-                tabIndex={0}
+                key={campaign.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3 }}
+                className={`group bg-card border border-border rounded-lg p-4 hover:shadow-sm transition-all duration-200 cursor-pointer ${
+                  selectedCampaigns.includes(campaign.id) ? 'ring-2 ring-primary ring-offset-2' : 'hover:border-border/60'
+                }`}
+                onClick={() => handleCampaignClick(campaign)}
               >
-                <button className="absolute top-4 right-4 text-secondary-text hover:text-white text-2xl" aria-label="Close details" onClick={() => setDetailsCampaign(null)}>&times;</button>
-                <div className="text-lg font-medium text-white mb-4">Campaign Details</div>
-                <form onSubmit={e => { e.preventDefault(); if (editCampaign) { setCampaigns(prev => prev.map(c => c.id === editCampaign.id ? { ...c, ...editCampaign } : c)); setDetailsCampaign(editCampaign); toast({ title: 'Campaign updated', description: 'Campaign details updated.' }); } }} className="flex flex-col gap-2">
-                  <label className="text-xs text-secondary-text">Name</label>
-                  <input type="text" className="bg-dark-bg-tertiary text-white rounded px-2 py-1 text-sm border border-dark-border" value={editCampaign?.name ?? ''} onChange={e => setEditCampaign(c => c ? { ...c, name: e.target.value } : c)} />
-                  <label className="text-xs text-secondary-text">Channel</label>
-                  <input type="text" className="bg-dark-bg-tertiary text-white rounded px-2 py-1 text-sm border border-dark-border" value={editCampaign?.channel ?? ''} onChange={e => setEditCampaign(c => c ? { ...c, channel: e.target.value } : c)} />
-                  <label className="text-xs text-secondary-text">Status</label>
-                  <select className="bg-dark-bg-tertiary text-white rounded px-2 py-1 text-sm border border-dark-border" value={editCampaign?.status ?? ''} onChange={e => setEditCampaign(c => c ? { ...c, status: e.target.value as Campaign["status"] } : c)}>
-                    <option value="draft">Draft</option>
-                    <option value="active">Active</option>
-                    <option value="paused">Paused</option>
-                    <option value="completed">Completed</option>
-                  </select>
-                  <label className="text-xs text-secondary-text">Leads</label>
-                  <input type="number" className="bg-dark-bg-tertiary text-white rounded px-2 py-1 text-sm border border-dark-border" value={editCampaign?.leads ?? 0} onChange={e => setEditCampaign(c => c ? { ...c, leads: Number(e.target.value) } : c)} />
-                  <label className="text-xs text-secondary-text">Created At</label>
-                  <input type="text" className="bg-dark-bg-tertiary text-white rounded px-2 py-1 text-sm border border-dark-border" value={editCampaign?.created_at ?? ''} onChange={e => setEditCampaign(c => c ? { ...c, created_at: e.target.value } : c)} />
-                  <label className="text-xs text-secondary-text">Last Run</label>
-                  <input type="text" className="bg-dark-bg-tertiary text-white rounded px-2 py-1 text-sm border border-dark-border" value={editCampaign?.last_run ?? ''} onChange={e => setEditCampaign(c => c ? { ...c, last_run: e.target.value } : c)} />
-                  <div className="flex gap-2 mt-4">
-                    <Button type="submit" variant="primary" loading={editing} aria-label="Save changes">Save</Button>
-                    <Button type="button" variant="secondary" onClick={() => setEditCampaign(detailsCampaign)} aria-label="Cancel edit">Cancel</Button>
-                    <Button type="button" variant="danger" onClick={() => { if (detailsCampaign) { setCampaigns(prev => prev.filter(c => c.id !== detailsCampaign.id)); setDetailsCampaign(null); toast({ title: 'Campaign deleted', description: 'Campaign deleted.' }); } }} aria-label="Delete campaign">Delete</Button>
-                    <Button type="button" variant="secondary" onClick={() => handleBulkExport('json')} aria-label="Export campaign as JSON">Export JSON</Button>
-                    <Button type="button" variant="secondary" onClick={() => handleBulkExport('csv')} aria-label="Export campaign as CSV">Export CSV</Button>
+                <div className="flex items-start justify-between mb-3">
+                  <input 
+                    type="checkbox" 
+                    checked={selectedCampaigns.includes(campaign.id)} 
+                    onChange={(e) => {
+                      e.stopPropagation();
+                      toggleSelect(campaign.id);
+                    }}
+                    aria-label={`Select campaign ${campaign.name}`} 
+                    className="mt-1"
+                  />
+                  <Badge variant="outline" className="text-xs">
+                    {campaign.channel}
+                  </Badge>
+                </div>
+                
+                <div className="space-y-3">
+                  {/* Campaign Header */}
+                  <div>
+                    <h3 className="font-medium text-foreground group-hover:text-primary transition-colors flex items-center gap-2">
+                      <Target className="w-4 h-4 text-muted-foreground" />
+                      {campaign.name}
+                    </h3>
+                    <p className="text-sm text-muted-foreground flex items-center gap-1 mt-1">
+                      <Users className="w-3 h-3" />
+                      {campaign.leads} {t('campaigns.leads')}
+                    </p>
                   </div>
-                </form>
+
+                  {/* Status */}
+                  <div className="flex items-center gap-2">
+                    <div className={`w-3 h-3 rounded-full ${getStatusColor(campaign.status)}`}></div>
+                    <Badge variant="outline" className="text-xs">
+                      <ClientOnly fallback={campaign.status}>
+                        {t(`campaigns.${campaign.status}`)}
+                      </ClientOnly>
+                    </Badge>
+                  </div>
+
+                  {/* Campaign Info */}
+                  <div className="space-y-1">
+                    <p className="text-sm text-muted-foreground flex items-center gap-2">
+                      <Calendar className="w-3 h-3" />
+                      {new Date(campaign.created_at).toLocaleDateString()}
+                    </p>
+                    {campaign.last_run && (
+                      <p className="text-sm text-muted-foreground flex items-center gap-2">
+                        <Activity className="w-3 h-3" />
+                        {new Date(campaign.last_run).toLocaleDateString()}
+                      </p>
+                    )}
+                  </div>
+
+                  {/* Action Buttons */}
+                  <div className="flex gap-2 pt-2 border-t border-border">
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="flex-1 text-xs"
+                      onClick={(e) => handleActionClick(e, campaign)}
+                    >
+                      <Activity className="w-3 h-3 mr-1" />
+                      <ClientOnly fallback="View">
+                        {t('campaigns.view')}
+                      </ClientOnly>
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      className="text-xs"
+                      onClick={(e) => handleActionClick(e, campaign)}
+                    >
+                      <MoreHorizontal className="w-3 h-3" />
+                    </Button>
+                  </div>
+                </div>
               </motion.div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
