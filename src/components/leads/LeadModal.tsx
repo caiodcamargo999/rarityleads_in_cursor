@@ -692,7 +692,7 @@ export default function LeadModal({
                         </Select>
                       ) : (
                         <Badge 
-                          variant={editedLead.priority === 'high' ? 'danger' : 
+                          variant={editedLead.priority === 'high' ? 'destructive' : 
                                   editedLead.priority === 'medium' ? 'default' : 'secondary'}
                           className="text-sm"
                         >
