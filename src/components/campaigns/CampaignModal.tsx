@@ -564,9 +564,9 @@ export default function CampaignModal({
                         <Badge 
                           variant={
                             editedCampaign.status === 'active' ? 'default' :
-                            editedCampaign.status === 'completed' ? 'success' :
-                            editedCampaign.status === 'paused' ? 'warning' :
-                            editedCampaign.status === 'archived' ? 'secondary' : 'outline'
+                            editedCampaign.status === 'completed' ? 'secondary' :
+                            editedCampaign.status === 'paused' ? 'destructive' :
+                            editedCampaign.status === 'archived' ? 'outline' : 'outline'
                           }
                           className="text-sm"
                         >
