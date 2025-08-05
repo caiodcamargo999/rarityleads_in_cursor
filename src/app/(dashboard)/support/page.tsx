@@ -197,7 +197,7 @@ export default function SupportPage() {
         {categories.map((category) => (
           <Button
             key={category.id}
-            variant={selectedCategory === category.id ? "default" : "outline"}
+            variant={selectedCategory === category.id ? "primary" : "outline"}
             size="sm"
             onClick={() => setSelectedCategory(category.id)}
             className="flex items-center gap-2"
