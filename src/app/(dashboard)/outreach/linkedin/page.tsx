@@ -1,17 +1,73 @@
 "use client"
 
+import { useState, useEffect } from 'react'
 import { motion, useInView } from 'framer-motion'
 import { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useSearchParams } from 'next/navigation'
 import { Linkedin, Users, MessageSquare, BarChart3 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { ClientOnly } from '@/components/ClientOnly'
+import MessageModal from '@/components/outreach/MessageModal'
+import AccountModal from '@/components/outreach/AccountModal'
 
 export default function LinkedInPage() {
   const { t } = useTranslation()
+  const searchParams = useSearchParams()
   const pageRef = useRef(null)
   const pageInView = useInView(pageRef, { once: true })
+
+  // Modal states
+  const [selectedMessage, setSelectedMessage] = useState<any>(null)
+  const [selectedAccount, setSelectedAccount] = useState<any>(null)
+  const [isMessageModalOpen, setIsMessageModalOpen] = useState(false)
+  const [isAccountModalOpen, setIsAccountModalOpen] = useState(false)
+
+  // Handle deep linking for modals
+  useEffect(() => {
+    const messageId = searchParams?.get('messageId')
+    const accountId = searchParams?.get('accountId')
+    
+    if (messageId) {
+      setIsMessageModalOpen(true)
+    }
+    
+    if (accountId) {
+      setIsAccountModalOpen(true)
+    }
+  }, [searchParams])
+
+  // Modal handlers
+  const handleOpenMessageModal = (message?: any) => {
+    setSelectedMessage(message || null)
+    setIsMessageModalOpen(true)
+  }
+
+  const handleCloseMessageModal = () => {
+    setIsMessageModalOpen(false)
+    setSelectedMessage(null)
+  }
+
+  const handleOpenAccountModal = (account?: any) => {
+    setSelectedAccount(account || null)
+    setIsAccountModalOpen(true)
+  }
+
+  const handleCloseAccountModal = () => {
+    setIsAccountModalOpen(false)
+    setSelectedAccount(null)
+  }
+
+  const handleSaveMessage = async (message: any) => {
+    // TODO: Implement save message logic
+    console.log('Saving LinkedIn message:', message)
+  }
+
+  const handleSaveAccount = async (account: any) => {
+    // TODO: Implement save account logic
+    console.log('Saving LinkedIn account:', account)
+  }
 
   const stats = [
     { label: t('outreach.linkedin.metrics.connections'), value: '847', icon: Users, color: 'text-blue-500' },
@@ -79,13 +135,31 @@ export default function LinkedInPage() {
               {t('outreach.linkedin.comingSoonDescription')}
             </ClientOnly>
           </p>
-          <Button variant="outline">
+          <Button 
+            variant="outline"
+            onClick={() => handleOpenMessageModal()}
+          >
             <ClientOnly fallback="Get Notified">
               {t('outreach.linkedin.getNotified')}
             </ClientOnly>
           </Button>
         </motion.div>
       </div>
+
+      {/* Modals */}
+      <MessageModal
+        message={selectedMessage}
+        isOpen={isMessageModalOpen}
+        onClose={handleCloseMessageModal}
+        onSave={handleSaveMessage}
+      />
+      
+      <AccountModal
+        account={selectedAccount}
+        isOpen={isAccountModalOpen}
+        onClose={handleCloseAccountModal}
+        onSave={handleSaveAccount}
+      />
     </div>
   )
 } 

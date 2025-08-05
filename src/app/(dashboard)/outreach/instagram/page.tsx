@@ -1,7 +1,9 @@
 "use client"
 
+import { useState, useEffect } from 'react'
 import { motion, useInView } from 'framer-motion'
 import { useRef } from 'react'
+import { useSearchParams } from 'next/navigation'
 import { 
   Instagram, 
   Plus, 
@@ -18,12 +20,65 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { useTranslation } from 'react-i18next'
 import { ClientOnly } from '@/components/ClientOnly'
-import Link from 'next/link'
+import MessageModal from '@/components/outreach/MessageModal'
+import AccountModal from '@/components/outreach/AccountModal'
 
 export default function InstagramPage() {
   const pageRef = useRef(null)
   const pageInView = useInView(pageRef, { once: true })
   const { t } = useTranslation()
+  const searchParams = useSearchParams()
+
+  // Modal states
+  const [selectedMessage, setSelectedMessage] = useState<any>(null)
+  const [selectedAccount, setSelectedAccount] = useState<any>(null)
+  const [isMessageModalOpen, setIsMessageModalOpen] = useState(false)
+  const [isAccountModalOpen, setIsAccountModalOpen] = useState(false)
+
+  // Handle deep linking for modals
+  useEffect(() => {
+    const messageId = searchParams?.get('messageId')
+    const accountId = searchParams?.get('accountId')
+    
+    if (messageId) {
+      setIsMessageModalOpen(true)
+    }
+    
+    if (accountId) {
+      setIsAccountModalOpen(true)
+    }
+  }, [searchParams])
+
+  // Modal handlers
+  const handleOpenMessageModal = (message?: any) => {
+    setSelectedMessage(message || null)
+    setIsMessageModalOpen(true)
+  }
+
+  const handleCloseMessageModal = () => {
+    setIsMessageModalOpen(false)
+    setSelectedMessage(null)
+  }
+
+  const handleOpenAccountModal = (account?: any) => {
+    setSelectedAccount(account || null)
+    setIsAccountModalOpen(true)
+  }
+
+  const handleCloseAccountModal = () => {
+    setIsAccountModalOpen(false)
+    setSelectedAccount(null)
+  }
+
+  const handleSaveMessage = async (message: any) => {
+    // TODO: Implement save message logic
+    console.log('Saving Instagram message:', message)
+  }
+
+  const handleSaveAccount = async (account: any) => {
+    // TODO: Implement save account logic
+    console.log('Saving Instagram account:', account)
+  }
 
   const stats = [
     { label: t('outreach.instagram.metrics.connectedAccounts'), value: 0, icon: Instagram, color: 'text-pink-500' },
@@ -56,36 +111,42 @@ export default function InstagramPage() {
               </p>
             </div>
             <div className="flex flex-col space-y-2 sm:flex-row sm:space-y-0 sm:space-x-2">
-              <Link href="/dashboard/outreach/instagram/accounts">
-                <Button variant="outline" size="sm" className="flex items-center gap-2 w-full sm:w-auto bg-muted border-border text-foreground hover:bg-muted/80">
-                  <Settings className="w-4 h-4" />
-                  <span className="hidden sm:inline">
-                    <ClientOnly fallback="Accounts">
-                      {t('outreach.instagram.accounts')}
-                    </ClientOnly>
-                  </span>
-                  <span className="sm:hidden">
-                    <ClientOnly fallback="Settings">
-                      {t('outreach.instagram.settings')}
-                    </ClientOnly>
-                  </span>
-                </Button>
-              </Link>
-              <Link href="/dashboard/outreach/instagram/conversations">
-                <Button variant="outline" size="sm" className="flex items-center gap-2 w-full sm:w-auto bg-muted border-border text-foreground hover:bg-muted/80">
-                  <MessageSquare className="w-4 h-4" />
-                  <span className="hidden sm:inline">
-                    <ClientOnly fallback="Conversations">
-                      {t('outreach.instagram.conversations')}
-                    </ClientOnly>
-                  </span>
-                  <span className="sm:hidden">
-                    <ClientOnly fallback="Chat">
-                      Chat
-                    </ClientOnly>
-                  </span>
-                </Button>
-              </Link>
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className="flex items-center gap-2 w-full sm:w-auto bg-muted border-border text-foreground hover:bg-muted/80"
+                onClick={() => handleOpenAccountModal()}
+              >
+                <Settings className="w-4 h-4" />
+                <span className="hidden sm:inline">
+                  <ClientOnly fallback="Accounts">
+                    {t('outreach.instagram.accounts')}
+                  </ClientOnly>
+                </span>
+                <span className="sm:hidden">
+                  <ClientOnly fallback="Settings">
+                    {t('outreach.instagram.settings')}
+                  </ClientOnly>
+                </span>
+              </Button>
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className="flex items-center gap-2 w-full sm:w-auto bg-muted border-border text-foreground hover:bg-muted/80"
+                onClick={() => handleOpenMessageModal()}
+              >
+                <MessageSquare className="w-4 h-4" />
+                <span className="hidden sm:inline">
+                  <ClientOnly fallback="Conversations">
+                    {t('outreach.instagram.conversations')}
+                  </ClientOnly>
+                </span>
+                <span className="sm:hidden">
+                  <ClientOnly fallback="Chat">
+                    Chat
+                  </ClientOnly>
+                </span>
+              </Button>
             </div>
           </div>
         </motion.div>
@@ -138,6 +199,21 @@ export default function InstagramPage() {
           </Button>
         </motion.div>
       </div>
+
+      {/* Modals */}
+      <MessageModal
+        message={selectedMessage}
+        isOpen={isMessageModalOpen}
+        onClose={handleCloseMessageModal}
+        onSave={handleSaveMessage}
+      />
+      
+      <AccountModal
+        account={selectedAccount}
+        isOpen={isAccountModalOpen}
+        onClose={handleCloseAccountModal}
+        onSave={handleSaveAccount}
+      />
     </div>
   )
 } 

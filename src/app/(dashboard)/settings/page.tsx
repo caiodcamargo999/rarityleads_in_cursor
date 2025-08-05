@@ -25,13 +25,15 @@ import {
 import { supabase } from '@/lib/supabase'
 import LanguageSwitcher from '@/components/LanguageSwitcher'
 import { ClientOnly } from '@/components/ClientOnly'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { useToast } from '@/hooks/use-toast'
 import { useTheme } from 'next-themes'
+import SettingsModal from '@/components/settings/SettingsModal'
 
 export default function SettingsPage() {
   const { t } = useTranslation()
   const router = useRouter()
+  const searchParams = useSearchParams()
   const { toast } = useToast()
   const [user, setUser] = useState<any>(null)
   const [loading, setLoading] = useState(true)
@@ -42,6 +44,35 @@ export default function SettingsPage() {
     push: false,
     sms: false
   })
+
+  // Modal states
+  const [selectedSettings, setSelectedSettings] = useState<any>(null)
+  const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false)
+
+  // Handle deep linking for modals
+  useEffect(() => {
+    const settingsId = searchParams?.get('id')
+    if (settingsId) {
+      // Find settings and open modal
+      setIsSettingsModalOpen(true)
+    }
+  }, [searchParams])
+
+  // Modal handlers
+  const handleOpenSettingsModal = (settings?: any) => {
+    setSelectedSettings(settings || null)
+    setIsSettingsModalOpen(true)
+  }
+
+  const handleCloseSettingsModal = () => {
+    setIsSettingsModalOpen(false)
+    setSelectedSettings(null)
+  }
+
+  const handleSaveSettings = async (settings: any) => {
+    // TODO: Implement save settings logic
+    console.log('Saving settings:', settings)
+  }
 
   useEffect(() => {
     const checkUser = async () => {
@@ -65,8 +96,18 @@ export default function SettingsPage() {
     }))
   }
 
-  const handleSettingsClick = (page: string) => {
-    router.push(`/settings/${page}`)
+  const handleSettingsClick = (type: string) => {
+    const settings = {
+      id: `settings-${type}`,
+      type: type,
+      title: `${type.charAt(0).toUpperCase() + type.slice(1)} Settings`,
+      description: `Manage your ${type} settings`,
+      data: {},
+      is_active: true,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
+    }
+    handleOpenSettingsModal(settings)
   }
 
   const handleSaveProfile = async () => {
@@ -492,6 +533,14 @@ export default function SettingsPage() {
           </Card>
         </motion.div>
       </div>
+
+      {/* Modals */}
+      <SettingsModal
+        settings={selectedSettings}
+        isOpen={isSettingsModalOpen}
+        onClose={handleCloseSettingsModal}
+        onSave={handleSaveSettings}
+      />
     </div>
   )
 } 

@@ -19,4 +19,6 @@ export const ClientOnly = ({ children, fallback = null }: ClientOnlyProps) => {
   }
 
   return <>{children}</>
-} 
+}
+
+export default ClientOnly 

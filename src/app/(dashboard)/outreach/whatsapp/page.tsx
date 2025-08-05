@@ -1,9 +1,10 @@
 "use client"
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion, useInView } from 'framer-motion'
 import { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useSearchParams } from 'next/navigation'
 import { 
   MessageSquare, 
   Plus, 
@@ -22,8 +23,9 @@ import {
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import Link from 'next/link'
 import { ClientOnly } from '@/components/ClientOnly'
+import MessageModal from '@/components/outreach/MessageModal'
+import AccountModal from '@/components/outreach/AccountModal'
 
 interface Campaign {
   id: string
@@ -39,10 +41,38 @@ interface Campaign {
 
 export default function WhatsAppPage() {
   const { t } = useTranslation()
+  const searchParams = useSearchParams()
   const [campaigns, setCampaigns] = useState<Campaign[]>([])
+  
+  // Modal states
+  const [selectedMessage, setSelectedMessage] = useState<any>(null)
+  const [selectedAccount, setSelectedAccount] = useState<any>(null)
+  const [isMessageModalOpen, setIsMessageModalOpen] = useState(false)
+  const [isAccountModalOpen, setIsAccountModalOpen] = useState(false)
   
   const pageRef = useRef(null)
   const pageInView = useInView(pageRef, { once: true })
+
+  // Handle deep linking for modals
+  useEffect(() => {
+    const messageId = searchParams?.get('messageId')
+    const accountId = searchParams?.get('accountId')
+    
+    if (messageId) {
+      // Find message and open modal
+      const message = campaigns.find(c => c.id === messageId)
+      if (message) {
+        setSelectedMessage(message)
+        setIsMessageModalOpen(true)
+      }
+    }
+    
+    if (accountId) {
+      // Find account and open modal
+      // This would be implemented when accounts are available
+      setIsAccountModalOpen(true)
+    }
+  }, [searchParams, campaigns])
 
   const stats = [
     { label: t('outreach.whatsapp.status.active'), value: 0, icon: MessageSquare, color: 'text-green-500' },
@@ -71,6 +101,37 @@ export default function WhatsAppPage() {
     }
   }
 
+  // Modal handlers
+  const handleOpenMessageModal = (message?: any) => {
+    setSelectedMessage(message || null)
+    setIsMessageModalOpen(true)
+  }
+
+  const handleCloseMessageModal = () => {
+    setIsMessageModalOpen(false)
+    setSelectedMessage(null)
+  }
+
+  const handleOpenAccountModal = (account?: any) => {
+    setSelectedAccount(account || null)
+    setIsAccountModalOpen(true)
+  }
+
+  const handleCloseAccountModal = () => {
+    setIsAccountModalOpen(false)
+    setSelectedAccount(null)
+  }
+
+  const handleSaveMessage = async (message: any) => {
+    // TODO: Implement save message logic
+    console.log('Saving message:', message)
+  }
+
+  const handleSaveAccount = async (account: any) => {
+    // TODO: Implement save account logic
+    console.log('Saving account:', account)
+  }
+
   return (
     <div ref={pageRef} className="min-h-screen bg-background w-full overflow-x-hidden">
       <div className="w-full max-w-full">
@@ -95,37 +156,48 @@ export default function WhatsAppPage() {
               </p>
             </div>
             <div className="flex flex-col space-y-2 sm:flex-row sm:space-y-0 sm:space-x-2">
-              <Link href="/dashboard/outreach/whatsapp/accounts">
-                <Button variant="outline" size="sm" className="flex items-center gap-2 w-full sm:w-auto bg-muted border-border text-foreground hover:bg-muted/80">
-                  <Settings className="w-4 h-4" />
-                  <span className="hidden sm:inline">
-                    <ClientOnly fallback="Accounts">
-                      {t('outreach.whatsapp.accounts')}
-                    </ClientOnly>
-                  </span>
-                  <span className="sm:hidden">
-                    <ClientOnly fallback="Settings">
-                      {t('outreach.whatsapp.settings')}
-                    </ClientOnly>
-                  </span>
-                </Button>
-              </Link>
-              <Link href="/dashboard/outreach/whatsapp/conversations">
-                <Button variant="outline" size="sm" className="flex items-center gap-2 w-full sm:w-auto bg-muted border-border text-foreground hover:bg-muted/80">
-                  <MessageSquare className="w-4 h-4" />
-                  <span className="hidden sm:inline">
-                    <ClientOnly fallback="Conversations">
-                      {t('outreach.whatsapp.conversations')}
-                    </ClientOnly>
-                  </span>
-                  <span className="sm:hidden">
-                    <ClientOnly fallback="Chat">
-                      {t('outreach.whatsapp.conversations')}
-                    </ClientOnly>
-                  </span>
-                </Button>
-              </Link>
-              <Button variant="primary" size="sm" className="flex items-center gap-2 w-full sm:w-auto">
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className="flex items-center gap-2 w-full sm:w-auto bg-muted border-border text-foreground hover:bg-muted/80"
+                onClick={() => handleOpenAccountModal()}
+              >
+                <Settings className="w-4 h-4" />
+                <span className="hidden sm:inline">
+                  <ClientOnly fallback="Accounts">
+                    {t('outreach.whatsapp.accounts')}
+                  </ClientOnly>
+                </span>
+                <span className="sm:hidden">
+                  <ClientOnly fallback="Settings">
+                    {t('outreach.whatsapp.settings')}
+                  </ClientOnly>
+                </span>
+              </Button>
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className="flex items-center gap-2 w-full sm:w-auto bg-muted border-border text-foreground hover:bg-muted/80"
+                onClick={() => handleOpenMessageModal()}
+              >
+                <MessageSquare className="w-4 h-4" />
+                <span className="hidden sm:inline">
+                  <ClientOnly fallback="Conversations">
+                    {t('outreach.whatsapp.conversations')}
+                  </ClientOnly>
+                </span>
+                <span className="sm:hidden">
+                  <ClientOnly fallback="Chat">
+                    {t('outreach.whatsapp.conversations')}
+                  </ClientOnly>
+                </span>
+              </Button>
+              <Button 
+                variant="primary" 
+                size="sm" 
+                className="flex items-center gap-2 w-full sm:w-auto"
+                onClick={() => handleOpenMessageModal()}
+              >
                 <Plus className="w-4 h-4" />
                 <span className="hidden sm:inline">
                   <ClientOnly fallback="New Campaign">
@@ -186,7 +258,12 @@ export default function WhatsAppPage() {
                   {t('outreach.whatsapp.manageCampaigns')}
                 </ClientOnly>
               </p>
-              <Button variant="outline" size="sm" className="w-full text-xs lg:text-sm">
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className="w-full text-xs lg:text-sm"
+                onClick={() => handleOpenMessageModal()}
+              >
                 <ClientOnly fallback="Get Started">
                   {t('outreach.whatsapp.newCampaign')}
                 </ClientOnly>
@@ -264,7 +341,8 @@ export default function WhatsAppPage() {
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.3, delay: 0.4 + index * 0.05 }}
-                    className="flex items-center justify-between p-4 bg-dark-bg border border-dark-border rounded-lg hover:bg-dark-bg-tertiary transition-colors"
+                    className="flex items-center justify-between p-4 bg-dark-bg border border-dark-border rounded-lg hover:bg-dark-bg-tertiary transition-colors cursor-pointer"
+                    onClick={() => handleOpenMessageModal(campaign)}
                   >
                     <div className="flex-1">
                       <div className="flex items-center gap-3 mb-2">
@@ -336,6 +414,21 @@ export default function WhatsAppPage() {
           </Card>
         </motion.div>
       </div>
+
+      {/* Modals */}
+      <MessageModal
+        message={selectedMessage}
+        isOpen={isMessageModalOpen}
+        onClose={handleCloseMessageModal}
+        onSave={handleSaveMessage}
+      />
+      
+      <AccountModal
+        account={selectedAccount}
+        isOpen={isAccountModalOpen}
+        onClose={handleCloseAccountModal}
+        onSave={handleSaveAccount}
+      />
     </div>
   )
 } 
