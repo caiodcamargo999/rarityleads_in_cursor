@@ -1308,5 +1308,55 @@
   },
   "company": {
     "name": "Rarity Leads"
+  },
+  "helpArticles": {
+    "title": "Articles d'Aide",
+    "gettingStarted": {
+      "title": "Commencer avec Rarity Leads",
+      "description": "Apprenez comment configurer votre compte et commencer à générer des leads en minutes.",
+      "tags": ["débutant", "configuration"],
+      "readingTime": "5 min"
+    },
+    "whatsappBusiness": {
+      "title": "Connexion WhatsApp Business",
+      "description": "Guide étape par étape pour connecter votre compte WhatsApp Business.",
+      "tags": ["whatsapp", "intégration"],
+      "readingTime": "8 min"
+    },
+    "leadScoring": {
+      "title": "Comprendre le Score des Leads",
+      "description": "Comment notre IA score et priorise vos leads pour une meilleure conversion.",
+      "tags": ["ia", "score"],
+      "readingTime": "6 min"
+    },
+    "crmPipeline": {
+      "title": "Gestion du Pipeline CRM",
+      "description": "Organisez et suivez vos leads à travers le pipeline de vente.",
+      "tags": ["crm", "pipeline"],
+      "readingTime": "7 min"
+    },
+    "apiIntegration": {
+      "title": "Guide d'Intégration API",
+      "description": "Connectez Rarity Leads avec vos outils et flux de travail existants.",
+      "tags": ["api", "intégration"],
+      "readingTime": "10 min"
+    },
+    "billingSubscription": {
+      "title": "Facturation et Abonnement",
+      "description": "Gérez votre abonnement, facturation et paramètres de compte.",
+      "tags": ["facturation", "compte"],
+      "readingTime": "4 min"
+    }
+  },
+  "faqs": {
+    "title": "Questions Fréquemment Posées",
+    "leadGeneration": {
+      "question": "Comment fonctionne la génération de leads ?",
+      "answer": "Notre IA analyse vos critères cibles et recherche dans plusieurs sources de données pour trouver des leads qualifiés qui correspondent à votre profil client idéal."
+    },
+    "exportLeads": {
+      "question": "Puis-je exporter mes leads ?",
+      "answer": "Oui, vous pouvez exporter vos leads dans différents formats incluant CSV et JSON. Cela vous permet d'intégrer avec votre CRM existant ou d'autres outils."
+    }
   }
 }

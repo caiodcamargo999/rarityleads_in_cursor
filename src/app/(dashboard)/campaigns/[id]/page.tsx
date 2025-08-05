@@ -44,7 +44,7 @@ export default function CampaignDetailPage() {
   // Mock data - replace with actual API call
   useEffect(() => {
     const mockCampaign: Campaign = {
-      id: params.id as string,
+      id: params?.id as string,
       name: "Q1 SaaS Outreach Campaign",
       channel: "LinkedIn",
       status: 'active',
@@ -63,7 +63,7 @@ export default function CampaignDetailPage() {
     setCampaign(mockCampaign);
     setEditedCampaign(mockCampaign);
     setIsLoading(false);
-  }, [params.id]);
+  }, [params?.id]);
 
   const handleSave = async () => {
     // TODO: Implement actual save logic

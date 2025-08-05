@@ -165,7 +165,7 @@ export default function CampaignsPage() {
             exit={{ opacity: 0, y: -10 }}
             className="fixed top-20 left-1/2 -translate-x-1/2 z-50 bg-card border border-border rounded-xl shadow-sm px-6 py-3 flex gap-4 items-center"
           >
-            <Button variant="destructive" onClick={handleBulkDelete} aria-label={t('campaigns.deleteSelected')}>
+            <Button variant="danger" onClick={handleBulkDelete} aria-label={t('campaigns.deleteSelected')}>
               <ClientOnly fallback="Delete">
                 {t('campaigns.delete')}
               </ClientOnly>

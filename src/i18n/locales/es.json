@@ -1308,5 +1308,55 @@
   },
   "company": {
     "name": "Rarity Leads"
+  },
+  "helpArticles": {
+    "title": "Artículos de Ayuda",
+    "gettingStarted": {
+      "title": "Comenzando con Rarity Leads",
+      "description": "Aprende cómo configurar tu cuenta y comenzar a generar leads en minutos.",
+      "tags": ["principiante", "configuración"],
+      "readingTime": "5 min"
+    },
+    "whatsappBusiness": {
+      "title": "Conectando WhatsApp Business",
+      "description": "Guía paso a paso para conectar tu cuenta WhatsApp Business.",
+      "tags": ["whatsapp", "integración"],
+      "readingTime": "8 min"
+    },
+    "leadScoring": {
+      "title": "Entendiendo la Puntuación de Leads",
+      "description": "Cómo nuestra IA puntúa y prioriza tus leads para mejor conversión.",
+      "tags": ["ia", "puntuación"],
+      "readingTime": "6 min"
+    },
+    "crmPipeline": {
+      "title": "Gestión de Pipeline CRM",
+      "description": "Organiza y rastrea tus leads a través del pipeline de ventas.",
+      "tags": ["crm", "pipeline"],
+      "readingTime": "7 min"
+    },
+    "apiIntegration": {
+      "title": "Guía de Integración API",
+      "description": "Conecta Rarity Leads con tus herramientas y flujos de trabajo existentes.",
+      "tags": ["api", "integración"],
+      "readingTime": "10 min"
+    },
+    "billingSubscription": {
+      "title": "Facturación y Suscripción",
+      "description": "Gestiona tu suscripción, facturación y configuración de cuenta.",
+      "tags": ["facturación", "cuenta"],
+      "readingTime": "4 min"
+    }
+  },
+  "faqs": {
+    "title": "Preguntas Frecuentes",
+    "leadGeneration": {
+      "question": "¿Cómo funciona la generación de leads?",
+      "answer": "Nuestra IA analiza tus criterios de destino y busca en múltiples fuentes de datos para encontrar leads calificados que coincidan con tu perfil de cliente ideal."
+    },
+    "exportLeads": {
+      "question": "¿Puedo exportar mis leads?",
+      "answer": "Sí, puedes exportar tus leads en varios formatos incluyendo CSV y JSON. Esto te permite integrar con tu CRM existente u otras herramientas."
+    }
   }
 }

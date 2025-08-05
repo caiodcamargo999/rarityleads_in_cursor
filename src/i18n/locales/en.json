@@ -1026,5 +1026,55 @@
   },
   "company": {
     "name": "Rarity Leads"
+  },
+  "helpArticles": {
+    "title": "Help Articles",
+    "gettingStarted": {
+      "title": "Getting Started with Rarity Leads",
+      "description": "Learn how to set up your account and start generating leads in minutes.",
+      "tags": ["beginner", "setup"],
+      "readingTime": "5 min"
+    },
+    "whatsappBusiness": {
+      "title": "Connecting WhatsApp Business",
+      "description": "Step-by-step guide to connect your WhatsApp Business account.",
+      "tags": ["whatsapp", "integration"],
+      "readingTime": "8 min"
+    },
+    "leadScoring": {
+      "title": "Understanding Lead Scoring",
+      "description": "How our AI scores and prioritizes your leads for better conversion.",
+      "tags": ["ai", "scoring"],
+      "readingTime": "6 min"
+    },
+    "crmPipeline": {
+      "title": "CRM Pipeline Management",
+      "description": "Organize and track your leads through the sales pipeline.",
+      "tags": ["crm", "pipeline"],
+      "readingTime": "7 min"
+    },
+    "apiIntegration": {
+      "title": "API Integration Guide",
+      "description": "Connect Rarity Leads with your existing tools and workflows.",
+      "tags": ["api", "integration"],
+      "readingTime": "10 min"
+    },
+    "billingSubscription": {
+      "title": "Billing and Subscription",
+      "description": "Manage your subscription, billing, and account settings.",
+      "tags": ["billing", "account"],
+      "readingTime": "4 min"
+    }
+  },
+  "faqs": {
+    "title": "Frequently Asked Questions",
+    "leadGeneration": {
+      "question": "How does lead generation work?",
+      "answer": "Our AI analyzes your target criteria and searches multiple data sources to find qualified leads that match your ideal customer profile."
+    },
+    "exportLeads": {
+      "question": "Can I export my leads?",
+      "answer": "Yes, you can export your leads in various formats including CSV and JSON. This allows you to integrate with your existing CRM or other tools."
+    }
   }
 }

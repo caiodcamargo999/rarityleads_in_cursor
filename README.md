@@ -55,6 +55,56 @@ LINKEDIN_API_KEY=your-linkedin-key
 CRUNCHBASE_API_KEY=your-crunchbase-key
 ```
 
+## 🏗️ Microservices Architecture
+
+Rarity Leads uses a distributed microservices architecture for scalability and reliability. The system consists of:
+
+### Core Services
+
+#### 1. **Message Orchestrator** (Port 3000)
+- **Purpose**: Central hub for all messaging operations
+- **Features**: Message routing, queue management, real-time updates
+- **Technologies**: Express.js, Redis, Bull queues, WebSocket
+- **Endpoints**: `/send-message`, `/send-bulk-messages`, `/enrich-lead`
+
+#### 2. **WhatsApp Service** (Port 3001)
+- **Purpose**: Multi-account WhatsApp management
+- **Features**: Session persistence, QR code generation, real-time messaging
+- **Technologies**: Baileys, WebSocket, Express.js
+- **Endpoints**: `/connect`, `/disconnect`, `/send-message`, `/session-status`
+
+#### 3. **Lead Enrichment Service** (Port 3006)
+- **Purpose**: Multi-source data enrichment and AI scoring
+- **Features**: Apollo, Clearbit, Crunchbase integration, AI scoring
+- **Technologies**: Express.js, Redis, Axios, AI scoring algorithms
+- **Endpoints**: `/enrich`, `/enrich/bulk`, `/health`
+
+#### 4. **Social Media Services** (Ports 3002-3005)
+- **Instagram Service** (Port 3002): Direct messaging and story replies
+- **Facebook Service** (Port 3003): Messenger integration
+- **LinkedIn Service** (Port 3004): InMail and messaging
+- **Twitter Service** (Port 3005): Direct messaging
+
+### Service Communication
+- **Redis**: Message queuing and caching
+- **WebSocket**: Real-time updates and notifications
+- **HTTP APIs**: Service-to-service communication
+- **Authentication**: JWT-based service authentication
+
+### Development Setup
+```bash
+# Start all services
+cd message-orchestrator && npm run dev
+cd whatsapp-service && npm run dev
+cd lead-enrichment-service && npm run dev
+
+# Start Redis
+redis-server
+
+# Start frontend
+npm run dev
+```
+
 ## 🗄️ Supabase Setup & Database
 
 ### Quick Supabase Setup

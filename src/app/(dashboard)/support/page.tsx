@@ -48,90 +48,70 @@ export default function SupportPage() {
   const helpArticles: HelpArticle[] = [
     {
       id: '1',
-      title: 'Getting Started with Rarity Leads',
+      title: t('helpArticles.gettingStarted.title'),
       category: 'onboarding',
-      description: 'Learn how to set up your account and start generating leads in minutes.',
-      tags: ['beginner', 'setup'],
-      readTime: '5 min',
+      description: t('helpArticles.gettingStarted.description'),
+      tags: t('helpArticles.gettingStarted.tags', { returnObjects: true }),
+      readTime: t('helpArticles.gettingStarted.readingTime'),
       popular: true
     },
     {
       id: '2',
-      title: 'Connecting WhatsApp Business',
+      title: t('helpArticles.whatsappBusiness.title'),
       category: 'integrations',
-      description: 'Step-by-step guide to connect your WhatsApp Business account.',
-      tags: ['whatsapp', 'integration'],
-      readTime: '8 min',
+      description: t('helpArticles.whatsappBusiness.description'),
+      tags: t('helpArticles.whatsappBusiness.tags', { returnObjects: true }),
+      readTime: t('helpArticles.whatsappBusiness.readingTime'),
       popular: true
     },
     {
       id: '3',
-      title: 'Understanding Lead Scoring',
+      title: t('helpArticles.leadScoring.title'),
       category: 'features',
-      description: 'How our AI scores and prioritizes your leads for better conversion.',
-      tags: ['ai', 'scoring'],
-      readTime: '6 min',
+      description: t('helpArticles.leadScoring.description'),
+      tags: t('helpArticles.leadScoring.tags', { returnObjects: true }),
+      readTime: t('helpArticles.leadScoring.readingTime'),
       popular: false
     },
     {
       id: '4',
-      title: 'CRM Pipeline Management',
+      title: t('helpArticles.crmPipeline.title'),
       category: 'features',
-      description: 'Organize and track your leads through the sales pipeline.',
-      tags: ['crm', 'pipeline'],
-      readTime: '7 min',
+      description: t('helpArticles.crmPipeline.description'),
+      tags: t('helpArticles.crmPipeline.tags', { returnObjects: true }),
+      readTime: t('helpArticles.crmPipeline.readingTime'),
       popular: false
     },
     {
       id: '5',
-      title: 'API Integration Guide',
+      title: t('helpArticles.apiIntegration.title'),
       category: 'integrations',
-      description: 'Connect Rarity Leads with your existing tools and workflows.',
-      tags: ['api', 'integration'],
-      readTime: '10 min',
+      description: t('helpArticles.apiIntegration.description'),
+      tags: t('helpArticles.apiIntegration.tags', { returnObjects: true }),
+      readTime: t('helpArticles.apiIntegration.readingTime'),
       popular: false
     },
     {
       id: '6',
-      title: 'Billing and Subscription',
+      title: t('helpArticles.billingSubscription.title'),
       category: 'account',
-      description: 'Manage your subscription, billing, and account settings.',
-      tags: ['billing', 'account'],
-      readTime: '4 min',
+      description: t('helpArticles.billingSubscription.description'),
+      tags: t('helpArticles.billingSubscription.tags', { returnObjects: true }),
+      readTime: t('helpArticles.billingSubscription.readingTime'),
       popular: false
     }
   ]
 
   const faqs: FAQ[] = [
     {
-      question: 'How does lead generation work?',
-      answer: 'Our AI analyzes your target criteria and searches multiple data sources to find qualified leads that match your ideal customer profile.',
+      question: t('faqs.leadGeneration.question'),
+      answer: t('faqs.leadGeneration.answer'),
       category: 'features'
     },
     {
-      question: 'Can I export my leads?',
-      answer: 'Yes, you can export leads in CSV format and integrate with popular CRM systems like HubSpot, Salesforce, and Pipedrive.',
+      question: t('faqs.exportLeads.question'),
+      answer: t('faqs.exportLeads.answer'),
       category: 'features'
-    },
-    {
-      question: 'Is my data secure?',
-      answer: 'We use enterprise-grade security with encryption at rest and in transit. All data is stored in secure, compliant data centers.',
-      category: 'security'
-    },
-    {
-      question: 'How many leads can I generate?',
-      answer: 'Lead limits depend on your subscription plan. Contact us for custom enterprise solutions.',
-      category: 'pricing'
-    },
-    {
-      question: 'Do you offer refunds?',
-      answer: 'We offer a 30-day money-back guarantee for all new subscriptions.',
-      category: 'billing'
-    },
-    {
-      question: 'Can I cancel anytime?',
-      answer: 'Yes, you can cancel your subscription at any time with no cancellation fees.',
-      category: 'billing'
     }
   ]
 
