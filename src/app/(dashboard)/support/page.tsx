@@ -51,7 +51,7 @@ export default function SupportPage() {
       title: t('helpArticles.gettingStarted.title'),
       category: 'onboarding',
       description: t('helpArticles.gettingStarted.description'),
-      tags: t('helpArticles.gettingStarted.tags', { returnObjects: true }),
+      tags: t('helpArticles.gettingStarted.tags', { returnObjects: true }) as string[],
       readTime: t('helpArticles.gettingStarted.readingTime'),
       popular: true
     },
@@ -60,7 +60,7 @@ export default function SupportPage() {
       title: t('helpArticles.whatsappBusiness.title'),
       category: 'integrations',
       description: t('helpArticles.whatsappBusiness.description'),
-      tags: t('helpArticles.whatsappBusiness.tags', { returnObjects: true }),
+      tags: t('helpArticles.whatsappBusiness.tags', { returnObjects: true }) as string[],
       readTime: t('helpArticles.whatsappBusiness.readingTime'),
       popular: true
     },
@@ -69,7 +69,7 @@ export default function SupportPage() {
       title: t('helpArticles.leadScoring.title'),
       category: 'features',
       description: t('helpArticles.leadScoring.description'),
-      tags: t('helpArticles.leadScoring.tags', { returnObjects: true }),
+      tags: t('helpArticles.leadScoring.tags', { returnObjects: true }) as string[],
       readTime: t('helpArticles.leadScoring.readingTime'),
       popular: false
     },
@@ -78,7 +78,7 @@ export default function SupportPage() {
       title: t('helpArticles.crmPipeline.title'),
       category: 'features',
       description: t('helpArticles.crmPipeline.description'),
-      tags: t('helpArticles.crmPipeline.tags', { returnObjects: true }),
+      tags: t('helpArticles.crmPipeline.tags', { returnObjects: true }) as string[],
       readTime: t('helpArticles.crmPipeline.readingTime'),
       popular: false
     },
@@ -87,7 +87,7 @@ export default function SupportPage() {
       title: t('helpArticles.apiIntegration.title'),
       category: 'integrations',
       description: t('helpArticles.apiIntegration.description'),
-      tags: t('helpArticles.apiIntegration.tags', { returnObjects: true }),
+      tags: t('helpArticles.apiIntegration.tags', { returnObjects: true }) as string[],
       readTime: t('helpArticles.apiIntegration.readingTime'),
       popular: false
     },
@@ -96,7 +96,7 @@ export default function SupportPage() {
       title: t('helpArticles.billingSubscription.title'),
       category: 'account',
       description: t('helpArticles.billingSubscription.description'),
-      tags: t('helpArticles.billingSubscription.tags', { returnObjects: true }),
+      tags: t('helpArticles.billingSubscription.tags', { returnObjects: true }) as string[],
       readTime: t('helpArticles.billingSubscription.readingTime'),
       popular: false
     }
