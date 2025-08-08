@@ -44,7 +44,7 @@ export default function CompanyDetailPage() {
   // Mock data - replace with actual API call
   useEffect(() => {
     const mockCompany: Company = {
-      id: params.id as string,
+      id: params?.id as string || 'unknown',
       name: "TechCorp Solutions",
       industry: "Technology",
       size: "50-200",
@@ -65,7 +65,7 @@ export default function CompanyDetailPage() {
     setCompany(mockCompany);
     setEditedCompany(mockCompany);
     setIsLoading(false);
-  }, [params.id]);
+  }, [params?.id]);
 
   const handleSave = async () => {
     // TODO: Implement actual save logic

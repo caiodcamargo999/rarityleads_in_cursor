@@ -317,7 +317,9 @@
       "error": "Failed to generate leads",
       "enriching": "Enriching lead data...",
       "scoring": "Scoring leads...",
-      "ready": "Leads ready for your pipeline"
+      "ready": "Leads ready for your pipeline",
+      "model": "AI Model",
+      "modelDescription": "Choose the AI model to analyze your requirements"
     },
     "enrichment": {
       "title": "Data Enrichment",

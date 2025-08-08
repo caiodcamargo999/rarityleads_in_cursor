@@ -20,6 +20,11 @@ import {
   Star
 } from 'lucide-react'
 import { ClientOnly } from '@/components/ClientOnly'
+import { supabase } from '@/lib/supabase'
+import { useToast } from '@/components/ui/use-toast'
+import { useRouter } from 'next/navigation'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { useState } from 'react'
 
 type Lead = {
   id?: string;
@@ -49,24 +54,167 @@ type Lead = {
 
 export default function LeadsResultsGrid({ leads = [] }: { leads?: Lead[] }) {
   const { t } = useTranslation()
+  const { toast } = useToast()
+  const router = useRouter()
+  const [stageByLead, setStageByLead] = useState<Record<string, string>>({})
 
-  const handleSaveToPipeline = (lead: Lead) => {
-    // TODO: Implement save to CRM pipeline
-    console.log('Saving lead to pipeline:', lead)
-    // This would typically:
-    // 1. Save lead to database
-    // 2. Add to CRM pipeline (to-contact stage)
-    // 3. Show success notification
-    // 4. Optionally redirect to CRM page
+  const handleSaveToPipeline = async (lead: Lead) => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) throw new Error('Not authenticated')
+
+      // Ensure lead exists in DB (basic de-duplication by user + email)
+      let dbLeadId: string | null = null
+      if (lead.email) {
+        const { data: existing } = await supabase
+          .from('leads')
+          .select('id')
+          .eq('user_id', user.id)
+          .eq('email', lead.email)
+          .limit(1)
+          .maybeSingle()
+        dbLeadId = existing?.id || null
+      }
+
+      if (!dbLeadId) {
+        const { data: inserted, error: insertErr } = await supabase
+          .from('leads')
+          .insert({
+            user_id: user.id,
+            full_name: lead.full_name,
+            company_name: lead.company_name,
+            job_title: lead.job_title,
+            location: lead.location,
+            timezone: lead.timezone,
+            contact_channels: lead.contact_channels || [],
+            source: lead.source,
+            tags: lead.tags || [],
+            suggested_services: lead.suggested_services || [],
+            best_contact_time: lead.best_contact_time,
+            email: lead.email,
+            phone: lead.phone,
+            website: lead.website,
+            linkedin_url: lead.linkedin_url,
+            company_size: lead.company_size,
+            industry: lead.industry,
+          })
+          .select('id')
+          .single()
+        if (insertErr) throw insertErr
+        dbLeadId = inserted.id
+      }
+
+      // Add to CRM pipeline (default stage: To Contact) — avoid duplicates for same lead
+      if (dbLeadId) {
+        const { data: existingLink } = await supabase
+          .from('crm_pipelines')
+          .select('pipeline_id')
+          .eq('user_id', user.id)
+          .eq('lead_id', dbLeadId)
+          .limit(1)
+          .maybeSingle()
+        if (!existingLink?.pipeline_id) {
+          await supabase
+            .from('crm_pipelines')
+            .insert({ user_id: user.id, lead_id: dbLeadId, stage: stageByLead[dbLeadId] || 'To Contact' })
+        }
+      }
+
+      toast({ title: t('leads.saved'), description: t('leads.savedToPipeline') })
+    } catch (error: any) {
+      toast({ title: t('common.error'), description: error?.message || 'Failed to save', variant: 'destructive' })
+    }
   }
 
-  const handleContact = (lead: Lead) => {
-    // TODO: Implement contact action
-    console.log('Contacting lead:', lead)
-    // This would typically:
-    // 1. Open contact modal/form
-    // 2. Show contact options (email, WhatsApp, etc.)
-    // 3. Pre-fill with lead data
+  const handleContact = async (lead: Lead) => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) throw new Error('Not authenticated')
+
+      // Ensure lead exists and get id
+      let dbLeadId: string | null = null
+      if (lead.email) {
+        const { data: existing } = await supabase
+          .from('leads')
+          .select('id')
+          .eq('user_id', user.id)
+          .eq('email', lead.email)
+          .limit(1)
+          .maybeSingle()
+        dbLeadId = existing?.id || null
+      }
+      if (!dbLeadId) {
+        const { data: inserted, error: insertErr } = await supabase
+          .from('leads')
+          .insert({
+            user_id: user.id,
+            full_name: lead.full_name,
+            company_name: lead.company_name,
+            job_title: lead.job_title,
+            location: lead.location,
+            timezone: lead.timezone,
+            contact_channels: lead.contact_channels || [],
+            source: lead.source,
+            tags: lead.tags || [],
+            suggested_services: lead.suggested_services || [],
+            best_contact_time: lead.best_contact_time,
+            email: lead.email,
+            phone: lead.phone,
+            website: lead.website,
+            linkedin_url: lead.linkedin_url,
+            company_size: lead.company_size,
+            industry: lead.industry,
+          })
+          .select('id')
+          .single()
+        if (insertErr) throw insertErr
+        dbLeadId = inserted.id
+      }
+
+      // Choose best channel
+      const preferred = (lead.contact_channels && lead.contact_channels[0]?.toLowerCase()) || ''
+      let channel: 'whatsapp' | 'linkedin' | 'email' = 'email'
+      let contact_identifier = lead.email || ''
+      if (preferred.includes('whatsapp') || (!lead.email && lead.phone)) {
+        channel = 'whatsapp'; contact_identifier = lead.phone || ''
+      } else if (preferred.includes('linkedin') || (!lead.email && lead.linkedin_url)) {
+        channel = 'linkedin'; contact_identifier = lead.linkedin_url || ''
+      }
+
+      if (!contact_identifier) throw new Error('No valid contact for conversation')
+
+      // Create conversation if not exists
+      const { data: existingConv } = await supabase
+        .from('conversations')
+        .select('id')
+        .eq('user_id', user.id)
+        .eq('lead_id', dbLeadId)
+        .eq('channel', channel)
+        .limit(1)
+        .maybeSingle()
+
+      let conversationId = existingConv?.id as string | undefined
+      if (!conversationId) {
+        const { data: created, error: convErr } = await supabase
+          .from('conversations')
+          .insert({
+            user_id: user.id,
+            lead_id: dbLeadId,
+            channel,
+            contact_identifier,
+            contact_name: lead.full_name,
+            status: 'active'
+          })
+          .select('id')
+          .single()
+        if (convErr) throw convErr
+        conversationId = created.id
+      }
+
+      router.push(`/dashboard/messages?conversationId=${conversationId}`)
+    } catch (error: any) {
+      toast({ title: t('common.error'), description: error?.message || 'Failed to start conversation', variant: 'destructive' })
+    }
   }
 
   return (
@@ -203,18 +351,34 @@ export default function LeadsResultsGrid({ leads = [] }: { leads?: Lead[] }) {
                   </div>
 
                   {/* Action Buttons */}
-                  <div className="flex gap-2 pt-2 border-t border-border">
-                    <Button 
-                      size="sm" 
-                      variant="outline" 
-                      className="flex-1 text-xs"
-                      onClick={() => handleSaveToPipeline(lead)}
-                    >
-                      <Save className="w-3 h-3 mr-1" />
-                      <ClientOnly fallback="Save to Pipeline">
-                        {t('leads.saveToPipeline')}
-                      </ClientOnly>
-                    </Button>
+                  <div className="flex gap-2 pt-2 border-t border-border items-center">
+                    <div className="flex-1 flex items-center gap-2">
+                      <Select
+                        value={stageByLead[lead.email || lead.full_name] || 'To Contact'}
+                        onValueChange={(v) => setStageByLead(prev => ({ ...prev, [lead.email || lead.full_name]: v }))}
+                      >
+                        <SelectTrigger className="h-8 w-40">
+                          <SelectValue placeholder="To Contact" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="To Contact">To Contact</SelectItem>
+                          <SelectItem value="Contacted">Contacted</SelectItem>
+                          <SelectItem value="In Conversation">In Conversation</SelectItem>
+                          <SelectItem value="Closed">Closed</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <Button 
+                        size="sm" 
+                        variant="outline" 
+                        className="text-xs"
+                        onClick={() => handleSaveToPipeline(lead)}
+                      >
+                        <Save className="w-3 h-3 mr-1" />
+                        <ClientOnly fallback="Add to CRM">
+                          {t('leads.saveToPipeline')}
+                        </ClientOnly>
+                      </Button>
+                    </div>
                     <div className="flex gap-1">
                       {lead.website && (
                         <Button 

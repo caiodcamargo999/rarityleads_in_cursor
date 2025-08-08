@@ -23,6 +23,7 @@ import {
   Zap
 } from 'lucide-react'
 import { ClientOnly } from '@/components/ClientOnly'
+import ArticleModal from '@/components/support/ArticleModal'
 
 interface HelpArticle {
   id: string
@@ -44,6 +45,8 @@ export default function SupportPage() {
   const { t } = useTranslation()
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('all')
+  const [selectedArticle, setSelectedArticle] = useState<HelpArticle | null>(null)
+  const [isArticleModalOpen, setIsArticleModalOpen] = useState(false)
 
   const helpArticles: HelpArticle[] = [
     {
@@ -138,6 +141,11 @@ export default function SupportPage() {
     return matchesSearch && matchesCategory
   })
 
+  const handleOpenArticle = (article: HelpArticle) => {
+    setSelectedArticle({ ...article, content: article.description } as any)
+    setIsArticleModalOpen(true)
+  }
+
   return (
     <div className="p-6 space-y-6">
       {/* Header */}
@@ -224,7 +232,7 @@ export default function SupportPage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3 }}
               >
-                <Card className="cursor-pointer hover:shadow-md transition-all duration-200 border-border h-full">
+                <Card className="cursor-pointer hover:shadow-md transition-all duration-200 border-border h-full" onClick={() => handleOpenArticle(article)}>
                   <CardHeader className="pb-3">
                     <div className="flex items-start justify-between">
                       <CardTitle className="text-base">{article.title}</CardTitle>
@@ -317,6 +325,13 @@ export default function SupportPage() {
           </Button>
         </div>
       </div>
+
+      {/* Article Modal */}
+      <ArticleModal
+        article={selectedArticle as any}
+        isOpen={isArticleModalOpen}
+        onClose={() => setIsArticleModalOpen(false)}
+      />
     </div>
   )
 } 

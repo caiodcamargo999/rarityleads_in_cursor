@@ -81,7 +81,7 @@ export default function CompanyModal({
 
   // Handle deep linking - open modal if company ID is in URL
   useEffect(() => {
-    const companyId = searchParams.get('id')
+    const companyId = searchParams?.get('id')
     if (companyId && !isOpen && company?.id === companyId) {
       // Modal should already be open if company matches
     }

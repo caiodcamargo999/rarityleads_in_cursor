@@ -53,13 +53,13 @@ export default function LeadDetailPage() {
   // Fetch lead data
   useEffect(() => {
     const fetchLead = async () => {
-      if (!params.id) return;
+      if (!params?.id) return;
       
       try {
         const { data, error } = await supabase
           .from('leads')
           .select('*')
-          .eq('id', params.id)
+          .eq('id', params.id!)
           .single();
 
         if (error) {
@@ -89,7 +89,7 @@ export default function LeadDetailPage() {
     };
 
     fetchLead();
-  }, [params.id, t, toast]);
+  }, [params?.id, t, toast]);
 
   const handleSave = async () => {
     if (!lead || !editedLead) return;

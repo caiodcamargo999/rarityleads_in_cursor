@@ -11,13 +11,14 @@ import { Plus, Download, Trash2, MoreHorizontal, Calendar, Users, Target, Activi
 import { Badge } from "@/components/ui/badge";
 import { useTranslation } from 'react-i18next';
 import { ClientOnly } from '@/components/ClientOnly';
+import CampaignModal from '@/components/campaigns/CampaignModal';
 Chart.register(BarElement, CategoryScale, LinearScale, Tooltip);
 
 interface Campaign {
   id: string;
   name: string;
   channel: string;
-  status: "draft" | "active" | "paused" | "completed";
+  status: "draft" | "active" | "paused" | "completed" | "archived";
   leads: number;
   created_at: string;
   last_run: string;
@@ -33,6 +34,8 @@ export default function CampaignsPage() {
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
   const [selectedCampaigns, setSelectedCampaigns] = useState<string[]>([]);
   const { toast } = useToast();
+  const [selectedCampaign, setSelectedCampaign] = useState<Campaign | null>(null);
+  const [isCampaignModalOpen, setIsCampaignModalOpen] = useState(false);
 
   const allIds = campaigns.map((c) => c.id);
   const isAllSelected = selectedCampaigns.length === allIds.length && allIds.length > 0;
@@ -84,7 +87,8 @@ export default function CampaignsPage() {
 
   // Handle campaign card click
   const handleCampaignClick = (campaign: Campaign) => {
-    router.push(`/dashboard/campaigns/${campaign.id}`);
+    setSelectedCampaign(campaign);
+    setIsCampaignModalOpen(true);
   };
 
   // Handle action button click (prevent card click)
@@ -302,6 +306,20 @@ export default function CampaignsPage() {
           </div>
         )}
       </div>
+
+      {/* Campaign Modal */}
+      <CampaignModal
+        campaign={selectedCampaign as any}
+        isOpen={isCampaignModalOpen}
+        onClose={() => setIsCampaignModalOpen(false)}
+        onSave={(updated) => {
+          // Simple merge with type assertion for now
+          setCampaigns(prev => prev.map(c => 
+            c.id === updated.id ? { ...c, ...updated } as Campaign : c
+          ));
+          setSelectedCampaign({ ...selectedCampaign!, ...updated } as Campaign);
+        }}
+      />
     </div>
   );
 } 

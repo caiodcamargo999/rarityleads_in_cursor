@@ -25,6 +25,7 @@ import {
 import { ClientOnly } from '@/components/ClientOnly'
 import CompanyModal from '@/components/companies/CompanyModal'
 import { useToast } from '@/components/ui/use-toast'
+import { supabase } from '@/lib/supabase'
 
 interface Company {
   id: string
@@ -76,386 +77,425 @@ export default function CompaniesPage() {
     }
   }, [searchParams, companies])
 
+  // Load companies from Supabase
   useEffect(() => {
-    // Simulate loading
-    const timer = setTimeout(() => {
-      setIsLoading(false)
-      // Mock data for demonstration
-      setCompanies([
-        {
-          id: '1',
-          name: 'TechCorp Inc',
-          industry: 'Technology',
-          size: '50-200',
-          location: 'San Francisco, CA',
-          website: 'https://techcorp.com',
-          phone: '+1 (555) 123-4567',
-          email: 'contact@techcorp.com',
-          founded: '2018',
-          revenue: '$5M - $10M',
-          employees: 150,
-          leads: 3,
-          status: 'prospect',
-          tags: ['SaaS', 'B2B', 'AI'],
-          lastContact: '2024-01-15',
-          notes: 'High potential SaaS company looking for growth marketing services.',
-          keyContacts: [
-            {
-              name: 'Sarah Johnson',
-              role: 'CEO',
-              email: 'sarah@techcorp.com',
-              phone: '+1 (555) 123-4567'
-            }
-          ]
-        },
-        {
-          id: '2',
-          name: 'Digital Solutions',
-          industry: 'Marketing',
-          size: '10-50',
-          location: 'New York, NY',
-          website: 'https://digitalsolutions.com',
-          phone: '+1 (555) 987-6543',
-          email: 'hello@digitalsolutions.com',
-          founded: '2020',
-          revenue: '$1M - $5M',
-          employees: 25,
-          leads: 1,
-          status: 'active',
-          tags: ['Agency', 'Digital Marketing'],
-          lastContact: '2024-01-14',
-          notes: 'Digital marketing agency with strong client base.',
-          keyContacts: [
-            {
-              name: 'Michael Chen',
-              role: 'Founder',
-              email: 'michael@digitalsolutions.com',
-              phone: '+1 (555) 987-6543'
-            }
-          ]
-        },
-        {
-          id: '3',
-          name: 'StartupXYZ',
-          industry: 'Technology',
-          size: '5-10',
-          location: 'Austin, TX',
-          website: 'https://startupxyz.com',
-          email: 'team@startupxyz.com',
-          founded: '2023',
-          revenue: '$100K - $500K',
-          employees: 8,
-          leads: 2,
-          status: 'customer',
-          tags: ['Startup', 'Fintech'],
-          lastContact: '2024-01-10'
-        },
-        {
-          id: '4',
-          name: 'Growth Partners',
-          industry: 'Consulting',
-          size: '200-500',
-          location: 'Miami, FL',
-          website: 'https://growthpartners.com',
-          phone: '+1 (555) 456-7890',
-          email: 'info@growthpartners.com',
-          founded: '2015',
-          revenue: '$10M - $50M',
-          employees: 300,
-          leads: 5,
-          status: 'active',
-          tags: ['Consulting', 'B2B'],
-          lastContact: '2024-01-12'
+    const loadCompanies = async () => {
+      setIsLoading(true)
+      try {
+        const { data: { user } } = await supabase.auth.getUser()
+        if (user) {
+          // Try to load from Supabase leads table
+          const { data: leads, error } = await supabase
+            .from('leads')
+            .select('*')
+            .eq('user_id', user.id)
+
+          if (!error && leads) {
+            // Convert leads to companies format
+            const companiesFromLeads = leads.map(lead => ({
+              id: lead.id,
+              name: lead.company_name || 'Unknown Company',
+              industry: lead.industry || 'Unknown',
+              size: lead.company_size || 'Unknown',
+              location: lead.location || 'Unknown',
+              website: lead.website || '',
+              phone: lead.phone || '',
+              email: lead.email || '',
+              founded: '',
+              revenue: '',
+              employees: 0,
+              leads: 1,
+              status: 'prospect' as const,
+              tags: lead.tags || [],
+              lastContact: lead.last_contacted_at || new Date().toISOString(),
+              notes: lead.notes || ''
+            }))
+
+            // Group by company name to avoid duplicates
+            const uniqueCompanies = companiesFromLeads.reduce((acc, company) => {
+              const existing = acc.find(c => c.name === company.name)
+              if (existing) {
+                existing.leads += 1
+                return acc
+              }
+              return [...acc, company]
+            }, [] as Company[])
+
+            setCompanies(uniqueCompanies)
+          } else {
+            setCompanies([])
+          }
+        } else {
+          // Not logged in, use localStorage
+          const storedCompanies = localStorage.getItem('companies')
+          if (storedCompanies) {
+            setCompanies(JSON.parse(storedCompanies))
+          } else {
+            setCompanies([])
+          }
         }
-      ])
-    }, 1000)
-    return () => clearTimeout(timer)
+      } catch (error) {
+        console.error('Error loading companies:', error)
+        setCompanies([])
+      } finally {
+        setIsLoading(false)
+      }
+    }
+    loadCompanies()
   }, [])
 
-  const statusColors = {
-    active: 'bg-green-500',
-    prospect: 'bg-blue-500',
-    customer: 'bg-purple-500',
-    inactive: 'bg-gray-500'
+  const handleAddCompany = async (newCompany: Company) => {
+    const updatedCompanies = [...companies, newCompany]
+    setCompanies(updatedCompanies)
+    
+    // Save to localStorage as backup
+    localStorage.setItem('companies', JSON.stringify(updatedCompanies))
+    
+    // Try to save to Supabase
+    try {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (user) {
+        await supabase.from('leads').insert({
+          user_id: user.id,
+          company_name: newCompany.name,
+          contact_name: newCompany.keyContacts?.[0]?.name || '',
+          email: newCompany.email,
+          phone: newCompany.phone,
+          website: newCompany.website,
+          industry: newCompany.industry,
+          company_size: newCompany.size,
+          location: newCompany.location,
+          tags: newCompany.tags,
+          notes: newCompany.notes
+        })
+      }
+    } catch (error) {
+      console.error('Error saving to Supabase:', error)
+    }
+    
+    toast({
+      title: t('companies.companyAdded'),
+      description: `${newCompany.name} has been added successfully.`
+    })
   }
 
+  const handleUpdateCompany = (updatedCompany: Company) => {
+    const updatedCompanies = companies.map(c => 
+      c.id === updatedCompany.id ? updatedCompany : c
+    )
+    setCompanies(updatedCompanies)
+    localStorage.setItem('companies', JSON.stringify(updatedCompanies))
+    toast({
+      title: t('companies.companyUpdated'),
+      description: `${updatedCompany.name} has been updated.`
+    })
+  }
+
+  const handleDeleteCompany = (companyId: string) => {
+    const updatedCompanies = companies.filter(c => c.id !== companyId)
+    setCompanies(updatedCompanies)
+    localStorage.setItem('companies', JSON.stringify(updatedCompanies))
+    toast({
+      title: t('companies.companyDeleted'),
+      description: 'Company has been deleted.'
+    })
+  }
+
+  // Filter companies based on search and filter
   const filteredCompanies = companies.filter(company => {
-    const matchesSearch = company.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         company.industry.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         company.location.toLowerCase().includes(searchTerm.toLowerCase())
+    const matchesSearch = searchTerm === '' || 
+      company.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      company.industry.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      company.location.toLowerCase().includes(searchTerm.toLowerCase())
+    
     const matchesFilter = selectedFilter === 'all' || company.status === selectedFilter
+    
     return matchesSearch && matchesFilter
   })
 
-  const getStatusLabel = (status: string) => {
-    switch (status) {
-      case 'active': return t('companies.active')
-      case 'prospect': return t('companies.prospect')
-      case 'customer': return t('companies.customer')
-      case 'inactive': return t('companies.inactive')
-      default: return status
-    }
-  }
+  // Calculate real stats from actual data
+  const stats = [
+    { label: t('companies.totalCompanies'), value: companies.length, icon: Building },
+    { label: t('companies.activeCustomers'), value: companies.filter(c => c.status === 'customer').length, icon: Users },
+    { label: t('companies.prospects'), value: companies.filter(c => c.status === 'prospect').length, icon: TrendingUp },
+    { label: t('companies.totalLeads'), value: companies.reduce((acc, c) => acc + (c.leads || 0), 0), icon: Calendar }
+  ]
 
   const handleCompanyClick = (company: Company) => {
     setSelectedCompany(company)
     setIsModalOpen(true)
+    // Update URL without navigation
+    const newUrl = new URL(window.location.href)
+    newUrl.searchParams.set('id', company.id)
+    window.history.pushState({}, '', newUrl)
   }
 
   const handleModalClose = () => {
     setIsModalOpen(false)
     setSelectedCompany(null)
+    // Remove ID from URL
+    const newUrl = new URL(window.location.href)
+    newUrl.searchParams.delete('id')
+    window.history.pushState({}, '', newUrl)
   }
 
-  const handleCompanySave = (updatedCompany: Company) => {
-    setCompanies(prev => prev.map(c => c.id === updatedCompany.id ? updatedCompany : c))
-    setSelectedCompany(updatedCompany)
+  const handleModalSave = (updatedCompany: Company) => {
+    if (companies.find(c => c.id === updatedCompany.id)) {
+      handleUpdateCompany(updatedCompany)
+    } else {
+      handleAddCompany(updatedCompany)
+    }
+    handleModalClose()
   }
 
-  const handleCompanyDelete = (companyId: string) => {
-    setCompanies(prev => prev.filter(c => c.id !== companyId))
-  }
+  return (
+    <div className="min-h-screen bg-dark-bg p-6">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
+        {/* Header */}
+        <div className="mb-8">
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <h1 className="text-3xl font-medium text-white mb-2">
+                <ClientOnly fallback="Companies">
+                  {t('companies.title')}
+                </ClientOnly>
+              </h1>
+              <p className="text-gray-400">
+                <ClientOnly fallback="Manage your company relationships">
+                  {t('companies.subtitle')}
+                </ClientOnly>
+              </p>
+            </div>
+            <Button 
+              variant="primary"
+              className="flex items-center gap-2"
+              onClick={() => {
+                const newCompany: Company = {
+                  id: Date.now().toString(),
+                  name: '',
+                  industry: '',
+                  size: '',
+                  location: '',
+                  website: '',
+                  founded: new Date().getFullYear().toString(),
+                  revenue: '',
+                  employees: 0,
+                  leads: 0,
+                  status: 'prospect',
+                  tags: [],
+                  lastContact: new Date().toISOString().split('T')[0]
+                }
+                setSelectedCompany(newCompany)
+                setIsModalOpen(true)
+              }}
+            >
+              <Plus className="w-4 h-4" />
+              <ClientOnly fallback="Add Company">
+                {t('companies.addCompany')}
+              </ClientOnly>
+            </Button>
+          </div>
 
-  if (isLoading) {
-    return (
-      <div className="p-6 space-y-6">
-        <div className="flex items-center justify-between">
-          <div className="h-8 bg-muted rounded w-48 animate-pulse"></div>
-          <div className="h-10 bg-muted rounded w-32 animate-pulse"></div>
+          {/* Stats */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+            {stats.map((stat, index) => (
+              <motion.div
+                key={stat.label}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3, delay: index * 0.1 }}
+              >
+                <Card className="bg-dark-card border-dark-border">
+                  <CardContent className="p-6">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-sm text-gray-400">
+                          <ClientOnly fallback={stat.label}>
+                            {stat.label}
+                          </ClientOnly>
+                        </p>
+                        <p className="text-2xl font-medium text-white mt-1">
+                          {stat.value}
+                        </p>
+                      </div>
+                      <div className="w-12 h-12 bg-purple-600/20 rounded-lg flex items-center justify-center">
+                        <stat.icon className="w-6 h-6 text-purple-500" />
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* Filters */}
+          <div className="flex flex-col sm:flex-row gap-4">
+            <div className="relative flex-1">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+              <Input
+                type="text"
+                placeholder={t('companies.searchPlaceholder')}
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pl-10 bg-dark-card border-dark-border text-white placeholder-gray-500"
+              />
+            </div>
+            <div className="flex gap-2">
+              {['all', 'customer', 'prospect', 'active', 'inactive'].map(filter => (
+                <Button
+                  key={filter}
+                  variant={selectedFilter === filter ? 'primary' : 'outline'}
+                  size="sm"
+                  onClick={() => setSelectedFilter(filter)}
+                >
+                  <ClientOnly fallback={filter}>
+                    {t(`companies.filter.${filter}`)}
+                  </ClientOnly>
+                </Button>
+              ))}
+            </div>
+          </div>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {[...Array(6)].map((_, i) => (
-            <div key={i} className="h-64 bg-muted rounded-lg animate-pulse"></div>
-                  ))}
-      </div>
+
+        {/* Companies List */}
+        {isLoading ? (
+          <div className="text-center py-12">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto mb-4"></div>
+            <p className="text-gray-400">Loading companies...</p>
+          </div>
+        ) : filteredCompanies.length === 0 ? (
+          <Card className="bg-dark-card border-dark-border">
+            <CardContent className="p-12 text-center">
+              <Building className="w-12 h-12 text-gray-600 mx-auto mb-4" />
+              <h3 className="text-lg font-medium text-white mb-2">
+                {searchTerm ? 'No companies found' : 'No companies yet'}
+              </h3>
+              <p className="text-gray-400 mb-4">
+                {searchTerm 
+                  ? 'Try adjusting your search or filters'
+                  : 'Start by adding your first company or generating leads'}
+              </p>
+              {!searchTerm && (
+                <Button 
+                  variant="primary"
+                  onClick={() => {
+                    const newCompany: Company = {
+                      id: Date.now().toString(),
+                      name: '',
+                      industry: '',
+                      size: '',
+                      location: '',
+                      website: '',
+                      founded: new Date().getFullYear().toString(),
+                      revenue: '',
+                      employees: 0,
+                      leads: 0,
+                      status: 'prospect',
+                      tags: [],
+                      lastContact: new Date().toISOString().split('T')[0]
+                    }
+                    setSelectedCompany(newCompany)
+                    setIsModalOpen(true)
+                  }}
+                >
+                  <Plus className="w-4 h-4 mr-2" />
+                  Add Your First Company
+                </Button>
+              )}
+            </CardContent>
+          </Card>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {filteredCompanies.map((company, index) => (
+              <motion.div
+                key={company.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3, delay: index * 0.05 }}
+              >
+                <Card 
+                  className="bg-dark-card border-dark-border hover:border-purple-600/50 transition-all cursor-pointer"
+                  onClick={() => handleCompanyClick(company)}
+                >
+                  <CardContent className="p-6">
+                    <div className="flex items-start justify-between mb-4">
+                      <div>
+                        <h3 className="text-lg font-medium text-white mb-1">
+                          {company.name}
+                        </h3>
+                        <p className="text-sm text-gray-400">{company.industry}</p>
+                      </div>
+                      <Badge
+                        variant={
+                          company.status === 'customer' ? 'default' :
+                          company.status === 'active' ? 'default' :
+                          company.status === 'prospect' ? 'secondary' :
+                          'outline'
+                        }
+                      >
+                        {company.status}
+                      </Badge>
+                    </div>
+
+                    <div className="space-y-2 mb-4">
+                      <div className="flex items-center gap-2 text-sm text-gray-400">
+                        <MapPin className="w-3 h-3" />
+                        <span>{company.location}</span>
+                      </div>
+                      <div className="flex items-center gap-2 text-sm text-gray-400">
+                        <Users className="w-3 h-3" />
+                        <span>{company.size || 'Size unknown'}</span>
+                      </div>
+                      {company.website && (
+                        <div className="flex items-center gap-2 text-sm text-gray-400">
+                          <Globe className="w-3 h-3" />
+                          <a 
+                            href={company.website}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="hover:text-purple-400 transition-colors"
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            {company.website.replace(/^https?:\/\//, '')}
+                          </a>
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="flex items-center justify-between pt-4 border-t border-dark-border">
+                      <div className="flex items-center gap-1">
+                        <span className="text-sm text-gray-400">Leads:</span>
+                        <span className="text-sm font-medium text-white">{company.leads}</span>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <Calendar className="w-3 h-3 text-gray-400" />
+                        <span className="text-xs text-gray-400">
+                          {new Date(company.lastContact).toLocaleDateString()}
+                        </span>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            ))}
+          </div>
+        )}
+      </motion.div>
 
       {/* Company Modal */}
-      <CompanyModal
-        company={selectedCompany}
-        isOpen={isModalOpen}
-        onClose={handleModalClose}
-        onSave={handleCompanySave}
-        onDelete={handleCompanyDelete}
-      />
+      {selectedCompany && (
+        <CompanyModal
+          company={selectedCompany}
+          isOpen={isModalOpen}
+          onClose={handleModalClose}
+          onSave={handleModalSave}
+          onDelete={handleDeleteCompany}
+        />
+      )}
     </div>
   )
 }
-
-  return (
-    <div className="p-6 space-y-6">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-medium text-foreground">
-            <ClientOnly fallback="Companies">
-              {t('companies.title')}
-            </ClientOnly>
-          </h1>
-          <p className="text-muted-foreground">
-            <ClientOnly fallback="Manage your company directory and track relationships">
-              {t('companies.description')}
-            </ClientOnly>
-          </p>
-        </div>
-        <Button className="flex items-center gap-2">
-          <Plus className="w-4 h-4" />
-          <ClientOnly fallback="Add Company">
-            {t('companies.addCompany')}
-          </ClientOnly>
-        </Button>
-      </div>
-
-      {/* Search and Filters */}
-      <div className="flex flex-col sm:flex-row gap-4">
-        <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
-          <Input
-            placeholder={t('companies.searchCompanies')}
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-10"
-          />
-        </div>
-        <div className="flex gap-2">
-          <Button variant="outline" className="flex items-center gap-2">
-            <Filter className="w-4 h-4" />
-            <ClientOnly fallback="Filter">
-              {t('companies.filter')}
-            </ClientOnly>
-          </Button>
-        </div>
-      </div>
-
-      {/* Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card>
-          <CardContent className="p-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-muted-foreground">{t('companies.totalCompanies')}</p>
-                <p className="text-2xl font-medium">{companies.length}</p>
-              </div>
-              <Building className="w-8 h-8 text-muted-foreground" />
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="p-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-muted-foreground">{t('companies.activeLeads')}</p>
-                <p className="text-2xl font-medium">{companies.reduce((sum, c) => sum + c.leads, 0)}</p>
-              </div>
-              <Users className="w-8 h-8 text-muted-foreground" />
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="p-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-muted-foreground">{t('companies.customers')}</p>
-                <p className="text-2xl font-medium">{companies.filter(c => c.status === 'customer').length}</p>
-              </div>
-              <TrendingUp className="w-8 h-8 text-muted-foreground" />
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="p-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-muted-foreground">{t('companies.prospects')}</p>
-                <p className="text-2xl font-medium">{companies.filter(c => c.status === 'prospect').length}</p>
-              </div>
-              <Calendar className="w-8 h-8 text-muted-foreground" />
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Companies Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filteredCompanies.map((company) => (
-          <motion.div
-            key={company.id}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3 }}
-          >
-            <Card 
-              className="hover:shadow-md transition-all duration-200 border-border cursor-pointer group"
-              onClick={() => handleCompanyClick(company)}
-            >
-              <CardHeader className="pb-3">
-                <div className="flex items-start justify-between">
-                  <div className="flex-1">
-                    <CardTitle className="text-lg group-hover:text-rarity-500 transition-colors">{company.name}</CardTitle>
-                    <CardDescription className="flex items-center gap-1 mt-1">
-                      <Building className="w-3 h-3" />
-                      {company.industry}
-                    </CardDescription>
-                  </div>
-                  <div className={`w-3 h-3 rounded-full ${statusColors[company.status]}`}></div>
-                </div>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                {/* Location */}
-                <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <MapPin className="w-4 h-4" />
-                  {company.location}
-                </div>
-
-                {/* Company Info */}
-                <div className="grid grid-cols-2 gap-4 text-sm">
-                  <div>
-                    <p className="text-muted-foreground">{t('companies.size')}</p>
-                    <p className="font-medium">{company.size}</p>
-                  </div>
-                  <div>
-                    <p className="text-muted-foreground">{t('companies.revenue')}</p>
-                    <p className="font-medium">{company.revenue}</p>
-                  </div>
-                  <div>
-                    <p className="text-muted-foreground">{t('companies.employees')}</p>
-                    <p className="font-medium">{company.employees}</p>
-                  </div>
-                  <div>
-                    <p className="text-muted-foreground">{t('companies.leads')}</p>
-                    <p className="font-medium">{company.leads}</p>
-                  </div>
-                </div>
-
-                {/* Tags */}
-                <div className="flex flex-wrap gap-1">
-                  {company.tags.map((tag, index) => (
-                    <Badge key={index} variant="outline" className="text-xs">
-                      {tag}
-                    </Badge>
-                  ))}
-                </div>
-
-                {/* Contact Info */}
-                <div className="flex items-center gap-2 pt-2 border-t border-border">
-                  {company.website && (
-                    <Button 
-                      size="sm" 
-                      variant="ghost" 
-                      className="h-8 w-8 p-0"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        window.open(company.website, '_blank');
-                      }}
-                    >
-                      <ExternalLink className="w-4 h-4" />
-                    </Button>
-                  )}
-                  {company.email && (
-                    <Button 
-                      size="sm" 
-                      variant="ghost" 
-                      className="h-8 w-8 p-0"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        window.open(`mailto:${company.email}`, '_blank');
-                      }}
-                    >
-                      <Mail className="w-4 h-4" />
-                    </Button>
-                  )}
-                  {company.phone && (
-                    <Button 
-                      size="sm" 
-                      variant="ghost" 
-                      className="h-8 w-8 p-0"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        window.open(`tel:${company.phone}`, '_blank');
-                      }}
-                    >
-                      <Phone className="w-4 h-4" />
-                    </Button>
-                  )}
-                  <div className="ml-auto">
-                    <Badge variant="secondary" className="text-xs">
-                      {getStatusLabel(company.status)}
-                    </Badge>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </motion.div>
-        ))}
-      </div>
-
-      {/* Company Modal */}
-      <CompanyModal
-        company={selectedCompany}
-        isOpen={isModalOpen}
-        onClose={handleModalClose}
-        onSave={handleCompanySave}
-        onDelete={handleCompanyDelete}
-      />
-    </div>
-  )
-} 

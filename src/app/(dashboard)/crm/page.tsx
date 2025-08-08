@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { motion, Reorder } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -27,6 +27,7 @@ import { ClientOnly } from '@/components/ClientOnly'
 import { Input } from '@/components/ui/input'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { useToast } from '@/components/ui/use-toast'
+import LeadModal from '@/components/leads/LeadModal'
 
 interface Lead {
   id: string
@@ -66,6 +67,9 @@ export default function CRMPage() {
   const [selectedFilter, setSelectedFilter] = useState('all')
   const [selectedLeads, setSelectedLeads] = useState<string[]>([])
   const [isDragging, setIsDragging] = useState(false)
+  const searchParams = useSearchParams()
+  const [selectedLead, setSelectedLead] = useState<Lead | null>(null)
+  const [isLeadModalOpen, setIsLeadModalOpen] = useState(false)
 
   useEffect(() => {
     // Simulate loading
@@ -157,6 +161,17 @@ export default function CRMPage() {
 
     return () => clearTimeout(timer)
   }, [])
+
+  // Deep link: open modal if ?id=<leadId>
+  useEffect(() => {
+    const leadId = searchParams?.get('id')
+    if (!leadId || leads.length === 0) return
+    const match = leads.find(l => l.id === leadId)
+    if (match) {
+      setSelectedLead(match)
+      setIsLeadModalOpen(true)
+    }
+  }, [searchParams, leads])
 
   // Calculate stage counts
   const stages: Stage[] = [
@@ -282,6 +297,21 @@ export default function CRMPage() {
         ? [] 
         : filteredLeads.map(lead => lead.id)
     )
+  }
+
+  const handleOpenLeadModal = (lead: Lead) => {
+    setSelectedLead(lead)
+    setIsLeadModalOpen(true)
+  }
+
+  const handleCloseLeadModal = () => {
+    setIsLeadModalOpen(false)
+    setSelectedLead(null)
+  }
+
+  const handleSaveLead = (updated: Lead) => {
+    setLeads(prev => prev.map(l => (l.id === updated.id ? { ...l, ...updated } : l)))
+    setSelectedLead(updated)
   }
 
   if (isLoading) {
@@ -505,7 +535,7 @@ export default function CRMPage() {
                       className={`cursor-pointer hover:shadow-md transition-all duration-200 border-border group ${
                         selectedLeads.includes(lead.id) ? 'ring-2 ring-primary' : ''
                       }`}
-                      onClick={() => router.push(`/dashboard/crm/${lead.id}`)}
+                      onClick={() => handleOpenLeadModal(lead)}
                     >
                       <CardContent className="p-4">
                         {/* Selection Checkbox */}
@@ -649,6 +679,13 @@ export default function CRMPage() {
           </motion.div>
         ))}
       </div>
+      {/* Lead Modal */}
+      <LeadModal
+        lead={selectedLead as any}
+        isOpen={isLeadModalOpen}
+        onClose={handleCloseLeadModal}
+        onSave={handleSaveLead as any}
+      />
     </div>
   )
 } 

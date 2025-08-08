@@ -46,7 +46,7 @@ export default function LeadDetailPage() {
   // Mock data - replace with actual API call
   useEffect(() => {
     const mockLead: Lead = {
-      id: params.id as string,
+      id: params?.id as string || 'unknown',
       full_name: "John Smith",
       company_name: "TechCorp Solutions",
       job_title: "Head of Marketing",
@@ -69,7 +69,7 @@ export default function LeadDetailPage() {
     setLead(mockLead);
     setEditedLead(mockLead);
     setIsLoading(false);
-  }, [params.id]);
+  }, [params?.id]);
 
   const handleSave = async () => {
     // TODO: Implement actual save logic

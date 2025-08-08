@@ -14,7 +14,7 @@
 - ✅ Added detailed descriptions for each rule
 - ✅ Updated color system to match current Tailwind implementation
 - ✅ Clarified button component usage requirements
-- ✅ **NEW: Added "Allowed Design Violations" section for 282 grandfathered violations**
+poozxp- ✅ **NEW: Added "Allowed Design Violations" section for 282 grandfathered violations**
 
 ### 3. **Enhanced ESLint Configuration**
 - ✅ Added custom rules to prevent forbidden styles
